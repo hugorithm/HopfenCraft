@@ -12,6 +12,7 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "product_id")
     private Long productId;
+    private String brand;
     private String name;
     private String description;
     private int quantity;
@@ -20,12 +21,21 @@ public class Product {
     public Product() {
     }
 
-    public Product(Long productId, String name, String description, int quantity, BigDecimal price) {
+    public Product(Long productId,  String brand, String name, String description, int quantity, BigDecimal price) {
         this.productId = productId;
         this.name = name;
         this.description = description;
         this.quantity = quantity;
         this.price = price;
+        this.brand = brand;
+    }
+
+    public String getBrand() {
+        return brand;
+    }
+
+    public void setBrand(String brand) {
+        this.brand = brand;
     }
 
     public Long getProductId() {
@@ -69,18 +79,19 @@ public class Product {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Product product = (Product) o;
-        return quantity == product.quantity && Objects.equals(productId, product.productId) && Objects.equals(name, product.name) && Objects.equals(description, product.description) && Objects.equals(price, product.price);
+        return quantity == product.quantity && Objects.equals(productId, product.productId) && Objects.equals(brand, product.brand) && Objects.equals(name, product.name) && Objects.equals(description, product.description) && Objects.equals(price, product.price);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(productId, name, description, quantity, price);
+        return Objects.hash(productId, brand, name, description, quantity, price);
     }
 
     @Override
     public String toString() {
         return "Product{" +
                 "productId=" + productId +
+                ", brand='" + brand + '\'' +
                 ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
                 ", quantity=" + quantity +
