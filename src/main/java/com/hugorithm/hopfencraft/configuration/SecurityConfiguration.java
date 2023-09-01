@@ -55,7 +55,7 @@ public class SecurityConfiguration {
                   auth.requestMatchers("/user/**").hasAnyRole("ADMIN", "USER");
                   auth.requestMatchers("/marketplace/").permitAll();
                   auth.requestMatchers("/marketplace/products").permitAll();
-                  auth.requestMatchers("marketplace/register/").hasRole("ADMIN");
+                  auth.requestMatchers("/marketplace/register/").hasRole("ADMIN");
                   auth.anyRequest().authenticated();
             });
 
