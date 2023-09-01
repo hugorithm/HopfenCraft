@@ -21,6 +21,7 @@ public class ProductRegistrationDTO {
         this.price = price;
     }
 
+
     public String getBrand() {
         return brand;
     }
