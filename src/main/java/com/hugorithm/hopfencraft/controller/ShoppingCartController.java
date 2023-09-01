@@ -36,7 +36,6 @@ public class ShoppingCartController {
 
     }
     @PostMapping("/add")
-    //NOT WORKING NEEDS FIX
     public ResponseEntity<List<CartItem>> addToCart(@AuthenticationPrincipal Jwt jwt, @RequestBody CartRegistrationDTO body) {
         String username = jwt.getSubject();
         ApplicationUser user = userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("Username not found"));

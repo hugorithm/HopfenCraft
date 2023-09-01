@@ -1,5 +1,6 @@
 package com.hugorithm.hopfencraft.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.util.Objects;
@@ -15,6 +16,7 @@ public class CartItem {
     private Product product;
 
     @ManyToOne
+    @JsonIgnore
     private ApplicationUser user;
 
     private int quantity;
