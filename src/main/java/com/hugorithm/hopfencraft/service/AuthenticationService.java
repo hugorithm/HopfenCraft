@@ -3,7 +3,6 @@ import java.util.HashSet;
 import java.util.NoSuchElementException;
 import java.util.Set;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -19,7 +18,6 @@ import com.hugorithm.hopfencraft.repository.UserRepository;
 import com.hugorithm.hopfencraft.dto.LoginResponseDTO;
 import com.hugorithm.hopfencraft.repository.RoleRepository;
 
-import javax.management.relation.RoleNotFoundException;
 
 @Service
 @Transactional
@@ -50,7 +48,12 @@ public class AuthenticationService {
         Set<Role> authorities = new HashSet<>();
         authorities.add(userRole);
 
-        return userRepository.save(new ApplicationUser(0L, username, encodedPassword, authorities));
+        ApplicationUser user = new ApplicationUser();
+        user.setUsername(username);
+        user.setPassword(encodedPassword);
+        user.setAuthorities(authorities);
+
+        return userRepository.save(user);
     }
 
     public LoginResponseDTO login(String username, String password){
