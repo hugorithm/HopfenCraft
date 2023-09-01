@@ -7,7 +7,6 @@ public class LoginResponseDTO {
     private String jwt;
 
     public LoginResponseDTO(){
-        super();
     }
 
     public LoginResponseDTO(ApplicationUser user, String jwt){

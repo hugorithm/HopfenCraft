@@ -30,6 +30,7 @@ public class HopfencraftApplication {
 			Set<Role> roles = new HashSet<>();
 			roles.add(adminRole);
 
+			//Ugly way of adding an admin and roles.
 			ApplicationUser admin = new ApplicationUser(1L, "admin", passwordEncoder.encode("password"), roles);
 
 			userRepository.save(admin);

@@ -1,5 +1,6 @@
 package com.hugorithm.hopfencraft.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -12,11 +13,12 @@ import java.util.Set;
 @Table(name = "users")
 public class ApplicationUser implements UserDetails {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")
     private Long userId;
     @Column(unique = true)
     private String username;
+    @JsonIgnore
     private String password;
 
     @ManyToMany(fetch = FetchType.EAGER)
@@ -29,7 +31,7 @@ public class ApplicationUser implements UserDetails {
 
     public ApplicationUser() {
         super();
-        this.authorities = new HashSet<Role>();
+        this.authorities = new HashSet<>();
     }
 
     public ApplicationUser(Long userId, String username, String password, Set<Role> authorities) {
