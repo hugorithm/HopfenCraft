@@ -58,9 +58,10 @@ public class SecurityConfiguration {
                 auth.requestMatchers("/user/**").hasAnyRole("ADMIN", "USER");
                 auth.anyRequest().authenticated();
             });
-          http.oauth2ResourceServer()
-                .jwt()
-                .jwtAuthenticationConverter(jwtAuthenticationConverter());
+          http.oauth2ResourceServer((oauth2) -> oauth2
+                  .jwt(jwtConfigurer -> jwtConfigurer.jwtAuthenticationConverter(jwtAuthenticationConverter()))
+          );
+
           http.sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
           return http.build();
