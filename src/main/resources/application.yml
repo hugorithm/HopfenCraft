@@ -5,9 +5,9 @@ server:
 
 spring:
   datasource:
-    password: psql123
-    url: jdbc:postgresql://localhost:5432/hopfencraft
-    username: dev
+    password: ${DB_PASSWORD}
+    url: ${DATABASE_URL}
+    username: ${DB_USERNAME}
   jpa:
     hibernate:
       ddl-auto: create-drop
