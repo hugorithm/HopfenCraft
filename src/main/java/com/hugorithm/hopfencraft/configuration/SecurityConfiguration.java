@@ -53,9 +53,10 @@ public class SecurityConfiguration {
                   auth.requestMatchers("/auth/**").permitAll();
                   auth.requestMatchers("/admin/**").hasRole("ADMIN");
                   auth.requestMatchers("/user/**").hasAnyRole("ADMIN", "USER");
-                  auth.requestMatchers("/marketplace/").permitAll();
-                  auth.requestMatchers("/marketplace/products").permitAll();
-                  auth.requestMatchers("/marketplace/register/").hasRole("ADMIN");
+                  auth.requestMatchers("/product/").permitAll();
+                  auth.requestMatchers("/product/**").permitAll();
+                  auth.requestMatchers("/product/products").permitAll();
+                  auth.requestMatchers("/product/register/").hasRole("ADMIN");
                   auth.anyRequest().authenticated();
             });
 
@@ -72,6 +73,7 @@ public class SecurityConfiguration {
     public JwtDecoder jwtDecoder(){
         return NimbusJwtDecoder.withPublicKey(keys.getPublicKey()).build();
     }
+
     @Bean
     public JwtEncoder jwtEncoder(){
         JWK jwk = new RSAKey.Builder(keys.getPublicKey()).privateKey(keys.getPrivateKey()).build();

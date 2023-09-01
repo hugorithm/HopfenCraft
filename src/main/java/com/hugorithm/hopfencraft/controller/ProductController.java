@@ -12,9 +12,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
+import java.util.UUID;
 
 @RestController
-@RequestMapping("/marketplace")
+@RequestMapping("/product")
 @CrossOrigin("*")
 public class ProductController {
     private final ProductRepository productRepository;
@@ -33,7 +34,7 @@ public class ProductController {
     }
 
     @GetMapping("/{productId}")
-    public ResponseEntity<Product> getProductById(@PathVariable Long productId) {
+    public ResponseEntity<Product> getProductById(@PathVariable UUID productId) {
         Optional<Product> product = productRepository.findById(productId);
 
         return product.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
