@@ -5,9 +5,7 @@ import jakarta.persistence.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @Table(name = "users")
@@ -20,6 +18,9 @@ public class ApplicationUser implements UserDetails {
     private String username;
     @JsonIgnore
     private String password;
+
+    @OneToMany(mappedBy = "user")
+    private List<CartItem> cartItems;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
@@ -39,6 +40,7 @@ public class ApplicationUser implements UserDetails {
         this.username = username;
         this.password = password;
         this.authorities = authorities;
+        this.cartItems = new ArrayList<>();
     }
 
     public Long getUserId() {
@@ -55,6 +57,14 @@ public class ApplicationUser implements UserDetails {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public List<CartItem> getCartItems() {
+        return cartItems;
+    }
+
+    public void setCartItems(List<CartItem> cartItems) {
+        this.cartItems = cartItems;
     }
 
     @Override

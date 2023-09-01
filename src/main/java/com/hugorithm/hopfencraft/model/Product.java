@@ -4,15 +4,14 @@ import jakarta.persistence.*;
 
 import java.math.BigDecimal;
 import java.util.Objects;
-import java.util.UUID;
 
 @Entity
 @Table(name = "products")
 public class Product {
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "product_id")
-    private UUID productId;
+    private Long productId;
     private String brand;
     @Column(unique = true)
     private String name;
@@ -23,7 +22,7 @@ public class Product {
     public Product() {
     }
 
-    public Product(UUID productId,  String brand, String name, String description, int quantity, BigDecimal price) {
+    public Product(Long productId,  String brand, String name, String description, int quantity, BigDecimal price) {
         this.productId = productId;
         this.name = name;
         this.description = description;
@@ -40,7 +39,7 @@ public class Product {
         this.brand = brand;
     }
 
-    public UUID getProductId() {
+    public Long getProductId() {
         return productId;
     }
 
