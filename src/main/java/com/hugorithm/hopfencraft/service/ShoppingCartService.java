@@ -26,23 +26,26 @@ public class ShoppingCartService {
         this.productRepository = productRepository;
     }
 
-    public ResponseEntity<List<CartItem>> addToCart(ApplicationUser user, Long productId, int quantity) {
+    public ResponseEntity<?> addToCart(ApplicationUser user, Long productId, int quantity) {
         try {
             Product product = productRepository.findById(productId)
                     .orElseThrow(() -> new NoSuchElementException("Product not found with ID: " + productId));
 
-            CartItem cartItem = new CartItem();
-            cartItem.setUser(user);
-            cartItem.setProduct(product);
-            cartItem.setQuantity(quantity);
+            if (quantity <= product.getQuantity()) {
+                CartItem cartItem = new CartItem();
+                cartItem.setUser(user);
+                cartItem.setProduct(product);
+                cartItem.setQuantity(quantity);
 
-            cartItemRepository.save(cartItem);
+                cartItemRepository.save(cartItem);
+            } else {
+                throw new IllegalArgumentException("Requested quantity exceeds available quantity");
+            }
 
             return ResponseEntity.ok(user.getCartItems());
 
-        } catch (UsernameNotFoundException | NoSuchElementException ex) {
-
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Collections.emptyList());
+        } catch (UsernameNotFoundException | NoSuchElementException | IllegalArgumentException ex) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
         }
     }
 }
