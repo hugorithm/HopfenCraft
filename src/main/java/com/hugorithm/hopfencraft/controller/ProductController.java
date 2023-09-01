@@ -1,7 +1,9 @@
 package com.hugorithm.hopfencraft.controller;
 
+import com.hugorithm.hopfencraft.dto.ProductRegistrationDTO;
 import com.hugorithm.hopfencraft.model.Product;
 import com.hugorithm.hopfencraft.repository.ProductRepository;
+import com.hugorithm.hopfencraft.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -9,17 +11,18 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.Optional;
 
 @RestController
 @RequestMapping("/marketplace")
 @CrossOrigin("*")
-public class MarketplaceController {
+public class ProductController {
     private final ProductRepository productRepository;
+    private final ProductService productService;
     @Autowired
-    public MarketplaceController(ProductRepository productRepository) {
+    public ProductController(ProductRepository productRepository, ProductService productService) {
         this.productRepository = productRepository;
+        this.productService = productService;
     }
 
     @GetMapping("/products")
@@ -34,5 +37,10 @@ public class MarketplaceController {
         Optional<Product> product = productRepository.findById(productId);
 
         return product.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    @PostMapping("/register")
+    public Product registerProduct(@RequestBody ProductRegistrationDTO body) {
+        return productService.registerProduct(body.getBrand(), body.getName(),body.getDescription(), body.getQuantity(), body.getPrice());
     }
 }

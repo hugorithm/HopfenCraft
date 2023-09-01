@@ -5,11 +5,9 @@ public class RegistrationDTO {
     private String password;
 
     public RegistrationDTO() {
-        super();
     }
 
     public RegistrationDTO(String username, String password) {
-        super();
         this.username = username;
         this.password = password;
     }

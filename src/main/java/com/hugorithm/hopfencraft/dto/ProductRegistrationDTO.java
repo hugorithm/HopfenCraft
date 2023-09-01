@@ -1,35 +1,24 @@
-package com.hugorithm.hopfencraft.model;
-
-import jakarta.persistence.*;
+package com.hugorithm.hopfencraft.dto;
 
 import java.math.BigDecimal;
 import java.util.Objects;
-import java.util.UUID;
 
-@Entity
-@Table(name = "products")
-public class Product {
-    @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    @Column(name = "product_id")
-    private UUID productId;
+public class ProductRegistrationDTO {
     private String brand;
-    @Column(unique = true)
     private String name;
     private String description;
     private int quantity;
     private BigDecimal price;
 
-    public Product() {
+    public ProductRegistrationDTO() {
     }
 
-    public Product(UUID productId,  String brand, String name, String description, int quantity, BigDecimal price) {
-        this.productId = productId;
+    public ProductRegistrationDTO(String brand, String name, String description, int quantity, BigDecimal price) {
+        this.brand = brand;
         this.name = name;
         this.description = description;
         this.quantity = quantity;
         this.price = price;
-        this.brand = brand;
     }
 
     public String getBrand() {
@@ -38,10 +27,6 @@ public class Product {
 
     public void setBrand(String brand) {
         this.brand = brand;
-    }
-
-    public UUID getProductId() {
-        return productId;
     }
 
     public String getName() {
@@ -80,20 +65,19 @@ public class Product {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Product product = (Product) o;
-        return quantity == product.quantity && Objects.equals(productId, product.productId) && Objects.equals(brand, product.brand) && Objects.equals(name, product.name) && Objects.equals(description, product.description) && Objects.equals(price, product.price);
+        ProductRegistrationDTO that = (ProductRegistrationDTO) o;
+        return quantity == that.quantity && Objects.equals(brand, that.brand) && Objects.equals(name, that.name) && Objects.equals(description, that.description) && Objects.equals(price, that.price);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(productId, brand, name, description, quantity, price);
+        return Objects.hash(brand, name, description, quantity, price);
     }
 
     @Override
     public String toString() {
-        return "Product{" +
-                "productId=" + productId +
-                ", brand='" + brand + '\'' +
+        return "ProductRegistrationDTO{" +
+                "brand='" + brand + '\'' +
                 ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
                 ", quantity=" + quantity +
