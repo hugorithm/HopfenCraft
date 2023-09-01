@@ -1,6 +1,7 @@
 package com.hugorithm.hopfencraft.service;
 import java.util.HashSet;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 import java.util.Set;
 
 import org.springframework.security.authentication.AuthenticationManager;
@@ -42,6 +43,12 @@ public class AuthenticationService {
     }
 
     public ApplicationUser registerUser(String username, String password){
+        Optional<ApplicationUser> existingUser = userRepository.findByUsername(username);
+
+        if (existingUser.isPresent()) {
+            throw new IllegalStateException("Username is already taken");
+        }
+
         String encodedPassword = passwordEncoder.encode(password);
         Role userRole = roleRepository.findByAuthority("USER").orElseThrow(() -> new NoSuchElementException("Role not Found"));
 
@@ -54,6 +61,7 @@ public class AuthenticationService {
         user.setAuthorities(authorities);
 
         return userRepository.save(user);
+
     }
 
     public LoginResponseDTO login(String username, String password){

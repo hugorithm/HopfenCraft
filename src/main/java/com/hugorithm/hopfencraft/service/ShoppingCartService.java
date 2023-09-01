@@ -31,6 +31,13 @@ public class ShoppingCartService {
             Product product = productRepository.findById(productId)
                     .orElseThrow(() -> new NoSuchElementException("Product not found with ID: " + productId));
 
+            /*
+            THIS MUST BE STUDIED
+            int totalQuantity = user.getCartItems().stream()
+                    .filter(cartItem -> cartItem.getProduct().getProductId().equals(productId))
+                    .mapToInt(CartItem::getQuantity)
+                    .sum();
+            */
             if (quantity <= product.getQuantity()) {
                 CartItem cartItem = new CartItem();
                 cartItem.setUser(user);
@@ -38,14 +45,15 @@ public class ShoppingCartService {
                 cartItem.setQuantity(quantity);
 
                 cartItemRepository.save(cartItem);
+
+                return ResponseEntity.ok(user.getCartItems());
             } else {
                 throw new IllegalArgumentException("Requested quantity exceeds available quantity");
             }
-
-            return ResponseEntity.ok(user.getCartItems());
 
         } catch (UsernameNotFoundException | NoSuchElementException | IllegalArgumentException ex) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
         }
     }
+
 }
