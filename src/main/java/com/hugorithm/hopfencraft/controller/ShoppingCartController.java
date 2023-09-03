@@ -14,14 +14,11 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/cart")
 public class ShoppingCartController {
 
-    private final CartItemRepository cartItemRepository;
-    private final UserRepository userRepository;
+
 
     private final ShoppingCartService shoppingCartService;
     @Autowired
-    public ShoppingCartController(CartItemRepository cartItemRepository, UserRepository userRepository, ShoppingCartService shoppingCartService) {
-        this.cartItemRepository = cartItemRepository;
-        this.userRepository = userRepository;
+    public ShoppingCartController( ShoppingCartService shoppingCartService) {
         this.shoppingCartService = shoppingCartService;
     }
 
