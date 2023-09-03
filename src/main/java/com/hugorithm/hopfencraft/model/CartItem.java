@@ -11,7 +11,7 @@ public class CartItem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "cart_id")
-    private Long cartId;
+    private Long cartItemId;
     @ManyToOne
     private Product product;
 
@@ -24,19 +24,19 @@ public class CartItem {
     public CartItem() {
     }
 
-    public CartItem(Long cartId, Product product, ApplicationUser user, int quantity) {
-        this.cartId = cartId;
+    public CartItem(Long cartItemId, Product product, ApplicationUser user, int quantity) {
+        this.cartItemId = cartItemId;
         this.product = product;
         this.user = user;
         this.quantity = quantity;
     }
 
-    public Long getCartId() {
-        return cartId;
+    public Long getCartItemId() {
+        return cartItemId;
     }
 
-    public void setCartId(Long cartId) {
-        this.cartId = cartId;
+    public void setCartItemId(Long cartItemId) {
+        this.cartItemId = cartItemId;
     }
 
     public Product getProduct() {
@@ -68,18 +68,18 @@ public class CartItem {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         CartItem cartItem = (CartItem) o;
-        return quantity == cartItem.quantity && Objects.equals(cartId, cartItem.cartId) && Objects.equals(product, cartItem.product) && Objects.equals(user, cartItem.user);
+        return quantity == cartItem.quantity && Objects.equals(cartItemId, cartItem.cartItemId) && Objects.equals(product, cartItem.product) && Objects.equals(user, cartItem.user);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(cartId, product, user, quantity);
+        return Objects.hash(cartItemId, product, user, quantity);
     }
 
     @Override
     public String toString() {
         return "CartItem{" +
-                "cartId=" + cartId +
+                "cartId=" + cartItemId +
                 ", product=" + product +
                 ", user=" + user +
                 ", quantity=" + quantity +

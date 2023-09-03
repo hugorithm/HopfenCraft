@@ -1,17 +1,22 @@
 package com.hugorithm.hopfencraft.dto;
 
+import com.hugorithm.hopfencraft.model.CartItem;
+
 import java.util.Objects;
 
 public class CartRegistrationDTO {
     private Long productId;
     private int quantity;
 
+    private Long cartItemId;
+
     public CartRegistrationDTO() {
     }
 
-    public CartRegistrationDTO(Long productId, int quantity) {
+    public CartRegistrationDTO(Long productId, int quantity, CartItem cartItem, Long cartItemId) {
         this.productId = productId;
         this.quantity = quantity;
+        this.cartItemId = cartItemId;
     }
 
     public Long getProductId() {
@@ -49,5 +54,13 @@ public class CartRegistrationDTO {
                 "productId=" + productId +
                 ", quantity=" + quantity +
                 '}';
+    }
+
+    public Long getCartItemId() {
+        return cartItemId;
+    }
+
+    public void setCartItemId(Long cartItemId) {
+        this.cartItemId = cartItemId;
     }
 }

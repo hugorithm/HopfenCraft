@@ -3,10 +3,12 @@ package com.hugorithm.hopfencraft.service;
 import com.hugorithm.hopfencraft.model.Product;
 import com.hugorithm.hopfencraft.repository.ProductRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 
 @Service
+@Transactional
 public class ProductService {
     private final ProductRepository productRepository;
 
