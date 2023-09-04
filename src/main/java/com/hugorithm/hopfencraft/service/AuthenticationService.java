@@ -4,6 +4,7 @@ import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.Set;
 
+import com.hugorithm.hopfencraft.dto.UserRegistrationDTO;
 import com.hugorithm.hopfencraft.validators.EmailValidator;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -40,7 +41,7 @@ public class AuthenticationService {
         this.tokenService = tokenService;
     }
 
-    public ResponseEntity<?> registerUser(String username, String password, String email){
+    public ResponseEntity<UserRegistrationDTO> registerUser(String username, String password, String email){
         try {
             Optional<ApplicationUser> existingUser = userRepository.findByUsername(username);
             Optional<ApplicationUser> existingEmail = userRepository.findByEmail(email);
@@ -66,13 +67,15 @@ public class AuthenticationService {
             ApplicationUser user = new ApplicationUser(username, encodedPassword, email, authorities);
             userRepository.save(user);
 
-            return ResponseEntity.ok(user);
+            UserRegistrationDTO userDto = new UserRegistrationDTO(username, password, email);
+
+            return ResponseEntity.ok(userDto);
         } catch (IllegalArgumentException ex) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 
-    public ResponseEntity<?> login(String username, String password){
+    public ResponseEntity<LoginResponseDTO> login(String username, String password){
         try {
             Authentication auth = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
             String token = tokenService.generateJwt(auth);

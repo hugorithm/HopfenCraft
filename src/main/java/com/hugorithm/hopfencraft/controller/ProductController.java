@@ -12,7 +12,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
-import java.util.UUID;
 
 @RestController
 @RequestMapping("/product")
@@ -41,7 +40,7 @@ public class ProductController {
     }
 
     @PostMapping("/register")
-    public Product registerProduct(@RequestBody ProductRegistrationDTO body) {
+    public ResponseEntity<ProductRegistrationDTO> registerProduct(@RequestBody ProductRegistrationDTO body) {
         return productService.registerProduct(body.getBrand(), body.getName(),body.getDescription(), body.getQuantity(), body.getPrice());
     }
 }

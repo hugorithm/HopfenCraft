@@ -46,7 +46,7 @@ public class UserService implements UserDetailsService {
         throw new IllegalArgumentException("Invalid token format");
     }
 
-    public ResponseEntity<?> sendPasswordResetRequest(Jwt jwt) {
+    public ResponseEntity<String> sendPasswordResetRequest(Jwt jwt) {
         try {
             ApplicationUser user = jwtService.getUserFromJwt(jwt);
             String token = tokenService.generatePasswordResetToken();
@@ -82,9 +82,8 @@ public class UserService implements UserDetailsService {
     }
     public ResponseEntity<?> showPasswordResetForm(Jwt jwt, String token) {
         try {
-            ApplicationUser user = verifyPasswordResetToken(jwt, token);
-
-            return ResponseEntity.ok(user);
+            verifyPasswordResetToken(jwt, token);
+            return ResponseEntity.ok().build();
         } catch (IllegalStateException ex) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
@@ -104,7 +103,7 @@ public class UserService implements UserDetailsService {
                 user.setPassword(encodedPassword);
                 userRepository.save(user);
 
-                return ResponseEntity.ok("Password changed successfully");
+                return ResponseEntity.ok().build();
             } else {
                 throw new IllegalStateException("Passwords don't match");
             }

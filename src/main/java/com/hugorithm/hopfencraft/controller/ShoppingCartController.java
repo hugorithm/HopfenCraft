@@ -8,6 +8,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 
+
 @RestController
 @RequestMapping("/cart")
 public class ShoppingCartController {
@@ -18,15 +19,15 @@ public class ShoppingCartController {
     }
 
     @GetMapping("/items")
-    public ResponseEntity<?> getCartItems(@AuthenticationPrincipal Jwt jwt) {
+    public ResponseEntity<CartRegistrationDTO> getCartItems(@AuthenticationPrincipal Jwt jwt) {
         return shoppingCartService.getCartItems(jwt);
     }
     @PostMapping("/add")
-    public ResponseEntity<?> addToCart(@AuthenticationPrincipal Jwt jwt, @RequestBody CartRegistrationDTO body) {
+    public ResponseEntity<CartRegistrationDTO> addToCart(@AuthenticationPrincipal Jwt jwt, @RequestBody CartRegistrationDTO body) {
         return shoppingCartService.addToCart(jwt, body.getProductId(), body.getQuantity());
     }
     @PostMapping("/remove")
-    public ResponseEntity<?> removeCartItem(@AuthenticationPrincipal Jwt jwt, @RequestBody CartRegistrationDTO body) {
+    public ResponseEntity<CartRegistrationDTO> removeCartItem(@AuthenticationPrincipal Jwt jwt, @RequestBody CartRegistrationDTO body) {
         return shoppingCartService.removeCartItem(jwt, body.getCartItemId());
     }
 

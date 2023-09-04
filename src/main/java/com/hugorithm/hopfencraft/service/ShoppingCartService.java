@@ -1,5 +1,6 @@
 package com.hugorithm.hopfencraft.service;
 
+import com.hugorithm.hopfencraft.dto.CartRegistrationDTO;
 import com.hugorithm.hopfencraft.model.ApplicationUser;
 import com.hugorithm.hopfencraft.model.CartItem;
 import com.hugorithm.hopfencraft.model.Product;
@@ -33,7 +34,7 @@ public class ShoppingCartService {
         return productRepository.findById(productId)
                 .orElseThrow(() -> new NoSuchElementException("Product not found with ID: " + productId));
     }
-    public ResponseEntity<?> addToCart(Jwt jwt, Long productId, int quantity) {
+    public ResponseEntity<CartRegistrationDTO> addToCart(Jwt jwt, Long productId, int quantity) {
         try {
             ApplicationUser user = jwtService.getUserFromJwt(jwt);
             Product product = getProductFromRepoById(productId);
@@ -51,7 +52,7 @@ public class ShoppingCartService {
                 cartItemRepository.save(cartItem);
                 cartItems.add(cartItem);
 
-                return ResponseEntity.ok(cartItems);
+                return ResponseEntity.ok(new CartRegistrationDTO(cartItems));
             } else {
                 throw new IllegalArgumentException("Requested quantity exceeds available quantity");
             }
@@ -61,7 +62,7 @@ public class ShoppingCartService {
         }
     }
 
-    public ResponseEntity<?> removeCartItem(Jwt jwt, Long cartItemId) {
+    public ResponseEntity<CartRegistrationDTO> removeCartItem(Jwt jwt, Long cartItemId) {
         try {
             ApplicationUser user = jwtService.getUserFromJwt(jwt);
             CartItem cartItem = findCartItemById(user, cartItemId);
@@ -69,7 +70,8 @@ public class ShoppingCartService {
             if (cartItem != null) {
                 user.getCartItems().remove(cartItem);
                 cartItemRepository.delete(cartItem);
-                return ResponseEntity.ok(user.getCartItems());
+
+                return ResponseEntity.ok(new CartRegistrationDTO(user.getCartItems()));
             } else {
                 throw new NoSuchElementException("Cart item not found with Id: " + cartItemId);
             }
@@ -84,11 +86,11 @@ public class ShoppingCartService {
                 .findFirst()
                 .orElse(null);
     }
-    public ResponseEntity<?> getCartItems(Jwt jwt) {
+    public ResponseEntity<CartRegistrationDTO> getCartItems(Jwt jwt) {
         try {
             ApplicationUser user = jwtService.getUserFromJwt(jwt);
 
-            return ResponseEntity.ok(user.getCartItems());
+            return ResponseEntity.ok(new CartRegistrationDTO(user.getCartItems()));
         } catch (UsernameNotFoundException | NoSuchElementException ex) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }

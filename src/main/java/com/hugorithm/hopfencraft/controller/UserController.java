@@ -19,7 +19,7 @@ public class UserController {
     }
 
     @PostMapping("/reset-password-request")
-    public ResponseEntity<?> sendPasswordResetRequest(@AuthenticationPrincipal Jwt jwt) {
+    public ResponseEntity<String> sendPasswordResetRequest(@AuthenticationPrincipal Jwt jwt) {
         return userService.sendPasswordResetRequest(jwt);
     }
 
