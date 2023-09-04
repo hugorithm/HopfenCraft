@@ -4,6 +4,9 @@ import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.Set;
 
+import com.hugorithm.hopfencraft.validators.EmailValidator;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -42,26 +45,41 @@ public class AuthenticationService {
         this.tokenService = tokenService;
     }
 
-    public ApplicationUser registerUser(String username, String password){
-        Optional<ApplicationUser> existingUser = userRepository.findByUsername(username);
+    public ResponseEntity<?> registerUser(String username, String password, String email){
+        try {
+            Optional<ApplicationUser> existingUser = userRepository.findByUsername(username);
+            Optional<ApplicationUser> existingEmail = userRepository.findByEmail(email);
 
-        if (existingUser.isPresent()) {
-            throw new IllegalStateException("Username is already taken");
+            if (existingUser.isPresent()) {
+                throw new IllegalArgumentException(String.format("Username %s is already taken", username));
+            }
+
+            if (existingEmail.isPresent()) {
+                throw new IllegalArgumentException(String.format("Email %s is already taken", email));
+            }
+
+            if (!EmailValidator.isValid(email)) {
+                throw new IllegalArgumentException("Email is not valid");
+            }
+
+            String encodedPassword = passwordEncoder.encode(password);
+            Role userRole = roleRepository.findByAuthority("USER").orElseThrow(() -> new NoSuchElementException("Role not Found"));
+
+            Set<Role> authorities = new HashSet<>();
+            authorities.add(userRole);
+
+            ApplicationUser user = new ApplicationUser();
+            user.setUsername(username);
+            user.setPassword(encodedPassword);
+            user.setAuthorities(authorities);
+            user.setEmail(email);
+
+            userRepository.save(user);
+
+            return ResponseEntity.ok(user);
+        } catch (IllegalArgumentException ex) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
         }
-
-        String encodedPassword = passwordEncoder.encode(password);
-        Role userRole = roleRepository.findByAuthority("USER").orElseThrow(() -> new NoSuchElementException("Role not Found"));
-
-        Set<Role> authorities = new HashSet<>();
-        authorities.add(userRole);
-
-        ApplicationUser user = new ApplicationUser();
-        user.setUsername(username);
-        user.setPassword(encodedPassword);
-        user.setAuthorities(authorities);
-
-        return userRepository.save(user);
-
     }
 
     public LoginResponseDTO login(String username, String password){

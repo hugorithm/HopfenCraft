@@ -35,7 +35,7 @@ public class HopfencraftApplication {
 			roles.add(adminRole);
 			// Add Admin
 			//Ugly way of adding an admin and roles.
-			ApplicationUser admin = new ApplicationUser(1L, "admin", passwordEncoder.encode("password"), roles);
+			ApplicationUser admin = new ApplicationUser(1L, "admin", passwordEncoder.encode("password"), "admin@admin.com", roles);
 
 			userRepository.save(admin);
 

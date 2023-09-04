@@ -18,7 +18,8 @@ public class ApplicationUser implements UserDetails {
     private String username;
     @JsonIgnore
     private String password;
-
+    @Column(unique = true)
+    private String email;
     @OneToMany(mappedBy = "user")
     private List<CartItem> cartItems;
 
@@ -35,10 +36,11 @@ public class ApplicationUser implements UserDetails {
         this.authorities = new HashSet<>();
     }
 
-    public ApplicationUser(Long userId, String username, String password, Set<Role> authorities) {
+    public ApplicationUser(Long userId, String username, String password, String email, Set<Role> authorities) {
         this.userId = userId;
         this.username = username;
         this.password = password;
+        this.email = email;
         this.authorities = authorities;
         this.cartItems = new ArrayList<>();
     }
@@ -104,5 +106,13 @@ public class ApplicationUser implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 }

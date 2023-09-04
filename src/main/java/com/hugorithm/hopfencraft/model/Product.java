@@ -83,12 +83,12 @@ public class Product {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Product product = (Product) o;
-        return quantity == product.quantity && Objects.equals(productId, product.productId) && Objects.equals(brand, product.brand) && Objects.equals(name, product.name) && Objects.equals(description, product.description) && Objects.equals(price, product.price);
+        return quantity == product.quantity && Objects.equals(productId, product.productId) && Objects.equals(brand, product.brand) && Objects.equals(name, product.name) && Objects.equals(description, product.description) && Objects.equals(price, product.price) && Objects.equals(registerDateTime, product.registerDateTime);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(productId, brand, name, description, quantity, price);
+        return Objects.hash(productId, brand, name, description, quantity, price, registerDateTime);
     }
 
     @Override
@@ -100,6 +100,7 @@ public class Product {
                 ", description='" + description + '\'' +
                 ", quantity=" + quantity +
                 ", price=" + price +
+                ", registerDateTime=" + registerDateTime +
                 '}';
     }
 

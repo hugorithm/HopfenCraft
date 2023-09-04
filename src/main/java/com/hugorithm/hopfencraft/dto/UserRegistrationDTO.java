@@ -1,15 +1,17 @@
 package com.hugorithm.hopfencraft.dto;
 
-public class RegistrationDTO {
+public class UserRegistrationDTO {
     private String username;
     private String password;
+    private String email;
 
-    public RegistrationDTO() {
+    public UserRegistrationDTO() {
     }
 
-    public RegistrationDTO(String username, String password) {
+    public UserRegistrationDTO(String username, String password, String email) {
         this.username = username;
         this.password = password;
+        this.email = email;
     }
 
 
@@ -31,9 +33,18 @@ public class RegistrationDTO {
 
     @Override
     public String toString() {
-        return "RegistrationDTO{" +
+        return "UserRegistrationDTO{" +
                 "username='" + username + '\'' +
                 ", password='" + password + '\'' +
+                ", email='" + email + '\'' +
                 '}';
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 }
