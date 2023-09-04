@@ -2,6 +2,7 @@ package com.hugorithm.hopfencraft.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -9,6 +10,7 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "products")
 @Data
+@NoArgsConstructor
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,16 +24,13 @@ public class Product {
     private BigDecimal price;
     private LocalDateTime registerDateTime;
 
-    public Product() {
-    }
 
     public Product(String brand, String name, String description, int quantity, BigDecimal price, LocalDateTime registerDateTime) {
+        this.brand = brand;
         this.name = name;
         this.description = description;
         this.quantity = quantity;
         this.price = price;
-        this.brand = brand;
         this.registerDateTime = registerDateTime;
     }
-
 }
