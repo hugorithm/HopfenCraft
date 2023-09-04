@@ -13,6 +13,7 @@ import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.NoSuchElementException;
 
 @Service
@@ -54,6 +55,7 @@ public class ShoppingCartService {
                 cartItem.setUser(user);
                 cartItem.setProduct(product);
                 cartItem.setQuantity(quantity);
+                cartItem.setAddedDateTime(LocalDateTime.now());
 
                 cartItemRepository.save(cartItem);
 
@@ -71,10 +73,10 @@ public class ShoppingCartService {
         try {
             ApplicationUser user = getUserFromJwt(jwt);
             CartItem cartItem = findCartItemById(user, cartItemId);
+
             if (cartItem != null) {
                 user.getCartItems().remove(cartItem);
                 cartItemRepository.delete(cartItem);
-
                 return ResponseEntity.ok(user.getCartItems());
             } else {
                 throw new NoSuchElementException("Cart item not found with Id: " + cartItemId);

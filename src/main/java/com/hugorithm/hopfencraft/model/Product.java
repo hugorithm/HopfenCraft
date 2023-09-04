@@ -3,6 +3,7 @@ package com.hugorithm.hopfencraft.model;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Entity
@@ -18,17 +19,19 @@ public class Product {
     private String description;
     private int quantity;
     private BigDecimal price;
+    private LocalDateTime registerDateTime;
 
     public Product() {
     }
 
-    public Product(Long productId,  String brand, String name, String description, int quantity, BigDecimal price) {
+    public Product(Long productId, String brand, String name, String description, int quantity, BigDecimal price, LocalDateTime registerDateTime) {
         this.productId = productId;
         this.name = name;
         this.description = description;
         this.quantity = quantity;
         this.price = price;
         this.brand = brand;
+        this.registerDateTime = registerDateTime;
     }
 
     public String getBrand() {
@@ -98,5 +101,13 @@ public class Product {
                 ", quantity=" + quantity +
                 ", price=" + price +
                 '}';
+    }
+
+    public LocalDateTime getRegisterDateTime() {
+        return registerDateTime;
+    }
+
+    public void setRegisterDateTime(LocalDateTime registerDateTime) {
+        this.registerDateTime = registerDateTime;
     }
 }

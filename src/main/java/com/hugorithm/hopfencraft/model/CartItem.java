@@ -3,6 +3,7 @@ package com.hugorithm.hopfencraft.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Entity
@@ -14,21 +15,20 @@ public class CartItem {
     private Long cartItemId;
     @ManyToOne
     private Product product;
-
     @ManyToOne
     @JsonIgnore
     private ApplicationUser user;
-
     private int quantity;
-
+    private LocalDateTime addedDateTime;
     public CartItem() {
     }
 
-    public CartItem(Long cartItemId, Product product, ApplicationUser user, int quantity) {
+    public CartItem(Long cartItemId, Product product, ApplicationUser user, int quantity, LocalDateTime addedDateTime) {
         this.cartItemId = cartItemId;
         this.product = product;
         this.user = user;
         this.quantity = quantity;
+        this.addedDateTime = addedDateTime;
     }
 
     public Long getCartItemId() {
@@ -84,5 +84,13 @@ public class CartItem {
                 ", user=" + user +
                 ", quantity=" + quantity +
                 '}';
+    }
+
+    public LocalDateTime getAddedDateTime() {
+        return addedDateTime;
+    }
+
+    public void setAddedDateTime(LocalDateTime addedDateTime) {
+        this.addedDateTime = addedDateTime;
     }
 }

@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 @Service
 @Transactional
@@ -23,6 +24,7 @@ public class ProductService {
         p.setDescription(description);
         p.setQuantity(quantity);
         p.setPrice(price);
+        p.setRegisterDateTime(LocalDateTime.now());
 
         return productRepository.save(p);
     }
