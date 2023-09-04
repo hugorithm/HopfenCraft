@@ -22,16 +22,13 @@ public class ShoppingCartService {
     private final CartItemRepository cartItemRepository;
     private final UserRepository userRepository;
     private final ProductRepository productRepository;
+    private final JwtService jwtService;
 
-    public ShoppingCartService(CartItemRepository cartItemRepository, UserRepository userRepository, ProductRepository productRepository) {
+    public ShoppingCartService(CartItemRepository cartItemRepository, UserRepository userRepository, ProductRepository productRepository, JwtService jwtService) {
         this.cartItemRepository = cartItemRepository;
         this.userRepository = userRepository;
         this.productRepository = productRepository;
-    }
-
-    private ApplicationUser getUserFromJwt(Jwt jwt) {
-        String username = jwt.getSubject();
-        return userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("Username not found"));
+        this.jwtService = jwtService;
     }
 
     private  Product getProductFromRepoById(Long productId) {
@@ -40,7 +37,7 @@ public class ShoppingCartService {
     }
     public ResponseEntity<?> addToCart(Jwt jwt, Long productId, int quantity) {
         try {
-            ApplicationUser user = getUserFromJwt(jwt);
+            ApplicationUser user = jwtService.getUserFromJwt(jwt);
             Product product = getProductFromRepoById(productId);
 
             /*
@@ -71,7 +68,7 @@ public class ShoppingCartService {
 
     public ResponseEntity<?> removeCartItem(Jwt jwt, Long cartItemId) {
         try {
-            ApplicationUser user = getUserFromJwt(jwt);
+            ApplicationUser user = jwtService.getUserFromJwt(jwt);
             CartItem cartItem = findCartItemById(user, cartItemId);
 
             if (cartItem != null) {
@@ -94,7 +91,7 @@ public class ShoppingCartService {
     }
     public ResponseEntity<?> getCartItems(Jwt jwt) {
         try {
-            ApplicationUser user = getUserFromJwt(jwt);
+            ApplicationUser user = jwtService.getUserFromJwt(jwt);
 
             return ResponseEntity.ok(user.getCartItems());
         } catch (UsernameNotFoundException | NoSuchElementException ex) {

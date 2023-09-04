@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.time.LocalDateTime;
 import java.util.*;
 
 @Entity
@@ -20,6 +21,10 @@ public class ApplicationUser implements UserDetails {
     private String password;
     @Column(unique = true)
     private String email;
+    @Column(name = "password_reset_token")
+    private String passwordResetToken;
+    @Column(name = "password_reset_token_expiration")
+    private LocalDateTime passwordResetTokenExpiration;
     @OneToMany(mappedBy = "user")
     private List<CartItem> cartItems;
 
@@ -114,5 +119,21 @@ public class ApplicationUser implements UserDetails {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getPasswordResetToken() {
+        return passwordResetToken;
+    }
+
+    public void setPasswordResetToken(String passwordResetToken) {
+        this.passwordResetToken = passwordResetToken;
+    }
+
+    public LocalDateTime getPasswordResetTokenExpiration() {
+        return passwordResetTokenExpiration;
+    }
+
+    public void setPasswordResetTokenExpiration(LocalDateTime passwordResetTokenExpiration) {
+        this.passwordResetTokenExpiration = passwordResetTokenExpiration;
     }
 }

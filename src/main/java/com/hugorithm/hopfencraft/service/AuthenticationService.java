@@ -13,6 +13,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,18 +27,15 @@ import com.hugorithm.hopfencraft.repository.RoleRepository;
 @Service
 @Transactional
 public class AuthenticationService {
-
+    private final JwtService jwtService;
     private final UserRepository userRepository;
-
     private final RoleRepository roleRepository;
-
     private final PasswordEncoder passwordEncoder;
-
     private final AuthenticationManager authenticationManager;
-
     private final TokenService tokenService;
 
-    public AuthenticationService(UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder, AuthenticationManager authenticationManager, TokenService tokenService) {
+    public AuthenticationService(JwtService jwtService, UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder, AuthenticationManager authenticationManager, TokenService tokenService) {
+        this.jwtService = jwtService;
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.passwordEncoder = passwordEncoder;
@@ -78,12 +76,11 @@ public class AuthenticationService {
 
             return ResponseEntity.ok(user);
         } catch (IllegalArgumentException ex) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex.getMessage());
         }
     }
 
     public LoginResponseDTO login(String username, String password){
-
         try {
             Authentication auth = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
             String token = tokenService.generateJwt(auth);
@@ -95,4 +92,16 @@ public class AuthenticationService {
         }
     }
 
+    //TODO: Write method and send Email with token.
+    public ResponseEntity<?> resetPassword(Jwt jwt) {
+        try {
+            ApplicationUser user = jwtService.getUserFromJwt(jwt);
+
+
+
+            return null;
+        } catch (Exception ex) {
+            return null;
+        }
+    }
 }

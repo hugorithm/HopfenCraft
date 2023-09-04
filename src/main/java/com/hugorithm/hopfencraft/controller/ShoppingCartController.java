@@ -1,8 +1,6 @@
 package com.hugorithm.hopfencraft.controller;
 
 import com.hugorithm.hopfencraft.dto.CartRegistrationDTO;
-import com.hugorithm.hopfencraft.repository.CartItemRepository;
-import com.hugorithm.hopfencraft.repository.UserRepository;
 import com.hugorithm.hopfencraft.service.ShoppingCartService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -13,9 +11,6 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/cart")
 public class ShoppingCartController {
-
-
-
     private final ShoppingCartService shoppingCartService;
     @Autowired
     public ShoppingCartController( ShoppingCartService shoppingCartService) {

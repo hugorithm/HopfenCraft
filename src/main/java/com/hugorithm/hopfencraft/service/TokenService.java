@@ -1,7 +1,9 @@
 package com.hugorithm.hopfencraft.service;
 
+import java.security.SecureRandom;
 import java.time.Duration;
 import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.stream.Collectors;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -39,5 +41,24 @@ public class TokenService {
                 .build();
 
         return jwtEncoder.encode(JwtEncoderParameters.from(claims)).getTokenValue();
+    }
+
+    private static String bytesToHex(byte[] bytes) {
+        StringBuilder hex = new StringBuilder(2 * bytes.length);
+        for (byte b : bytes) {
+            hex.append(String.format("%02x", b));
+        }
+        return hex.toString();
+    }
+    public static String generatePasswordResetToken() {
+        SecureRandom random = new SecureRandom();
+        byte[] bytes = new byte[32];
+        random.nextBytes(bytes);
+        String token = bytesToHex(bytes);
+
+        LocalDateTime expires = LocalDateTime.now().plusHours(1);
+        token += "|" + expires;
+
+        return token;
     }
 }
