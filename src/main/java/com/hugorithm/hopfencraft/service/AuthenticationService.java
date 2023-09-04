@@ -6,6 +6,8 @@ import java.util.Set;
 
 import com.hugorithm.hopfencraft.dto.UserRegistrationDTO;
 import com.hugorithm.hopfencraft.validators.EmailValidator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -32,6 +34,7 @@ public class AuthenticationService {
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
     private final TokenService tokenService;
+    private final static Logger LOGGER = LoggerFactory.getLogger(AuthenticationService.class);
 
     public AuthenticationService(UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder, AuthenticationManager authenticationManager, TokenService tokenService) {
         this.userRepository = userRepository;
@@ -71,6 +74,7 @@ public class AuthenticationService {
 
             return ResponseEntity.ok(userDto);
         } catch (IllegalArgumentException ex) {
+            LOGGER.error(ex.getMessage(), ex);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
@@ -83,6 +87,7 @@ public class AuthenticationService {
 
             return ResponseEntity.ok(user);
         } catch (AuthenticationException ex){
+            LOGGER.error("Failed to authenticate", ex);
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
     }

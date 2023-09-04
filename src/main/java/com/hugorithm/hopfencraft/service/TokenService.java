@@ -5,6 +5,8 @@ import java.time.Duration;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.stream.Collectors;
+
+
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth2.jwt.JwtClaimsSet;
@@ -16,8 +18,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class TokenService {
     private final JwtEncoder jwtEncoder;
-
     private final JwtDecoder jwtDecoder;
+
 
     public TokenService(JwtEncoder jwtEncoder, JwtDecoder jwtDecoder) {
         this.jwtEncoder = jwtEncoder;

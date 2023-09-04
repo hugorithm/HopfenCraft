@@ -2,6 +2,8 @@ package com.hugorithm.hopfencraft.service;
 
 import com.hugorithm.hopfencraft.model.ApplicationUser;
 import com.hugorithm.hopfencraft.repository.UserRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -22,6 +24,9 @@ public class UserService implements UserDetailsService {
     private final EmailService emailService;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final static Logger LOGGER = LoggerFactory.getLogger(UserService.class);
+
+
 
     public UserService(JwtService jwtService, TokenService tokenService, EmailService emailService, UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.jwtService = jwtService;
@@ -53,15 +58,16 @@ public class UserService implements UserDetailsService {
             LocalDateTime expirationDate = extractDateTimeFromToken(token);
             user.setPasswordResetTokenExpiration(expirationDate);
 
-            String subject = "HopfenCraft: Password Reset";
+            String subject = "Password Reset";
             String link = emailService.baseUrl + "/user/reset-password?token=" + token;
-            String message = String.format("Please use the following link to reset your password: %s \nIf you didn't do this please contact the admin!", link);
+            String message = emailService.buildEmail(user.getUsername(),"Please use the following link to reset your password", link);
 
             emailService.sendEmail(user.getEmail(), subject, message);
             user.setPasswordResetToken(token);
 
             return ResponseEntity.ok("Password reset email sent successfully");
         } catch (IllegalStateException ex) {
+            LOGGER.error(ex.getMessage(), ex);
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
     }
@@ -85,6 +91,7 @@ public class UserService implements UserDetailsService {
             verifyPasswordResetToken(jwt, token);
             return ResponseEntity.ok().build();
         } catch (IllegalStateException ex) {
+            LOGGER.error(ex.getMessage(), ex);
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
     }
@@ -109,6 +116,7 @@ public class UserService implements UserDetailsService {
             }
 
         } catch (IllegalStateException ex) {
+            LOGGER.error(ex.getMessage(), ex);
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
     }

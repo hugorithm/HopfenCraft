@@ -6,6 +6,8 @@ import com.hugorithm.hopfencraft.model.CartItem;
 import com.hugorithm.hopfencraft.model.Product;
 import com.hugorithm.hopfencraft.repository.CartItemRepository;
 import com.hugorithm.hopfencraft.repository.ProductRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -23,6 +25,7 @@ public class ShoppingCartService {
     private final CartItemRepository cartItemRepository;
     private final ProductRepository productRepository;
     private final JwtService jwtService;
+    private final static Logger LOGGER = LoggerFactory.getLogger(ShoppingCartService.class);
 
     public ShoppingCartService(CartItemRepository cartItemRepository, ProductRepository productRepository, JwtService jwtService) {
         this.cartItemRepository = cartItemRepository;
@@ -58,6 +61,7 @@ public class ShoppingCartService {
             }
 
         } catch (UsernameNotFoundException | NoSuchElementException | IllegalArgumentException ex) {
+            LOGGER.error(ex.getMessage(), ex);
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }
@@ -76,6 +80,7 @@ public class ShoppingCartService {
                 throw new NoSuchElementException("Cart item not found with Id: " + cartItemId);
             }
         } catch (UsernameNotFoundException | NoSuchElementException ex) {
+            LOGGER.error(ex.getMessage(), ex);
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }
@@ -92,6 +97,7 @@ public class ShoppingCartService {
 
             return ResponseEntity.ok(new CartRegistrationDTO(user.getCartItems()));
         } catch (UsernameNotFoundException | NoSuchElementException ex) {
+            LOGGER.error(ex.getMessage(), ex);
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }
