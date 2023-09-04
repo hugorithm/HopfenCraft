@@ -18,14 +18,6 @@ public class ProductService {
     }
 
     public Product registerProduct(String brand, String name, String description, int quantity, BigDecimal price) {
-        Product p = new Product();
-        p.setBrand(brand);
-        p.setName(name);
-        p.setDescription(description);
-        p.setQuantity(quantity);
-        p.setPrice(price);
-        p.setRegisterDateTime(LocalDateTime.now());
-
-        return productRepository.save(p);
+        return productRepository.save(new Product(brand, name, description, quantity, price, LocalDateTime.now()));
     }
 }

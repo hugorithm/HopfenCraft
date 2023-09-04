@@ -68,7 +68,7 @@ public class AuthenticationService {
 
             return ResponseEntity.ok(user);
         } catch (IllegalArgumentException ex) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 
@@ -80,7 +80,7 @@ public class AuthenticationService {
 
             return ResponseEntity.ok(user);
         } catch (AuthenticationException ex){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
     }
 }

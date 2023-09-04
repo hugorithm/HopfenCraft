@@ -62,7 +62,7 @@ public class UserService implements UserDetailsService {
 
             return ResponseEntity.ok("Password reset email sent successfully");
         } catch (IllegalStateException ex) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
     }
 
@@ -86,7 +86,7 @@ public class UserService implements UserDetailsService {
 
             return ResponseEntity.ok(user);
         } catch (IllegalStateException ex) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(ex.getMessage());
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
     }
 
@@ -110,7 +110,7 @@ public class UserService implements UserDetailsService {
             }
 
         } catch (IllegalStateException ex) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
     }
 }

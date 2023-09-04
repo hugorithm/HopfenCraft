@@ -57,7 +57,7 @@ public class ShoppingCartService {
             }
 
         } catch (UsernameNotFoundException | NoSuchElementException | IllegalArgumentException ex) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }
 
@@ -90,7 +90,7 @@ public class ShoppingCartService {
 
             return ResponseEntity.ok(user.getCartItems());
         } catch (UsernameNotFoundException | NoSuchElementException ex) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }
 
