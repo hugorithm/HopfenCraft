@@ -50,7 +50,7 @@ public class TokenService {
         }
         return hex.toString();
     }
-    public static String generatePasswordResetToken() {
+    public String generatePasswordResetToken() {
         SecureRandom random = new SecureRandom();
         byte[] bytes = new byte[32];
         random.nextBytes(bytes);

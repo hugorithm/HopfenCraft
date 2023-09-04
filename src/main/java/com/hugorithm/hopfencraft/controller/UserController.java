@@ -1,6 +1,7 @@
 package com.hugorithm.hopfencraft.controller;
 
-import com.hugorithm.hopfencraft.service.AuthenticationService;
+import com.hugorithm.hopfencraft.dto.PasswordResetDTO;
+import com.hugorithm.hopfencraft.service.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
@@ -11,14 +12,24 @@ import org.springframework.web.bind.annotation.*;
 @CrossOrigin("*")
 //See CrossOrigin after
 public class UserController {
-    private final AuthenticationService authenticationService;
+    private final UserService userService;
 
-    public UserController(AuthenticationService authenticationService) {
-        this.authenticationService = authenticationService;
+    public UserController(UserService userService) {
+        this.userService = userService;
+    }
+
+    @PostMapping("/reset-password-request")
+    public ResponseEntity<?> sendPasswordResetRequest(@AuthenticationPrincipal Jwt jwt) {
+        return userService.sendPasswordResetRequest(jwt);
+    }
+
+    @GetMapping("/reset-password")
+    public ResponseEntity<?> resetPassword(@AuthenticationPrincipal Jwt jwt, @RequestParam String token) {
+        return userService.showPasswordResetForm(jwt, token);
     }
 
     @PostMapping("/reset-password")
-    public ResponseEntity<?> resetPassword(@AuthenticationPrincipal Jwt jwt) {
-        return authenticationService.resetPassword(jwt);
+    public ResponseEntity<?> resetPassword(@AuthenticationPrincipal Jwt jwt, @RequestBody PasswordResetDTO body, @RequestParam String token) {
+        return userService.resetPassword(jwt, token, body.getOldPassword(), body.getNewPassword(), body.getNewPasswordConfirmation());
     }
 }

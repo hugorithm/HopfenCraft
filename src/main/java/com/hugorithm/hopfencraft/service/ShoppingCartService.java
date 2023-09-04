@@ -5,7 +5,6 @@ import com.hugorithm.hopfencraft.model.CartItem;
 import com.hugorithm.hopfencraft.model.Product;
 import com.hugorithm.hopfencraft.repository.CartItemRepository;
 import com.hugorithm.hopfencraft.repository.ProductRepository;
-import com.hugorithm.hopfencraft.repository.UserRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -14,19 +13,18 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.NoSuchElementException;
 
 @Service
 @Transactional
 public class ShoppingCartService {
     private final CartItemRepository cartItemRepository;
-    private final UserRepository userRepository;
     private final ProductRepository productRepository;
     private final JwtService jwtService;
 
-    public ShoppingCartService(CartItemRepository cartItemRepository, UserRepository userRepository, ProductRepository productRepository, JwtService jwtService) {
+    public ShoppingCartService(CartItemRepository cartItemRepository, ProductRepository productRepository, JwtService jwtService) {
         this.cartItemRepository = cartItemRepository;
-        this.userRepository = userRepository;
         this.productRepository = productRepository;
         this.jwtService = jwtService;
     }
@@ -40,23 +38,20 @@ public class ShoppingCartService {
             ApplicationUser user = jwtService.getUserFromJwt(jwt);
             Product product = getProductFromRepoById(productId);
 
-            /*
-            int totalQuantity = user.getCartItems().stream()
+            List<CartItem> cartItems = user.getCartItems();
+
+            int totalQuantity = cartItems.stream()
                     .filter(cartItem -> cartItem.getProduct().getProductId().equals(productId))
                     .mapToInt(CartItem::getQuantity)
                     .sum();
-            */
 
-            if (quantity <= product.getQuantity()) {
-                CartItem cartItem = new CartItem();
-                cartItem.setUser(user);
-                cartItem.setProduct(product);
-                cartItem.setQuantity(quantity);
-                cartItem.setAddedDateTime(LocalDateTime.now());
+            if (quantity + totalQuantity <= product.getQuantity()) {
+                CartItem cartItem = new CartItem(product, user, quantity, LocalDateTime.now());
 
                 cartItemRepository.save(cartItem);
+                cartItems.add(cartItem);
 
-                return ResponseEntity.ok(user.getCartItems());
+                return ResponseEntity.ok(cartItems);
             } else {
                 throw new IllegalArgumentException("Requested quantity exceeds available quantity");
             }
@@ -79,7 +74,7 @@ public class ShoppingCartService {
                 throw new NoSuchElementException("Cart item not found with Id: " + cartItemId);
             }
         } catch (UsernameNotFoundException | NoSuchElementException ex) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }
 

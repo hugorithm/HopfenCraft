@@ -19,3 +19,16 @@ spring:
   devtools:
     restart:
       enabled: true
+  mail:
+    host: ${EMAIL_HOST}
+    port: ${EMAIL_PORT}
+    username: ${EMAIL_USERNAME}
+    password: ${EMAIL_PASSWORD}
+    properties:
+      mail:
+        smtp:
+          auth:
+            true
+        starttls:
+          enable:
+            true
