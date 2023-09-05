@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
 import java.util.stream.Collectors;
 
 
+import lombok.AllArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth2.jwt.JwtClaimsSet;
@@ -19,15 +20,11 @@ import org.springframework.security.oauth2.jwt.JwtEncoderParameters;
 import org.springframework.stereotype.Service;
 
 @Service
+@AllArgsConstructor
 public class TokenService {
     private final JwtEncoder jwtEncoder;
     private final JwtDecoder jwtDecoder;
 
-
-    public TokenService(JwtEncoder jwtEncoder, JwtDecoder jwtDecoder) {
-        this.jwtEncoder = jwtEncoder;
-        this.jwtDecoder = jwtDecoder;
-    }
 
     public String generateJwt(Authentication auth){
         Instant now = Instant.now();

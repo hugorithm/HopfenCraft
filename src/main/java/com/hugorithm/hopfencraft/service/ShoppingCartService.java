@@ -6,6 +6,7 @@ import com.hugorithm.hopfencraft.model.CartItem;
 import com.hugorithm.hopfencraft.model.Product;
 import com.hugorithm.hopfencraft.repository.CartItemRepository;
 import com.hugorithm.hopfencraft.repository.ProductRepository;
+import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -21,17 +22,12 @@ import java.util.NoSuchElementException;
 
 @Service
 @Transactional
+@AllArgsConstructor
 public class ShoppingCartService {
     private final CartItemRepository cartItemRepository;
     private final ProductRepository productRepository;
     private final JwtService jwtService;
     private final static Logger LOGGER = LoggerFactory.getLogger(ShoppingCartService.class);
-
-    public ShoppingCartService(CartItemRepository cartItemRepository, ProductRepository productRepository, JwtService jwtService) {
-        this.cartItemRepository = cartItemRepository;
-        this.productRepository = productRepository;
-        this.jwtService = jwtService;
-    }
 
     private  Product getProductFromRepoById(Long productId) {
         return productRepository.findById(productId)

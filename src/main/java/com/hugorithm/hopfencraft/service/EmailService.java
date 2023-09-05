@@ -1,5 +1,8 @@
 package com.hugorithm.hopfencraft.service;
 
+import com.hugorithm.hopfencraft.model.ApplicationUser;
+import com.hugorithm.hopfencraft.model.Email;
+import com.hugorithm.hopfencraft.repository.EmailRepository;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.AllArgsConstructor;
@@ -10,14 +13,19 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+
 @Service
 @AllArgsConstructor
 public class EmailService {
     private final JavaMailSender mailSender;
     public final String baseUrl = "http://localhost:8080";
+
+    private final EmailRepository emailRepository;
     private final static Logger LOGGER = LoggerFactory.getLogger(EmailService.class);
+
     @Async
-    public void sendEmail(String to, String subject, String email) {
+    public void sendEmail(String to, String subject, String email, ApplicationUser user, Email.EmailType emailType) {
         try {
             MimeMessage mimeMessage = mailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, "utf-8");
@@ -28,13 +36,16 @@ public class EmailService {
             helper.setFrom("no-reply@hopfencraft.com");
 
             mailSender.send(mimeMessage);
+
+            emailRepository.save(new Email(emailType, LocalDateTime.now(), user));
+
         } catch (MessagingException ex) {
             LOGGER.error("failed to send email", ex);
             throw new IllegalStateException("failed to send email");
         }
     }
 
-    public String buildEmail(String username, String message, String link) {
+    public String buildPasswordResetEmail(String username, String message, String link) {
         return "<div style=\"font-family:Helvetica,Arial,sans-serif;font-size:16px;margin:0;color:#0b0c0c\">\n" +
                 "\n" +
                 "<span style=\"display:none;font-size:1px;color:#fff;max-height:0\"></span>\n" +

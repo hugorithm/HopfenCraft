@@ -1,7 +1,9 @@
 package com.hugorithm.hopfencraft.service;
 
 import com.hugorithm.hopfencraft.model.ApplicationUser;
+import com.hugorithm.hopfencraft.model.Email;
 import com.hugorithm.hopfencraft.repository.UserRepository;
+import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -18,6 +20,7 @@ import java.time.format.DateTimeFormatter;
 
 
 @Service
+@AllArgsConstructor
 public class UserService implements UserDetailsService {
     private final JwtService jwtService;
     private final TokenService tokenService;
@@ -25,16 +28,6 @@ public class UserService implements UserDetailsService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final static Logger LOGGER = LoggerFactory.getLogger(UserService.class);
-
-
-
-    public UserService(JwtService jwtService, TokenService tokenService, EmailService emailService, UserRepository userRepository, PasswordEncoder passwordEncoder) {
-        this.jwtService = jwtService;
-        this.tokenService = tokenService;
-        this.emailService = emailService;
-        this.userRepository = userRepository;
-        this.passwordEncoder = passwordEncoder;
-    }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -65,9 +58,9 @@ public class UserService implements UserDetailsService {
 
             String subject = "Password Reset";
             String link = emailService.baseUrl + "/user/reset-password?token=" + token;
-            String message = emailService.buildEmail(user.getUsername(),"Please use the following link to reset your password", link);
+            String message = emailService.buildPasswordResetEmail(user.getUsername(),"Please use the following link to reset your password", link);
 
-            emailService.sendEmail(user.getEmail(), subject, message);
+            emailService.sendEmail(user.getEmail(), subject, message, user, Email.EmailType.PASSWORD_RESET);
 
             return ResponseEntity.ok("Password reset email sent successfully");
         } catch (IllegalStateException | IllegalArgumentException ex) {

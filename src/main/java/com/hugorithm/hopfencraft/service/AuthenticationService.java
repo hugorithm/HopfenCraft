@@ -6,6 +6,9 @@ import java.util.Set;
 
 import com.hugorithm.hopfencraft.dto.UserRegistrationResponseDTO;
 import com.hugorithm.hopfencraft.validators.EmailValidator;
+import com.hugorithm.hopfencraft.validators.PasswordValidator;
+import com.hugorithm.hopfencraft.validators.UsernameValidator;
+import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -28,6 +31,7 @@ import com.hugorithm.hopfencraft.repository.RoleRepository;
 
 @Service
 @Transactional
+@AllArgsConstructor
 public class AuthenticationService {
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
@@ -36,24 +40,18 @@ public class AuthenticationService {
     private final TokenService tokenService;
     private final static Logger LOGGER = LoggerFactory.getLogger(AuthenticationService.class);
 
-    public AuthenticationService(UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder, AuthenticationManager authenticationManager, TokenService tokenService) {
-        this.userRepository = userRepository;
-        this.roleRepository = roleRepository;
-        this.passwordEncoder = passwordEncoder;
-        this.authenticationManager = authenticationManager;
-        this.tokenService = tokenService;
-    }
-
-    private boolean isUsernameValid(String username) throws IllegalArgumentException{
-        return username != null && username.matches("^[a-zA-Z0-9_-]{3,20}$");
-    }
-
     public ResponseEntity<UserRegistrationResponseDTO> registerUser(String username, String password, String email){
         try {
             username = username.toLowerCase();
-            if(!isUsernameValid(username)) {
+
+            if(!UsernameValidator.isUsernameValid(username)) {
                 throw new IllegalArgumentException("Username is not valid");
             }
+
+            if (!PasswordValidator.isValidPassword(password)) {
+                throw new IllegalArgumentException("Password is not valid");
+            }
+
             Optional<ApplicationUser> existingUser = userRepository.findByUsername(username);
             Optional<ApplicationUser> existingEmail = userRepository.findByEmail(email);
 
