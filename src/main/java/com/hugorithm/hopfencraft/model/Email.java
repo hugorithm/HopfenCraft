@@ -22,7 +22,7 @@ public class Email {
     @Enumerated(EnumType.STRING)
     private EmailType emailType;
     public enum EmailType {
-        WELCOME,
+        REGISTRATION,
         PASSWORD_RESET,
         ORDER
     }

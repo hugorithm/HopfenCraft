@@ -38,6 +38,7 @@ public class AuthenticationService {
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
     private final TokenService tokenService;
+    private final EmailService emailService;
     private final static Logger LOGGER = LoggerFactory.getLogger(AuthenticationService.class);
 
     public ResponseEntity<UserRegistrationResponseDTO> registerUser(String username, String password, String email){
@@ -75,6 +76,8 @@ public class AuthenticationService {
 
             ApplicationUser user = new ApplicationUser(username, encodedPassword, email, authorities);
             userRepository.save(user);
+
+
 
             UserRegistrationResponseDTO userDto = new UserRegistrationResponseDTO(username, email);
 
