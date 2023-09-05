@@ -1,5 +1,8 @@
 package com.hugorithm.hopfencraft.service;
 
+import java.net.URLDecoder;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.security.SecureRandom;
 import java.time.Duration;
 import java.time.Instant;
@@ -61,6 +64,10 @@ public class TokenService {
         LocalDateTime expires = LocalDateTime.now().plusHours(1);
         token += "|" + expires;
 
-        return token;
+        return URLEncoder.encode(token, StandardCharsets.UTF_8).replace(".", "%2E");
+    }
+
+    public String URLDecodeToken(String encodedToken) {
+        return URLDecoder.decode(encodedToken, StandardCharsets.UTF_8).replace("%2E", ".");
     }
 }

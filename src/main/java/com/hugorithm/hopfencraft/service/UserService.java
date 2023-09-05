@@ -55,15 +55,20 @@ public class UserService implements UserDetailsService {
         try {
             ApplicationUser user = jwtService.getUserFromJwt(jwt);
             String token = tokenService.generatePasswordResetToken();
-            LocalDateTime expirationDate = extractDateTimeFromToken(token);
+            String decodedToken = tokenService.URLDecodeToken(token);
+            LocalDateTime expirationDate = extractDateTimeFromToken(decodedToken);
+
             user.setPasswordResetTokenExpiration(expirationDate);
+            user.setPasswordResetToken(decodedToken);
+
+            userRepository.save(user);
 
             String subject = "Password Reset";
             String link = emailService.baseUrl + "/user/reset-password?token=" + token;
             String message = emailService.buildEmail(user.getUsername(),"Please use the following link to reset your password", link);
 
             emailService.sendEmail(user.getEmail(), subject, message);
-            user.setPasswordResetToken(token);
+
 
             return ResponseEntity.ok("Password reset email sent successfully");
         } catch (IllegalStateException ex) {
@@ -74,13 +79,15 @@ public class UserService implements UserDetailsService {
 
     private ApplicationUser verifyPasswordResetToken(Jwt jwt, String token) {
         ApplicationUser user = jwtService.getUserFromJwt(jwt);
-        LocalDateTime expirationDate = extractDateTimeFromToken(token);
+        LocalDateTime expirationDate = extractDateTimeFromToken(tokenService.URLDecodeToken(token));
 
-        if (!token.equals(user.getPasswordResetToken())) {
+        ApplicationUser dbUser = userRepository.findByUsername(user.getUsername()).orElseThrow(() -> new UsernameNotFoundException("Username not found"));
+
+        if (!token.equals(dbUser.getPasswordResetToken())) {
             throw new IllegalArgumentException("Invalid token");
         }
 
-        if (expirationDate.isAfter(LocalDateTime.now())) {
+        if (expirationDate.equals(dbUser.getPasswordResetTokenExpiration()) && dbUser.getPasswordResetTokenExpiration().isBefore(LocalDateTime.now())) {
             throw new IllegalArgumentException("Token has expired");
         }
 
@@ -90,7 +97,7 @@ public class UserService implements UserDetailsService {
         try {
             verifyPasswordResetToken(jwt, token);
             return ResponseEntity.ok().build();
-        } catch (IllegalStateException ex) {
+        } catch (IllegalArgumentException | UsernameNotFoundException ex) {
             LOGGER.error(ex.getMessage(), ex);
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }

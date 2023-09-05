@@ -26,7 +26,7 @@ public class ProductController {
         this.productService = productService;
     }
 
-    //TODO: Must try to use DTO
+    //TODO: Must try to use DTO and check all the DTOs
     @GetMapping("/products")
     public Page<Product> getProducts(@RequestParam(defaultValue = "0") int page,
                                      @RequestParam(defaultValue = "10") int size) {
