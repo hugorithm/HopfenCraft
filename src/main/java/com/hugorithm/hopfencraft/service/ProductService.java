@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
@@ -30,7 +29,7 @@ public class ProductService {
                 throw new IllegalStateException("Product already exists");
             }
 
-            productRepository.save(new Product(brand, name, description, quantity, price, LocalDateTime.now()));
+            productRepository.save(new Product(brand, name, description, quantity, price));
             return ResponseEntity.ok(new ProductRegistrationDTO(brand, name, description, quantity, price));
         } catch (NoSuchElementException | IllegalStateException ex) {
             LOGGER.error(ex.getMessage(), ex);

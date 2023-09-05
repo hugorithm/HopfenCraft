@@ -1,8 +1,10 @@
 package com.hugorithm.hopfencraft.model;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -22,15 +24,16 @@ public class Product {
     private String description;
     private int quantity;
     private BigDecimal price;
+    @CreationTimestamp
     private LocalDateTime registerDateTime;
 
 
-    public Product(String brand, String name, String description, int quantity, BigDecimal price, LocalDateTime registerDateTime) {
+    public Product(String brand, String name, String description, int quantity, BigDecimal price) {
         this.brand = brand;
         this.name = name;
         this.description = description;
         this.quantity = quantity;
         this.price = price;
-        this.registerDateTime = registerDateTime;
     }
+
 }

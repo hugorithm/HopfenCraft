@@ -1,5 +1,6 @@
 package com.hugorithm.hopfencraft.service;
 
+import com.hugorithm.hopfencraft.dto.CartItemDTO;
 import com.hugorithm.hopfencraft.dto.CartResponseDTO;
 import com.hugorithm.hopfencraft.model.ApplicationUser;
 import com.hugorithm.hopfencraft.model.CartItem;
@@ -16,9 +17,9 @@ import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -46,12 +47,21 @@ public class ShoppingCartService {
                     .sum();
 
             if (quantity + totalQuantity <= product.getQuantity()) {
-                CartItem cartItem = new CartItem(product, user, quantity, LocalDateTime.now());
+                CartItem cartItem = new CartItem(product, user, quantity);
 
                 cartItemRepository.save(cartItem);
                 cartItems.add(cartItem);
 
-                return ResponseEntity.ok(new CartResponseDTO(cartItems));
+                List<CartItemDTO> cartItemDTOs = cartItems.stream()
+                        .map(ci -> new CartItemDTO(
+                                ci.getCartItemId(),
+                                ci.getProduct(),
+                                ci.getQuantity(),
+                                ci.getAddedDateTime()
+                        ))
+                        .collect(Collectors.toList());
+
+                return ResponseEntity.ok(new CartResponseDTO(cartItemDTOs));
             } else {
                 throw new IllegalArgumentException("Requested quantity exceeds available quantity");
             }
@@ -66,12 +76,22 @@ public class ShoppingCartService {
         try {
             ApplicationUser user = jwtService.getUserFromJwt(jwt);
             CartItem cartItem = findCartItemById(user, cartItemId);
+            List<CartItem> cartItems = user.getCartItems();
 
             if (cartItem != null) {
-                user.getCartItems().remove(cartItem);
+                cartItems.remove(cartItem);
                 cartItemRepository.delete(cartItem);
 
-                return ResponseEntity.ok(new CartResponseDTO(user.getCartItems()));
+                List<CartItemDTO> cartItemDTOs = cartItems.stream()
+                        .map(ci -> new CartItemDTO(
+                                ci.getCartItemId(),
+                                ci.getProduct(),
+                                ci.getQuantity(),
+                                ci.getAddedDateTime()
+                        ))
+                        .collect(Collectors.toList());
+
+                return ResponseEntity.ok(new CartResponseDTO(cartItemDTOs));
             } else {
                 throw new NoSuchElementException("Cart item not found with Id: " + cartItemId);
             }
@@ -90,8 +110,18 @@ public class ShoppingCartService {
     public ResponseEntity<CartResponseDTO> getCartItems(Jwt jwt) {
         try {
             ApplicationUser user = jwtService.getUserFromJwt(jwt);
+            List<CartItem> cartItems = user.getCartItems();
 
-            return ResponseEntity.ok(new CartResponseDTO(user.getCartItems()));
+            List<CartItemDTO> cartItemDTOs = cartItems.stream()
+                    .map(ci -> new CartItemDTO(
+                            ci.getCartItemId(),
+                            ci.getProduct(),
+                            ci.getQuantity(),
+                            ci.getAddedDateTime()
+                    ))
+                    .collect(Collectors.toList());
+
+            return ResponseEntity.ok(new CartResponseDTO(cartItemDTOs));
         } catch (UsernameNotFoundException | NoSuchElementException ex) {
             LOGGER.error(ex.getMessage(), ex);
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
