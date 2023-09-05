@@ -44,8 +44,16 @@ public class AuthenticationService {
         this.tokenService = tokenService;
     }
 
+    private boolean isUsernameValid(String username) throws IllegalArgumentException{
+        return username != null && username.matches("^[a-zA-Z0-9_-]{3,20}$");
+    }
+
     public ResponseEntity<UserRegistrationResponseDTO> registerUser(String username, String password, String email){
         try {
+            username = username.toLowerCase();
+            if(!isUsernameValid(username)) {
+                throw new IllegalArgumentException("Username is not valid");
+            }
             Optional<ApplicationUser> existingUser = userRepository.findByUsername(username);
             Optional<ApplicationUser> existingEmail = userRepository.findByEmail(email);
 
