@@ -83,6 +83,9 @@ public class EmailService {
                 "\n" +
                 "        /* Content */\n" +
                 "        .content {\n" +
+                "            display: flex;\n" +
+                "            flex-wrap: wrap;\n" +
+                "            justify-content: center;" +
                 "            background-color: #ffffff;\n" +
                 "            padding: 30px;\n" +
                 "            border-radius: 4px;\n" +
@@ -90,6 +93,7 @@ public class EmailService {
                 "        }\n" +
                 "\n" +
                 "        .message {\n" +
+                "            width: 100%;\n" +
                 "            font-size: 16px;\n" +
                 "            color: #333333;\n" +
                 "            margin-bottom: 20px;\n" +
@@ -97,7 +101,8 @@ public class EmailService {
                 "\n" +
                 "        /* Button */\n" +
                 "        .cta-button {\n" +
-                "            display: inline-block;\n" +
+                "            display: block;\n" +
+                "            margin: 0 auto;\n" +
                 "            padding: 10px 20px;\n" +
                 "            background-color: #007BFF;\n" +
                 "            color: #ffffff;\n" +
@@ -125,7 +130,7 @@ public class EmailService {
                 "            <h1>Password Reset</h1>\n" +
                 "        </div>\n" +
                 "        <div class=\"content\">\n" +
-                "            <p class=\"message\">Hi " + username + ",</p>\n" +
+                "            <p class=\"message\">Hi <strong>" + username + "</strong>,</p>\n" +
                 "            <p class=\"message\">You recently requested to reset your password. Click the button below to reset it:</p>\n" +
                 "            <a class=\"cta-button\" href=\"" + link + "\">Reset Password</a>\n" +
                 "        </div>\n" +
