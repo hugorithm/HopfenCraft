@@ -1,6 +1,5 @@
 package com.hugorithm.hopfencraft.dto;
 
-import com.hugorithm.hopfencraft.model.ApplicationUser;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -9,6 +8,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class LoginResponseDTO {
-    private ApplicationUser user;
+    private String username;
+    private String email;
     private String jwt;
 }

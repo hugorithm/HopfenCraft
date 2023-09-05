@@ -83,9 +83,10 @@ public class AuthenticationService {
         try {
             Authentication auth = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
             String token = tokenService.generateJwt(auth);
-            LoginResponseDTO user = new LoginResponseDTO(userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("user not found")), token);
+            ApplicationUser user = userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("user not found"));
+            LoginResponseDTO response = new LoginResponseDTO(user.getUsername(), user.getEmail(), token);
 
-            return ResponseEntity.ok(user);
+            return ResponseEntity.ok(response);
         } catch (AuthenticationException ex){
             LOGGER.error("Failed to authenticate", ex);
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();

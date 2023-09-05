@@ -81,13 +81,11 @@ public class UserService implements UserDetailsService {
         ApplicationUser user = jwtService.getUserFromJwt(jwt);
         LocalDateTime expirationDate = extractDateTimeFromToken(tokenService.URLDecodeToken(token));
 
-        ApplicationUser dbUser = userRepository.findById(user.getUserId()).orElseThrow(() -> new UsernameNotFoundException("Username not found"));
-
-        if (!token.equals(dbUser.getPasswordResetToken())) {
+        if (!token.equals(user.getPasswordResetToken())) {
             throw new IllegalArgumentException("Invalid token");
         }
 
-        if (expirationDate.equals(dbUser.getPasswordResetTokenExpiration()) && dbUser.getPasswordResetTokenExpiration().isBefore(LocalDateTime.now())) {
+        if (expirationDate.equals(user.getPasswordResetTokenExpiration()) && user.getPasswordResetTokenExpiration().isBefore(LocalDateTime.now())) {
             throw new IllegalArgumentException("Token has expired");
         }
 
@@ -106,8 +104,7 @@ public class UserService implements UserDetailsService {
     //TODO: Implement google reCaptcha
     public ResponseEntity<?> resetPassword(Jwt jwt, String token, String oldPassword, String newPassword, String newPasswordConfirmation) {
         try {
-            ApplicationUser jwtUser = verifyPasswordResetToken(jwt, token);
-            ApplicationUser user = userRepository.findById(jwtUser.getUserId()).orElseThrow(() -> new UsernameNotFoundException("Username not found"));
+            ApplicationUser user = verifyPasswordResetToken(jwt, token);
 
             if (!passwordEncoder.matches(oldPassword, user.getPassword())) {
                 throw new IllegalStateException("Wrong credentials");
