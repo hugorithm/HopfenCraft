@@ -1,6 +1,7 @@
 package com.hugorithm.hopfencraft.controller;
 
 import com.hugorithm.hopfencraft.dto.CartRegistrationDTO;
+import com.hugorithm.hopfencraft.dto.CartResponseDTO;
 import com.hugorithm.hopfencraft.service.ShoppingCartService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -19,15 +20,15 @@ public class ShoppingCartController {
     }
 
     @GetMapping("/items")
-    public ResponseEntity<CartRegistrationDTO> getCartItems(@AuthenticationPrincipal Jwt jwt) {
+    public ResponseEntity<CartResponseDTO> getCartItems(@AuthenticationPrincipal Jwt jwt) {
         return shoppingCartService.getCartItems(jwt);
     }
     @PostMapping("/add")
-    public ResponseEntity<CartRegistrationDTO> addToCart(@AuthenticationPrincipal Jwt jwt, @RequestBody CartRegistrationDTO body) {
+    public ResponseEntity<CartResponseDTO> addToCart(@AuthenticationPrincipal Jwt jwt, @RequestBody CartRegistrationDTO body) {
         return shoppingCartService.addToCart(jwt, body.getProductId(), body.getQuantity());
     }
     @PostMapping("/remove")
-    public ResponseEntity<CartRegistrationDTO> removeCartItem(@AuthenticationPrincipal Jwt jwt, @RequestBody CartRegistrationDTO body) {
+    public ResponseEntity<CartResponseDTO> removeCartItem(@AuthenticationPrincipal Jwt jwt, @RequestBody CartRegistrationDTO body) {
         return shoppingCartService.removeCartItem(jwt, body.getCartItemId());
     }
 

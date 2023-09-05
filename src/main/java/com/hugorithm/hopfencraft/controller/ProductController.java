@@ -9,6 +9,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
@@ -25,6 +26,7 @@ public class ProductController {
         this.productService = productService;
     }
 
+    //TODO: Must try to use DTO
     @GetMapping("/products")
     public Page<Product> getProducts(@RequestParam(defaultValue = "0") int page,
                                      @RequestParam(defaultValue = "10") int size) {
@@ -40,7 +42,7 @@ public class ProductController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<ProductRegistrationDTO> registerProduct(@RequestBody ProductRegistrationDTO body) {
+    public ResponseEntity<ProductRegistrationDTO> registerProduct(@Validated @RequestBody ProductRegistrationDTO body) {
         return productService.registerProduct(body.getBrand(), body.getName(),body.getDescription(), body.getQuantity(), body.getPrice());
     }
 }
