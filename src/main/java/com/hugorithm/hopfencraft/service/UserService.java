@@ -58,7 +58,7 @@ public class UserService implements UserDetailsService {
 
             String subject = "Password Reset";
             String link = emailService.baseUrl + "/user/reset-password?token=" + token;
-            String message = emailService.buildPasswordResetEmail(user.getUsername(),"Please use the following link to reset your password", link);
+            String message = emailService.buildPasswordResetEmail(user.getUsername(), link);
 
             emailService.sendEmail(user.getEmail(), subject, message, user, Email.EmailType.PASSWORD_RESET);
 

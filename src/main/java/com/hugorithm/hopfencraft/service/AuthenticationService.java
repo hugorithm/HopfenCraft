@@ -5,6 +5,7 @@ import java.util.Optional;
 import java.util.Set;
 
 import com.hugorithm.hopfencraft.dto.UserRegistrationResponseDTO;
+import com.hugorithm.hopfencraft.model.Email;
 import com.hugorithm.hopfencraft.validators.EmailValidator;
 import com.hugorithm.hopfencraft.validators.PasswordValidator;
 import com.hugorithm.hopfencraft.validators.UsernameValidator;
@@ -77,7 +78,10 @@ public class AuthenticationService {
             ApplicationUser user = new ApplicationUser(username, encodedPassword, email, authorities);
             userRepository.save(user);
 
+            String message = emailService.buildWelcomeEmail(username);
+            String subject = "Welcome to HopfenCraft - Your Registration Was Successful!";
 
+            emailService.sendEmail(user.getEmail(), subject, message, user, Email.EmailType.REGISTRATION);
 
             UserRegistrationResponseDTO userDto = new UserRegistrationResponseDTO(username, email);
 
