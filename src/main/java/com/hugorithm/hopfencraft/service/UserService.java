@@ -77,7 +77,7 @@ public class UserService implements UserDetailsService {
         }
     }
 
-    private ApplicationUser verifyPasswordResetToken(Jwt jwt, String token) {
+    private ApplicationUser verifyPasswordResetToken(Jwt jwt, String token) throws IllegalArgumentException {
         ApplicationUser user = jwtService.getUserFromJwt(jwt);
         LocalDateTime expirationDate = extractDateTimeFromToken(tokenService.URLDecodeToken(token));
 
@@ -113,10 +113,15 @@ public class UserService implements UserDetailsService {
                 throw new IllegalStateException("Wrong credentials");
             }
 
+            if (oldPassword.equals(newPassword)) {
+                throw new IllegalStateException("New password must be different from the old password");
+            }
+
             if (newPassword.equals(newPasswordConfirmation)) {
                 String encodedPassword = passwordEncoder.encode(newPassword);
                 user.setPassword(encodedPassword);
-
+                user.setPasswordResetToken(null);
+                user.setPasswordResetTokenExpiration(null);
                 userRepository.save(user);
 
                 return ResponseEntity.ok().build();
@@ -124,7 +129,7 @@ public class UserService implements UserDetailsService {
                 throw new IllegalStateException("Passwords don't match");
             }
 
-        } catch (IllegalStateException ex) {
+        } catch (IllegalStateException | IllegalArgumentException | UsernameNotFoundException ex) {
             LOGGER.error(ex.getMessage(), ex);
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }

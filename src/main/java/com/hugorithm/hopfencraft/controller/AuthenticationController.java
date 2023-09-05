@@ -25,5 +25,4 @@ public class AuthenticationController {
     public ResponseEntity<LoginResponseDTO> login(@RequestBody UserRegistrationDTO body) {
         return authenticationService.login(body.getUsername(), body.getPassword());
     }
-
 }
