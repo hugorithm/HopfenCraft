@@ -70,7 +70,7 @@ public class AuthenticationService {
             ApplicationUser user = new ApplicationUser(username, encodedPassword, email, authorities);
             userRepository.save(user);
 
-            UserRegistrationDTO userDto = new UserRegistrationDTO(username, password, email);
+            UserRegistrationDTO userDto = new UserRegistrationDTO(username, email);
 
             return ResponseEntity.ok(userDto);
         } catch (IllegalArgumentException ex) {
