@@ -2,6 +2,7 @@ package com.hugorithm.hopfencraft.controller;
 
 import com.hugorithm.hopfencraft.dto.LoginResponseDTO;
 import com.hugorithm.hopfencraft.dto.UserRegistrationDTO;
+import com.hugorithm.hopfencraft.dto.UserRegistrationResponseDTO;
 import com.hugorithm.hopfencraft.service.AuthenticationService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,7 +18,7 @@ public class AuthenticationController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<UserRegistrationDTO> registerUser(@RequestBody UserRegistrationDTO body){
+    public ResponseEntity<UserRegistrationResponseDTO> registerUser(@RequestBody UserRegistrationDTO body){
         return authenticationService.registerUser(body.getUsername(), body.getPassword(), body.getEmail());
     }
 

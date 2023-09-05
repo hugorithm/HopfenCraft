@@ -41,7 +41,7 @@ public class UserService implements UserDetailsService {
         return userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("User not found"));
     }
 
-    private LocalDateTime extractDateTimeFromToken(String token) {
+    private LocalDateTime extractDateTimeFromToken(String token) throws IllegalArgumentException {
         String[] parts = token.split("\\|");
         if (parts.length == 2) {
             String dateStr = parts[1];
@@ -69,9 +69,8 @@ public class UserService implements UserDetailsService {
 
             emailService.sendEmail(user.getEmail(), subject, message);
 
-
             return ResponseEntity.ok("Password reset email sent successfully");
-        } catch (IllegalStateException ex) {
+        } catch (IllegalStateException | IllegalArgumentException ex) {
             LOGGER.error(ex.getMessage(), ex);
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }

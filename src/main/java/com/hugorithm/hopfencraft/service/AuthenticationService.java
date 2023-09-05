@@ -4,7 +4,7 @@ import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.Set;
 
-import com.hugorithm.hopfencraft.dto.UserRegistrationDTO;
+import com.hugorithm.hopfencraft.dto.UserRegistrationResponseDTO;
 import com.hugorithm.hopfencraft.validators.EmailValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -44,7 +44,7 @@ public class AuthenticationService {
         this.tokenService = tokenService;
     }
 
-    public ResponseEntity<UserRegistrationDTO> registerUser(String username, String password, String email){
+    public ResponseEntity<UserRegistrationResponseDTO> registerUser(String username, String password, String email){
         try {
             Optional<ApplicationUser> existingUser = userRepository.findByUsername(username);
             Optional<ApplicationUser> existingEmail = userRepository.findByEmail(email);
@@ -70,7 +70,7 @@ public class AuthenticationService {
             ApplicationUser user = new ApplicationUser(username, encodedPassword, email, authorities);
             userRepository.save(user);
 
-            UserRegistrationDTO userDto = new UserRegistrationDTO(username, email);
+            UserRegistrationResponseDTO userDto = new UserRegistrationResponseDTO(username, email);
 
             return ResponseEntity.ok(userDto);
         } catch (IllegalArgumentException ex) {
