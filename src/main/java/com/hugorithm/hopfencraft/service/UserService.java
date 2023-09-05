@@ -81,7 +81,7 @@ public class UserService implements UserDetailsService {
         ApplicationUser user = jwtService.getUserFromJwt(jwt);
         LocalDateTime expirationDate = extractDateTimeFromToken(tokenService.URLDecodeToken(token));
 
-        ApplicationUser dbUser = userRepository.findByUsername(user.getUsername()).orElseThrow(() -> new UsernameNotFoundException("Username not found"));
+        ApplicationUser dbUser = userRepository.findById(user.getUserId()).orElseThrow(() -> new UsernameNotFoundException("Username not found"));
 
         if (!token.equals(dbUser.getPasswordResetToken())) {
             throw new IllegalArgumentException("Invalid token");
@@ -106,7 +106,8 @@ public class UserService implements UserDetailsService {
     //TODO: Implement google reCaptcha
     public ResponseEntity<?> resetPassword(Jwt jwt, String token, String oldPassword, String newPassword, String newPasswordConfirmation) {
         try {
-            ApplicationUser user = verifyPasswordResetToken(jwt, token);
+            ApplicationUser jwtUser = verifyPasswordResetToken(jwt, token);
+            ApplicationUser user = userRepository.findById(jwtUser.getUserId()).orElseThrow(() -> new UsernameNotFoundException("Username not found"));
 
             if (!passwordEncoder.matches(oldPassword, user.getPassword())) {
                 throw new IllegalStateException("Wrong credentials");
@@ -115,6 +116,7 @@ public class UserService implements UserDetailsService {
             if (newPassword.equals(newPasswordConfirmation)) {
                 String encodedPassword = passwordEncoder.encode(newPassword);
                 user.setPassword(encodedPassword);
+
                 userRepository.save(user);
 
                 return ResponseEntity.ok().build();
