@@ -33,10 +33,7 @@ public class AuthenticationControllerTests {
     @Test
     public void testRegisterUser_ValidInput_ReturnsOk() throws Exception {
         // Define valid input data
-        UserRegistrationDTO validInput = new UserRegistrationDTO();
-        validInput.setUsername("validusername");
-        validInput.setPassword("ValidPass123!");
-        validInput.setEmail("validemail@example.com");
+        UserRegistrationDTO validInput = new UserRegistrationDTO("validusername", "ValidPass123!", "validemail@example.com");
 
         // Define the expected response from the service
         UserRegistrationResponseDTO expectedResponse = new UserRegistrationResponseDTO("validusername", "validemail@example.com");
@@ -54,10 +51,7 @@ public class AuthenticationControllerTests {
     @Test
     public void testRegisterUser_InvalidUsername_ReturnsBadRequest() throws Exception {
         // Define invalid input with a username that doesn't meet validation rules
-        UserRegistrationDTO invalidInput = new UserRegistrationDTO();
-        invalidInput.setUsername("sh");
-        invalidInput.setPassword("ValidPass123!");
-        invalidInput.setEmail("validemail@example.com");
+        UserRegistrationDTO invalidInput = new UserRegistrationDTO("sh", "ValidPass123!", "validemail@example.com");
 
         // Perform the POST request
         mockMvc.perform(post("/auth/register")
@@ -69,10 +63,7 @@ public class AuthenticationControllerTests {
     @Test
     public void testRegisterUser_InvalidPassword_ReturnsBadRequest() throws Exception {
         // Define invalid input with a password that doesn't meet validation rules
-        UserRegistrationDTO invalidInput = new UserRegistrationDTO();
-        invalidInput.setUsername("validusername");
-        invalidInput.setPassword("invalidpassword");
-        invalidInput.setEmail("validemail@example.com");
+        UserRegistrationDTO invalidInput = new UserRegistrationDTO("validusername", "invalidpassword", "validemail@example.com");
 
         // Perform the POST request
         mockMvc.perform(post("/auth/register")
