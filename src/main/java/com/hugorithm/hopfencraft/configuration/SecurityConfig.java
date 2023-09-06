@@ -27,10 +27,10 @@ import org.springframework.security.oauth2.server.resource.authentication.JwtGra
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
-public class SecurityConfiguration {
+public class SecurityConfig {
     private final RSAKeyProperties keys;
 
-    public SecurityConfiguration(RSAKeyProperties keys) {
+    public SecurityConfig(RSAKeyProperties keys) {
         this.keys = keys;
     }
 
