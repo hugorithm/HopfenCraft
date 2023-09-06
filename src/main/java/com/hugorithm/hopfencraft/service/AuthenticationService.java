@@ -88,7 +88,7 @@ public class AuthenticationService {
             return ResponseEntity.ok(userDto);
         } catch (IllegalArgumentException ex) {
             LOGGER.error(ex.getMessage(), ex);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
     }
 
