@@ -6,6 +6,7 @@ import com.hugorithm.hopfencraft.repository.ProductRepository;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,7 +17,7 @@ import java.util.Optional;
 
 @Service
 @Transactional
-@AllArgsConstructor
+@AllArgsConstructor(onConstructor = @__(@Autowired))
 public class ProductService {
     private final ProductRepository productRepository;
     private final static Logger LOGGER = LoggerFactory.getLogger(ProductService.class);

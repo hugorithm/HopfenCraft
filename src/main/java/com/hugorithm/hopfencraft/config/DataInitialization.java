@@ -1,4 +1,4 @@
-package com.hugorithm.hopfencraft.configuration;
+package com.hugorithm.hopfencraft.config;
 
 import com.hugorithm.hopfencraft.model.ApplicationUser;
 import com.hugorithm.hopfencraft.model.Product;

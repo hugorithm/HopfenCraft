@@ -1,11 +1,15 @@
 package com.hugorithm.hopfencraft.utils;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.stereotype.Component;
 
 import java.security.KeyPair;
 import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
 
+@Getter
+@Setter
 @Component
 public class RSAKeyProperties {
 
@@ -16,21 +20,5 @@ public class RSAKeyProperties {
         KeyPair kp = KeyGeneratorUtility.generateRsaKey();
         this.publicKey = (RSAPublicKey) kp.getPublic();
         this.privateKey = (RSAPrivateKey) kp.getPrivate();
-    }
-
-    public RSAPublicKey getPublicKey() {
-        return publicKey;
-    }
-
-    public void setPublicKey(RSAPublicKey publicKey) {
-        this.publicKey = publicKey;
-    }
-
-    public RSAPrivateKey getPrivateKey() {
-        return privateKey;
-    }
-
-    public void setPrivateKey(RSAPrivateKey privateKey) {
-        this.privateKey = privateKey;
     }
 }

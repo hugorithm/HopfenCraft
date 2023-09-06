@@ -1,4 +1,4 @@
-package com.hugorithm.hopfencraft.configuration;
+package com.hugorithm.hopfencraft.config;
 
 import com.hugorithm.hopfencraft.utils.RSAKeyProperties;
 import com.nimbusds.jose.jwk.JWK;
