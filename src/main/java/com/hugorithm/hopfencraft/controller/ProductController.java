@@ -1,5 +1,6 @@
 package com.hugorithm.hopfencraft.controller;
 
+import com.hugorithm.hopfencraft.dto.ProductDTO;
 import com.hugorithm.hopfencraft.dto.ProductRegistrationDTO;
 import com.hugorithm.hopfencraft.model.Product;
 import com.hugorithm.hopfencraft.repository.ProductRepository;
@@ -28,17 +29,40 @@ public class ProductController {
 
     //TODO: Must try to use DTO and check all the DTOs
     @GetMapping("/products")
-    public Page<Product> getProducts(@RequestParam(defaultValue = "0") int page,
+    public Page<ProductDTO> getProducts(@RequestParam(defaultValue = "0") int page,
                                      @RequestParam(defaultValue = "10") int size) {
         Pageable pageable = PageRequest.of(page, size);
-        return productRepository.findAll(pageable);
+        Page<Product> productPage = productRepository.findAll(pageable);
+
+        return productPage.map(p ->
+                new ProductDTO(
+                        p.getProductId(),
+                        p.getBrand(),
+                        p.getName(),
+                        p.getDescription(),
+                        p.getQuantity(),
+                        p.getPrice(),
+                        p.getRegisterDateTime()
+                )
+        );
     }
 
     @GetMapping("/{productId}")
-    public ResponseEntity<Product> getProductById(@PathVariable Long productId) {
+    public ResponseEntity<ProductDTO> getProductById(@PathVariable Long productId) {
         Optional<Product> product = productRepository.findById(productId);
 
-        return product.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+        return product.map(p -> ResponseEntity.ok(
+            new ProductDTO(
+                    p.getProductId(),
+                    p.getBrand(),
+                    p.getName(),
+                    p.getDescription(),
+                    p.getQuantity(),
+                    p.getPrice(),
+                    p.getRegisterDateTime()
+                    )
+                )
+        ).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @PostMapping("/register")
