@@ -76,6 +76,7 @@ public class RoleRepositoryTests {
     public void RoleRepository_UpdateRole_ReturnRoleNotNull() {
         //Arrange
         Role role = new Role("USER");
+        String auth = role.getAuthority();
 
         //Act
         roleRepository.save(role);
@@ -88,6 +89,9 @@ public class RoleRepositoryTests {
         //Assert
         Assertions.assertThat(updatedRole.getAuthority()).isNotNull();
         Assertions.assertThat(updatedRole.getRoleId()).isNotNull();
+        Assertions.assertThat(updatedRole.getAuthority()).isNotEqualTo(auth);
+        Assertions.assertThat(updatedRole.getRoleId()).isEqualTo(role.getRoleId());
+
     }
 
     @Test

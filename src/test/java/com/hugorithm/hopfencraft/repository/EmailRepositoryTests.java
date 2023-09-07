@@ -41,6 +41,7 @@ public class EmailRepositoryTests {
         //Assert
         Assertions.assertThat(savedEmail).isNotNull();
         Assertions.assertThat(savedEmail.getEmailId()).isGreaterThan(0);
+
     }
 
     @Test
@@ -90,22 +91,27 @@ public class EmailRepositoryTests {
         roles.add(role);
         ApplicationUser user = new ApplicationUser("user1", "Password123!", "email@example.com", roles);
         ApplicationUser user2 = new ApplicationUser("user2", "Password123!", "email2@example.com", roles);
-        Email email = new Email(Email.EmailType.REGISTRATION, LocalDateTime.now(), user);
 
+        Email email = new Email(Email.EmailType.REGISTRATION, LocalDateTime.now(), user);
+        LocalDateTime mailDate = email.getEmailSendDate();
         //Act
         emailRepository.save(email);
 
         Email repoEmail = emailRepository.findById(email.getEmailId()).get();
-        repoEmail.setEmailType(Email.EmailType.REGISTRATION);
-        repoEmail.setEmailSendDate(LocalDateTime.now());
+        repoEmail.setEmailType(Email.EmailType.ORDER);
+        repoEmail.setEmailSendDate(LocalDateTime.now().plusDays(24));
         repoEmail.setUser(user2);
 
         Email updatedEmail = emailRepository.save(repoEmail);
 
         //Assert
+        Assertions.assertThat(updatedEmail.getEmailType()).isEqualTo(Email.EmailType.ORDER);
+        Assertions.assertThat(updatedEmail.getEmailSendDate()).isNotEqualTo(mailDate);
+        Assertions.assertThat(updatedEmail.getUser()).isEqualTo(user2);
         Assertions.assertThat(updatedEmail.getEmailType()).isNotNull();
         Assertions.assertThat(updatedEmail.getEmailSendDate()).isNotNull();
         Assertions.assertThat(updatedEmail.getUser()).isNotNull();
+
     }
 
     @Test

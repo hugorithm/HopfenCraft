@@ -68,6 +68,10 @@ public class CartItemRepositoryTests {
         //Assert
         Assertions.assertThat(cartItems).isNotNull();
         Assertions.assertThat(cartItems.size()).isEqualTo(2);
+
+        CartItem firstCartItem = cartItems.get(0);
+        Assertions.assertThat(firstCartItem.getProduct()).isEqualTo(product);
+        Assertions.assertThat(firstCartItem.getUser()).isEqualTo(user);
     }
 
     @Test
