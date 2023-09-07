@@ -22,8 +22,6 @@ public class AuthenticationControllerIntegrationTest {
 
     @Autowired
     private TestRestTemplate restTemplate;
-
-
     @Test
     public void testRegisterUser_ValidInput_ReturnsOk() {
         UserRegistrationDTO validInput = new UserRegistrationDTO("validusername", "ValidPass123!", "validemaildiff@example.com");
@@ -159,6 +157,31 @@ public class AuthenticationControllerIntegrationTest {
 
         LoginResponseDTO responseBody = response.getBody();
         assertNull(responseBody);
+    }
+
+    @Test
+    public void testLogin_ValidCredentials_ReturnsOk() {
+        UserRegistrationDTO validInput = new UserRegistrationDTO("validusername", "ValidPass123!", "validemaildiff@example.com");
+
+        ResponseEntity<UserRegistrationResponseDTO> response = restTemplate.postForEntity(
+                "http://localhost:" + port + "/auth/register",
+                validInput,
+                UserRegistrationResponseDTO.class);
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+
+
+        UserRegistrationDTO validInput2 = new UserRegistrationDTO("validusername", "ValidPass123!");
+
+        ResponseEntity<LoginResponseDTO> loginResponse = restTemplate.postForEntity(
+                "http://localhost:" + port + "/auth/login",
+                validInput2,
+                LoginResponseDTO.class);
+
+        assertEquals(HttpStatus.OK, loginResponse.getStatusCode());
+
+        LoginResponseDTO responseBody = loginResponse.getBody();
+        assertNotNull(responseBody);
     }
 
 
