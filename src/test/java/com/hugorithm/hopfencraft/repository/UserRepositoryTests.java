@@ -38,7 +38,7 @@ public class UserRepositoryTests {
     }
 
     @Test
-    public void UserRepository_GetAll_ReturnMoreThenOneUser() {
+    public void UserRepository_GetAll_ReturnMoreThanOneUser() {
         //Arrange
         Role role = new Role("USER");
         Set<Role> roles = new HashSet<>();
