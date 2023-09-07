@@ -1,4 +1,4 @@
-package com.hugorithm.hopfencraft.controller;
+package com.hugorithm.hopfencraft.integration;
 
 import com.hugorithm.hopfencraft.dto.LoginResponseDTO;
 import com.hugorithm.hopfencraft.dto.UserRegistrationDTO;
