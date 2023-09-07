@@ -93,6 +93,10 @@ public class UserRepositoryTests {
         Set<Role> roles = new HashSet<>();
         roles.add(role);
         ApplicationUser user = new ApplicationUser("user1", "Password123!", "email@example.com", roles);
+        String username = user.getUsername();
+        String password = user.getPassword();
+        String email = user.getEmail();
+
 
         userRepository.save(user);
 
@@ -106,6 +110,9 @@ public class UserRepositoryTests {
         Assertions.assertThat(updatedUser.getUsername()).isNotNull();
         Assertions.assertThat(updatedUser.getEmail()).isNotNull();
         Assertions.assertThat(updatedUser.getPassword()).isNotNull();
+        Assertions.assertThat(updatedUser.getUsername()).isNotEqualTo(username);
+        Assertions.assertThat(updatedUser.getPassword()).isNotEqualTo(password);
+        Assertions.assertThat(updatedUser.getEmail()).isNotEqualTo(email);
     }
 
     @Test

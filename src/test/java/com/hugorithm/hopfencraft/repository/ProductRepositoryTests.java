@@ -78,6 +78,13 @@ public class ProductRepositoryTests {
     public void ProductRepository_UpdateProduct_ReturnProductNotNull() {
         //Arrange
         Product product = new Product("Paulaner", "Paulaner Weissbier", "Weiss", 10, new BigDecimal("2.39"));
+        int q = product.getQuantity();
+        String b = product.getBrand();
+        String n = product.getName();
+        String d = product.getDescription();
+        BigDecimal pr = product.getPrice();
+        LocalDateTime dt = product.getRegisterDateTime();
+
 
         //Act
         productRepository.save(product);
@@ -95,10 +102,16 @@ public class ProductRepositoryTests {
         //Assert
         Assertions.assertThat(updatedProduct.getBrand()).isNotNull();
         Assertions.assertThat(updatedProduct.getName()).isNotNull();
-        Assertions.assertThat(updatedProduct.getQuantity()).isEqualTo(repoProduct.getQuantity());
         Assertions.assertThat(updatedProduct.getDescription()).isNotNull();
         Assertions.assertThat(updatedProduct.getPrice()).isNotNull();
         Assertions.assertThat(updatedProduct.getRegisterDateTime()).isNotNull();
+        Assertions.assertThat(updatedProduct.getQuantity()).isNotEqualTo(q);
+        Assertions.assertThat(updatedProduct.getBrand()).isNotEqualTo(b);
+        Assertions.assertThat(updatedProduct.getName()).isNotEqualTo(n);
+        Assertions.assertThat(updatedProduct.getDescription()).isNotEqualTo(d);
+        Assertions.assertThat(updatedProduct.getPrice()).isNotEqualTo(pr);
+        Assertions.assertThat(updatedProduct.getRegisterDateTime()).isNotEqualTo(dt);
+
     }
 
     @Test

@@ -99,16 +99,23 @@ public class CartItemRepositoryTests {
         Set<Role> roles = new HashSet<>();
         roles.add(role);
         ApplicationUser user = new ApplicationUser("user1", "Password123!", "email@example.com", roles);
+        ApplicationUser user2 = new ApplicationUser("user2", "Password123!", "email@example.com", roles);
         Product product = new Product("Paulaner", "Paulaner Weissbier", "Weiss", 10, new BigDecimal("2.39"));
+        Product product2 = new Product("Paulaner", "Paulaner Helles", "Lager", 10, new BigDecimal("2.59"));
         CartItem cartItem = new CartItem(product, user, 2);
+        int q = cartItem.getQuantity();
+        Product p = cartItem.getProduct();
+        ApplicationUser u = cartItem.getUser();
+        LocalDateTime dt = cartItem.getAddedDateTime();
 
         //Act
         cartItemRepository.save(cartItem);
 
         CartItem repoCartItem = cartItemRepository.findById(cartItem.getCartItemId()).get();
         repoCartItem.setAddedDateTime(LocalDateTime.now());
-        repoCartItem.setQuantity(4);
-        repoCartItem.setProduct(product);
+        repoCartItem.setQuantity(5);
+        repoCartItem.setProduct(product2);
+        repoCartItem.setUser(user2);
 
 
         CartItem updatedCartItem = cartItemRepository.save(repoCartItem);
@@ -117,6 +124,10 @@ public class CartItemRepositoryTests {
         Assertions.assertThat(updatedCartItem.getQuantity()).isNotNull();
         Assertions.assertThat(updatedCartItem.getProduct()).isNotNull();
         Assertions.assertThat(updatedCartItem.getUser()).isNotNull();
+        Assertions.assertThat(updatedCartItem.getQuantity()).isNotEqualTo(q);
+        Assertions.assertThat(updatedCartItem.getProduct()).isNotEqualTo(p);
+        Assertions.assertThat(updatedCartItem.getUser()).isNotEqualTo(u);
+        Assertions.assertThat(updatedCartItem.getAddedDateTime()).isNotEqualTo(dt);
     }
 
     @Test
