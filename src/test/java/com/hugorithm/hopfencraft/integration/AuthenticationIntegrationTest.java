@@ -161,6 +161,7 @@ public class AuthenticationIntegrationTest {
 
     @Test
     public void Login_ValidCredentials_ReturnsOk() {
+        //Register User
         UserRegistrationDTO validInput = new UserRegistrationDTO("validusername", "ValidPass123!", "validemaildiff@example.com");
 
         ResponseEntity<UserRegistrationResponseDTO> response = restTemplate.postForEntity(
@@ -170,7 +171,7 @@ public class AuthenticationIntegrationTest {
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
 
-
+        //Login
         UserRegistrationDTO validInput2 = new UserRegistrationDTO("validusername", "ValidPass123!");
 
         ResponseEntity<LoginResponseDTO> loginResponse = restTemplate.postForEntity(
@@ -180,8 +181,11 @@ public class AuthenticationIntegrationTest {
 
         assertEquals(HttpStatus.OK, loginResponse.getStatusCode());
 
+        //Assert
         LoginResponseDTO responseBody = loginResponse.getBody();
         assertNotNull(responseBody);
+        assertEquals(responseBody.getUsername(), validInput.getUsername());
+        assertEquals(responseBody.getEmail(), validInput.getEmail());
     }
 
 
