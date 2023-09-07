@@ -121,7 +121,7 @@ public class CartItemRepositoryTests {
         CartItem updatedCartItem = cartItemRepository.save(repoCartItem);
 
         //Assert
-        Assertions.assertThat(updatedCartItem.getQuantity()).isNotNull();
+        Assertions.assertThat(updatedCartItem.getQuantity()).isNotNegative();
         Assertions.assertThat(updatedCartItem.getProduct()).isNotNull();
         Assertions.assertThat(updatedCartItem.getUser()).isNotNull();
         Assertions.assertThat(updatedCartItem.getQuantity()).isNotEqualTo(q);
