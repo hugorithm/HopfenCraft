@@ -1,6 +1,6 @@
 package com.hugorithm.hopfencraft.service;
 
-import com.hugorithm.hopfencraft.dto.ProductRegistrationDTO;
+import com.hugorithm.hopfencraft.dto.ProductDTO;
 import com.hugorithm.hopfencraft.model.Product;
 import com.hugorithm.hopfencraft.repository.ProductRepository;
 import lombok.AllArgsConstructor;
@@ -22,7 +22,7 @@ public class ProductService {
     private final ProductRepository productRepository;
     private final static Logger LOGGER = LoggerFactory.getLogger(ProductService.class);
 
-    public ResponseEntity<ProductRegistrationDTO> registerProduct(String brand, String name, String description, int quantity, BigDecimal price) {
+    public ResponseEntity<ProductDTO> registerProduct(String brand, String name, String description, int quantity, BigDecimal price) {
         try {
             Optional<Product> product = productRepository.findProductByName(name);
 
@@ -30,12 +30,19 @@ public class ProductService {
                 throw new IllegalStateException("Product already exists");
             }
 
-            productRepository.save(new Product(brand, name, description, quantity, price));
-            return ResponseEntity.ok(new ProductRegistrationDTO(brand, name, description, quantity, price));
+            Product p = productRepository.save(new Product(brand, name, description, quantity, price));
+            return ResponseEntity.ok(new ProductDTO(
+                    p.getProductId(),
+                    p.getBrand(),
+                    p.getName(),
+                    p.getDescription(),
+                    p.getQuantity(),
+                    p.getPrice(),
+                    p.getRegisterDateTime()
+            ));
         } catch (NoSuchElementException | IllegalStateException ex) {
             LOGGER.error(ex.getMessage(), ex);
             return ResponseEntity.notFound().build();
         }
-
     }
 }

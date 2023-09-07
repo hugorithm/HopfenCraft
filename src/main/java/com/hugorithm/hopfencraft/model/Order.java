@@ -31,4 +31,10 @@ public class Order {
     @CreationTimestamp
     private LocalDateTime orderDate;
 
+    public Order(ApplicationUser user, BigDecimal total, List<CartItem> orderItems, LocalDateTime orderDate) {
+        this.user = user;
+        this.total = total;
+        this.orderItems = orderItems;
+        this.orderDate = orderDate;
+    }
 }

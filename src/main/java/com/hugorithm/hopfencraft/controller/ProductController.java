@@ -65,7 +65,7 @@ public class ProductController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<ProductRegistrationDTO> registerProduct(@Validated @RequestBody ProductRegistrationDTO body) {
+    public ResponseEntity<ProductDTO> registerProduct(@Validated @RequestBody ProductRegistrationDTO body) {
         return productService.registerProduct(body.getBrand(), body.getName(),body.getDescription(), body.getQuantity(), body.getPrice());
     }
 }
