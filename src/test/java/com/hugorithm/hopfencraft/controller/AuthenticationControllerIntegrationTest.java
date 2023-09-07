@@ -23,7 +23,7 @@ public class AuthenticationControllerIntegrationTest {
     @Autowired
     private TestRestTemplate restTemplate;
     @Test
-    public void testRegisterUser_ValidInput_ReturnsOk() {
+    public void RegisterUser_ValidInput_ReturnsOk() {
         UserRegistrationDTO validInput = new UserRegistrationDTO("validusername", "ValidPass123!", "validemaildiff@example.com");
 
         ResponseEntity<UserRegistrationResponseDTO> response = restTemplate.postForEntity(
@@ -42,7 +42,7 @@ public class AuthenticationControllerIntegrationTest {
     }
 
     @Test
-    public void testRegisterUser_InvalidEmail_ReturnsBadRequest() {
+    public void RegisterUser_InvalidEmail_ReturnsBadRequest() {
         UserRegistrationDTO validInput = new UserRegistrationDTO("validusername", "ValidPass123!", "invalidemail");
 
         ResponseEntity<UserRegistrationResponseDTO> response = restTemplate.postForEntity(
@@ -57,7 +57,7 @@ public class AuthenticationControllerIntegrationTest {
     }
 
     @Test
-    public void testRegisterUser_InvalidSameEmail_ReturnsBadRequest() {
+    public void RegisterUser_InvalidSameEmail_ReturnsBadRequest() {
         UserRegistrationDTO validInput = new UserRegistrationDTO("test", "ValidPass123!", "test@example.com");
         UserRegistrationDTO validInput2 = new UserRegistrationDTO("test2", "ValidPass123!", "test@example.com");
 
@@ -85,7 +85,7 @@ public class AuthenticationControllerIntegrationTest {
     }
 
     @Test
-    public void testRegisterUser_InvalidSameUsername_ReturnsBadRequest() {
+    public void RegisterUser_InvalidSameUsername_ReturnsBadRequest() {
         UserRegistrationDTO validInput = new UserRegistrationDTO("test", "ValidPass123!", "test@example.com");
         UserRegistrationDTO validInput2 = new UserRegistrationDTO("test", "ValidPass123!", "test2@example.com");
 
@@ -113,7 +113,7 @@ public class AuthenticationControllerIntegrationTest {
     }
 
     @Test
-    public void testRegisterUser_InvalidUsername_ReturnsBadRequest() {
+    public void RegisterUser_InvalidUsername_ReturnsBadRequest() {
         UserRegistrationDTO validInput = new UserRegistrationDTO("in", "ValidPass123!", "validemail@example.com");
 
         ResponseEntity<UserRegistrationResponseDTO> response = restTemplate.postForEntity(
@@ -128,7 +128,7 @@ public class AuthenticationControllerIntegrationTest {
     }
 
     @Test
-    public void testRegisterUser_InvalidPassword_ReturnsBadRequest() {
+    public void RegisterUser_InvalidPassword_ReturnsBadRequest() {
         UserRegistrationDTO validInput = new UserRegistrationDTO("validusername", "invalidpassword", "validemail@example.com");
 
         ResponseEntity<UserRegistrationResponseDTO> response = restTemplate.postForEntity(
@@ -143,7 +143,7 @@ public class AuthenticationControllerIntegrationTest {
     }
 
     @Test
-    public void testLogin_BadCredentials_ReturnsBadRequest() {
+    public void Login_BadCredentials_ReturnsBadRequest() {
         UserRegistrationDTO invalidInput = new UserRegistrationDTO();
         invalidInput.setUsername("validusername");
         invalidInput.setPassword("invalidpassword");
@@ -160,7 +160,7 @@ public class AuthenticationControllerIntegrationTest {
     }
 
     @Test
-    public void testLogin_ValidCredentials_ReturnsOk() {
+    public void Login_ValidCredentials_ReturnsOk() {
         UserRegistrationDTO validInput = new UserRegistrationDTO("validusername", "ValidPass123!", "validemaildiff@example.com");
 
         ResponseEntity<UserRegistrationResponseDTO> response = restTemplate.postForEntity(

@@ -32,7 +32,7 @@ public class AuthenticationControllerTests {
     private AuthenticationService authenticationService;
 
     @Test
-    public void testRegisterUser_ValidInput_ReturnsOk() throws Exception {
+    public void RegisterUser_ValidInput_ReturnsOk() throws Exception {
         // Define valid input data
         UserRegistrationDTO validInput = new UserRegistrationDTO("validusername", "ValidPass123!", "validemail@example.com");
 
@@ -52,7 +52,7 @@ public class AuthenticationControllerTests {
     }
 
     @Test
-    public void testRegisterUser_InvalidUsername_ReturnsBadRequest() throws Exception {
+    public void RegisterUser_InvalidUsername_ReturnsBadRequest() throws Exception {
         // Define invalid input with a username that doesn't meet validation rules
         UserRegistrationDTO invalidInput = new UserRegistrationDTO("nn", "ValidPass123!", "validemail@example.com");
 
@@ -67,7 +67,7 @@ public class AuthenticationControllerTests {
     }
 
     @Test
-    public void testRegisterUser_InvalidEmail_ReturnsBadRequest() throws Exception {
+    public void RegisterUser_InvalidEmail_ReturnsBadRequest() throws Exception {
         // Define invalid input with a email that doesn't meet validation rules
         UserRegistrationDTO invalidInput = new UserRegistrationDTO("validusername", "ValidPass123!", "invalidemail");
 
@@ -82,7 +82,7 @@ public class AuthenticationControllerTests {
     }
 
     @Test
-    public void testRegisterUser_InvalidPassword_ReturnsBadRequest() throws Exception {
+    public void RegisterUser_InvalidPassword_ReturnsBadRequest() throws Exception {
         // Define invalid input with a password that doesn't meet validation rules
         UserRegistrationDTO invalidInput = new UserRegistrationDTO("validusername", "invalidpassword", "validemail@example.com");
         given(authenticationService.registerUser(invalidInput.getUsername(), invalidInput.getPassword(), invalidInput.getEmail())).willReturn(ResponseEntity.badRequest().build());
