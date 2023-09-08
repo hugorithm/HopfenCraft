@@ -1,5 +1,6 @@
 package com.hugorithm.hopfencraft.integration;
 
+import com.hugorithm.hopfencraft.dto.LoginDTO;
 import com.hugorithm.hopfencraft.dto.LoginResponseDTO;
 import com.hugorithm.hopfencraft.dto.UserRegistrationDTO;
 import com.hugorithm.hopfencraft.dto.UserRegistrationResponseDTO;
@@ -144,16 +145,14 @@ public class AuthenticationIntegrationTest {
 
     @Test
     public void Login_BadCredentials_ReturnsBadRequest() {
-        UserRegistrationDTO invalidInput = new UserRegistrationDTO();
-        invalidInput.setUsername("validusername");
-        invalidInput.setPassword("invalidpassword");
+        LoginDTO invalidInput = new LoginDTO("validusername", "invalidpassword");
 
         ResponseEntity<LoginResponseDTO> response = restTemplate.postForEntity(
                 "http://localhost:" + port + "/auth/login",
                 invalidInput,
                 LoginResponseDTO.class);
 
-        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        assertEquals(HttpStatus.UNAUTHORIZED, response.getStatusCode());
 
         LoginResponseDTO responseBody = response.getBody();
         assertNull(responseBody);
@@ -172,7 +171,7 @@ public class AuthenticationIntegrationTest {
         assertEquals(HttpStatus.OK, response.getStatusCode());
 
         //Login
-        UserRegistrationDTO validInput2 = new UserRegistrationDTO("validusername", "ValidPass123!");
+        LoginDTO validInput2 = new LoginDTO("validusername", "ValidPass123!");
 
         ResponseEntity<LoginResponseDTO> loginResponse = restTemplate.postForEntity(
                 "http://localhost:" + port + "/auth/login",

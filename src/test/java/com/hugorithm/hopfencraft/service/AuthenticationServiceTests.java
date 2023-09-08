@@ -1,6 +1,7 @@
 package com.hugorithm.hopfencraft.service;
 
 import com.hugorithm.hopfencraft.config.DataInitialization;
+import com.hugorithm.hopfencraft.dto.LoginDTO;
 import com.hugorithm.hopfencraft.dto.LoginResponseDTO;
 import com.hugorithm.hopfencraft.dto.UserRegistrationDTO;
 import com.hugorithm.hopfencraft.dto.UserRegistrationResponseDTO;
@@ -76,52 +77,10 @@ public class AuthenticationServiceTests {
     }
 
     @Test
-    public void testRegisterUser_InvalidEmail_ReturnsBadRequest() {
-        dataInitialization.run();
-        // Implement test logic for user registration with an invalid email.
-        UserRegistrationDTO invalidInput = new UserRegistrationDTO("invalidusername", "ValidPass123!", "invalidemail");
-
-        // Call the service method
-        ResponseEntity<UserRegistrationResponseDTO> response = authenticationService.registerUser(invalidInput.getUsername(), invalidInput.getPassword(), invalidInput.getEmail());
-
-        // Assert the expected behavior
-        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
-        assertNull(response.getBody());
-    }
-
-    @Test
-    public void testRegisterUser_InvalidUsername_ReturnsBadRequest() {
-        dataInitialization.run();
-        // Implement test logic for user registration with an invalid username.
-        UserRegistrationDTO invalidInput = new UserRegistrationDTO("in", "ValidPass123!", "validemail@example.com");
-
-        // Call the service method
-        ResponseEntity<UserRegistrationResponseDTO> response = authenticationService.registerUser(invalidInput.getUsername(), invalidInput.getPassword(), invalidInput.getEmail());
-
-        // Assert the expected behavior
-        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
-        assertNull(response.getBody());
-    }
-
-    @Test
-    public void testRegisterUser_InvalidPassword_ReturnsBadRequest() {
-        dataInitialization.run();
-        // Implement test logic for user registration with an invalid password.
-        UserRegistrationDTO invalidInput = new UserRegistrationDTO("validusername", "invalidpassword", "validemail@example.com");
-
-        // Call the service method
-        ResponseEntity<UserRegistrationResponseDTO> response = authenticationService.registerUser(invalidInput.getUsername(), invalidInput.getPassword(), invalidInput.getEmail());
-
-        // Assert the expected behavior
-        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
-        assertNull(response.getBody());
-    }
-
-    @Test
     public void testLogin_BadCredentials_ReturnsBadRequest() {
         dataInitialization.run();
         // Implement test logic for user login with incorrect credentials.
-        UserRegistrationDTO invalidInput = new UserRegistrationDTO("validusername", "invalidpassword");
+        LoginDTO invalidInput = new LoginDTO("validusername", "invalidpassword");
 
         // Mock dependencies
         when(authenticationManager.authenticate(any(UsernamePasswordAuthenticationToken.class))).thenThrow(new AuthenticationException("Authentication failed") {
@@ -131,14 +90,14 @@ public class AuthenticationServiceTests {
         ResponseEntity<LoginResponseDTO> response = authenticationService.login(invalidInput.getUsername(), invalidInput.getPassword());
 
         // Assert the expected behavior
-        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        assertEquals(HttpStatus.UNAUTHORIZED, response.getStatusCode());
         assertNull(response.getBody());
     }
     @Test
     public void testLogin_Successful_ReturnsOk() {
         dataInitialization.run();
         // Implement test logic for a successful user login.
-        UserRegistrationDTO validInput = new UserRegistrationDTO("validusername", "ValidPass123!");
+        LoginDTO validInput = new LoginDTO("validusername", "ValidPass123!");
         ApplicationUser user = new ApplicationUser();
         user.setUsername("validusername");
         user.setEmail("validemail@example.com");

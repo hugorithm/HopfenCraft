@@ -1,10 +1,9 @@
 package com.hugorithm.hopfencraft.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hugorithm.hopfencraft.dto.ProductDTO;
 import com.hugorithm.hopfencraft.dto.ProductRegistrationDTO;
 import com.hugorithm.hopfencraft.service.ProductService;
+import com.hugorithm.hopfencraft.utils.JsonToStringConverter;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -12,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.web.servlet.MockMvc;
@@ -69,7 +69,7 @@ public class ProductControllerTests {
         // Perform the POST request
         mockMvc.perform(post("/product/register")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(asJsonString(validInput)))
+                        .content(JsonToStringConverter.asJsonString(validInput)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.brand", equalTo( expectedResponse.getBrand())))
                 .andExpect(jsonPath("$.name", equalTo(expectedResponse.getName())))
@@ -80,10 +80,69 @@ public class ProductControllerTests {
 
     }
 
-    // Utility method to convert objects to JSON
-    private String asJsonString(Object obj) throws JsonProcessingException {
-        ObjectMapper objectMapper = new ObjectMapper();
-        return objectMapper.writeValueAsString(obj);
+    @Test
+    public void RegisterProduct_InvalidInput_ReturnsBadRequest() throws Exception {
+        // Define invalid input data (missing required fields)
+        ProductRegistrationDTO invalidInput = new ProductRegistrationDTO();
+
+        mockMvc.perform(post("/product/register")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(JsonToStringConverter.asJsonString(invalidInput)))
+                .andExpect(status().isBadRequest());
+
+        // Define invalid input data (missing required fields)
+        ProductRegistrationDTO invalidInput2 = new ProductRegistrationDTO(
+                "aa",
+                "bb",
+                "cc",
+                10,
+                new BigDecimal("-2.6")
+        );
+
+        mockMvc.perform(post("/product/register")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(JsonToStringConverter.asJsonString(invalidInput2)))
+                .andExpect(status().isBadRequest());
+
+        // Define invalid input data (missing required fields)
+        ProductRegistrationDTO invalidInput3 = new ProductRegistrationDTO(
+                "aa",
+                "bb",
+                "cc",
+                -10,
+                new BigDecimal("2.6")
+        );
+
+        mockMvc.perform(post("/product/register")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(JsonToStringConverter.asJsonString(invalidInput3)))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void RegisterProduct_DuplicateProduct_ReturnsConflict() throws Exception {
+        // Define input data for a product that already exists
+        ProductRegistrationDTO existingProduct = new ProductRegistrationDTO(
+                "Paulaner",
+                "Paulaner Weizen",
+                "Weiss",
+                10,
+                new BigDecimal("2.39")
+        );
+
+        // Simulate the ProductService returning a conflict response
+        given(productService.registerProduct(
+                existingProduct.getBrand(),
+                existingProduct.getName(),
+                existingProduct.getDescription(),
+                existingProduct.getQuantity(),
+                existingProduct.getPrice()
+        )).willReturn(ResponseEntity.status(HttpStatus.CONFLICT).build());
+
+        mockMvc.perform(post("/product/register")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(JsonToStringConverter.asJsonString(existingProduct)))
+                .andExpect(status().isConflict());
     }
 
 

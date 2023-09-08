@@ -1,10 +1,9 @@
 package com.hugorithm.hopfencraft.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hugorithm.hopfencraft.dto.UserRegistrationDTO;
 import com.hugorithm.hopfencraft.dto.UserRegistrationResponseDTO;
 import com.hugorithm.hopfencraft.service.AuthenticationService;
+import com.hugorithm.hopfencraft.utils.JsonToStringConverter;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -45,7 +44,7 @@ public class AuthenticationControllerTests {
         // Perform the POST request
         mockMvc.perform(post("/auth/register")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(asJsonString(validInput)))
+                        .content(JsonToStringConverter.asJsonString(validInput)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.username", equalTo("validusername")))
                 .andExpect(jsonPath("$.email", equalTo("validemail@example.com")));
@@ -62,7 +61,7 @@ public class AuthenticationControllerTests {
         // Perform the POST request
         mockMvc.perform(post("/auth/register")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(asJsonString(invalidInput)))
+                        .content(JsonToStringConverter.asJsonString(invalidInput)))
                 .andExpect(status().isBadRequest());
     }
 
@@ -77,7 +76,7 @@ public class AuthenticationControllerTests {
         // Perform the POST request
         mockMvc.perform(post("/auth/register")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(asJsonString(invalidInput)))
+                        .content(JsonToStringConverter.asJsonString(invalidInput)))
                 .andExpect(status().isBadRequest());
     }
 
@@ -89,14 +88,7 @@ public class AuthenticationControllerTests {
         // Perform the POST request
         mockMvc.perform(post("/auth/register")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(asJsonString(invalidInput)))
+                        .content(JsonToStringConverter.asJsonString(invalidInput)))
                 .andExpect(status().isBadRequest());
-    }
-
-
-    // Utility method to convert objects to JSON
-    private String asJsonString(Object obj) throws JsonProcessingException {
-        ObjectMapper objectMapper = new ObjectMapper();
-        return objectMapper.writeValueAsString(obj);
     }
 }
