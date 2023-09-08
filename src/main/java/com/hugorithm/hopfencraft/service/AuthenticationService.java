@@ -1,10 +1,11 @@
 package com.hugorithm.hopfencraft.service;
 import java.util.HashSet;
-import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.Set;
 
 import com.hugorithm.hopfencraft.dto.UserRegistrationResponseDTO;
+import com.hugorithm.hopfencraft.exception.EmailAlreadyTakenException;
+import com.hugorithm.hopfencraft.exception.UsernameAlreadyExistsException;
 import com.hugorithm.hopfencraft.model.Email;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
@@ -27,6 +28,8 @@ import com.hugorithm.hopfencraft.repository.UserRepository;
 import com.hugorithm.hopfencraft.dto.LoginResponseDTO;
 import com.hugorithm.hopfencraft.repository.RoleRepository;
 
+import javax.management.relation.RoleNotFoundException;
+
 
 @Service
 @Transactional
@@ -44,21 +47,20 @@ public class AuthenticationService {
         try {
             username = username.toLowerCase();
 
-
             Optional<ApplicationUser> existingUser = userRepository.findByUsername(username);
-            Optional<ApplicationUser> existingEmail = userRepository.findByEmail(email);
 
             if (existingUser.isPresent()) {
-                throw new IllegalArgumentException(String.format("Username %s is already taken", username));
+                throw new UsernameAlreadyExistsException(String.format("Username %s is already taken", username));
             }
+
+            Optional<ApplicationUser> existingEmail = userRepository.findByEmail(email);
 
             if (existingEmail.isPresent()) {
-                throw new IllegalArgumentException(String.format("Email %s is already taken", email));
+                throw new EmailAlreadyTakenException(String.format("Email %s is already taken", email));
             }
 
-
             String encodedPassword = passwordEncoder.encode(password);
-            Role userRole = roleRepository.findByAuthority("USER").orElseThrow(() -> new NoSuchElementException("Role not Found"));
+            Role userRole = roleRepository.findByAuthority("USER").orElseThrow(() -> new RoleNotFoundException("Role not Found"));
 
             Set<Role> authorities = new HashSet<>();
             authorities.add(userRole);
@@ -74,9 +76,9 @@ public class AuthenticationService {
             UserRegistrationResponseDTO userDto = new UserRegistrationResponseDTO(username, email);
 
             return ResponseEntity.ok(userDto);
-        } catch (IllegalArgumentException ex) {
+        } catch (UsernameAlreadyExistsException | EmailAlreadyTakenException | RoleNotFoundException ex) {
             LOGGER.error(ex.getMessage(), ex);
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+            return ResponseEntity.status(HttpStatus.CONFLICT).build();
         }
     }
 
@@ -84,7 +86,7 @@ public class AuthenticationService {
         try {
             Authentication auth = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
             String token = tokenService.generateJwt(auth);
-            ApplicationUser user = userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("user not found"));
+            ApplicationUser user = userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("User not found"));
             LoginResponseDTO response = new LoginResponseDTO(user.getUsername(), user.getEmail(), token);
 
             return ResponseEntity.ok(response);

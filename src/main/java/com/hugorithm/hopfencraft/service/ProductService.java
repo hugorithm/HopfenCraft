@@ -1,6 +1,7 @@
 package com.hugorithm.hopfencraft.service;
 
 import com.hugorithm.hopfencraft.dto.ProductDTO;
+import com.hugorithm.hopfencraft.exception.ProductAlreadyExistsException;
 import com.hugorithm.hopfencraft.model.Product;
 import com.hugorithm.hopfencraft.repository.ProductRepository;
 import lombok.AllArgsConstructor;
@@ -30,7 +31,7 @@ public class ProductService {
             Optional<Product> product = productRepository.findProductByName(name);
 
             if (product.isPresent()) {
-                throw new IllegalStateException("Product already exists");
+                throw new ProductAlreadyExistsException("Product already exists");
             }
 
             Product p = productRepository.save(new Product(brand, name, description, quantity, price));
@@ -46,7 +47,7 @@ public class ProductService {
         } catch (NoSuchElementException ex) {
             LOGGER.error(ex.getMessage(), ex);
             return ResponseEntity.notFound().build();
-        } catch (IllegalStateException ex) {
+        } catch (ProductAlreadyExistsException ex) {
             LOGGER.error(ex.getMessage(), ex);
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
         }

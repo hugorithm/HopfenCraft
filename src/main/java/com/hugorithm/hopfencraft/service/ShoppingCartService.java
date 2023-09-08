@@ -3,6 +3,9 @@ package com.hugorithm.hopfencraft.service;
 import com.hugorithm.hopfencraft.dto.CartItemDTO;
 import com.hugorithm.hopfencraft.dto.CartResponseDTO;
 import com.hugorithm.hopfencraft.dto.ProductDTO;
+import com.hugorithm.hopfencraft.exception.CartItemNotFoundException;
+import com.hugorithm.hopfencraft.exception.CartItemQuantityExceedsAvailableException;
+import com.hugorithm.hopfencraft.exception.ProductNotFoundException;
 import com.hugorithm.hopfencraft.model.ApplicationUser;
 import com.hugorithm.hopfencraft.model.CartItem;
 import com.hugorithm.hopfencraft.model.Product;
@@ -34,7 +37,7 @@ public class ShoppingCartService {
 
     private  Product getProductFromRepoById(Long productId) {
         return productRepository.findById(productId)
-                .orElseThrow(() -> new NoSuchElementException("Product not found with ID: " + productId));
+                .orElseThrow(() -> new ProductNotFoundException("Product not found with ID: " + productId));
     }
     private ResponseEntity<CartResponseDTO> getCartResponseDTOResponseEntity(List<CartItem> cartItems) {
         List<CartItemDTO> cartItemDTOs = cartItems.stream()
@@ -76,10 +79,10 @@ public class ShoppingCartService {
 
                 return getCartResponseDTOResponseEntity(cartItems);
             } else {
-                throw new IllegalArgumentException("Requested quantity exceeds available quantity");
+                throw new CartItemQuantityExceedsAvailableException("Requested quantity exceeds available quantity");
             }
 
-        } catch (UsernameNotFoundException | NoSuchElementException | IllegalArgumentException ex) {
+        } catch (UsernameNotFoundException | ProductNotFoundException | CartItemQuantityExceedsAvailableException ex) {
             LOGGER.error(ex.getMessage(), ex);
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
@@ -99,9 +102,9 @@ public class ShoppingCartService {
 
                 return getCartResponseDTOResponseEntity(cartItems);
             } else {
-                throw new NoSuchElementException("Cart item not found with Id: " + cartItemId);
+                throw new CartItemNotFoundException("Cart item not found with Id: " + cartItemId);
             }
-        } catch (UsernameNotFoundException | NoSuchElementException ex) {
+        } catch (UsernameNotFoundException | CartItemNotFoundException ex) {
             LOGGER.error(ex.getMessage(), ex);
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }

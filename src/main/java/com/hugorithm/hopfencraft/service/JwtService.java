@@ -14,6 +14,6 @@ public class JwtService {
     private final UserRepository userRepository;
     public ApplicationUser getUserFromJwt(Jwt jwt) throws UsernameNotFoundException {
         String username = jwt.getSubject();
-        return userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("Username not found"));
+        return userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("User not found"));
     }
 }

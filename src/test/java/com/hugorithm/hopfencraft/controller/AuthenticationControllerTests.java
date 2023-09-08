@@ -62,7 +62,7 @@ public class AuthenticationControllerTests {
         mockMvc.perform(post("/auth/register")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(JsonToStringConverter.asJsonString(invalidInput)))
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isUnauthorized());
     }
 
     @Test
@@ -89,6 +89,6 @@ public class AuthenticationControllerTests {
         mockMvc.perform(post("/auth/register")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(JsonToStringConverter.asJsonString(invalidInput)))
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isUnauthorized());
     }
 }

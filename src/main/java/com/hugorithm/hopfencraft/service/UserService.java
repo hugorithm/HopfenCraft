@@ -1,5 +1,6 @@
 package com.hugorithm.hopfencraft.service;
 
+import com.hugorithm.hopfencraft.exception.*;
 import com.hugorithm.hopfencraft.model.ApplicationUser;
 import com.hugorithm.hopfencraft.model.Email;
 import com.hugorithm.hopfencraft.repository.UserRepository;
@@ -35,14 +36,14 @@ public class UserService implements UserDetailsService {
         return userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("User not found"));
     }
 
-    private LocalDateTime extractDateTimeFromToken(String token) throws IllegalArgumentException {
+    private LocalDateTime extractDateTimeFromToken(String token) throws InvalidTokenException {
         String[] parts = token.split("\\|");
         if (parts.length == 2) {
             String dateStr = parts[1];
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSSSSSSS");
             return LocalDateTime.parse(dateStr, formatter);
         }
-        throw new IllegalArgumentException("Invalid token format");
+        throw new InvalidTokenException("Invalid token format");
     }
 
     public ResponseEntity<String> sendPasswordResetRequest(Jwt jwt) {
@@ -64,22 +65,22 @@ public class UserService implements UserDetailsService {
             emailService.sendEmail(user.getEmail(), subject, message, user, Email.EmailType.PASSWORD_RESET);
 
             return ResponseEntity.ok("Password reset email sent successfully");
-        } catch (IllegalStateException | IllegalArgumentException ex) {
+        } catch (UsernameNotFoundException | InvalidTokenException ex) {
             LOGGER.error(ex.getMessage(), ex);
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
     }
 
-    private ApplicationUser verifyPasswordResetToken(Jwt jwt, String token) throws IllegalArgumentException {
+    private ApplicationUser verifyPasswordResetToken(Jwt jwt, String token) throws InvalidTokenException {
         ApplicationUser user = jwtService.getUserFromJwt(jwt);
         LocalDateTime expirationDate = extractDateTimeFromToken(tokenService.URLDecodeToken(token));
 
         if (!token.equals(user.getPasswordResetToken())) {
-            throw new IllegalArgumentException("Invalid token");
+            throw new InvalidTokenException("Invalid token");
         }
 
         if (expirationDate.equals(user.getPasswordResetTokenExpiration()) && user.getPasswordResetTokenExpiration().isBefore(LocalDateTime.now())) {
-            throw new IllegalArgumentException("Token has expired");
+            throw new InvalidTokenException("Token has expired");
         }
 
         return user;
@@ -88,7 +89,7 @@ public class UserService implements UserDetailsService {
         try {
             verifyPasswordResetToken(jwt, token);
             return ResponseEntity.ok().build();
-        } catch (IllegalArgumentException | UsernameNotFoundException ex) {
+        } catch (InvalidTokenException | UsernameNotFoundException ex) {
             LOGGER.error(ex.getMessage(), ex);
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
@@ -100,11 +101,11 @@ public class UserService implements UserDetailsService {
             ApplicationUser user = verifyPasswordResetToken(jwt, token);
 
             if (!passwordEncoder.matches(oldPassword, user.getPassword())) {
-                throw new IllegalStateException("Wrong credentials");
+                throw new WrongCredentialsException("Wrong credentials");
             }
 
             if (oldPassword.equals(newPassword)) {
-                throw new IllegalStateException("New password must be different from the old password");
+                throw new SamePasswordException("New password must be different from the old password");
             }
 
             if (newPassword.equals(newPasswordConfirmation)) {
@@ -116,10 +117,10 @@ public class UserService implements UserDetailsService {
 
                 return ResponseEntity.ok().build();
             } else {
-                throw new IllegalStateException("Passwords don't match");
+                throw new PasswordMismatchException("Passwords don't match");
             }
 
-        } catch (IllegalStateException | IllegalArgumentException | UsernameNotFoundException ex) {
+        } catch (SamePasswordException | PasswordMismatchException | UsernameNotFoundException | InvalidTokenException ex) {
             LOGGER.error(ex.getMessage(), ex);
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }

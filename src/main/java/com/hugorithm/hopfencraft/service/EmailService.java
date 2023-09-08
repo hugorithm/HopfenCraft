@@ -1,5 +1,6 @@
 package com.hugorithm.hopfencraft.service;
 
+import com.hugorithm.hopfencraft.exception.EmailSendingFailedException;
 import com.hugorithm.hopfencraft.model.ApplicationUser;
 import com.hugorithm.hopfencraft.model.Email;
 import com.hugorithm.hopfencraft.repository.EmailRepository;
@@ -9,6 +10,7 @@ import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.MailSendException;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Async;
@@ -40,9 +42,9 @@ public class EmailService {
 
             emailRepository.save(new Email(emailType, LocalDateTime.now(), user));
 
-        } catch (MessagingException ex) {
-            LOGGER.error("failed to send email", ex);
-            throw new IllegalStateException("failed to send email");
+        } catch (MessagingException | MailSendException ex) {
+            LOGGER.error(ex.getMessage(), ex);
+            throw new EmailSendingFailedException("Email sending failed");
         }
     }
     public String buildWelcomeEmail(String username) {

@@ -79,7 +79,7 @@ public class AuthenticationIntegrationTest {
                 validInput2,
                 UserRegistrationResponseDTO.class);
 
-        assertEquals(HttpStatus.BAD_REQUEST, response2.getStatusCode());
+        assertEquals(HttpStatus.CONFLICT, response2.getStatusCode());
 
         UserRegistrationResponseDTO responseBody2 = response2.getBody();
         assertNull(responseBody2);
@@ -107,7 +107,7 @@ public class AuthenticationIntegrationTest {
                 validInput2,
                 UserRegistrationResponseDTO.class);
 
-        assertEquals(HttpStatus.BAD_REQUEST, response2.getStatusCode());
+        assertEquals(HttpStatus.CONFLICT, response2.getStatusCode());
 
         UserRegistrationResponseDTO responseBody2 = response2.getBody();
         assertNull(responseBody2);
@@ -122,7 +122,7 @@ public class AuthenticationIntegrationTest {
                 validInput,
                 UserRegistrationResponseDTO.class);
 
-        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        assertEquals(HttpStatus.UNAUTHORIZED, response.getStatusCode());
 
         UserRegistrationResponseDTO responseBody = response.getBody();
         assertNull(responseBody);
@@ -137,7 +137,7 @@ public class AuthenticationIntegrationTest {
                 validInput,
                 UserRegistrationResponseDTO.class);
 
-        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        assertEquals(HttpStatus.UNAUTHORIZED, response.getStatusCode());
 
         UserRegistrationResponseDTO responseBody = response.getBody();
         assertNull(responseBody);
