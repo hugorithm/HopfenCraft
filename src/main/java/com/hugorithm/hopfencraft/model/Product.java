@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 @Table(name = "products")
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,6 +30,15 @@ public class Product {
 
 
     public Product(String brand, String name, String description, int quantity, BigDecimal price) {
+        this.brand = brand;
+        this.name = name;
+        this.description = description;
+        this.quantity = quantity;
+        this.price = price;
+    }
+
+    public Product(Long productId, String brand, String name, String description, int quantity, BigDecimal price) {
+        this.productId = productId;
         this.brand = brand;
         this.name = name;
         this.description = description;

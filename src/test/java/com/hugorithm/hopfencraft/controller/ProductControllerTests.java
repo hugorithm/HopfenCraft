@@ -2,6 +2,7 @@ package com.hugorithm.hopfencraft.controller;
 
 import com.hugorithm.hopfencraft.dto.ProductDTO;
 import com.hugorithm.hopfencraft.dto.ProductRegistrationDTO;
+import com.hugorithm.hopfencraft.model.Product;
 import com.hugorithm.hopfencraft.service.ProductService;
 import com.hugorithm.hopfencraft.utils.JsonToStringConverter;
 import org.junit.jupiter.api.Test;
@@ -11,6 +12,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -18,9 +22,14 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
 
-import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -75,7 +84,8 @@ public class ProductControllerTests {
                 .andExpect(jsonPath("$.name", equalTo(expectedResponse.getName())))
                 .andExpect(jsonPath("$.description", equalTo(expectedResponse.getDescription())))
                 .andExpect(jsonPath("$.quantity", equalTo(expectedResponse.getQuantity())))
-                .andExpect(jsonPath("$.price", equalTo(expectedResponse.getPrice().toString())));
+                .andExpect(jsonPath("$.price", equalTo(expectedResponse.getPrice().toString())))
+                .andExpect(jsonPath("$.productId", notNullValue()));
 
 
     }
@@ -145,5 +155,103 @@ public class ProductControllerTests {
                 .andExpect(status().isConflict());
     }
 
+    @Test
+    public void RegisterProduct_InvalidPrice_ReturnsBadRequest() throws Exception {
+        // Define invalid input data with a negative price
+        ProductRegistrationDTO invalidInput = new ProductRegistrationDTO(
+                "Invalid Product",
+                "Invalid Description",
+                "Category",
+                10,
+                new BigDecimal("-1.0")
+        );
+
+        mockMvc.perform(post("/product/register")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(JsonToStringConverter.asJsonString(invalidInput)))
+                .andExpect(status().isBadRequest());
+
+        // Define invalid input data with a zero price
+        ProductRegistrationDTO invalidInput2 = new ProductRegistrationDTO(
+                "Invalid Product",
+                "Invalid Description",
+                "Category",
+                10,
+                BigDecimal.ZERO
+        );
+
+        mockMvc.perform(post("/product/register")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(JsonToStringConverter.asJsonString(invalidInput2)))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void GetProducts_Paginated_ReturnsPageOfProducts() throws Exception {
+        // Define test data with multiple products
+        Product p1 = new Product(1L,"Paulaner", "Paulaner", "Weiss", 10, new BigDecimal("2.39"));
+        Product p2 = new Product(2L, "Franziskaner", "Franziskaner", "Weiss", 31, new BigDecimal("2.29"));
+        Product p3 = new Product(3L, "La Choufe", "La Choufe", "Belgium Gold", 14, new BigDecimal("3.57"));
+        Product p4 = new Product(4L,"Benediktiner", "Benediktiner", "Weiss", 10, new BigDecimal("2.39"));
+        Product p5 = new Product(5L, "Spaten", "Spaten", "Weiss", 31, new BigDecimal("2.29"));
+        Product p6 = new Product(6L, "Ayinger", "Ayinger", "Belgium Gold", 14, new BigDecimal("3.57"));
+        Product p7 = new Product(7L, "Krombacher", "Krombacher", "Weiss", 10, new BigDecimal("2.39"));
+        Product p8 = new Product(8L,"Erdinger", "Erdinger", "Weiss", 31, new BigDecimal("2.29"));
+        Product p9 = new Product(9L,"Augistiner", "Augistiner", "Belgium Gold", 14, new BigDecimal("3.57"));
+        Product p10 = new Product(10L,"Kapunziner", "Kapunziner", "Weiss", 10, new BigDecimal("2.39"));
+        Product p11 = new Product(11L,"Munchener", "Munchener", "Weiss", 31, new BigDecimal("2.29"));
+        Product p12 = new Product(12L,"La Choufe 2", "La Choufe 2", "Belgium Gold", 14, new BigDecimal("3.57"));
+
+        List<Product> products = Arrays.asList(p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12);
+
+        // Simulate the ProductService returning a page of products
+        Page<Product> productPage = new PageImpl<>(products);
+
+        given(productService.findAll(any(Pageable.class))).willReturn(productPage);
+
+        mockMvc.perform(get("/product/products")
+                        .param("page", "1")
+                        .param("size", "10")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.content", hasSize(products.size())))
+                .andExpect(jsonPath("$.content[0].productId", notNullValue()))
+                .andExpect(jsonPath("$.content[0].brand", notNullValue()))
+                .andExpect(jsonPath("$.content[0].name", notNullValue()))
+                .andExpect(jsonPath("$.content[0].description", notNullValue()))
+                .andExpect(jsonPath("$.content[0].quantity", notNullValue()))
+                .andExpect(jsonPath("$.content[0].price", notNullValue()));
+    }
+
+    @Test
+    public void GetProductById_ExistingProduct_ReturnsProduct() throws Exception {
+        // Define an existing product
+        Long productId = 1L;
+        Product existingProduct = new Product(productId, "Existing Brand", "Existing Product", "Existing Description", 5, new BigDecimal("4.99"), LocalDateTime.now());
+
+        given(productService.findById(productId)).willReturn(Optional.of(existingProduct));
+
+        mockMvc.perform(get("/product/{productId}", productId)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.productId", equalTo(existingProduct.getProductId().intValue())))
+                .andExpect(jsonPath("$.brand", equalTo(existingProduct.getBrand())))
+                .andExpect(jsonPath("$.name", equalTo(existingProduct.getName())))
+                .andExpect(jsonPath("$.description", equalTo(existingProduct.getDescription())))
+                .andExpect(jsonPath("$.quantity", equalTo(existingProduct.getQuantity())))
+                .andExpect(jsonPath("$.price", equalTo(existingProduct.getPrice().toString())));
+    }
+
+    @Test
+    public void GetProductById_NonExistingProduct_ReturnsNotFound() throws Exception {
+        // Define a non-existing product ID
+        Long nonExistingProductId = 999L;
+
+        given(productService.findById(nonExistingProductId)).willReturn(Optional.empty());
+
+        mockMvc.perform(get("/product/{productId}", nonExistingProductId)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound());
+    }
 
 }
