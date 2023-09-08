@@ -32,6 +32,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -289,7 +290,7 @@ public class ProductControllerTests {
                 validInput.getPrice()
         )).willReturn(ResponseEntity.ok(expectedUpdatedProduct));
 
-        mockMvc.perform(post("/product/update")
+        mockMvc.perform(put("/product/update")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(JsonToStringConverter.asJsonString(validInput)))
                 .andExpect(status().isOk())

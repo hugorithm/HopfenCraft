@@ -68,7 +68,7 @@ public class ProductController {
         return productService.registerProduct(body.getBrand(), body.getName(),body.getDescription(), body.getQuantity(), body.getPrice());
     }
 
-    @PostMapping("/update")
+    @PutMapping("/update")
     public ResponseEntity<ProductDTO> updateProduct(@Valid @RequestBody ProductUpdateDTO body) {
         return productService.updateProduct(body.getProductId(), body.getBrand(), body.getName(), body.getDescription(), body.getQuantity(), body.getPrice());
     }
