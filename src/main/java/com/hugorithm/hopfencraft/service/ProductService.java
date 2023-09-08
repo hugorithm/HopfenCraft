@@ -2,6 +2,7 @@ package com.hugorithm.hopfencraft.service;
 
 import com.hugorithm.hopfencraft.dto.ProductDTO;
 import com.hugorithm.hopfencraft.exception.ProductAlreadyExistsException;
+import com.hugorithm.hopfencraft.exception.ProductNotFoundException;
 import com.hugorithm.hopfencraft.model.Product;
 import com.hugorithm.hopfencraft.repository.ProductRepository;
 import lombok.AllArgsConstructor;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
@@ -59,5 +61,47 @@ public class ProductService {
 
     public Optional<Product> findById(Long productId) {
         return productRepository.findById(productId);
+    }
+
+    public ResponseEntity<ProductDTO> updateProduct(Long productId, String brand, String name, String description, int quantity, BigDecimal price) {
+        try {
+            Product product = productRepository.findById(productId).orElseThrow(() -> new ProductNotFoundException(String.format("Product not found with id: %s", productId)));
+            product.setBrand(brand);
+            product.setName(name);
+            product.setDescription(description);
+            product.setQuantity(quantity);
+            product.setPrice(price);
+            product.setRegisterDateTime(LocalDateTime.now());
+
+            productRepository.save(product);
+
+            return ResponseEntity.ok(new ProductDTO(
+                    product.getProductId(),
+                    product.getBrand(),
+                    product.getName(),
+                    product.getDescription(),
+                    product.getQuantity(),
+                    product.getPrice(),
+                    product.getRegisterDateTime()
+            ));
+
+        } catch (ProductNotFoundException ex) {
+            LOGGER.error(ex.getMessage(), ex);
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    public ResponseEntity<String> removeProduct(Long productId) {
+        try {
+            Product product = productRepository.findById(productId)
+                    .orElseThrow(() -> new ProductNotFoundException(String.format("Product not found with id: %s", productId)));
+
+            productRepository.delete(product);
+
+            return ResponseEntity.ok("Product removed successfully");
+        } catch (ProductNotFoundException ex) {
+            LOGGER.error(ex.getMessage(), ex);
+            return ResponseEntity.notFound().build();
+        }
     }
 }

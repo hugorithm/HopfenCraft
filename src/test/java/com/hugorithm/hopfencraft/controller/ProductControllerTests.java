@@ -2,6 +2,7 @@ package com.hugorithm.hopfencraft.controller;
 
 import com.hugorithm.hopfencraft.dto.ProductDTO;
 import com.hugorithm.hopfencraft.dto.ProductRegistrationDTO;
+import com.hugorithm.hopfencraft.dto.ProductUpdateDTO;
 import com.hugorithm.hopfencraft.model.Product;
 import com.hugorithm.hopfencraft.service.ProductService;
 import com.hugorithm.hopfencraft.utils.JsonToStringConverter;
@@ -253,5 +254,52 @@ public class ProductControllerTests {
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound());
     }
+
+    @Test
+    public void UpdateProduct_ValidInput_ReturnsOk() throws Exception {
+        // Define valid input data for updating a product
+        Long productId = 1L;
+        LocalDateTime dt = LocalDateTime.now();
+        ProductUpdateDTO validInput = new ProductUpdateDTO(
+                1L,
+                "Updated Brand",
+                "Updated Product",
+                "Updated Description",
+                20,
+                new BigDecimal("9.99")
+        );
+
+        // Define the expected updated product response
+        ProductDTO expectedUpdatedProduct = new ProductDTO(
+                productId,
+                "Updated Brand",
+                "Updated Product",
+                "Updated Description",
+                20,
+                new BigDecimal("9.99"),
+                dt
+        );
+
+        given(productService.updateProduct(
+                validInput.getProductId(),
+                validInput.getBrand(),
+                validInput.getName(),
+                validInput.getDescription(),
+                validInput.getQuantity(),
+                validInput.getPrice()
+        )).willReturn(ResponseEntity.ok(expectedUpdatedProduct));
+
+        mockMvc.perform(post("/product/update")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(JsonToStringConverter.asJsonString(validInput)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.brand", equalTo(expectedUpdatedProduct.getBrand())))
+                .andExpect(jsonPath("$.name", equalTo(expectedUpdatedProduct.getName())))
+                .andExpect(jsonPath("$.description", equalTo(expectedUpdatedProduct.getDescription())))
+                .andExpect(jsonPath("$.quantity", equalTo(expectedUpdatedProduct.getQuantity())))
+                .andExpect(jsonPath("$.price", equalTo(expectedUpdatedProduct.getPrice().toString())));
+    }
+
+
 
 }

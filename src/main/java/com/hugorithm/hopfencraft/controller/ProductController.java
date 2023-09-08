@@ -2,6 +2,7 @@ package com.hugorithm.hopfencraft.controller;
 
 import com.hugorithm.hopfencraft.dto.ProductDTO;
 import com.hugorithm.hopfencraft.dto.ProductRegistrationDTO;
+import com.hugorithm.hopfencraft.dto.ProductUpdateDTO;
 import com.hugorithm.hopfencraft.model.Product;
 import com.hugorithm.hopfencraft.service.ProductService;
 import jakarta.validation.Valid;
@@ -65,5 +66,15 @@ public class ProductController {
     @PostMapping("/register")
     public ResponseEntity<ProductDTO> registerProduct(@Valid @RequestBody ProductRegistrationDTO body) {
         return productService.registerProduct(body.getBrand(), body.getName(),body.getDescription(), body.getQuantity(), body.getPrice());
+    }
+
+    @PostMapping("/update")
+    public ResponseEntity<ProductDTO> updateProduct(@Valid @RequestBody ProductUpdateDTO body) {
+        return productService.updateProduct(body.getProductId(), body.getBrand(), body.getName(), body.getDescription(), body.getQuantity(), body.getPrice());
+    }
+
+    @DeleteMapping("/remove")
+    public ResponseEntity<String> removeProduct(@Valid @RequestBody Long productId) {
+        return productService.removeProduct(productId);
     }
 }
