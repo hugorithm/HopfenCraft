@@ -4,6 +4,7 @@ import com.hugorithm.hopfencraft.dto.LoginResponseDTO;
 import com.hugorithm.hopfencraft.dto.UserRegistrationDTO;
 import com.hugorithm.hopfencraft.dto.UserRegistrationResponseDTO;
 import com.hugorithm.hopfencraft.service.AuthenticationService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 @CrossOrigin("*")
 public class AuthenticationController {
     private final AuthenticationService authenticationService;
-
+    @Autowired
     public AuthenticationController(AuthenticationService authenticationService) {
         this.authenticationService = authenticationService;
     }
