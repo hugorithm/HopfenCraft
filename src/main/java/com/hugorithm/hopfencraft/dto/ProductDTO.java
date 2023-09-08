@@ -1,5 +1,6 @@
 package com.hugorithm.hopfencraft.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -14,6 +15,7 @@ public class ProductDTO {
     private String name;
     private String description;
     private int quantity;
+    @JsonFormat(shape = JsonFormat.Shape.STRING)
     private BigDecimal price;
     private LocalDateTime registerDateTime;
 
