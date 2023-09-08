@@ -47,6 +47,7 @@ public class SecurityConfig {
         return new ProviderManager(daoProvider);
     }
     @Bean
+    // TODO: Check /product/{id} authorization
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
           http.csrf(AbstractHttpConfigurer::disable)
               .authorizeHttpRequests(auth -> {
@@ -54,10 +55,9 @@ public class SecurityConfig {
                   auth.requestMatchers("/admin/**").hasRole("ADMIN");
                   auth.requestMatchers("/user/**").hasAnyRole("ADMIN", "USER");
                   auth.requestMatchers("/product/").permitAll();
-                  auth.requestMatchers("/product/**").permitAll();
                   auth.requestMatchers("/product/products").permitAll();
-                  auth.requestMatchers("/product/register/").hasRole("ADMIN");
-                  auth.requestMatchers("/product/update/").hasRole("ADMIN");
+                  auth.requestMatchers("/product/register").hasRole("ADMIN");
+                  auth.requestMatchers("/product/update").hasRole("ADMIN");
                   auth.requestMatchers("/cart/**").hasAnyRole("ADMIN", "USER");
                   auth.anyRequest().authenticated();
             });

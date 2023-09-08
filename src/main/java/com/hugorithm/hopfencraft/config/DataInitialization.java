@@ -47,7 +47,7 @@ public class DataInitialization implements CommandLineRunner {
         roles.add(adminRole);
         // Add Admin
         // Ugly way of adding an admin and roles.
-        ApplicationUser admin = new ApplicationUser("admin", passwordEncoder.encode("password"), "admin@admin.com", roles);
+        ApplicationUser admin = new ApplicationUser("admin", passwordEncoder.encode("Password123!"), "admin@admin.com", roles);
 
         userRepository.save(admin);
 
