@@ -3,7 +3,6 @@ package com.hugorithm.hopfencraft.controller;
 import com.hugorithm.hopfencraft.dto.ProductDTO;
 import com.hugorithm.hopfencraft.dto.ProductRegistrationDTO;
 import com.hugorithm.hopfencraft.model.Product;
-import com.hugorithm.hopfencraft.repository.ProductRepository;
 import com.hugorithm.hopfencraft.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -19,11 +18,9 @@ import java.util.Optional;
 @RequestMapping("/product")
 @CrossOrigin("*")
 public class ProductController {
-    private final ProductRepository productRepository;
     private final ProductService productService;
     @Autowired
-    public ProductController(ProductRepository productRepository, ProductService productService) {
-        this.productRepository = productRepository;
+    public ProductController(ProductService productService) {
         this.productService = productService;
     }
 
@@ -31,7 +28,7 @@ public class ProductController {
     public Page<ProductDTO> getProducts(@RequestParam(defaultValue = "0") int page,
                                      @RequestParam(defaultValue = "10") int size) {
         Pageable pageable = PageRequest.of(page, size);
-        Page<Product> productPage = productRepository.findAll(pageable);
+        Page<Product> productPage = productService.findAll(pageable);
 
         return productPage.map(p ->
                 new ProductDTO(
@@ -48,7 +45,7 @@ public class ProductController {
 
     @GetMapping("/{productId}")
     public ResponseEntity<ProductDTO> getProductById(@PathVariable Long productId) {
-        Optional<Product> product = productRepository.findById(productId);
+        Optional<Product> product = productService.findById(productId);
 
         return product.map(p -> ResponseEntity.ok(
             new ProductDTO(
