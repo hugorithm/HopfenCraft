@@ -2,6 +2,7 @@ package com.hugorithm.hopfencraft.controller;
 
 import com.hugorithm.hopfencraft.dto.PasswordResetDTO;
 import com.hugorithm.hopfencraft.service.UserService;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
@@ -29,7 +30,7 @@ public class UserController {
     }
 
     @PostMapping("/reset-password")
-    public ResponseEntity<?> resetPassword(@AuthenticationPrincipal Jwt jwt, @RequestBody PasswordResetDTO body, @RequestParam String token) {
+    public ResponseEntity<?> resetPassword(@AuthenticationPrincipal Jwt jwt, @Valid @RequestBody PasswordResetDTO body, @RequestParam String token) {
         return userService.resetPassword(jwt, token, body.getOldPassword(), body.getNewPassword(), body.getNewPasswordConfirmation());
     }
 }

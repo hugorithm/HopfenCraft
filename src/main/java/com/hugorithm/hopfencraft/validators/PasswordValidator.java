@@ -1,26 +1,44 @@
 package com.hugorithm.hopfencraft.validators;
 
-public class PasswordValidator {
+import com.hugorithm.hopfencraft.exception.PasswordNotValidException;
+import jakarta.validation.ConstraintValidator;
+import jakarta.validation.ConstraintValidatorContext;
 
-    public static boolean isValidPassword(String password) {
+public class PasswordValidator implements ConstraintValidator<Password, String> {
+
+    @Override
+    public void initialize(Password constraintAnnotation) {
+    }
+
+    @Override
+    public boolean isValid(String password, ConstraintValidatorContext context) {
+
+        if (password == null || password.isEmpty()) {
+            throw new PasswordNotValidException("Password is Null or Empty");
+        }
+
         if (password.length() < 8) {
-            return false;
+            throw new PasswordNotValidException("Password must have at least 8 characters");
         }
 
         if (!password.matches(".*[A-Z].*")) {
-            return false;
+            throw new PasswordNotValidException("Password must contain at least 1 Uppercase character");
         }
 
         if (!password.matches(".*[a-z].*")) {
-            return false;
+            throw new PasswordNotValidException("Password must contain at least 1 lowerCase character");
         }
 
         if (!password.matches(".*\\d.*")) {
-            return false;
+            throw new PasswordNotValidException("Password must contain at least 1 digit");
         }
 
         if (!password.matches(".*[^\\s\\p{C}].*")) {
-            return false;
+            throw new PasswordNotValidException("Password must not contain whitespace or control characters");
+        }
+
+        if (!password.matches(".*[!@#$%^&*()_+{}\\[\\]:;<>,.?~\\\\|\\-].*")) {
+            throw new PasswordNotValidException("Password must  contain at least 1 special character");
         }
 
         return true;

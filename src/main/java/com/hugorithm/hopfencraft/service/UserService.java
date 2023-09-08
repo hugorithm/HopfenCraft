@@ -3,7 +3,6 @@ package com.hugorithm.hopfencraft.service;
 import com.hugorithm.hopfencraft.model.ApplicationUser;
 import com.hugorithm.hopfencraft.model.Email;
 import com.hugorithm.hopfencraft.repository.UserRepository;
-import com.hugorithm.hopfencraft.validators.PasswordValidator;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -106,10 +105,6 @@ public class UserService implements UserDetailsService {
 
             if (oldPassword.equals(newPassword)) {
                 throw new IllegalStateException("New password must be different from the old password");
-            }
-
-            if (!PasswordValidator.isValidPassword(newPassword)) {
-                throw new IllegalArgumentException("Password is not valid");
             }
 
             if (newPassword.equals(newPasswordConfirmation)) {

@@ -4,12 +4,13 @@ import com.hugorithm.hopfencraft.dto.ProductDTO;
 import com.hugorithm.hopfencraft.dto.ProductRegistrationDTO;
 import com.hugorithm.hopfencraft.model.Product;
 import com.hugorithm.hopfencraft.service.ProductService;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Positive;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
@@ -44,7 +45,7 @@ public class ProductController {
     }
 
     @GetMapping("/{productId}")
-    public ResponseEntity<ProductDTO> getProductById(@PathVariable Long productId) {
+    public ResponseEntity<ProductDTO> getProductById(@PathVariable @Positive Long productId) {
         Optional<Product> product = productService.findById(productId);
 
         return product.map(p -> ResponseEntity.ok(
@@ -62,7 +63,7 @@ public class ProductController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<ProductDTO> registerProduct(@Validated @RequestBody ProductRegistrationDTO body) {
+    public ResponseEntity<ProductDTO> registerProduct(@Valid @RequestBody ProductRegistrationDTO body) {
         return productService.registerProduct(body.getBrand(), body.getName(),body.getDescription(), body.getQuantity(), body.getPrice());
     }
 }

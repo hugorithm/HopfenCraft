@@ -6,9 +6,6 @@ import java.util.Set;
 
 import com.hugorithm.hopfencraft.dto.UserRegistrationResponseDTO;
 import com.hugorithm.hopfencraft.model.Email;
-import com.hugorithm.hopfencraft.validators.EmailValidator;
-import com.hugorithm.hopfencraft.validators.PasswordValidator;
-import com.hugorithm.hopfencraft.validators.UsernameValidator;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -47,13 +44,6 @@ public class AuthenticationService {
         try {
             username = username.toLowerCase();
 
-            if(!UsernameValidator.isUsernameValid(username)) {
-                throw new IllegalArgumentException("Username is not valid");
-            }
-
-            if (!PasswordValidator.isValidPassword(password)) {
-                throw new IllegalArgumentException("Password is not valid");
-            }
 
             Optional<ApplicationUser> existingUser = userRepository.findByUsername(username);
             Optional<ApplicationUser> existingEmail = userRepository.findByEmail(email);
@@ -66,9 +56,6 @@ public class AuthenticationService {
                 throw new IllegalArgumentException(String.format("Email %s is already taken", email));
             }
 
-            if (!EmailValidator.isValid(email)) {
-                throw new IllegalArgumentException("Email is not valid");
-            }
 
             String encodedPassword = passwordEncoder.encode(password);
             Role userRole = roleRepository.findByAuthority("USER").orElseThrow(() -> new NoSuchElementException("Role not Found"));
@@ -103,7 +90,7 @@ public class AuthenticationService {
             return ResponseEntity.ok(response);
         } catch (AuthenticationException ex){
             LOGGER.error("Failed to authenticate", ex);
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
     }
 }
