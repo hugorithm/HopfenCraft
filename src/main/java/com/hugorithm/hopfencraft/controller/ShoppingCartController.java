@@ -29,8 +29,8 @@ public class ShoppingCartController {
     public ResponseEntity<CartResponseDTO> addToCart(@AuthenticationPrincipal Jwt jwt, @Valid @RequestBody CartRegistrationDTO body) {
         return shoppingCartService.addToCart(jwt, body.getProductId(), body.getQuantity());
     }
-    @PostMapping("/remove")
-    public ResponseEntity<CartResponseDTO> removeCartItem(@AuthenticationPrincipal Jwt jwt, @RequestBody @Positive Long cartItemId) {
+    @DeleteMapping("/remove/{cartItemId}")
+    public ResponseEntity<CartResponseDTO> removeCartItem(@AuthenticationPrincipal Jwt jwt, @PathVariable @Positive Long cartItemId) {
         return shoppingCartService.removeCartItem(jwt, cartItemId);
     }
 
