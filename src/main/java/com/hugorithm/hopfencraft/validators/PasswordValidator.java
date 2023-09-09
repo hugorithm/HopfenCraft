@@ -1,6 +1,6 @@
 package com.hugorithm.hopfencraft.validators;
 
-import com.hugorithm.hopfencraft.exception.PasswordNotValidException;
+import com.hugorithm.hopfencraft.exception.auth.PasswordNotValidException;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 

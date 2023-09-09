@@ -1,9 +1,9 @@
 package com.hugorithm.hopfencraft.service;
 
 import com.hugorithm.hopfencraft.dto.ProductDTO;
-import com.hugorithm.hopfencraft.exception.ProductAlreadyExistsException;
-import com.hugorithm.hopfencraft.exception.ProductNotFoundException;
-import com.hugorithm.hopfencraft.exception.ProductUpdateException;
+import com.hugorithm.hopfencraft.exception.product.ProductAlreadyExistsException;
+import com.hugorithm.hopfencraft.exception.product.ProductNotFoundException;
+import com.hugorithm.hopfencraft.exception.product.ProductUpdateException;
 import com.hugorithm.hopfencraft.model.Product;
 import com.hugorithm.hopfencraft.repository.ProductRepository;
 import lombok.AllArgsConstructor;

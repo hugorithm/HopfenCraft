@@ -1,6 +1,6 @@
 package com.hugorithm.hopfencraft.service;
 
-import com.hugorithm.hopfencraft.exception.EmailSendingFailedException;
+import com.hugorithm.hopfencraft.exception.email.EmailSendingFailedException;
 import com.hugorithm.hopfencraft.model.ApplicationUser;
 import com.hugorithm.hopfencraft.model.Email;
 import com.hugorithm.hopfencraft.repository.EmailRepository;

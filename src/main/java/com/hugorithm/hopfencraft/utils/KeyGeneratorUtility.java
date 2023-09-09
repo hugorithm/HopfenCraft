@@ -1,6 +1,6 @@
 package com.hugorithm.hopfencraft.utils;
 
-import com.hugorithm.hopfencraft.exception.RsaKeyGenerationException;
+import com.hugorithm.hopfencraft.exception.auth.RsaKeyGenerationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

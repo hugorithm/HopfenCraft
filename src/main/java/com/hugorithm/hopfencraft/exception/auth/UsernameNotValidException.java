@@ -1,4 +1,4 @@
-package com.hugorithm.hopfencraft.exception;
+package com.hugorithm.hopfencraft.exception.auth;
 
 public class UsernameNotValidException  extends RuntimeException  {
     public UsernameNotValidException(String message) {

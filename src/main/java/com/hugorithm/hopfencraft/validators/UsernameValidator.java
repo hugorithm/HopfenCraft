@@ -1,6 +1,6 @@
 package com.hugorithm.hopfencraft.validators;
 
-import com.hugorithm.hopfencraft.exception.UsernameNotValidException;
+import com.hugorithm.hopfencraft.exception.auth.UsernameNotValidException;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 

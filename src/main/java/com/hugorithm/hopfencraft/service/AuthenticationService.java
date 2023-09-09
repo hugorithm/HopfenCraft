@@ -4,8 +4,8 @@ import java.util.Optional;
 import java.util.Set;
 
 import com.hugorithm.hopfencraft.dto.UserRegistrationResponseDTO;
-import com.hugorithm.hopfencraft.exception.EmailAlreadyTakenException;
-import com.hugorithm.hopfencraft.exception.UsernameAlreadyExistsException;
+import com.hugorithm.hopfencraft.exception.email.EmailAlreadyTakenException;
+import com.hugorithm.hopfencraft.exception.auth.UsernameAlreadyExistsException;
 import com.hugorithm.hopfencraft.model.Email;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;

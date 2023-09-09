@@ -1,5 +1,7 @@
 package com.hugorithm.hopfencraft.exception;
 
+import com.hugorithm.hopfencraft.exception.auth.PasswordNotValidException;
+import com.hugorithm.hopfencraft.exception.auth.UsernameNotValidException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
