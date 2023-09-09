@@ -29,7 +29,7 @@ import java.util.Optional;
 
 import static org.hamcrest.Matchers.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -67,13 +67,13 @@ public class ProductControllerTests {
                 LocalDateTime.now()
         );
 
-        given(productService.registerProduct(
+        when(productService.registerProduct(
                 validInput.getBrand(),
                 validInput.getName(),
                 validInput.getDescription(),
                 validInput.getQuantity(),
                 validInput.getPrice()
-        )).willReturn(ResponseEntity.ok(expectedResponse));
+        )).thenReturn(ResponseEntity.ok(expectedResponse));
 
         // Perform the POST request
         mockMvc.perform(post("/product/register")
@@ -86,8 +86,6 @@ public class ProductControllerTests {
                 .andExpect(jsonPath("$.quantity", equalTo(expectedResponse.getQuantity())))
                 .andExpect(jsonPath("$.price", equalTo(expectedResponse.getPrice().toString())))
                 .andExpect(jsonPath("$.productId", notNullValue()));
-
-
     }
 
     @Test
@@ -141,13 +139,13 @@ public class ProductControllerTests {
         );
 
         // Simulate the ProductService returning a conflict response
-        given(productService.registerProduct(
+        when(productService.registerProduct(
                 existingProduct.getBrand(),
                 existingProduct.getName(),
                 existingProduct.getDescription(),
                 existingProduct.getQuantity(),
                 existingProduct.getPrice()
-        )).willReturn(ResponseEntity.status(HttpStatus.CONFLICT).build());
+        )).thenReturn(ResponseEntity.status(HttpStatus.CONFLICT).build());
 
         mockMvc.perform(post("/product/register")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -207,7 +205,7 @@ public class ProductControllerTests {
         // Simulate the ProductService returning a page of products
         Page<Product> productPage = new PageImpl<>(products);
 
-        given(productService.findAll(any(Pageable.class))).willReturn(productPage);
+        when(productService.findAll(any(Pageable.class))).thenReturn(productPage);
 
         mockMvc.perform(get("/product/products")
                         .param("page", "1")
@@ -229,7 +227,7 @@ public class ProductControllerTests {
         Long productId = 1L;
         Product existingProduct = new Product(productId, "Existing Brand", "Existing Product", "Existing Description", 5, new BigDecimal("4.99"), LocalDateTime.now());
 
-        given(productService.findById(productId)).willReturn(Optional.of(existingProduct));
+        when(productService.findById(productId)).thenReturn(Optional.of(existingProduct));
 
         mockMvc.perform(get("/product/{productId}", productId)
                         .contentType(MediaType.APPLICATION_JSON))
@@ -247,7 +245,7 @@ public class ProductControllerTests {
         // Define a non-existing product ID
         Long nonExistingProductId = 999L;
 
-        given(productService.findById(nonExistingProductId)).willReturn(Optional.empty());
+        when(productService.findById(nonExistingProductId)).thenReturn(Optional.empty());
 
         mockMvc.perform(get("/product/{productId}", nonExistingProductId)
                         .contentType(MediaType.APPLICATION_JSON))
@@ -279,14 +277,14 @@ public class ProductControllerTests {
                 dt
         );
 
-        given(productService.updateProduct(
+        when(productService.updateProduct(
                 validInput.getProductId(),
                 validInput.getBrand(),
                 validInput.getName(),
                 validInput.getDescription(),
                 validInput.getQuantity(),
                 validInput.getPrice()
-        )).willReturn(ResponseEntity.ok(expectedUpdatedProduct));
+        )).thenReturn(ResponseEntity.ok(expectedUpdatedProduct));
 
         mockMvc.perform(put("/product/update")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -312,14 +310,14 @@ public class ProductControllerTests {
                 new BigDecimal("9.99")
         );
 
-        given(productService.updateProduct(
+        when(productService.updateProduct(
                 invalidInput.getProductId(),
                 invalidInput.getBrand(),
                 invalidInput.getName(),
                 invalidInput.getDescription(),
                 invalidInput.getQuantity(),
                 invalidInput.getPrice()
-        )).willReturn(ResponseEntity.badRequest().build());
+        )).thenReturn(ResponseEntity.badRequest().build());
 
         mockMvc.perform(put("/product/update")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -336,14 +334,14 @@ public class ProductControllerTests {
         invalidInput.setQuantity(10);
         invalidInput.setPrice(new BigDecimal("2.50"));
 
-        given(productService.updateProduct(
+        when(productService.updateProduct(
                 invalidInput.getProductId(),
                 invalidInput.getBrand(),
                 invalidInput.getName(),
                 invalidInput.getDescription(),
                 invalidInput.getQuantity(),
                 invalidInput.getPrice()
-        )).willReturn(ResponseEntity.badRequest().build());
+        )).thenReturn(ResponseEntity.badRequest().build());
 
         mockMvc.perform(put("/product/update")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -358,7 +356,7 @@ public class ProductControllerTests {
         Long productId = 1L;
 
         // Simulate a successful removal by the productService
-        given(productService.removeProduct(productId)).willReturn(ResponseEntity.ok("Product removed successfully"));
+        when(productService.removeProduct(productId)).thenReturn(ResponseEntity.ok("Product removed successfully"));
 
         mockMvc.perform(delete("/product/remove/{productId}", productId)
                         .contentType(MediaType.APPLICATION_JSON)
@@ -372,7 +370,7 @@ public class ProductControllerTests {
         Long nonExistingProductId = 999L;
 
         // Simulate productService returning a not found response
-        given(productService.removeProduct(nonExistingProductId)).willReturn(ResponseEntity.notFound().build());
+        when(productService.removeProduct(nonExistingProductId)).thenReturn(ResponseEntity.notFound().build());
 
         mockMvc.perform(delete("/product/remove/{nonExistingProductId}", nonExistingProductId)
                         .contentType(MediaType.APPLICATION_JSON)
@@ -386,8 +384,8 @@ public class ProductControllerTests {
         Long productIdWithError = 2L;
 
         // Simulate productService returning an internal server error response
-        given(productService.removeProduct(productIdWithError))
-                .willReturn(ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error occurred while removing product"));
+        when(productService.removeProduct(productIdWithError))
+                .thenReturn(ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error occurred while removing product"));
 
         mockMvc.perform(delete("/product/remove/{productIdWithError}", productIdWithError)
                         .contentType(MediaType.APPLICATION_JSON)
