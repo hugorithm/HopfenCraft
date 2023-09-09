@@ -55,9 +55,9 @@ public class SecurityConfig {
                   auth.requestMatchers("/admin/**").hasRole("ADMIN");
                   auth.requestMatchers("/user/**").hasAnyRole("ADMIN", "USER");
                   auth.requestMatchers("/product/").permitAll();
-                  auth.requestMatchers("/product/products").permitAll();
                   auth.requestMatchers("/product/register").hasRole("ADMIN");
                   auth.requestMatchers("/product/update").hasRole("ADMIN");
+                  auth.requestMatchers("/product/products").permitAll();
                   auth.requestMatchers("/cart/**").hasAnyRole("ADMIN", "USER");
                   auth.anyRequest().authenticated();
             });
