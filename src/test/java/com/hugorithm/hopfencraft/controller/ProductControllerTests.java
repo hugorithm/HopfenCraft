@@ -301,6 +301,49 @@ public class ProductControllerTests {
                 .andExpect(jsonPath("$.price", equalTo(expectedUpdatedProduct.getPrice().toString())));
     }
 
+    @Test
+    public void UpdateProduct_InvalidQuantity_ReturnsBadRequest() throws Exception {
+        // Define invalid input data for updating a product (e.g., empty name)
+        Long productId = 1L;
+        ProductUpdateDTO invalidInput = new ProductUpdateDTO(
+                productId,
+                "Update Product Brand",
+                "Updated Product",
+                "Updated Description",
+                -20, //negative quantity
+                new BigDecimal("9.99")
+        );
+
+        mockMvc.perform(put("/product/update")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(JsonToStringConverter.asJsonString(invalidInput)))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void UpdateProduct_InvalidEmptyInput_ReturnsBadRequest() throws Exception {
+        // Define invalid input data for updating a product (e.g., empty name)
+        Long productId = 1L;
+        ProductUpdateDTO invalidInput = new ProductUpdateDTO();
+        invalidInput.setProductId(productId);
+        invalidInput.setQuantity(10);
+        invalidInput.setPrice(new BigDecimal("2.50"));
+
+        given(productService.updateProduct(
+                invalidInput.getProductId(),
+                invalidInput.getBrand(),
+                invalidInput.getName(),
+                invalidInput.getDescription(),
+                invalidInput.getQuantity(),
+                invalidInput.getPrice()
+        )).willReturn(ResponseEntity.badRequest().build());
+
+        mockMvc.perform(put("/product/update")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(JsonToStringConverter.asJsonString(invalidInput)))
+                .andExpect(status().isBadRequest());
+    }
+
 
 
 }
