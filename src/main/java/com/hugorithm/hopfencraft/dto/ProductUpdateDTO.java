@@ -20,9 +20,7 @@ public class ProductUpdateDTO {
     private String brand;
     private String name;
     private String description;
-    @Positive
     private int quantity;
     @JsonFormat(shape = JsonFormat.Shape.STRING)
-    @PositiveBigDecimal
     private BigDecimal price;
 }

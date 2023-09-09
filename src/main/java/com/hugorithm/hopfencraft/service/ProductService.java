@@ -89,7 +89,7 @@ public class ProductService {
                 product.setPrice(price);
             }
 
-            if (brand.isBlank() && name.isBlank() && description.isBlank() && quantity < 0 && (price == null || price.compareTo(BigDecimal.ZERO) < 0)) {
+            if (brand == null && name == null && description == null && quantity < 0 && (price == null || price.compareTo(BigDecimal.ZERO) < 0)) {
                 throw new ProductUpdateException("At least one field must be updated");
             }
 

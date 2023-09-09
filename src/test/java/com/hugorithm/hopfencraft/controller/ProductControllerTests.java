@@ -312,6 +312,15 @@ public class ProductControllerTests {
                 new BigDecimal("9.99")
         );
 
+        given(productService.updateProduct(
+                invalidInput.getProductId(),
+                invalidInput.getBrand(),
+                invalidInput.getName(),
+                invalidInput.getDescription(),
+                invalidInput.getQuantity(),
+                invalidInput.getPrice()
+        )).willReturn(ResponseEntity.badRequest().build());
+
         mockMvc.perform(put("/product/update")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(JsonToStringConverter.asJsonString(invalidInput)))
@@ -351,7 +360,7 @@ public class ProductControllerTests {
         // Simulate a successful removal by the productService
         given(productService.removeProduct(productId)).willReturn(ResponseEntity.ok("Product removed successfully"));
 
-        mockMvc.perform(delete("/product/remove")
+        mockMvc.perform(delete("/product/remove/{productId}", productId)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(JsonToStringConverter.asJsonString(productId)))
                 .andExpect(status().isOk());
@@ -365,7 +374,7 @@ public class ProductControllerTests {
         // Simulate productService returning a not found response
         given(productService.removeProduct(nonExistingProductId)).willReturn(ResponseEntity.notFound().build());
 
-        mockMvc.perform(delete("/product/remove")
+        mockMvc.perform(delete("/product/remove/{nonExistingProductId}", nonExistingProductId)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(JsonToStringConverter.asJsonString(nonExistingProductId)))
                 .andExpect(status().isNotFound());
@@ -380,7 +389,7 @@ public class ProductControllerTests {
         given(productService.removeProduct(productIdWithError))
                 .willReturn(ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error occurred while removing product"));
 
-        mockMvc.perform(delete("/product/remove")
+        mockMvc.perform(delete("/product/remove/{productIdWithError}", productIdWithError)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(JsonToStringConverter.asJsonString(productIdWithError)))
                 .andExpect(status().isInternalServerError());
