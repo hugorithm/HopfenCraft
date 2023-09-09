@@ -73,8 +73,8 @@ public class ProductController {
         return productService.updateProduct(body.getProductId(), body.getBrand(), body.getName(), body.getDescription(), body.getQuantity(), body.getPrice());
     }
 
-    @DeleteMapping("/remove")
-    public ResponseEntity<String> removeProduct(@Valid @RequestBody Long productId) {
+    @DeleteMapping("/remove/{productId}")
+    public ResponseEntity<String> removeProduct(@PathVariable Long productId) {
         return productService.removeProduct(productId);
     }
 }

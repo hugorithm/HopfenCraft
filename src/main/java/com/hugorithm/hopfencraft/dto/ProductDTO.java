@@ -18,7 +18,6 @@ public class ProductDTO {
     @JsonFormat(shape = JsonFormat.Shape.STRING)
     private BigDecimal price;
     private LocalDateTime registerDateTime;
-
     public ProductDTO(String brand, String name, String description, int quantity, BigDecimal price) {
         this.brand = brand;
         this.name = name;
