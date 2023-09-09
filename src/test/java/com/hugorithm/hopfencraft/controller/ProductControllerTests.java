@@ -30,9 +30,7 @@ import java.util.Optional;
 import static org.hamcrest.Matchers.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -345,5 +343,47 @@ public class ProductControllerTests {
     }
 
 
+    @Test
+    public void RemoveProduct_ValidInput_ReturnsOk() throws Exception {
+        // Define a valid product ID to be removed
+        Long productId = 1L;
+
+        // Simulate a successful removal by the productService
+        given(productService.removeProduct(productId)).willReturn(ResponseEntity.ok("Product removed successfully"));
+
+        mockMvc.perform(delete("/product/remove")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(JsonToStringConverter.asJsonString(productId)))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    public void RemoveProduct_NonExistingProduct_ReturnsNotFound() throws Exception {
+        // Define a non-existing product ID to be removed
+        Long nonExistingProductId = 999L;
+
+        // Simulate productService returning a not found response
+        given(productService.removeProduct(nonExistingProductId)).willReturn(ResponseEntity.notFound().build());
+
+        mockMvc.perform(delete("/product/remove")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(JsonToStringConverter.asJsonString(nonExistingProductId)))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    public void RemoveProduct_ErrorInRemoving_ReturnsInternalServerError() throws Exception {
+        // Define a product ID that will result in an error during removal
+        Long productIdWithError = 2L;
+
+        // Simulate productService returning an internal server error response
+        given(productService.removeProduct(productIdWithError))
+                .willReturn(ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error occurred while removing product"));
+
+        mockMvc.perform(delete("/product/remove")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(JsonToStringConverter.asJsonString(productIdWithError)))
+                .andExpect(status().isInternalServerError());
+    }
 
 }
