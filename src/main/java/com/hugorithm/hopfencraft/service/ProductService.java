@@ -80,18 +80,19 @@ public class ProductService {
             if (isNotBlank(description)) {
                 product.setDescription(description);
             }
-
+            // TODO: This logic is bad. Needs revision.
             if (quantity >= 0) {
                 product.setQuantity(quantity);
+            } else {
+                throw new ProductUpdateException("Quantity must be positive or zero");
             }
 
             if (price != null && price.compareTo(BigDecimal.ZERO) >= 0) {
                 product.setPrice(price);
+            } else {
+                throw new ProductUpdateException("Price must be positive or zero");
             }
 
-            if (brand == null && name == null && description == null && quantity < 0 && (price == null || price.compareTo(BigDecimal.ZERO) < 0)) {
-                throw new ProductUpdateException("At least one field must be updated");
-            }
 
             productRepository.save(product);
 
