@@ -2,13 +2,12 @@ package com.hugorithm.hopfencraft.integration;
 
 import com.hugorithm.hopfencraft.config.TestConfig;
 import com.hugorithm.hopfencraft.dto.*;
-import com.hugorithm.hopfencraft.repository.RoleRepository;
-import com.hugorithm.hopfencraft.repository.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.test.web.server.LocalServerPort;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.data.domain.Page;
 import org.springframework.http.*;
 import org.springframework.test.annotation.DirtiesContext;
@@ -27,12 +26,6 @@ public class ProductIntegrationTests {
 
     @Autowired
     private TestRestTemplate restTemplate;
-
-    @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
-    private RoleRepository roleRepository;
 
     @Test
     public void CreateProduct_ValidInput_ReturnsCreated() {
@@ -82,7 +75,6 @@ public class ProductIntegrationTests {
 
     @Test
     public void CreateProduct_InvalidInput_ReturnsBadRequest() {
-        // Create a ProductDTO with invalid input
         //Login
         LoginDTO login = new LoginDTO("admin", "Password123!");
 
@@ -95,7 +87,7 @@ public class ProductIntegrationTests {
 
         String jwt = loginResponse.getBody().getJwt();
 
-
+        // Create a ProductDTO with invalid input
         ProductRegistrationDTO invalidInput = new ProductRegistrationDTO(
                 "Test Brand",
                 "Test Name",
@@ -118,16 +110,40 @@ public class ProductIntegrationTests {
 
         ProductDTO responseBody = response.getBody();
         assertNull(responseBody);
+
     }
 
     @Test
     public void GetProductById_ValidId_ReturnsOk() {
+        LoginDTO login = new LoginDTO("admin", "Password123!");
+
+        ResponseEntity<LoginResponseDTO> loginResponse = restTemplate.postForEntity(
+                "http://localhost:" + port + "/auth/login",
+                login,
+                LoginResponseDTO.class);
+
+        assertEquals(HttpStatus.OK, loginResponse.getStatusCode());
+
+        String jwt = loginResponse.getBody().getJwt();
+
         // Create a ProductDTO for testing
-        ProductRegistrationDTO validInput = new ProductRegistrationDTO("Test Product", "Test description", "Test brand", 10, new BigDecimal("19.99"));
+        ProductRegistrationDTO validInput = new ProductRegistrationDTO(
+                "Test Brand",
+                "Test Name",
+                "Test Description",
+                10,
+                new BigDecimal("19.99")
+        );
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Authorization", "Bearer " + jwt);
+
+        HttpEntity<ProductRegistrationDTO> requestEntity = new HttpEntity<>(validInput, headers);
+
 
         ResponseEntity<ProductDTO> createResponse = restTemplate.postForEntity(
                 "http://localhost:" + port + "/product/register",
-                validInput,
+                requestEntity,
                 ProductDTO.class);
 
         assertEquals(HttpStatus.OK, createResponse.getStatusCode());
@@ -145,15 +161,17 @@ public class ProductIntegrationTests {
 
         ProductDTO responseBody = response.getBody();
         assertNotNull(responseBody);
-        assertEquals("Test Product", responseBody.getName());
-        assertEquals("Test description", responseBody.getDescription());
-        assertEquals("Test brand", responseBody.getBrand());
+        assertEquals("Test Brand", responseBody.getBrand());
+        assertEquals("Test Name", responseBody.getName());
+        assertEquals("Test Description", responseBody.getDescription());
         assertEquals(10, responseBody.getQuantity());
         assertEquals(new BigDecimal("19.99"), responseBody.getPrice());
     }
 
     @Test
     public void GetProductById_InvalidId_ReturnsNotFound() {
+
+
         ResponseEntity<ProductDTO> response = restTemplate.getForEntity(
                 "http://localhost:" + port + "/product/9999", // Assuming ID 9999 doesn't exist
                 ProductDTO.class);
@@ -163,59 +181,100 @@ public class ProductIntegrationTests {
 
     @Test
     public void GetProducts_ReturnsOk() {
+        LoginDTO login = new LoginDTO("admin", "Password123!");
+
+        ResponseEntity<LoginResponseDTO> loginResponse = restTemplate.postForEntity(
+                "http://localhost:" + port + "/auth/login",
+                login,
+                LoginResponseDTO.class);
+
+        assertEquals(HttpStatus.OK, loginResponse.getStatusCode());
+
+        String jwt = loginResponse.getBody().getJwt();
+
         // Create some ProductDTOs for testing
         ProductRegistrationDTO product1 = new ProductRegistrationDTO(
-                "Product 1",
-                "Description 1",
                 "Brand 1",
+                "Name 1",
+                "Description 1",
                 5,
                 new BigDecimal("10.99")
         );
         ProductRegistrationDTO product2 = new ProductRegistrationDTO(
-                "Product 2",
-                "Description 2",
                 "Brand 2",
+                "Name 2",
+                "Description 2",
                 8,
                 new BigDecimal("15.99")
         );
         ProductRegistrationDTO product3 = new ProductRegistrationDTO(
-                "Product 3",
-                "Description 3",
                 "Brand 3",
+                "Name 3",
+                "Description 3",
                 3,
                 new BigDecimal("7.99")
         );
 
-        restTemplate.postForEntity("http://localhost:" + port + "/product/register", product1, ProductRegistrationDTO.class);
-        restTemplate.postForEntity("http://localhost:" + port + "/product/register", product2, ProductRegistrationDTO.class);
-        restTemplate.postForEntity("http://localhost:" + port + "/product/register", product3, ProductRegistrationDTO.class);
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Authorization", "Bearer " + jwt);
+
+        HttpEntity<ProductRegistrationDTO> requestEntity1 = new HttpEntity<>(product1, headers);
+        HttpEntity<ProductRegistrationDTO> requestEntity2 = new HttpEntity<>(product2, headers);
+        HttpEntity<ProductRegistrationDTO> requestEntity3 = new HttpEntity<>(product3, headers);
 
 
-        ResponseEntity<Page<ProductDTO>> response = restTemplate.getForEntity(
+        restTemplate.postForEntity("http://localhost:" + port + "/product/register", requestEntity1, ProductRegistrationDTO.class);
+        restTemplate.postForEntity("http://localhost:" + port + "/product/register", requestEntity2, ProductRegistrationDTO.class);
+        restTemplate.postForEntity("http://localhost:" + port + "/product/register", requestEntity3, ProductRegistrationDTO.class);
+
+
+        ResponseEntity<Page<ProductDTO>> response = restTemplate.exchange(
                 "http://localhost:" + port + "/product/products",
-                null);
+                HttpMethod.GET,
+                new HttpEntity<>(headers),
+                new ParameterizedTypeReference<Page<ProductDTO>>() {}
+        );
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
 
         Page<ProductDTO> responseBody = response.getBody();
         assertNotNull(responseBody);
-        assertEquals(3, responseBody.getSize());
+        // 15 here is because TestConfig runs DataInitialization which creates 12 Products. Here we add 3 more so 12 + 3 = 15
+        assertEquals(15, responseBody.getTotalElements());
+
+
     }
 
     @Test
     public void UpdateProduct_ValidInput_ReturnsOk() {
+        LoginDTO login = new LoginDTO("admin", "Password123!");
+
+        ResponseEntity<LoginResponseDTO> loginResponse = restTemplate.postForEntity(
+                "http://localhost:" + port + "/auth/login",
+                login,
+                LoginResponseDTO.class);
+
+        assertEquals(HttpStatus.OK, loginResponse.getStatusCode());
+
+        String jwt = loginResponse.getBody().getJwt();
+
         // Create a ProductDTO for testing
         ProductRegistrationDTO validInput = new ProductRegistrationDTO(
-                "Test Product",
-                "Test description",
-                "Test brand",
+                "Test Brand",
+                "Test Name",
+                "Test Description",
                 10,
                 new BigDecimal("19.99")
         );
 
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Authorization", "Bearer " + jwt);
+
+        HttpEntity<ProductRegistrationDTO> requestEntity = new HttpEntity<>(validInput, headers);
+
         ResponseEntity<ProductDTO> createResponse = restTemplate.postForEntity(
                 "http://localhost:" + port + "/product/register",
-                validInput,
+                requestEntity,
                 ProductDTO.class);
 
         assertEquals(HttpStatus.OK, createResponse.getStatusCode());
@@ -228,14 +287,21 @@ public class ProductIntegrationTests {
         // Update the product
         ProductUpdateDTO updatedProduct = new ProductUpdateDTO(
                 productId,
-                "Updated Product",
-                "Updated description",
-                "Updated brand",
+                "Updated Brand",
+                "Updated Name",
+                "Updated Description",
                 20,
                 new BigDecimal("29.99")
         );
 
-        restTemplate.put("http://localhost:" + port + "/product/update", updatedProduct);
+        HttpEntity<ProductUpdateDTO> requestEntityUpdate = new HttpEntity<>(updatedProduct, headers);
+
+        restTemplate.exchange(
+                "http://localhost:" + port + "/product/update",
+                HttpMethod.PUT,
+                requestEntityUpdate,
+                ProductDTO.class
+        );
 
         // Verify that the product was updated
         ResponseEntity<ProductDTO> response = restTemplate.getForEntity(
@@ -246,30 +312,46 @@ public class ProductIntegrationTests {
 
         ProductDTO responseBody = response.getBody();
         assertNotNull(responseBody);
-        assertEquals("Updated Product", responseBody.getName());
-        assertEquals("Updated description", responseBody.getDescription());
-        assertEquals("Updated brand", responseBody.getBrand());
+        assertEquals("Updated Brand", responseBody.getBrand());
+        assertEquals("Updated Name", responseBody.getName());
+        assertEquals("Updated Description", responseBody.getDescription());
         assertEquals(20, responseBody.getQuantity());
         assertEquals(new BigDecimal("29.99"), responseBody.getPrice());
     }
 
     @Test
     public void UpdateProduct_InvalidInput_ReturnsBadRequest() {
+        LoginDTO login = new LoginDTO("admin", "Password123!");
+
+        ResponseEntity<LoginResponseDTO> loginResponse = restTemplate.postForEntity(
+                "http://localhost:" + port + "/auth/login",
+                login,
+                LoginResponseDTO.class);
+
+        assertEquals(HttpStatus.OK, loginResponse.getStatusCode());
+
+        String jwt = loginResponse.getBody().getJwt();
+
         // Create a ProductDTO for testing
         ProductRegistrationDTO validInput = new ProductRegistrationDTO(
-                "Test Product",
-                "Test description",
-                "Test brand",
+                "Test Brand",
+                "Test Name",
+                "Test Description",
                 10,
                 new BigDecimal("19.99")
         );
 
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Authorization", "Bearer " + jwt);
+
+        HttpEntity<ProductRegistrationDTO> requestEntity = new HttpEntity<>(validInput, headers);
+
         ResponseEntity<ProductDTO> createResponse = restTemplate.postForEntity(
                 "http://localhost:" + port + "/product/register",
-                validInput,
+                requestEntity,
                 ProductDTO.class);
 
-        assertEquals(HttpStatus.CREATED, createResponse.getStatusCode());
+        assertEquals(HttpStatus.OK, createResponse.getStatusCode());
 
         ProductDTO createdProduct = createResponse.getBody();
         assertNotNull(createdProduct);
@@ -279,18 +361,25 @@ public class ProductIntegrationTests {
         // Attempt to update the product with invalid input
         ProductUpdateDTO invalidInput = new ProductUpdateDTO(
                 productId,
-                "Short",
-                "Test description",
-                "Test brand",
+                "Test Brand Updated",
+                "Test Name Updated",
+                "Test Description Updated",
                 -5,
-                new BigDecimal("19.99")
+                new BigDecimal("-39.99")
         );
 
-        restTemplate.put("http://localhost:" + port + "/product/update", invalidInput);
+        HttpEntity<ProductUpdateDTO> requestEntityUpdate = new HttpEntity<>(invalidInput, headers);
+
+        restTemplate.exchange(
+                "http://localhost:" + port + "/product/update",
+                HttpMethod.PUT,
+                requestEntityUpdate,
+                ProductDTO.class
+        );
 
         // Verify that the product was not updated due to invalid input
         ResponseEntity<ProductDTO> response = restTemplate.getForEntity(
-                "http://localhost:" + port + "/products/" + productId,
+                "http://localhost:" + port + "/product/" + productId,
                 ProductDTO.class);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
@@ -299,9 +388,10 @@ public class ProductIntegrationTests {
         assertNotNull(updatedProduct);
 
         // Assert that the product details are still the same as before the update
-        assertEquals(createdProduct.getName(), updatedProduct.getName());
-        assertEquals(createdProduct.getDescription(), updatedProduct.getDescription());
-        assertEquals(createdProduct.getBrand(), updatedProduct.getBrand());
+        // In this example only the invalid quantity should be ignored. The rest should be updated
+        assertNotEquals(createdProduct.getBrand(), updatedProduct.getBrand());
+        assertNotEquals(createdProduct.getName(), updatedProduct.getName());
+        assertNotEquals(createdProduct.getDescription(), updatedProduct.getDescription());
         assertEquals(createdProduct.getQuantity(), updatedProduct.getQuantity());
         assertEquals(createdProduct.getPrice(), updatedProduct.getPrice());
 
