@@ -57,6 +57,7 @@ public class SecurityConfig {
                   auth.requestMatchers("/product/register").hasRole("ADMIN");
                   auth.requestMatchers("/product/update").hasRole("ADMIN");
                   auth.requestMatchers("/product/remove").hasRole("ADMIN");
+                  auth.requestMatchers("/product/**").permitAll(); // Allow access to /product/{productId} without authentication
                   auth.requestMatchers("/product/products").permitAll();
                   auth.requestMatchers("/cart/**").hasAnyRole("ADMIN", "USER");
                   auth.anyRequest().authenticated();
