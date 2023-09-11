@@ -76,7 +76,7 @@ public class UserControllerTests {
         Set<Role> roles = new HashSet<>();
         roles.add(role);
         ApplicationUser user = new ApplicationUser("user1", "Password123!", "email@example.com", roles);
-        PasswordResetDTO passwordResetDTO = new PasswordResetDTO(user,"Password123!", "newPassword123!", "newPassword123!");
+        PasswordResetDTO passwordResetDTO = new PasswordResetDTO("Password123!", "newPassword123!", "newPassword123!");
 
         // Mock the behavior of your userService to return a success response
         String resetToken = "resetToken"; // Replace with an actual reset token
