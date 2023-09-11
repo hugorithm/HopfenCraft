@@ -29,6 +29,8 @@ public class ApplicationUser implements UserDetails {
     private LocalDateTime passwordResetTokenExpiration;
     @OneToMany(mappedBy = "user")
     private List<CartItem> cartItems;
+    @OneToMany(mappedBy = "user")
+    private List<Order> orders;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
@@ -50,6 +52,7 @@ public class ApplicationUser implements UserDetails {
         this.email = email;
         this.authorities = authorities;
         this.cartItems = new ArrayList<>();
+        this.orders = new ArrayList<>();
     }
 
     @Override
