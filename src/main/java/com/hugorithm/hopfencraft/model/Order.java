@@ -1,6 +1,7 @@
 package com.hugorithm.hopfencraft.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.hugorithm.hopfencraft.enums.OrderStatus;
+import com.hugorithm.hopfencraft.enums.PaymentMethod;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -20,11 +21,11 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "order_id")
     private Long orderId;
+
     @ManyToOne
     @JoinColumn(name = "user_id")
-    @JsonIgnore
     private ApplicationUser user;
-    private BigDecimal total;
+
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<CartItem> orderItems;
 
@@ -32,6 +33,34 @@ public class Order {
     @CreationTimestamp
     private LocalDateTime orderDate;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "order_status")
+    private OrderStatus orderStatus;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "payment_method")
+    private PaymentMethod paymentMethod;
+
+    @Column(name = "payment_transaction_id")
+    private String paymentTransactionId;
+
+    // Shipping Address fields
+    private String shippingName;
+    private String shippingAddress;
+    private String shippingCity;
+    private String shippingState;
+    private String shippingPostalCode;
+    private String shippingCountry;
+
+    // Billing Address fields
+    private String billingName;
+    private String billingAddress;
+    private String billingCity;
+    private String billingState;
+    private String billingPostalCode;
+    private String billingCountry;
+
+    private BigDecimal total;
     public Order(ApplicationUser user, BigDecimal total) {
         this.user = user;
         this.total = total;
