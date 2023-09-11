@@ -68,4 +68,8 @@ public class TokenService {
     public String URLDecodeToken(String encodedToken) {
         return URLDecoder.decode(encodedToken, StandardCharsets.UTF_8).replace("%2E", ".");
     }
+
+    public String URLEncodeToken(String decodedToken) {
+        return URLEncoder.encode(decodedToken, StandardCharsets.UTF_8).replace(".", "%2E");
+    }
 }

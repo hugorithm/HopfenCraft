@@ -76,9 +76,10 @@ public class UserService implements UserDetailsService {
 
     private ApplicationUser verifyPasswordResetToken(Jwt jwt, String token) throws InvalidTokenException {
         ApplicationUser user = jwtService.getUserFromJwt(jwt);
-        LocalDateTime expirationDate = extractDateTimeFromToken(tokenService.URLDecodeToken(token));
+        String decodedToken = tokenService.URLDecodeToken(token);
+        LocalDateTime expirationDate = extractDateTimeFromToken(decodedToken);
 
-        if (!token.equals(user.getPasswordResetToken())) {
+        if (!decodedToken.equals(user.getPasswordResetToken())) {
             throw new InvalidTokenException("Invalid token");
         }
 
@@ -123,7 +124,7 @@ public class UserService implements UserDetailsService {
                 throw new PasswordMismatchException("Passwords don't match");
             }
 
-        } catch (SamePasswordException | PasswordMismatchException | UsernameNotFoundException | InvalidTokenException ex) {
+        } catch (SamePasswordException | PasswordMismatchException | UsernameNotFoundException | InvalidTokenException | WrongCredentialsException ex) {
             LOGGER.error(ex.getMessage(), ex);
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }

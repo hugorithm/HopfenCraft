@@ -6,6 +6,7 @@ import com.hugorithm.hopfencraft.dto.LoginResponseDTO;
 import com.hugorithm.hopfencraft.dto.PasswordResetDTO;
 import com.hugorithm.hopfencraft.model.ApplicationUser;
 import com.hugorithm.hopfencraft.repository.UserRepository;
+import com.hugorithm.hopfencraft.service.TokenService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -28,6 +29,8 @@ public class UserIntegrationTests {
     private TestRestTemplate restTemplate;
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private TokenService tokenService;
 
     @Test
     public void sendPasswordResetRequest_ValidUser_ReturnsOk() {
@@ -106,7 +109,7 @@ public class UserIntegrationTests {
         // Add more assertions as needed
 
         PasswordResetDTO passwordResetDTO = new PasswordResetDTO(
-                "OldPassword123!",
+                "Password123!",
                 "NewPassword123!",
                 "NewPassword123!"
         );
@@ -114,11 +117,11 @@ public class UserIntegrationTests {
 
         HttpEntity<PasswordResetDTO> requestEntity = new HttpEntity<>(passwordResetDTO, headers);
 
-        ResponseEntity<?> response3 = restTemplate.exchange(
+        ResponseEntity<Void> response3 = restTemplate.exchange(
                 "http://localhost:" + port + "/user/reset-password?token=" + token,
                 HttpMethod.POST,
                 requestEntity,
-                ResponseEntity.class
+                Void.class
         );
 
         assertEquals(HttpStatus.OK, response3.getStatusCode());
@@ -152,17 +155,19 @@ public class UserIntegrationTests {
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals("Password reset email sent successfully", response.getBody());
 
-        // Assume you have an invalid reset token or invalid PasswordResetDTO
-        PasswordResetDTO passwordResetDTO = new PasswordResetDTO();
-        passwordResetDTO.setOldPassword("InvalidOldPassword"); // Invalid old password
+        // Assume you have an invalid PasswordResetDTO
+        PasswordResetDTO passwordResetDTO = new PasswordResetDTO(
+                "InvalidOldPassword123!",
+                "NewPassword123!",
+                "NewPassword123!"
+        );
 
         ApplicationUser user = userRepository.findByUsername("testuser").get();
 
-        String token = user.getPasswordResetToken();
+        String token =  tokenService.URLEncodeToken(user.getPasswordResetToken());
 
 
 
-        HttpEntity<PasswordResetDTO> requestEntity = new HttpEntity<>(passwordResetDTO, headers);
         ResponseEntity<?> response2 = restTemplate.exchange(
                 "http://localhost:" + port + "/user/reset-password?token=" + token,
                 HttpMethod.GET,
@@ -170,13 +175,16 @@ public class UserIntegrationTests {
                 ResponseEntity.class
         );
 
+
         assertEquals(HttpStatus.OK, response2.getStatusCode());
 
-        ResponseEntity<?> response3 = restTemplate.exchange(
+
+        HttpEntity<PasswordResetDTO> requestEntity = new HttpEntity<>(passwordResetDTO, headers);
+        ResponseEntity<Void> response3 = restTemplate.exchange(
                 "http://localhost:" + port + "/user/reset-password?token=" + token,
                 HttpMethod.POST,
                 requestEntity,
-                ResponseEntity.class
+                Void.class
         );
 
         assertEquals(HttpStatus.BAD_REQUEST, response3.getStatusCode());
