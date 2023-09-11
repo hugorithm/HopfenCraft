@@ -75,7 +75,7 @@ public class AuthenticationService {
 
             UserRegistrationResponseDTO userDto = new UserRegistrationResponseDTO(username, email);
 
-            return ResponseEntity.ok(userDto);
+            return ResponseEntity.status(HttpStatus.CREATED).body(userDto);
         } catch (UsernameAlreadyExistsException | EmailAlreadyTakenException | RoleNotFoundException ex) {
             LOGGER.error(ex.getMessage(), ex);
             return ResponseEntity.status(HttpStatus.CONFLICT).build();

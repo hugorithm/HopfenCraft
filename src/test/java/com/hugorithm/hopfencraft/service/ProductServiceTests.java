@@ -58,7 +58,7 @@ public class ProductServiceTests {
         );
 
         // Assert the expected behavior
-        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(HttpStatus.CREATED, response.getStatusCode());
         ProductDTO responseBody = response.getBody();
         assertNotNull(responseBody);
         assertEquals("TestBrand", responseBody.getBrand());

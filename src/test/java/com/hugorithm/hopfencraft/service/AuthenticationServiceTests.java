@@ -69,7 +69,7 @@ public class AuthenticationServiceTests {
         ResponseEntity<UserRegistrationResponseDTO> response = authenticationService.registerUser(validInput.getUsername(), validInput.getPassword(), validInput.getEmail());
 
         // Assert the expected behavior
-        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(HttpStatus.CREATED, response.getStatusCode());
         UserRegistrationResponseDTO responseBody = response.getBody();
         assertNotNull(responseBody);
         assertEquals("validusername", responseBody.getUsername());

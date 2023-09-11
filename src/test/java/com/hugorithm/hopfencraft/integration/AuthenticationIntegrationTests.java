@@ -32,7 +32,7 @@ public class AuthenticationIntegrationTests {
                 validInput,
                 UserRegistrationResponseDTO.class);
 
-        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(HttpStatus.CREATED, response.getStatusCode());
 
         UserRegistrationResponseDTO responseBody = response.getBody();
         assertNotNull(responseBody);
@@ -67,7 +67,7 @@ public class AuthenticationIntegrationTests {
                 validInput,
                 UserRegistrationResponseDTO.class);
 
-        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(HttpStatus.CREATED, response.getStatusCode());
 
         UserRegistrationResponseDTO responseBody = response.getBody();
         assertNotNull(responseBody);
@@ -95,7 +95,7 @@ public class AuthenticationIntegrationTests {
                 validInput,
                 UserRegistrationResponseDTO.class);
 
-        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(HttpStatus.CREATED, response.getStatusCode());
 
         UserRegistrationResponseDTO responseBody = response.getBody();
         assertNotNull(responseBody);
@@ -168,7 +168,7 @@ public class AuthenticationIntegrationTests {
                 validInput,
                 UserRegistrationResponseDTO.class);
 
-        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(HttpStatus.CREATED, response.getStatusCode());
 
         //Login
         LoginDTO validInput2 = new LoginDTO("validusername", "ValidPass123!");

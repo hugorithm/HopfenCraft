@@ -61,7 +61,7 @@ public class ProductIntegrationTests {
                 ProductDTO.class
         );
 
-        assertEquals(HttpStatus.OK, response2.getStatusCode());
+        assertEquals(HttpStatus.CREATED, response2.getStatusCode());
 
         ProductDTO responseBody2 = response2.getBody();
         assertNotNull(responseBody2);
@@ -146,7 +146,7 @@ public class ProductIntegrationTests {
                 requestEntity,
                 ProductDTO.class);
 
-        assertEquals(HttpStatus.OK, createResponse.getStatusCode());
+        assertEquals(HttpStatus.CREATED, createResponse.getStatusCode());
 
         ProductDTO createdProduct = createResponse.getBody();
         assertNotNull(createdProduct);
@@ -278,7 +278,7 @@ public class ProductIntegrationTests {
                 requestEntity,
                 ProductDTO.class);
 
-        assertEquals(HttpStatus.OK, createResponse.getStatusCode());
+        assertEquals(HttpStatus.CREATED, createResponse.getStatusCode());
 
         ProductDTO createdProduct = createResponse.getBody();
         assertNotNull(createdProduct);
@@ -352,7 +352,7 @@ public class ProductIntegrationTests {
                 requestEntity,
                 ProductDTO.class);
 
-        assertEquals(HttpStatus.OK, createResponse.getStatusCode());
+        assertEquals(HttpStatus.CREATED, createResponse.getStatusCode());
 
         ProductDTO createdProduct = createResponse.getBody();
         assertNotNull(createdProduct);

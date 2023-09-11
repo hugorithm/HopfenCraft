@@ -39,7 +39,7 @@ public class ProductService {
             }
 
             Product p = productRepository.save(new Product(brand, name, description, quantity, price));
-            return ResponseEntity.ok(new ProductDTO(
+            return ResponseEntity.status(HttpStatus.CREATED).body(new ProductDTO(
                     p.getProductId(),
                     p.getBrand(),
                     p.getName(),
