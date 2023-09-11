@@ -4,9 +4,9 @@ import java.util.Optional;
 import java.util.Set;
 
 import com.hugorithm.hopfencraft.dto.UserRegistrationResponseDTO;
+import com.hugorithm.hopfencraft.enums.EmailType;
 import com.hugorithm.hopfencraft.exception.email.EmailAlreadyTakenException;
 import com.hugorithm.hopfencraft.exception.auth.UsernameAlreadyExistsException;
-import com.hugorithm.hopfencraft.model.Email;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -71,7 +71,7 @@ public class AuthenticationService {
             String message = emailService.buildWelcomeEmail(username);
             String subject = "Welcome to HopfenCraft - Your Registration Was Successful!";
 
-            emailService.sendEmail(user.getEmail(), subject, message, user, Email.EmailType.REGISTRATION);
+            emailService.sendEmail(user.getEmail(), subject, message, user, EmailType.REGISTRATION);
 
             UserRegistrationResponseDTO userDto = new UserRegistrationResponseDTO(username, email);
 

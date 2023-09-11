@@ -1,5 +1,6 @@
 package com.hugorithm.hopfencraft.service;
 
+import com.hugorithm.hopfencraft.enums.EmailType;
 import com.hugorithm.hopfencraft.exception.email.EmailSendingFailedException;
 import com.hugorithm.hopfencraft.model.ApplicationUser;
 import com.hugorithm.hopfencraft.model.Email;
@@ -28,7 +29,7 @@ public class EmailService {
     private final static Logger LOGGER = LoggerFactory.getLogger(EmailService.class);
 
     @Async
-    public void sendEmail(String to, String subject, String email, ApplicationUser user, Email.EmailType emailType) {
+    public void sendEmail(String to, String subject, String email, ApplicationUser user, EmailType emailType) {
         try {
             MimeMessage mimeMessage = mailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, "utf-8");

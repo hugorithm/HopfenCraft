@@ -1,5 +1,6 @@
 package com.hugorithm.hopfencraft.repository;
 
+import com.hugorithm.hopfencraft.enums.EmailType;
 import com.hugorithm.hopfencraft.model.ApplicationUser;
 import com.hugorithm.hopfencraft.model.Email;
 import com.hugorithm.hopfencraft.model.Role;
@@ -33,7 +34,7 @@ public class EmailRepositoryTests {
         Set<Role> roles = new HashSet<>();
         roles.add(role);
         ApplicationUser user = new ApplicationUser("user1", "Password123!", "email@example.com", roles);
-        Email email = new Email(Email.EmailType.REGISTRATION, LocalDateTime.now(), user);
+        Email email = new Email(EmailType.REGISTRATION, LocalDateTime.now(), user);
 
         //Act
         Email savedEmail = emailRepository.save(email);
@@ -51,8 +52,8 @@ public class EmailRepositoryTests {
         Set<Role> roles = new HashSet<>();
         roles.add(role);
         ApplicationUser user = new ApplicationUser("user1", "Password123!", "email@example.com", roles);
-        Email email = new Email(Email.EmailType.REGISTRATION, LocalDateTime.now(), user);
-        Email email2 = new Email(Email.EmailType.ORDER, LocalDateTime.now(), user);
+        Email email = new Email(EmailType.REGISTRATION, LocalDateTime.now(), user);
+        Email email2 = new Email(EmailType.ORDER, LocalDateTime.now(), user);
 
         //Act
         userRepository.save(user);
@@ -73,7 +74,7 @@ public class EmailRepositoryTests {
         Set<Role> roles = new HashSet<>();
         roles.add(role);
         ApplicationUser user = new ApplicationUser("user1", "Password123!", "email@example.com", roles);
-        Email email = new Email(Email.EmailType.REGISTRATION, LocalDateTime.now(), user);
+        Email email = new Email(EmailType.REGISTRATION, LocalDateTime.now(), user);
 
         //Act
         emailRepository.save(email);
@@ -92,20 +93,20 @@ public class EmailRepositoryTests {
         ApplicationUser user = new ApplicationUser("user1", "Password123!", "email@example.com", roles);
         ApplicationUser user2 = new ApplicationUser("user2", "Password123!", "email2@example.com", roles);
 
-        Email email = new Email(Email.EmailType.REGISTRATION, LocalDateTime.now(), user);
+        Email email = new Email(EmailType.REGISTRATION, LocalDateTime.now(), user);
         LocalDateTime mailDate = email.getEmailSendDate();
         //Act
         emailRepository.save(email);
 
         Email repoEmail = emailRepository.findById(email.getEmailId()).get();
-        repoEmail.setEmailType(Email.EmailType.ORDER);
+        repoEmail.setEmailType(EmailType.ORDER);
         repoEmail.setEmailSendDate(LocalDateTime.now().plusDays(24));
         repoEmail.setUser(user2);
 
         Email updatedEmail = emailRepository.save(repoEmail);
 
         //Assert
-        Assertions.assertThat(updatedEmail.getEmailType()).isEqualTo(Email.EmailType.ORDER);
+        Assertions.assertThat(updatedEmail.getEmailType()).isEqualTo(EmailType.ORDER);
         Assertions.assertThat(updatedEmail.getEmailSendDate()).isNotEqualTo(mailDate);
         Assertions.assertThat(updatedEmail.getUser()).isEqualTo(user2);
         Assertions.assertThat(updatedEmail.getEmailType()).isNotNull();
@@ -121,7 +122,7 @@ public class EmailRepositoryTests {
         Set<Role> roles = new HashSet<>();
         roles.add(role);
         ApplicationUser user = new ApplicationUser("user1", "Password123!", "email@example.com", roles);
-        Email email = new Email(Email.EmailType.REGISTRATION, LocalDateTime.now(), user);
+        Email email = new Email(EmailType.REGISTRATION, LocalDateTime.now(), user);
 
         //Act
         emailRepository.save(email);

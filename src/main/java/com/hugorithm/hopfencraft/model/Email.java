@@ -1,5 +1,6 @@
 package com.hugorithm.hopfencraft.model;
 
+import com.hugorithm.hopfencraft.enums.EmailType;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -21,11 +22,6 @@ public class Email {
 
     @Enumerated(EnumType.STRING)
     private EmailType emailType;
-    public enum EmailType {
-        REGISTRATION,
-        PASSWORD_RESET,
-        ORDER
-    }
 
     public Email(EmailType emailType, LocalDateTime emailSendDate, ApplicationUser user) {
         this.emailType = emailType;
