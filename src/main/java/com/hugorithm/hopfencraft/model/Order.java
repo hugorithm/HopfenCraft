@@ -8,6 +8,7 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -24,17 +25,21 @@ public class Order {
     @JsonIgnore
     private ApplicationUser user;
     private BigDecimal total;
-    @OneToMany(mappedBy = "order")
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<CartItem> orderItems;
 
     @Column(name = "order_date")
     @CreationTimestamp
     private LocalDateTime orderDate;
 
-    public Order(ApplicationUser user, BigDecimal total, List<CartItem> orderItems, LocalDateTime orderDate) {
+    public Order(ApplicationUser user, BigDecimal total) {
         this.user = user;
         this.total = total;
-        this.orderItems = orderItems;
-        this.orderDate = orderDate;
+        this.orderItems = new ArrayList<>();
+    }
+
+    public void setOrderItems(List<CartItem> orderItems) {
+        this.orderItems.clear(); // Clear existing references
+        this.orderItems.addAll(orderItems); // Add the new order items
     }
 }
