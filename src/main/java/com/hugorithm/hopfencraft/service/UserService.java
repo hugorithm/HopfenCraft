@@ -55,8 +55,6 @@ public class UserService implements UserDetailsService {
             ApplicationUser user = jwtService.getUserFromJwt(jwt);
             String token = tokenService.generatePasswordResetToken();
             String decodedToken = tokenService.URLDecodeToken(token);
-            System.out.println("token: "+ token);
-            System.out.println("decoded token: " +decodedToken);
             LocalDateTime expirationDate = extractDateTimeFromToken(decodedToken);
             user.setPasswordResetTokenExpiration(expirationDate);
             user.setPasswordResetToken(decodedToken);
