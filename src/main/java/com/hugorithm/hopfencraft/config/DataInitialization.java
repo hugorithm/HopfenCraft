@@ -41,15 +41,20 @@ public class DataInitialization implements CommandLineRunner {
         // Add Roles
         if (roleRepository.findByAuthority("ADMIN").isPresent()) return;
         Role adminRole = roleRepository.save(new Role("ADMIN"));
-        roleRepository.save(new Role("USER"));
+        Role userRole = roleRepository.save(new Role("USER"));
 
         Set<Role> roles = new HashSet<>();
         roles.add(adminRole);
+
+        Set<Role> userRoles = new HashSet<>();
+        userRoles.add(userRole);
         // Add Admin
         // Ugly way of adding an admin and roles.
         ApplicationUser admin = new ApplicationUser("admin", passwordEncoder.encode("Password123!"), "admin@admin.com", roles);
+        ApplicationUser user = new ApplicationUser("testuser", passwordEncoder.encode("Password123!"), "user@test.com", userRoles);
 
         userRepository.save(admin);
+        userRepository.save(user);
 
         //Add products
 
