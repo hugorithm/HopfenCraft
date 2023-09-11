@@ -38,7 +38,7 @@ public class ProductIntegrationTests {
                 LoginResponseDTO.class);
 
         assertEquals(HttpStatus.OK, loginResponse.getStatusCode());
-
+        assertNotNull(loginResponse.getBody());
         String jwt = loginResponse.getBody().getJwt();
 
         // Create a ProductDTO for testing
@@ -84,7 +84,7 @@ public class ProductIntegrationTests {
                 LoginResponseDTO.class);
 
         assertEquals(HttpStatus.OK, loginResponse.getStatusCode());
-
+        assertNotNull(loginResponse.getBody());
         String jwt = loginResponse.getBody().getJwt();
 
         // Create a ProductDTO with invalid input
@@ -123,7 +123,7 @@ public class ProductIntegrationTests {
                 LoginResponseDTO.class);
 
         assertEquals(HttpStatus.OK, loginResponse.getStatusCode());
-
+        assertNotNull(loginResponse.getBody());
         String jwt = loginResponse.getBody().getJwt();
 
         // Create a ProductDTO for testing
@@ -189,7 +189,7 @@ public class ProductIntegrationTests {
                 LoginResponseDTO.class);
 
         assertEquals(HttpStatus.OK, loginResponse.getStatusCode());
-
+        assertNotNull(loginResponse.getBody());
         String jwt = loginResponse.getBody().getJwt();
 
         // Create some ProductDTOs for testing
@@ -256,7 +256,7 @@ public class ProductIntegrationTests {
                 LoginResponseDTO.class);
 
         assertEquals(HttpStatus.OK, loginResponse.getStatusCode());
-
+        assertNotNull(loginResponse.getBody());
         String jwt = loginResponse.getBody().getJwt();
 
         // Create a ProductDTO for testing
@@ -330,7 +330,7 @@ public class ProductIntegrationTests {
                 LoginResponseDTO.class);
 
         assertEquals(HttpStatus.OK, loginResponse.getStatusCode());
-
+        assertNotNull(loginResponse.getBody());
         String jwt = loginResponse.getBody().getJwt();
 
         // Create a ProductDTO for testing
