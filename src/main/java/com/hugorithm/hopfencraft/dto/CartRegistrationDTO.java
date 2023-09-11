@@ -7,6 +7,7 @@ import lombok.*;
 
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 public class CartRegistrationDTO {
     @Positive
     @NotNull
@@ -14,5 +15,4 @@ public class CartRegistrationDTO {
     @Positive
     @NotNull
     private int quantity;
-    private Long cartItemId;
 }
