@@ -20,12 +20,12 @@ public class CartItem {
     private Product product;
     @ManyToOne
     private ApplicationUser user;
+    @ManyToOne()
+    @JoinColumn(name = "order_id")
+    private Order order;
     private int quantity;
     @CreationTimestamp
     private LocalDateTime addedDateTime;
-    @ManyToOne
-    @JoinColumn(name = "order_id")
-    private Order order;
 
     public CartItem(Product product, ApplicationUser user, int quantity) {
         this.product = product;
