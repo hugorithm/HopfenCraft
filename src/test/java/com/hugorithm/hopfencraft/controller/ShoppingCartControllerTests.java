@@ -28,9 +28,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import static org.hamcrest.Matchers.equalTo;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
 @WebMvcTest(controllers = ShoppingCartController.class)
 @AutoConfigureMockMvc(addFilters = false)
@@ -72,7 +70,7 @@ public class ShoppingCartControllerTests {
     @Test
     public void TestAddToCart_ValidInput_ReturnsOK() throws Exception {
         // Create a CartRegistrationDTO for testing
-        CartRegistrationDTO cartRegistrationDTO = new CartRegistrationDTO(1L, 2, 1L);
+        CartRegistrationDTO cartRegistrationDTO = new CartRegistrationDTO(1L, 2);
 
         // Mock the behavior of your shoppingCartService to return a CartResponseDTO
         CartResponseDTO cartResponseDTO = new CartResponseDTO(Collections.emptyList());
