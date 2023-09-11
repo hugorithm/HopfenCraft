@@ -1,5 +1,6 @@
 package com.hugorithm.hopfencraft.service;
 
+import com.hugorithm.hopfencraft.enums.EmailType;
 import com.hugorithm.hopfencraft.exception.auth.InvalidTokenException;
 import com.hugorithm.hopfencraft.exception.auth.PasswordMismatchException;
 import com.hugorithm.hopfencraft.exception.auth.SamePasswordException;
@@ -39,7 +40,7 @@ public class UserService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("User not found"));
     }
-
+    //TODO: Try to fix the pattern yyyy-MM-dd'T'HH:mm:ss.SSSSSSSSS | Sometimes doesn't work
     private LocalDateTime extractDateTimeFromToken(String token) throws InvalidTokenException {
         String[] parts = token.split("\\|");
         if (parts.length == 2) {
@@ -65,7 +66,7 @@ public class UserService implements UserDetailsService {
             String link = emailService.baseUrl + "/user/reset-password?token=" + token;
             String message = emailService.buildPasswordResetEmail(user.getUsername(), link);
 
-            emailService.sendEmail(user.getEmail(), subject, message, user, Email.EmailType.PASSWORD_RESET);
+            emailService.sendEmail(user.getEmail(), subject, message, user, EmailType.PASSWORD_RESET);
 
             return ResponseEntity.ok("Password reset email sent successfully");
         } catch (UsernameNotFoundException | InvalidTokenException | EmailSendingFailedException ex) {
