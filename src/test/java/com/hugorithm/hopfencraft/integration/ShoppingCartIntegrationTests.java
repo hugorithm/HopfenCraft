@@ -36,7 +36,7 @@ public class ShoppingCartIntegrationTests {
                 LoginResponseDTO.class);
 
         assertEquals(HttpStatus.OK, loginResponse.getStatusCode());
-
+        assertNotNull(loginResponse.getBody());
         String jwt = loginResponse.getBody().getJwt();
 
         // Create a CartRegistrationDTO for testing
@@ -78,7 +78,7 @@ public class ShoppingCartIntegrationTests {
                 LoginResponseDTO.class);
 
         assertEquals(HttpStatus.OK, loginResponse.getStatusCode());
-
+        assertNotNull(loginResponse.getBody());
         String jwt = loginResponse.getBody().getJwt();
 
         // Perform a GET request to retrieve cart items
@@ -115,7 +115,7 @@ public class ShoppingCartIntegrationTests {
                 LoginResponseDTO.class);
 
         assertEquals(HttpStatus.OK, loginResponse.getStatusCode());
-
+        assertNotNull(loginResponse.getBody());
         String jwt = loginResponse.getBody().getJwt();
 
 
@@ -185,7 +185,7 @@ public class ShoppingCartIntegrationTests {
                 LoginResponseDTO.class);
 
         assertEquals(HttpStatus.OK, loginResponse.getStatusCode());
-
+        assertNotNull(loginResponse.getBody());
         String jwt = loginResponse.getBody().getJwt();
 
         // Create a CartRegistrationDTO with an invalid product ID (e.g., a product ID that doesn't exist)
@@ -219,7 +219,7 @@ public class ShoppingCartIntegrationTests {
                 LoginResponseDTO.class);
 
         assertEquals(HttpStatus.OK, loginResponse.getStatusCode());
-
+        assertNotNull(loginResponse.getBody());
         String jwt = loginResponse.getBody().getJwt();
         // Create a CartRegistrationDTO with an invalid quantity (e.g., a negative quantity)
         CartRegistrationDTO invalidInput = new CartRegistrationDTO(1L, 90);
@@ -251,7 +251,7 @@ public class ShoppingCartIntegrationTests {
                 LoginResponseDTO.class);
 
         assertEquals(HttpStatus.OK, loginResponse.getStatusCode());
-
+        assertNotNull(loginResponse.getBody());
         String jwt = loginResponse.getBody().getJwt();
         HttpHeaders headers = new HttpHeaders();
         headers.set("Authorization", "Bearer " + jwt);
