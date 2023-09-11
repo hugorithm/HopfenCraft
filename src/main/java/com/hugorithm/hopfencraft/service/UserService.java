@@ -4,6 +4,7 @@ import com.hugorithm.hopfencraft.exception.auth.InvalidTokenException;
 import com.hugorithm.hopfencraft.exception.auth.PasswordMismatchException;
 import com.hugorithm.hopfencraft.exception.auth.SamePasswordException;
 import com.hugorithm.hopfencraft.exception.auth.WrongCredentialsException;
+import com.hugorithm.hopfencraft.exception.email.EmailSendingFailedException;
 import com.hugorithm.hopfencraft.model.ApplicationUser;
 import com.hugorithm.hopfencraft.model.Email;
 import com.hugorithm.hopfencraft.repository.UserRepository;
@@ -54,8 +55,9 @@ public class UserService implements UserDetailsService {
             ApplicationUser user = jwtService.getUserFromJwt(jwt);
             String token = tokenService.generatePasswordResetToken();
             String decodedToken = tokenService.URLDecodeToken(token);
+            System.out.println("token: "+ token);
+            System.out.println("decoded token: " +decodedToken);
             LocalDateTime expirationDate = extractDateTimeFromToken(decodedToken);
-
             user.setPasswordResetTokenExpiration(expirationDate);
             user.setPasswordResetToken(decodedToken);
 
@@ -68,7 +70,7 @@ public class UserService implements UserDetailsService {
             emailService.sendEmail(user.getEmail(), subject, message, user, Email.EmailType.PASSWORD_RESET);
 
             return ResponseEntity.ok("Password reset email sent successfully");
-        } catch (UsernameNotFoundException | InvalidTokenException ex) {
+        } catch (UsernameNotFoundException | InvalidTokenException | EmailSendingFailedException ex) {
             LOGGER.error(ex.getMessage(), ex);
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
