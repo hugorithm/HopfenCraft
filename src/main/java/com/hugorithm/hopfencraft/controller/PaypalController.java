@@ -13,8 +13,8 @@ public class PaypalController {
     private final PaypalService paypalService;
 
 
-    private static final String SUCCESS_URL = "/success";
-    private static final String CANCEL_URL = "/cancel";
+    private static final String SUCCESS_URL = "http://localhost:8080/paypal/success";
+    private static final String CANCEL_URL = "http://localhost:8080/paypal/cancel";
 
     public PaypalController(PaypalService paypalService) {
         this.paypalService = paypalService;
@@ -34,7 +34,7 @@ public class PaypalController {
                 ));
     }
 
-    @GetMapping(value = SUCCESS_URL)
+    @GetMapping(value = "/success")
     public ResponseEntity<String> executePayment(@RequestParam("paymentId") String paymentId, @RequestParam("PayerID") String payerId) {
         String executeResult = paypalService.executePayment(paymentId, payerId);
         return ResponseEntity.ok(executeResult);
