@@ -32,3 +32,8 @@ spring:
         starttls:
           enable:
             true
+paypal:
+  mode: sandbox
+  client:
+    id: ${PAYPAL_CLIENT_ID}
+    secret: ${PAYPAL_CLIENT_SECRET}
