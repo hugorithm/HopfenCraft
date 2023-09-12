@@ -12,6 +12,10 @@ import org.springframework.web.bind.annotation.*;
 public class PaypalController {
     private final PaypalService paypalService;
 
+
+    private static final String SUCCESS_URL = "/success";
+    private static final String CANCEL_URL = "/cancel";
+
     public PaypalController(PaypalService paypalService) {
         this.paypalService = paypalService;
     }
@@ -25,8 +29,8 @@ public class PaypalController {
                         request.getMethod(),
                         request.getIntent(),
                         request.getDescription(),
-                        request.getSuccessUrl(),
-                        request.getCancelUrl()
+                        SUCCESS_URL,
+                        CANCEL_URL
                 ));
     }
 

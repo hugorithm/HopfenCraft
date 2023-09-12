@@ -19,8 +19,4 @@ public class PaymentRequestDTO {
     private String intent;
     @NotBlank
     private String description;
-    @NotBlank
-    private String successUrl;
-    @NotBlank
-    private String cancelUrl;
 }
