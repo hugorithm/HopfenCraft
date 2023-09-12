@@ -34,7 +34,7 @@ public class PaypalController {
                 ));
     }
 
-    @GetMapping("/execute-payment")
+    @GetMapping(value = SUCCESS_URL)
     public ResponseEntity<String> executePayment(@RequestParam("paymentId") String paymentId, @RequestParam("PayerID") String payerId) {
         String executeResult = paypalService.executePayment(paymentId, payerId);
         return ResponseEntity.ok(executeResult);
