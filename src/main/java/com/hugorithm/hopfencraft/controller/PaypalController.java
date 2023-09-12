@@ -1,0 +1,38 @@
+package com.hugorithm.hopfencraft.controller;
+
+import com.hugorithm.hopfencraft.dto.PaymentRequestDTO;
+import com.hugorithm.hopfencraft.service.PaypalService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+@RestController
+@RequestMapping("/paypal")
+@CrossOrigin("*")
+public class PaypalController {
+    private final PaypalService paypalService;
+
+    public PaypalController(PaypalService paypalService) {
+        this.paypalService = paypalService;
+    }
+
+    @PostMapping("/create-payment")
+    public ResponseEntity<String> createPayment(@RequestBody PaymentRequestDTO request) {
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(paypalService.createPayment(
+                        request.getTotal(),
+                        request.getCurrency(),
+                        request.getMethod(),
+                        request.getIntent(),
+                        request.getDescription(),
+                        request.getSuccessUrl(),
+                        request.getCancelUrl()
+                ));
+    }
+
+    @GetMapping("/execute-payment")
+    public ResponseEntity<String> executePayment(@RequestParam("paymentId") String paymentId, @RequestParam("PayerID") String payerId) {
+        String executeResult = paypalService.executePayment(paymentId, payerId);
+        return ResponseEntity.ok(executeResult);
+    }
+}
