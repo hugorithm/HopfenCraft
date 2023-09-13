@@ -44,7 +44,7 @@ public class PaypalService {
             Payment createdPayment = payment.create(apiContext);
             for (Links link : createdPayment.getLinks()) {
                 if (link.getRel().equals("approval_url")) {
-                    return ResponseEntity.status(HttpStatus.CREATED).body(link.getHref());
+                    return ResponseEntity.ok(link.getHref());
                 }
             }
         } catch (PayPalRESTException ex) {
