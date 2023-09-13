@@ -23,7 +23,7 @@ public class PaypalService {
     private final APIContext apiContext;
     private final static Logger LOGGER = LoggerFactory.getLogger(PaypalService.class);
 
-    @Async
+    @Async("threadPoolExecutor")
     public CompletableFuture<ResponseEntity<?>> createPayment(String total, String currency, String method, String intent, String description, String successUrl, String cancelUrl) {
         Amount amount = new Amount(currency, total);
 
@@ -57,7 +57,7 @@ public class PaypalService {
         return CompletableFuture.completedFuture(ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build());
     }
 
-    @Async
+    @Async("threadPoolExecutor")
     public CompletableFuture<ResponseEntity<?>> executePayment(String paymentId, String payerId) {
         try {
             Payment payment = Payment.get(apiContext, paymentId);
