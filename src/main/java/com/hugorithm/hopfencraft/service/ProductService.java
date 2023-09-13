@@ -21,7 +21,6 @@ import java.math.BigDecimal;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
-import static io.micrometer.common.util.StringUtils.isNotBlank;
 
 @Service
 @Transactional
@@ -65,34 +64,42 @@ public class ProductService {
         return productRepository.findById(productId);
     }
 
-    public ResponseEntity<ProductDTO> updateProduct(Long productId, String brand, String name, String description, int quantity, BigDecimal price) {
+    public ResponseEntity<ProductDTO> updateProduct(Long productId, String brand, String name, String description, Integer quantity, BigDecimal price) {
         try {
             Product product = productRepository.findById(productId).orElseThrow(() -> new ProductNotFoundException(String.format("Product not found with id: %s", productId)));
 
-            if (isNotBlank(brand)) {
+            if (brand != null && !brand.isBlank()) {
                 product.setBrand(brand);
             }
 
-            if (isNotBlank(name)) {
+            if (name != null && !name.isBlank()) {
                 product.setName(name);
             }
 
-            if (isNotBlank(description)) {
+            if (description != null && !description.isBlank()) {
                 product.setDescription(description);
             }
-            // TODO: This logic is bad. Needs revision.
-            if (quantity >= 0) {
-                product.setQuantity(quantity);
-            } else {
-                throw new ProductUpdateException("Quantity must be positive or zero");
+
+            if (quantity != null) {
+                if (quantity >= 0) {
+                    product.setQuantity(quantity);
+                } else {
+                    throw new ProductUpdateException("Quantity must be positive or zero");
+                }
             }
 
-            if (price != null && price.compareTo(BigDecimal.ZERO) >= 0) {
-                product.setPrice(price);
-            } else {
-                throw new ProductUpdateException("Price must be positive or zero");
+            if (price != null) {
+                if (price.compareTo(BigDecimal.ZERO) >= 0) {
+                    product.setPrice(price);
+                } else {
+                    throw new ProductUpdateException("Price must be positive or zero");
+                }
             }
 
+            // If none of the fields were updated, throw an exception
+            if (brand == null && name == null && description == null && quantity == null && price == null) {
+                throw new ProductUpdateException("No fields to update");
+            }
 
             productRepository.save(product);
 
