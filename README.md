@@ -14,6 +14,7 @@
     <img alt="PayPal Integration Status" src="https://img.shields.io/badge/PayPal%20Integration-Success-brightgreen"/>
     <img alt="PayPal API Version" src="https://img.shields.io/badge/PayPal%20API%20Version-v2.0-blue"/>
     <img alt="PayPal Payment Methods" src="https://img.shields.io/badge/Payment%20Methods-PayPal%2C%20Credit%20Card-orange"/>
+    <img alt="Docker" src="https://img.shields.io/badge/Docker-Container-blue?style=flat&logo=docker" />
 </p>
 
 
