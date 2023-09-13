@@ -3,7 +3,10 @@ package com.hugorithm.hopfencraft.controller;
 import com.hugorithm.hopfencraft.dto.PaymentRequestDTO;
 import com.hugorithm.hopfencraft.service.PaypalService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.concurrent.CompletableFuture;
 
 @RestController
 @RequestMapping("/paypal")
@@ -19,7 +22,7 @@ public class PaypalController {
     }
 
     @PostMapping("/create-payment")
-    public ResponseEntity<?> createPayment(@RequestBody PaymentRequestDTO request) {
+    public CompletableFuture<ResponseEntity<?>> createPayment(@RequestBody PaymentRequestDTO request) {
         return paypalService.createPayment(
                         request.getTotal(),
                         request.getCurrency(),
@@ -32,7 +35,7 @@ public class PaypalController {
     }
 
     @GetMapping(value = "/success")
-    public ResponseEntity<?> executePayment(@RequestParam("paymentId") String paymentId, @RequestParam("PayerID") String payerId) {
+    public CompletableFuture<ResponseEntity<?>> executePayment(@RequestParam("paymentId") String paymentId, @RequestParam("PayerID") String payerId) {
         return paypalService.executePayment(paymentId, payerId);
     }
 }

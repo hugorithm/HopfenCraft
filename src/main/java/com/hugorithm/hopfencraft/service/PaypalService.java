@@ -9,10 +9,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
+import java.util.concurrent.CompletableFuture;
 
 @Service
 @Transactional
@@ -21,7 +23,8 @@ public class PaypalService {
     private final APIContext apiContext;
     private final static Logger LOGGER = LoggerFactory.getLogger(PaypalService.class);
 
-    public ResponseEntity<?> createPayment(String total, String currency, String method, String intent, String description, String successUrl, String cancelUrl) {
+    @Async
+    public CompletableFuture<ResponseEntity<?>> createPayment(String total, String currency, String method, String intent, String description, String successUrl, String cancelUrl) {
         Amount amount = new Amount(currency, total);
 
         Transaction transaction = new Transaction();
@@ -44,18 +47,18 @@ public class PaypalService {
             Payment createdPayment = payment.create(apiContext);
             for (Links link : createdPayment.getLinks()) {
                 if (link.getRel().equals("approval_url")) {
-                    return ResponseEntity.ok(link.getHref());
+                    return CompletableFuture.completedFuture(ResponseEntity.ok(link.getHref()));
                 }
             }
         } catch (PayPalRESTException ex) {
             LOGGER.error(ex.getMessage(), ex);
         }
 
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        return CompletableFuture.completedFuture(ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build());
     }
 
-    //TODO: Make this Async
-    public ResponseEntity<?> executePayment(String paymentId, String payerId) {
+    @Async
+    public CompletableFuture<ResponseEntity<?>> executePayment(String paymentId, String payerId) {
         try {
             Payment payment = Payment.get(apiContext, paymentId);
             PaymentExecution paymentExecution = new PaymentExecution();
@@ -64,10 +67,10 @@ public class PaypalService {
 
             //TODO: return paymentResponseDTO with executedPayment.getState(), etc... Also integrate the order and save in the database
 
-            return ResponseEntity.ok("Payment executed successfully. Payment ID: " + executedPayment.getId());
+            return CompletableFuture.completedFuture(ResponseEntity.ok("Payment executed successfully. Payment ID: " + executedPayment.getId()));
         } catch (PayPalRESTException ex) {
             LOGGER.error(ex.getMessage(), ex);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+            return CompletableFuture.completedFuture(ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build());
         }
     }
 
