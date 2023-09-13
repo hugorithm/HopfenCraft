@@ -239,7 +239,6 @@ public class ProductIntegrationTests {
 
         Page<ProductDTO> responseBody = response.getBody();
         assertNotNull(responseBody);
-        // TODO: Maybe just create a init data for tests without all the products.
         // 15 here is because TestConfig runs DataInitialization which creates 12 Products. Here we add 3 more so 12 + 3 = 15
         assertEquals(15, responseBody.getTotalElements());
 

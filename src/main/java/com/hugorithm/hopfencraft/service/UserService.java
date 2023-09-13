@@ -7,7 +7,6 @@ import com.hugorithm.hopfencraft.exception.auth.SamePasswordException;
 import com.hugorithm.hopfencraft.exception.auth.WrongCredentialsException;
 import com.hugorithm.hopfencraft.exception.email.EmailSendingFailedException;
 import com.hugorithm.hopfencraft.model.ApplicationUser;
-import com.hugorithm.hopfencraft.model.Email;
 import com.hugorithm.hopfencraft.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
@@ -24,6 +23,8 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+import java.util.Optional;
 
 
 @Service
@@ -40,15 +41,42 @@ public class UserService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("User not found"));
     }
-    //TODO: Try to fix the pattern yyyy-MM-dd'T'HH:mm:ss.SSSSSSSSS | Sometimes doesn't work
+
     private LocalDateTime extractDateTimeFromToken(String token) throws InvalidTokenException {
         String[] parts = token.split("\\|");
         if (parts.length == 2) {
             String dateStr = parts[1];
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSSSSSSS");
-            return LocalDateTime.parse(dateStr, formatter);
+            String[] datePatterns = {
+                    "yyyy-MM-dd'T'HH:mm:ss.SSSSSSSSS",
+                    "yyyy-MM-dd'T'HH:mm:ss.SSSSSSSS",  // One less 'S'
+                    "yyyy-MM-dd'T'HH:mm:ss.SSSSSS",    // Two less 'S'
+                    "yyyy-MM-dd'T'HH:mm:ss.SSSSS",      // Three less 'S'
+                    "yyyy-MM-dd'T'HH:mm:ss.SSSS",        // Four less 'S'
+                    "yyyy-MM-dd'T'HH:mm:ss.SSS",          // Five less 'S'
+                    "yyyy-MM-dd'T'HH:mm:ss.SS",            // Six less 'S'
+                    "yyyy-MM-dd'T'HH:mm:ss.S",              // Seven less 'S'
+            };
+
+            for (String pattern : datePatterns) {
+                Optional<LocalDateTime> parsedDateTime = tryParseDateTime(dateStr, pattern);
+                if (parsedDateTime.isPresent()) {
+                    return parsedDateTime.get();
+                }
+            }
+
+            throw new InvalidTokenException("Unable to parse date-time from token");
         }
         throw new InvalidTokenException("Invalid token format");
+    }
+
+    private Optional<LocalDateTime> tryParseDateTime(String input, String pattern) {
+        try {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern(pattern);
+            return Optional.of(LocalDateTime.parse(input, formatter));
+        } catch (DateTimeParseException e) {
+            // Parsing failed with this pattern
+            return Optional.empty();
+        }
     }
 
     public ResponseEntity<String> sendPasswordResetRequest(Jwt jwt) {
