@@ -129,8 +129,7 @@ public class PaypalService {
             ObjectNode unitNode = purchaseUnitsNode.addObject();
             ObjectNode amountNode = unitNode.putObject("amount");
             amountNode.put("currency_code", "EUR");
-            amountNode.put("value", "100.00");
-
+            amountNode.put("value", "35.90");
             String requestJson = jsonNode.toString();
 
             HttpEntity<String> entity = new HttpEntity<String>(requestJson, headers);
