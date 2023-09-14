@@ -110,44 +110,48 @@ public class PaypalService {
     }
 
     public ResponseEntity<Object> createOrder() {
-        String accessToken = generateAccessToken();
-        RestTemplate restTemplate = new RestTemplate();
+        try {
+            String accessToken = generateAccessToken();
+            RestTemplate restTemplate = new RestTemplate();
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.set("Authorization", "Bearer " + accessToken);
-        headers.add("Content-Type", "application/json");
-        headers.add("Accept", "application/json");
-        headers.setContentType(MediaType.APPLICATION_JSON);
+            HttpHeaders headers = new HttpHeaders();
+            headers.set("Authorization", "Bearer " + accessToken);
+            headers.add("Content-Type", "application/json");
+            headers.add("Accept", "application/json");
+            headers.setContentType(MediaType.APPLICATION_JSON);
 
-        //JSON String
-        ObjectMapper objectMapper = new ObjectMapper();
-        ObjectNode jsonNode = objectMapper.createObjectNode();
+            //JSON String
+            ObjectMapper objectMapper = new ObjectMapper();
+            ObjectNode jsonNode = objectMapper.createObjectNode();
 
-        jsonNode.put("intent", "CAPTURE");
-        ArrayNode purchaseUnitsNode = jsonNode.putArray("purchase_units");
-        ObjectNode unitNode = purchaseUnitsNode.addObject();
-        ObjectNode amountNode = unitNode.putObject("amount");
-        amountNode.put("currency_code", "EUR");
-        amountNode.put("value", "100.00");
+            jsonNode.put("intent", "CAPTURE");
+            ArrayNode purchaseUnitsNode = jsonNode.putArray("purchase_units");
+            ObjectNode unitNode = purchaseUnitsNode.addObject();
+            ObjectNode amountNode = unitNode.putObject("amount");
+            amountNode.put("currency_code", "EUR");
+            amountNode.put("value", "100.00");
 
-        String requestJson = jsonNode.toString();
+            String requestJson = jsonNode.toString();
 
-        HttpEntity<String> entity = new HttpEntity<String>(requestJson, headers);
+            HttpEntity<String> entity = new HttpEntity<String>(requestJson, headers);
 
-        ResponseEntity<Object> response = restTemplate.exchange(
-                PAYPAL_BASE_URL + "/v2/checkout/orders",
-                HttpMethod.POST,
-                entity,
-                Object.class
-        );
+            ResponseEntity<Object> response = restTemplate.exchange(
+                    PAYPAL_BASE_URL + "/v2/checkout/orders",
+                    HttpMethod.POST,
+                    entity,
+                    Object.class
+            );
 
-        if (response.getStatusCode() == HttpStatus.CREATED) {
-            LOGGER.info("Paypal order created");
-            return ResponseEntity.status(response.getStatusCode()).body(response.getBody());
-        } else {
-            LOGGER.error("Failed to create paypal order");
-            return ResponseEntity.status(response.getStatusCode()).build();
+            if (response.getStatusCode() == HttpStatus.CREATED) {
+                LOGGER.info("Paypal order created");
+                return ResponseEntity.status(response.getStatusCode()).body(response.getBody());
+            } else {
+                LOGGER.error("Failed to create paypal order");
+                return ResponseEntity.status(response.getStatusCode()).build();
+            }
+        } catch (PaypalAccessTokenException ex) {
+            LOGGER.error(ex.getMessage(), ex);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
-
     }
 }
