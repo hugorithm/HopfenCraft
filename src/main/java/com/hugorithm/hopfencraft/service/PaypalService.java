@@ -109,7 +109,7 @@ public class PaypalService {
         }
     }
 
-    public ResponseEntity<Object> createOrder() {
+    public ResponseEntity<Object> createOrder(String total, String currency) {
         try {
             String accessToken = generateAccessToken();
             RestTemplate restTemplate = new RestTemplate();
@@ -128,8 +128,8 @@ public class PaypalService {
             ArrayNode purchaseUnitsNode = jsonNode.putArray("purchase_units");
             ObjectNode unitNode = purchaseUnitsNode.addObject();
             ObjectNode amountNode = unitNode.putObject("amount");
-            amountNode.put("currency_code", "EUR");
-            amountNode.put("value", "35.90");
+            amountNode.put("currency_code", currency);
+            amountNode.put("value", total);
             String requestJson = jsonNode.toString();
 
             HttpEntity<String> entity = new HttpEntity<String>(requestJson, headers);

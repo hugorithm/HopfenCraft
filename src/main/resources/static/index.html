@@ -16,7 +16,13 @@
                   createOrder: (data, actions) => {
                     return fetch("http://localhost:8080/paypal/api/orders/create-order", {
                       method: "post",
-                      // use the "body" param to optionally pass additional order information
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                      body: JSON.stringify({
+                          total: "25.43",
+                          currency: "EUR"
+                      })
 
                     })
                       .then(response => response.json())

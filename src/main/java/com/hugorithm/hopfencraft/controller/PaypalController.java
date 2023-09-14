@@ -1,5 +1,6 @@
 package com.hugorithm.hopfencraft.controller;
 
+import com.hugorithm.hopfencraft.dto.PaymentRequestDTO;
 import com.hugorithm.hopfencraft.service.PaypalService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,8 +21,8 @@ public class PaypalController {
     }
 
     @PostMapping("/api/orders/create-order")
-    public ResponseEntity<Object> createOrder() {
-        return paypalService.createOrder();
+    public ResponseEntity<Object> createOrder(@RequestBody PaymentRequestDTO body) {
+        return paypalService.createOrder(body.getTotal(), body.getCurrency());
     }
 
 }

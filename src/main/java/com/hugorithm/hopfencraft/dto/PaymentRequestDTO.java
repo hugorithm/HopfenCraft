@@ -10,13 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class PaymentRequestDTO {
     @NotBlank
-    private String total;
-    @NotBlank
     private String currency;
     @NotBlank
-    private String method;
-    @NotBlank
-    private String intent;
-    @NotBlank
-    private String description;
+    private String total;
 }
