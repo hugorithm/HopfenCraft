@@ -26,7 +26,6 @@ public class TokenService {
     private final JwtEncoder jwtEncoder;
     private final JwtDecoder jwtDecoder;
 
-
     public String generateJwt(Authentication auth){
         Instant now = Instant.now();
         String scope = auth.getAuthorities().stream()
