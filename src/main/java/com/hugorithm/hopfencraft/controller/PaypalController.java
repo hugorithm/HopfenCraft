@@ -3,7 +3,8 @@ package com.hugorithm.hopfencraft.controller;
 import com.hugorithm.hopfencraft.dto.PaymentRequestDTO;
 import com.hugorithm.hopfencraft.service.PaypalService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.scheduling.annotation.Async;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.concurrent.CompletableFuture;
@@ -35,7 +36,7 @@ public class PaypalController {
     }
 
     @GetMapping(value = "/success")
-    public CompletableFuture<ResponseEntity<?>> executePayment(@RequestParam("paymentId") String paymentId, @RequestParam("PayerID") String payerId) {
-        return paypalService.executePayment(paymentId, payerId);
+    public CompletableFuture<ResponseEntity<?>> executePayment(@AuthenticationPrincipal Jwt jwt, @RequestParam("paymentId") String paymentId, @RequestParam("PayerID") String payerId) {
+        return paypalService.executePayment(jwt, paymentId, payerId);
     }
 }

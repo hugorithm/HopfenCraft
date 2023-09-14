@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Async;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,6 +23,7 @@ import java.util.concurrent.CompletableFuture;
 @AllArgsConstructor(onConstructor = @__(@Autowired))
 public class PaypalService {
     private final APIContext apiContext;
+    private final JwtService jwtService;
     private final static Logger LOGGER = LoggerFactory.getLogger(PaypalService.class);
 
     @Async("threadPoolExecutor")
@@ -58,12 +61,14 @@ public class PaypalService {
     }
 
     @Async("threadPoolExecutor")
-    public CompletableFuture<ResponseEntity<?>> executePayment(String paymentId, String payerId) {
+    public CompletableFuture<ResponseEntity<?>> executePayment(Jwt jwt, String paymentId, String payerId) {
         try {
             Payment payment = Payment.get(apiContext, paymentId);
             PaymentExecution paymentExecution = new PaymentExecution();
             paymentExecution.setPayerId(payerId);
             Payment executedPayment = payment.execute(apiContext, paymentExecution);
+            //TODO: change to API v2 and add Order when creating payment, here getOrders from user which == paymentId
+            //ApplicationUser user = jwtService.getUserFromJwt(jwt);
 
             //TODO: return paymentResponseDTO with executedPayment.getState(), etc... Also integrate the order and save in the database
 
@@ -71,6 +76,9 @@ public class PaypalService {
         } catch (PayPalRESTException ex) {
             LOGGER.error(ex.getMessage(), ex);
             return CompletableFuture.completedFuture(ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build());
+        } catch (UsernameNotFoundException ex) {
+            LOGGER.error(ex.getMessage(), ex);
+            return CompletableFuture.completedFuture(ResponseEntity.status(HttpStatus.NOT_FOUND).build());
         }
     }
 
