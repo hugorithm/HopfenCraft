@@ -72,10 +72,10 @@ public class OrderService {
             order.setOrderItems(cartItems);
             order.setOrderStatus(OrderStatus.PENDING);
 
-            orderRepository.save(order);
+            Order savedOrder = orderRepository.save(order);
 
             for (CartItem cartItem : cartItems) {
-                cartItem.setOrder(order);
+                cartItem.setOrder(savedOrder);
                 cartItemRepository.save(cartItem);
             }
 
