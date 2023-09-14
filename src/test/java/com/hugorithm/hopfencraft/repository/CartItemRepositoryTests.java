@@ -30,11 +30,11 @@ public class CartItemRepositoryTests {
     @Test
     public void CartItemRepository_SaveAll_ReturnSavedCartItem() {
         //Arrange
-        Role role = new Role("USER");
+        Role role = new Role("ADMIN");
         Set<Role> roles = new HashSet<>();
         roles.add(role);
         ApplicationUser user = new ApplicationUser("user1", "Password123!", "email@example.com", roles);
-        Product product = new Product("Paulaner", "Paulaner Weissbier", "Weiss", 10, new BigDecimal("2.39"));
+        Product product = new Product("Paulaner", "Paulaner Weissbier", "Weiss", 10, new BigDecimal("2.39"), user);
         CartItem cartItem = new CartItem(product, user, 2);
 
         //Act
@@ -48,11 +48,11 @@ public class CartItemRepositoryTests {
     @Test
     public void CartItemRepository_GetAll_ReturnMoreThanOneCartItem() {
         //Arrange
-        Role role = new Role("USER");
+        Role role = new Role("ADMIN");
         Set<Role> roles = new HashSet<>();
         roles.add(role);
         ApplicationUser user = new ApplicationUser("user1", "Password123!", "email@example.com", roles);
-        Product product = new Product("Paulaner", "Paulaner Weissbier", "Weiss", 10, new BigDecimal("2.39"));
+        Product product = new Product("Paulaner", "Paulaner Weissbier", "Weiss", 10, new BigDecimal("2.39"), user);
         CartItem cartItem = new CartItem(product, user, 2);
         CartItem cartItem2 = new CartItem(product, user, 3);
 
@@ -77,11 +77,11 @@ public class CartItemRepositoryTests {
     @Test
     public void CartItemRepository_FindById_ReturnCartItem() {
         //Arrange
-        Role role = new Role("USER");
+        Role role = new Role("ADMIN");
         Set<Role> roles = new HashSet<>();
         roles.add(role);
         ApplicationUser user = new ApplicationUser("user1", "Password123!", "email@example.com", roles);
-        Product product = new Product("Paulaner", "Paulaner Weissbier", "Weiss", 10, new BigDecimal("2.39"));
+        Product product = new Product("Paulaner", "Paulaner Weissbier", "Weiss", 10, new BigDecimal("2.39"), user);
         CartItem cartItem = new CartItem(product, user, 2);
 
         //Act
@@ -95,13 +95,13 @@ public class CartItemRepositoryTests {
     @Test
     public void CartItemRepository_UpdateCartItem_ReturnCartItemNotNull() {
         //Arrange
-        Role role = new Role("USER");
+        Role role = new Role("ADMIN");
         Set<Role> roles = new HashSet<>();
         roles.add(role);
         ApplicationUser user = new ApplicationUser("user1", "Password123!", "email@example.com", roles);
         ApplicationUser user2 = new ApplicationUser("user2", "Password123!", "email@example.com", roles);
-        Product product = new Product("Paulaner", "Paulaner Weissbier", "Weiss", 10, new BigDecimal("2.39"));
-        Product product2 = new Product("Paulaner", "Paulaner Helles", "Lager", 10, new BigDecimal("2.59"));
+        Product product = new Product("Paulaner", "Paulaner Weissbier", "Weiss", 10, new BigDecimal("2.39"), user);
+        Product product2 = new Product("Paulaner", "Paulaner Helles", "Lager", 10, new BigDecimal("2.59"), user);
         CartItem cartItem = new CartItem(product, user, 2);
         int q = cartItem.getQuantity();
         Product p = cartItem.getProduct();
@@ -133,11 +133,11 @@ public class CartItemRepositoryTests {
     @Test
     public void CartItemRepository_CartItemDelete_ReturnCartItemIsEmpty() {
         //Arrange
-        Role role = new Role("USER");
+        Role role = new Role("ADMIN");
         Set<Role> roles = new HashSet<>();
         roles.add(role);
         ApplicationUser user = new ApplicationUser("user1", "Password123!", "email@example.com", roles);
-        Product product = new Product("Paulaner", "Paulaner Weissbier", "Weiss", 10, new BigDecimal("2.39"));
+        Product product = new Product("Paulaner", "Paulaner Weissbier", "Weiss", 10, new BigDecimal("2.39"), user);
         CartItem cartItem = new CartItem(product, user, 2);
 
         //Act

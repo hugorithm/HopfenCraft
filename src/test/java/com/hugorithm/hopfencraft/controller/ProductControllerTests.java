@@ -3,11 +3,14 @@ package com.hugorithm.hopfencraft.controller;
 import com.hugorithm.hopfencraft.dto.ProductDTO;
 import com.hugorithm.hopfencraft.dto.ProductRegistrationDTO;
 import com.hugorithm.hopfencraft.dto.ProductUpdateDTO;
+import com.hugorithm.hopfencraft.model.ApplicationUser;
 import com.hugorithm.hopfencraft.model.Product;
 import com.hugorithm.hopfencraft.service.ProductService;
 import com.hugorithm.hopfencraft.utils.JsonToStringConverter;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -16,9 +19,11 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.math.BigDecimal;
@@ -29,6 +34,7 @@ import java.util.Optional;
 
 import static org.hamcrest.Matchers.*;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -43,7 +49,13 @@ public class ProductControllerTests {
     private MockMvc mockMvc;
     @MockBean
     private ProductService productService;
+    private Jwt mockJwt;
 
+    @BeforeEach
+    public void setUp() {
+        // Create a mock Jwt for testing
+        mockJwt = Mockito.mock(Jwt.class);
+    }
     @Test
     public void RegisterProduct_ValidInput_ReturnsOk() throws Exception {
         // Define valid input data
@@ -57,6 +69,7 @@ public class ProductControllerTests {
                 price
         );
 
+
         // Define the expected response from the service
         ProductDTO expectedResponse = new ProductDTO(1L,
                 "Paulaner",
@@ -68,16 +81,18 @@ public class ProductControllerTests {
         );
 
         when(productService.registerProduct(
-                validInput.getBrand(),
-                validInput.getName(),
-                validInput.getDescription(),
-                validInput.getQuantity(),
-                validInput.getPrice()
+                any(Jwt.class),
+                eq(validInput.getBrand()),
+                eq(validInput.getName()),
+                eq(validInput.getDescription()),
+                eq(validInput.getQuantity()),
+                eq(validInput.getPrice())
         )).thenReturn(ResponseEntity.ok(expectedResponse));
 
         // Perform the POST request
         mockMvc.perform(post("/product/register")
                         .contentType(MediaType.APPLICATION_JSON)
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + mockJwt)
                         .content(JsonToStringConverter.asJsonString(validInput)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.brand", equalTo( expectedResponse.getBrand())))
@@ -140,15 +155,17 @@ public class ProductControllerTests {
 
         // Simulate the ProductService returning a conflict response
         when(productService.registerProduct(
-                existingProduct.getBrand(),
-                existingProduct.getName(),
-                existingProduct.getDescription(),
-                existingProduct.getQuantity(),
-                existingProduct.getPrice()
+                any(Jwt.class),
+                eq(existingProduct.getBrand()),
+                eq(existingProduct.getName()),
+                eq(existingProduct.getDescription()),
+                eq(existingProduct.getQuantity()),
+                eq(existingProduct.getPrice())
         )).thenReturn(ResponseEntity.status(HttpStatus.CONFLICT).build());
 
         mockMvc.perform(post("/product/register")
                         .contentType(MediaType.APPLICATION_JSON)
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + mockJwt)
                         .content(JsonToStringConverter.asJsonString(existingProduct)))
                 .andExpect(status().isConflict());
     }
@@ -224,8 +241,21 @@ public class ProductControllerTests {
     @Test
     public void GetProductById_ExistingProduct_ReturnsProduct() throws Exception {
         // Define an existing product
+        ApplicationUser user = new ApplicationUser();
+        user.setUsername("testuser");
+        user.setEmail("testuser@example.com");
+
         Long productId = 1L;
-        Product existingProduct = new Product(productId, "Existing Brand", "Existing Product", "Existing Description", 5, new BigDecimal("4.99"), LocalDateTime.now());
+        Product existingProduct = new Product(
+                productId,
+                "Existing Brand",
+                "Existing Product",
+                "Existing Description",
+                5,
+                new BigDecimal("4.99"),
+                LocalDateTime.now(),
+                user
+        );
 
         when(productService.findById(productId)).thenReturn(Optional.of(existingProduct));
 

@@ -1,6 +1,7 @@
 package com.hugorithm.hopfencraft.service;
 
 import com.hugorithm.hopfencraft.dto.ProductDTO;
+import com.hugorithm.hopfencraft.model.ApplicationUser;
 import com.hugorithm.hopfencraft.model.Product;
 import com.hugorithm.hopfencraft.repository.ProductRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -14,6 +15,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.oauth2.jwt.Jwt;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
@@ -29,6 +31,8 @@ public class ProductServiceTests {
 
     @Mock
     private ProductRepository productRepository;
+    @Mock
+    private JwtService jwtService;
 
     @BeforeEach
     void setUp() {
@@ -38,18 +42,24 @@ public class ProductServiceTests {
     @Test
     public void testRegisterProduct_ValidInput_ReturnsOk() {
         // Implement test logic for a successful product registration.
+        ApplicationUser user = new ApplicationUser();
+        user.setUsername("testuser");
+        user.setEmail("testuser@example.com");
         // Create a valid product DTO
         ProductDTO validProductDTO = new ProductDTO(null, "TestBrand", "TestName", "TestDescription", 10, new BigDecimal("19.99"), null);
 
         // Mock the product repository to return an empty Optional, indicating the product does not exist
         when(productRepository.findProductByName("TestName")).thenReturn(Optional.empty());
 
+        when(jwtService.getUserFromJwt(any())).thenReturn(user);
+
         // Mock the product repository to save the product and return it
-        Product savedProduct = new Product("TestBrand", "TestName", "TestDescription", 10, new BigDecimal("19.99"));
+        Product savedProduct = new Product("TestBrand", "TestName", "TestDescription", 10, new BigDecimal("19.99"), user);
         when(productRepository.save(any())).thenReturn(savedProduct);
 
         // Call the service method
         ResponseEntity<ProductDTO> response = productService.registerProduct(
+                mock(Jwt.class),
                 validProductDTO.getBrand(),
                 validProductDTO.getName(),
                 validProductDTO.getDescription(),
@@ -71,14 +81,18 @@ public class ProductServiceTests {
     @Test
     public void testRegisterProduct_ProductAlreadyExists_ReturnsConflict() {
         // Implement test logic for product registration when the product already exists.
+        ApplicationUser user = new ApplicationUser();
+        user.setUsername("testuser");
+        user.setEmail("testuser@example.com");
         // Create a valid product DTO
         ProductDTO validProductDTO = new ProductDTO(null, "TestBrand", "TestName", "TestDescription", 10, new BigDecimal("19.99"), null);
 
         // Mock the product repository to return a non-empty Optional, indicating the product already exists
         when(productRepository.findProductByName("TestName")).thenReturn(Optional.of(new Product()));
-
+        when(jwtService.getUserFromJwt(any())).thenReturn(user);
         // Call the service method
         ResponseEntity<ProductDTO> response = productService.registerProduct(
+                mock(Jwt.class),
                 validProductDTO.getBrand(),
                 validProductDTO.getName(),
                 validProductDTO.getDescription(),
@@ -93,8 +107,11 @@ public class ProductServiceTests {
     @Test
     public void testUpdateProduct_ValidInput_ReturnsOk() {
         // Implement test logic for a successful product update.
+        ApplicationUser user = new ApplicationUser();
+        user.setUsername("testuser");
+        user.setEmail("testuser@example.com");
         Long productId = 1L;
-        Product existingProduct = new Product("TestBrand", "TestName", "TestDescription", 5, new BigDecimal("19.99"));
+        Product existingProduct = new Product("TestBrand", "TestName", "TestDescription", 5, new BigDecimal("19.99"), user);
         existingProduct.setProductId(productId);
 
         // Mock the product repository to return the existing product
@@ -146,8 +163,11 @@ public class ProductServiceTests {
     @Test
     public void testUpdateProduct_InvalidQuantity_ReturnsBadRequest() {
         // Implement test logic for updating a product with an invalid quantity.
+        ApplicationUser user = new ApplicationUser();
+        user.setUsername("testuser");
+        user.setEmail("testuser@example.com");
         Long productId = 1L;
-        Product existingProduct = new Product("TestBrand", "TestName", "TestDescription", 5, new BigDecimal("19.99"));
+        Product existingProduct = new Product("TestBrand", "TestName", "TestDescription", 5, new BigDecimal("19.99"), user);
         existingProduct.setProductId(productId);
 
         // Mock the product repository to return the existing product
@@ -170,8 +190,11 @@ public class ProductServiceTests {
     @Test
     public void testUpdateProduct_InvalidPrice_ReturnsBadRequest() {
         // Implement test logic for updating a product with an invalid price.
+        ApplicationUser user = new ApplicationUser();
+        user.setUsername("testuser");
+        user.setEmail("testuser@example.com");
         Long productId = 1L;
-        Product existingProduct = new Product("TestBrand", "TestName", "TestDescription", 5, new BigDecimal("19.99"));
+        Product existingProduct = new Product("TestBrand", "TestName", "TestDescription", 5, new BigDecimal("19.99"), user);
         existingProduct.setProductId(productId);
 
         // Mock the product repository to return the existing product
@@ -225,12 +248,15 @@ public class ProductServiceTests {
     @Test
     public void testFindAllProducts_ReturnsPageOfProducts() {
         // Implement test logic for retrieving all products with pagination.
+        ApplicationUser user = new ApplicationUser();
+        user.setUsername("testuser");
+        user.setEmail("testuser@example.com");
         // Mock data initialization to return a sample page of products
         Pageable pageable = Pageable.ofSize(5).withPage(0);
         when(productRepository.findAll(pageable)).thenReturn(new PageImpl<>(Arrays.asList(
-                new Product("Brand1", "Product1", "Description1", 5, new BigDecimal("19.99")),
-                new Product("Brand2", "Product2", "Description2", 10, new BigDecimal("29.99")),
-                new Product("Brand3", "Product3", "Description3", 15, new BigDecimal("39.99"))
+                new Product("Brand1", "Product1", "Description1", 5, new BigDecimal("19.99"), user),
+                new Product("Brand2", "Product2", "Description2", 10, new BigDecimal("29.99"), user),
+                new Product("Brand3", "Product3", "Description3", 15, new BigDecimal("39.99"), user)
         )));
 
         // Call the service method to retrieve all products
@@ -244,8 +270,11 @@ public class ProductServiceTests {
     @Test
     public void testFindProductById_ValidProductId_ReturnsProduct() {
         // Implement test logic for retrieving a product by its valid product ID.
+        ApplicationUser user = new ApplicationUser();
+        user.setUsername("testuser");
+        user.setEmail("testuser@example.com");
         Long productId = 1L;
-        Product existingProduct = new Product("Brand", "Product", "Description", 5, new BigDecimal("19.99"));
+        Product existingProduct = new Product("Brand", "Product", "Description", 5, new BigDecimal("19.99"), user);
         existingProduct.setProductId(productId);
 
         // Mock the product repository to return the existing product

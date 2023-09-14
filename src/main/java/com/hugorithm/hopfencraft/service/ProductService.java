@@ -4,6 +4,7 @@ import com.hugorithm.hopfencraft.dto.ProductDTO;
 import com.hugorithm.hopfencraft.exception.product.ProductAlreadyExistsException;
 import com.hugorithm.hopfencraft.exception.product.ProductNotFoundException;
 import com.hugorithm.hopfencraft.exception.product.ProductUpdateException;
+import com.hugorithm.hopfencraft.model.ApplicationUser;
 import com.hugorithm.hopfencraft.model.Product;
 import com.hugorithm.hopfencraft.repository.ProductRepository;
 import lombok.AllArgsConstructor;
@@ -14,6 +15,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,17 +30,18 @@ import java.util.Optional;
 @AllArgsConstructor(onConstructor = @__(@Autowired))
 public class ProductService {
     private final ProductRepository productRepository;
+    private final JwtService jwtService;
     private final static Logger LOGGER = LoggerFactory.getLogger(ProductService.class);
 
-    public ResponseEntity<ProductDTO> registerProduct(String brand, String name, String description, int quantity, BigDecimal price) {
+    public ResponseEntity<ProductDTO> registerProduct(Jwt jwt, String brand, String name, String description, int quantity, BigDecimal price) {
         try {
             Optional<Product> product = productRepository.findProductByName(name);
 
             if (product.isPresent()) {
                 throw new ProductAlreadyExistsException("Product already exists");
             }
-
-            Product p = productRepository.save(new Product(brand, name, description, quantity, price));
+            ApplicationUser user = jwtService.getUserFromJwt(jwt);
+            Product p = productRepository.save(new Product(brand, name, description, quantity, price, user));
             return ResponseEntity.status(HttpStatus.CREATED).body(new ProductDTO(
                     p.getProductId(),
                     p.getBrand(),
@@ -47,7 +51,7 @@ public class ProductService {
                     p.getPrice(),
                     p.getRegisterDateTime()
             ));
-        } catch (NoSuchElementException ex) {
+        } catch (NoSuchElementException | UsernameNotFoundException ex) {
             LOGGER.error(ex.getMessage(), ex);
             return ResponseEntity.notFound().build();
         } catch (ProductAlreadyExistsException ex) {

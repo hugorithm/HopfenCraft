@@ -27,14 +27,16 @@ public class Product {
     private BigDecimal price;
     @CreationTimestamp
     private LocalDateTime registerDateTime;
+    @ManyToOne
+    private ApplicationUser user;
 
-
-    public Product(String brand, String name, String description, int quantity, BigDecimal price) {
+    public Product(String brand, String name, String description, int quantity, BigDecimal price, ApplicationUser user) {
         this.brand = brand;
         this.name = name;
         this.description = description;
         this.quantity = quantity;
         this.price = price;
+        this.user = user;
     }
 
     public Product(Long productId, String brand, String name, String description, int quantity, BigDecimal price) {
@@ -45,5 +47,4 @@ public class Product {
         this.quantity = quantity;
         this.price = price;
     }
-
 }

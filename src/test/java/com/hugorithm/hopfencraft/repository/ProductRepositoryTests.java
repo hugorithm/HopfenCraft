@@ -1,5 +1,6 @@
 package com.hugorithm.hopfencraft.repository;
 
+import com.hugorithm.hopfencraft.model.ApplicationUser;
 import com.hugorithm.hopfencraft.model.Product;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -18,11 +19,16 @@ import java.util.Optional;
 public class ProductRepositoryTests {
     @Autowired
     private ProductRepository productRepository;
+    @Autowired
+    private UserRepository userRepository;
     @Test
     public void ProductRepository_SaveAll_ReturnSavedProduct() {
+        ApplicationUser user = new ApplicationUser();
+        user.setUsername("testuser");
+        user.setEmail("testuser@example.com");
 
         //Arrange
-        Product product = new Product("Paulaner", "Paulaner", "Weiss", 10, new BigDecimal("2.39"));
+        Product product = new Product("Paulaner", "Paulaner", "Weiss", 10, new BigDecimal("2.39"), user);
 
         //Act
         Product savedProduct = productRepository.save(product);
@@ -34,11 +40,15 @@ public class ProductRepositoryTests {
 
     @Test
     public void ProductRepository_GetAll_ReturnMoreThanOneProduct() {
+        ApplicationUser user = new ApplicationUser();
+        user.setUsername("testuser");
+        user.setEmail("testuser@example.com");
         //Arrange
-        Product product = new Product("Paulaner", "Paulaner Weissbier", "Weiss", 10, new BigDecimal("2.39"));
-        Product product2 = new Product("Franziskaner", "Franziskaner Hefeweizen", "Weiss", 11, new BigDecimal("2.99"));
+        Product product = new Product("Paulaner", "Paulaner Weissbier", "Weiss", 10, new BigDecimal("2.39"), user);
+        Product product2 = new Product("Franziskaner", "Franziskaner Hefeweizen", "Weiss", 11, new BigDecimal("2.99"), user);
 
         //Act
+        userRepository.save(user);
         productRepository.save(product);
         productRepository.save(product2);
         List<Product> userList = productRepository.findAll();
@@ -50,8 +60,11 @@ public class ProductRepositoryTests {
 
     @Test
     public void ProductRepository_FindById_ReturnProduct() {
+        ApplicationUser user = new ApplicationUser();
+        user.setUsername("testuser");
+        user.setEmail("testuser@example.com");
         //Arrange
-        Product product = new Product("Paulaner", "Paulaner Weissbier", "Weiss", 10, new BigDecimal("2.39"));
+        Product product = new Product("Paulaner", "Paulaner Weissbier", "Weiss", 10, new BigDecimal("2.39"), user);
 
         //Act
         productRepository.save(product);
@@ -63,10 +76,14 @@ public class ProductRepositoryTests {
 
     @Test
     public void ProductRepository_FindByName_ReturnProductNotNull() {
+        ApplicationUser user = new ApplicationUser();
+        user.setUsername("testuser");
+        user.setEmail("testuser@example.com");
         //Arrange
-        Product product = new Product("Paulaner", "Paulaner Weissbier", "Weiss", 10, new BigDecimal("2.39"));
+        Product product = new Product("Paulaner", "Paulaner Weissbier", "Weiss", 10, new BigDecimal("2.39"), user);
 
         //Act
+        userRepository.save(user);
         productRepository.save(product);
 
         Product repoProduct = productRepository.findProductByName(product.getName()).get();
@@ -76,8 +93,11 @@ public class ProductRepositoryTests {
 
     @Test
     public void ProductRepository_UpdateProduct_ReturnProductNotNull() {
+        ApplicationUser user = new ApplicationUser();
+        user.setUsername("testuser");
+        user.setEmail("testuser@example.com");
         //Arrange
-        Product product = new Product("Paulaner", "Paulaner Weissbier", "Weiss", 10, new BigDecimal("2.39"));
+        Product product = new Product("Paulaner", "Paulaner Weissbier", "Weiss", 10, new BigDecimal("2.39"), user);
         int q = product.getQuantity();
         String b = product.getBrand();
         String n = product.getName();
@@ -116,8 +136,11 @@ public class ProductRepositoryTests {
 
     @Test
     public void ProductRepository_ProductDelete_ReturnProductIsEmpty() {
+        ApplicationUser user = new ApplicationUser();
+        user.setUsername("testuser");
+        user.setEmail("testuser@example.com");
         //Arrange
-        Product product = new Product("Paulaner", "Paulaner Weissbier", "Weiss", 10, new BigDecimal("2.39"));
+        Product product = new Product("Paulaner", "Paulaner Weissbier", "Weiss", 10, new BigDecimal("2.39"), user);
 
         //Act
         productRepository.save(product);
