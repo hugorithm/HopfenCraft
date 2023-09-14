@@ -7,11 +7,12 @@ import com.hugorithm.hopfencraft.model.ApplicationUser;
 import com.hugorithm.hopfencraft.model.Product;
 import com.hugorithm.hopfencraft.service.ProductService;
 import com.hugorithm.hopfencraft.utils.JsonToStringConverter;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -33,9 +34,9 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.hamcrest.Matchers.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.when;
+import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -51,13 +52,10 @@ public class ProductControllerTests {
     private ProductService productService;
     private Jwt mockJwt;
 
-    @BeforeEach
-    public void setUp() {
-        // Create a mock Jwt for testing
-        mockJwt = Mockito.mock(Jwt.class);
-    }
+    private final static Logger LOGGER = LoggerFactory.getLogger(ProductControllerTests.class);
+
     @Test
-    public void RegisterProduct_ValidInput_ReturnsOk() throws Exception {
+    public void RegisterProduct_ValidInput_ReturnsCreated() throws Exception {
         // Define valid input data
 
         BigDecimal price = new BigDecimal("2.39");
@@ -69,9 +67,9 @@ public class ProductControllerTests {
                 price
         );
 
-
         // Define the expected response from the service
-        ProductDTO expectedResponse = new ProductDTO(1L,
+        ProductDTO expectedResponse = new ProductDTO(
+                1L,
                 "Paulaner",
                 "Paulaner Weizen",
                 "Weiss",
@@ -80,27 +78,38 @@ public class ProductControllerTests {
                 LocalDateTime.now()
         );
 
+        // Mock the productService.registerProduct method to return the expected response
         when(productService.registerProduct(
-                any(Jwt.class),
+                same(mockJwt),
                 eq(validInput.getBrand()),
                 eq(validInput.getName()),
                 eq(validInput.getDescription()),
                 eq(validInput.getQuantity()),
                 eq(validInput.getPrice())
-        )).thenReturn(ResponseEntity.ok(expectedResponse));
+        )).thenReturn(ResponseEntity.status(HttpStatus.CREATED).body(expectedResponse));
 
-        // Perform the POST request
+        // Perform the POST request using mockMvc
         mockMvc.perform(post("/product/register")
                         .contentType(MediaType.APPLICATION_JSON)
                         .header(HttpHeaders.AUTHORIZATION, "Bearer " + mockJwt)
                         .content(JsonToStringConverter.asJsonString(validInput)))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.brand", equalTo( expectedResponse.getBrand())))
-                .andExpect(jsonPath("$.name", equalTo(expectedResponse.getName())))
-                .andExpect(jsonPath("$.description", equalTo(expectedResponse.getDescription())))
-                .andExpect(jsonPath("$.quantity", equalTo(expectedResponse.getQuantity())))
-                .andExpect(jsonPath("$.price", equalTo(expectedResponse.getPrice().toString())))
-                .andExpect(jsonPath("$.productId", notNullValue()));
+                .andExpect(status().isCreated()) // Expect a 201 Created status
+                .andExpect(jsonPath("$.brand").value(expectedResponse.getBrand()))
+                .andExpect(jsonPath("$.name").value(expectedResponse.getName()))
+                .andExpect(jsonPath("$.description").value(expectedResponse.getDescription()))
+                .andExpect(jsonPath("$.quantity").value(expectedResponse.getQuantity()))
+                .andExpect(jsonPath("$.price").value(expectedResponse.getPrice().toString()))
+                .andExpect(jsonPath("$.productId").isNumber());
+
+        // Verify that the productService.registerProduct method was called with the expected arguments
+        verify(productService).registerProduct(
+               same(mockJwt),
+                eq(validInput.getBrand()),
+                eq(validInput.getName()),
+                eq(validInput.getDescription()),
+                eq(validInput.getQuantity()),
+                eq(validInput.getPrice())
+        );
     }
 
     @Test
@@ -155,7 +164,7 @@ public class ProductControllerTests {
 
         // Simulate the ProductService returning a conflict response
         when(productService.registerProduct(
-                any(Jwt.class),
+                same(mockJwt),
                 eq(existingProduct.getBrand()),
                 eq(existingProduct.getName()),
                 eq(existingProduct.getDescription()),
@@ -222,7 +231,7 @@ public class ProductControllerTests {
         // Simulate the ProductService returning a page of products
         Page<Product> productPage = new PageImpl<>(products);
 
-        when(productService.findAll(any(Pageable.class))).thenReturn(productPage);
+        when(productService.findAll(Mockito.any(Pageable.class))).thenReturn(productPage);
 
         mockMvc.perform(get("/product/products")
                         .param("page", "1")
