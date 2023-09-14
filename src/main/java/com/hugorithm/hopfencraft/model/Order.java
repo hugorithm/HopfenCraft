@@ -60,7 +60,7 @@ public class Order {
     private String billingPostalCode;
     private String billingCountry;
 
-
+    //TODO: Delete this field
     private BigDecimal total;
     public Order(ApplicationUser user, BigDecimal total) {
         this.user = user;
