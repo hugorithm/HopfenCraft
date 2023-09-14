@@ -17,7 +17,7 @@
                     return fetch("http://localhost:8080/paypal/api/orders/create-order", {
                       method: "post",
                       // use the "body" param to optionally pass additional order information
-                      // like product ids or amount or you can pass them in the backend like we did.
+
                     })
                       .then(response => response.json())
                       .then(order => order.id);
