@@ -1,85 +1,143 @@
 package com.hugorithm.hopfencraft.service;
 
-import com.paypal.api.payments.*;
-import com.paypal.base.rest.APIContext;
-import com.paypal.base.rest.PayPalRESTException;
-import lombok.AllArgsConstructor;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.scheduling.annotation.Async;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.oauth2.jwt.Jwt;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
+import org.springframework.web.client.RestTemplate;
 
-import java.util.Collections;
-import java.util.concurrent.CompletableFuture;
+import java.util.Base64;
 
 @Service
 @Transactional
-@AllArgsConstructor(onConstructor = @__(@Autowired))
 public class PaypalService {
-    private final APIContext apiContext;
     private final JwtService jwtService;
+    private final String clientId;
+    private final String clientSecret;
     private final static Logger LOGGER = LoggerFactory.getLogger(PaypalService.class);
+    //Needs to be changed with live url for production
+    private final String PAYPAL_BASE_URL = "https://api-m.sandbox.paypal.com";
 
-    @Async("threadPoolExecutor")
-    public CompletableFuture<ResponseEntity<?>> createPayment(String total, String currency, String method, String intent, String description, String successUrl, String cancelUrl) {
-        Amount amount = new Amount(currency, total);
-
-        Transaction transaction = new Transaction();
-        transaction.setDescription(description);
-        transaction.setAmount(amount);
-
-        RedirectUrls redirectUrls = new RedirectUrls();
-        redirectUrls.setCancelUrl(cancelUrl);
-        redirectUrls.setReturnUrl(successUrl);
-
-        Payment payment = new Payment();
-        payment.setIntent(intent);
-        Payer payer = new Payer();
-        payer.setPaymentMethod(method);
-        payment.setPayer(payer);
-        payment.setTransactions(Collections.singletonList(transaction));
-        payment.setRedirectUrls(redirectUrls);
-
-        try {
-            Payment createdPayment = payment.create(apiContext);
-            for (Links link : createdPayment.getLinks()) {
-                if (link.getRel().equals("approval_url")) {
-                    return CompletableFuture.completedFuture(ResponseEntity.ok(link.getHref()));
-                }
-            }
-        } catch (PayPalRESTException ex) {
-            LOGGER.error(ex.getMessage(), ex);
-        }
-
-        return CompletableFuture.completedFuture(ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build());
+    @Autowired
+    public PaypalService(JwtService jwtService,
+                         @Value("${paypal.client.id}") String clientId,
+                         @Value("${paypal.client.secret}") String clientSecret) {
+        this.jwtService = jwtService;
+        this.clientId = clientId;
+        this.clientSecret = clientSecret;
     }
 
-    @Async("threadPoolExecutor")
-    public CompletableFuture<ResponseEntity<?>> executePayment(Jwt jwt, String paymentId, String payerId) {
-        try {
-            Payment payment = Payment.get(apiContext, paymentId);
-            PaymentExecution paymentExecution = new PaymentExecution();
-            paymentExecution.setPayerId(payerId);
-            Payment executedPayment = payment.execute(apiContext, paymentExecution);
-            //TODO: change to API v2 and add Order when creating payment, here getOrders from user which == paymentId
-            //ApplicationUser user = jwtService.getUserFromJwt(jwt);
+    private String getAuth(String clientId, String clientSecret) {
+        String auth = clientId + ":" + clientSecret;
+        return Base64.getEncoder().encodeToString(auth.getBytes());
+    }
 
-            //TODO: return paymentResponseDTO with executedPayment.getState(), etc... Also integrate the order and save in the database
+    private String generateAccessToken() {
+        String auth = this.getAuth(this.clientId, this.clientSecret);
 
-            return CompletableFuture.completedFuture(ResponseEntity.ok("Payment executed successfully. Payment ID: " + executedPayment.getId()));
-        } catch (PayPalRESTException ex) {
-            LOGGER.error(ex.getMessage(), ex);
-            return CompletableFuture.completedFuture(ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build());
-        } catch (UsernameNotFoundException ex) {
-            LOGGER.error(ex.getMessage(), ex);
-            return CompletableFuture.completedFuture(ResponseEntity.status(HttpStatus.NOT_FOUND).build());
+        RestTemplate restTemplate = new RestTemplate();
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+        headers.set("Authorization", "Basic " + auth);
+
+        MultiValueMap<String, String> requestBody = new LinkedMultiValueMap<>();
+        HttpEntity<?> request = new HttpEntity<>(requestBody, headers);
+        requestBody.add("grant_type", "client_credentials");
+
+        ResponseEntity<String> response = restTemplate.postForEntity(
+                PAYPAL_BASE_URL +"/v1/oauth2/token",
+                request,
+                String.class
+        );
+
+        if (response.getStatusCode() == HttpStatus.OK) {
+            LOGGER.info("GET TOKEN: SUCCESSFUL!");
+            return new JSONObject(response.getBody()).getString("access_token");
+        } else {
+            LOGGER.error("GET TOKEN: FAILED!");
+            return "Unavailable to get ACCESS TOKEN, STATUS CODE " + response.getStatusCode();
         }
+    }
+
+    public ResponseEntity<Object> capturePayment(String orderId) {
+        String accessToken = generateAccessToken();
+        HttpHeaders headers = new HttpHeaders();
+        RestTemplate restTemplate = new RestTemplate();
+
+        headers.set("Authorization", "Bearer " + accessToken);
+        headers.add("Content-Type", "application/json");
+        headers.add("Accept", "application/json");
+        headers.setContentType(MediaType.APPLICATION_JSON);
+
+        HttpEntity<String> entity = new HttpEntity<String>(null, headers);
+
+        ResponseEntity<Object> response = restTemplate.exchange(
+                PAYPAL_BASE_URL + "/v2/checkout/orders/" + orderId + "/capture",
+                HttpMethod.POST,
+                entity,
+                Object.class
+        );
+
+        if (response.getStatusCode() == HttpStatus.CREATED) {
+            LOGGER.info("Paypal order captured");
+            return ResponseEntity.status(response.getStatusCode()).body(response.getBody());
+        } else {
+            LOGGER.error("Failed to capture paypal order");
+            return ResponseEntity.status(response.getStatusCode()).body("Failed to capture paypal order");
+        }
+    }
+
+    public ResponseEntity<Object> createOrder() {
+        String accessToken = generateAccessToken();
+        RestTemplate restTemplate = new RestTemplate();
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Authorization", "Bearer " + accessToken);
+        headers.add("Content-Type", "application/json");
+        headers.add("Accept", "application/json");
+        headers.setContentType(MediaType.APPLICATION_JSON);
+
+        //JSON String
+        ObjectMapper objectMapper = new ObjectMapper();
+        ObjectNode jsonNode = objectMapper.createObjectNode();
+
+        jsonNode.put("intent", "CAPTURE");
+        ArrayNode purchaseUnitsNode = jsonNode.putArray("purchase_units");
+        ObjectNode unitNode = purchaseUnitsNode.addObject();
+        ObjectNode amountNode = unitNode.putObject("amount");
+        amountNode.put("currency_code", "EUR");
+        amountNode.put("value", "100.00");
+
+        String requestJson = jsonNode.toString();
+
+        HttpEntity<String> entity = new HttpEntity<String>(requestJson, headers);
+
+        ResponseEntity<Object> response = restTemplate.exchange(
+                PAYPAL_BASE_URL + "/v2/checkout/orders",
+                HttpMethod.POST,
+                entity,
+                Object.class
+        );
+
+        if (response.getStatusCode() == HttpStatus.CREATED) {
+            LOGGER.info("Paypal order created");
+            return ResponseEntity.status(response.getStatusCode()).body(response.getBody());
+        } else {
+            LOGGER.error("Failed to create paypal order");
+            return ResponseEntity.status(response.getStatusCode()).build();
+        }
+
     }
 
 
