@@ -4,6 +4,7 @@ package com.hugorithm.hopfencraft.service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.hugorithm.hopfencraft.exception.paypal.PaypalAccessTokenException;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.Base64;
@@ -62,39 +64,48 @@ public class PaypalService {
         );
 
         if (response.getStatusCode() == HttpStatus.OK) {
-            LOGGER.info("GET TOKEN: SUCCESSFUL!");
+            LOGGER.info("Token generated successfully");
             return new JSONObject(response.getBody()).getString("access_token");
         } else {
-            LOGGER.error("GET TOKEN: FAILED!");
-            return "Unavailable to get ACCESS TOKEN, STATUS CODE " + response.getStatusCode();
+            LOGGER.error("Failed to get Access Token Status code: {}",response.getStatusCode());
+            throw new PaypalAccessTokenException("Failed to get Access Token, Status Code: " + response.getStatusCode());
         }
     }
 
     public ResponseEntity<Object> capturePayment(String orderId) {
-        String accessToken = generateAccessToken();
-        HttpHeaders headers = new HttpHeaders();
-        RestTemplate restTemplate = new RestTemplate();
+        try {
+            String accessToken = generateAccessToken();
+            HttpHeaders headers = new HttpHeaders();
+            RestTemplate restTemplate = new RestTemplate();
 
-        headers.set("Authorization", "Bearer " + accessToken);
-        headers.add("Content-Type", "application/json");
-        headers.add("Accept", "application/json");
-        headers.setContentType(MediaType.APPLICATION_JSON);
+            headers.set("Authorization", "Bearer " + accessToken);
+            headers.add("Content-Type", "application/json");
+            headers.add("Accept", "application/json");
+            headers.setContentType(MediaType.APPLICATION_JSON);
 
-        HttpEntity<String> entity = new HttpEntity<String>(null, headers);
+            HttpEntity<String> entity = new HttpEntity<String>(null, headers);
 
-        ResponseEntity<Object> response = restTemplate.exchange(
-                PAYPAL_BASE_URL + "/v2/checkout/orders/" + orderId + "/capture",
-                HttpMethod.POST,
-                entity,
-                Object.class
-        );
+            ResponseEntity<Object> response = restTemplate.exchange(
+                    PAYPAL_BASE_URL + "/v2/checkout/orders/" + orderId + "/capture",
+                    HttpMethod.POST,
+                    entity,
+                    Object.class
+            );
 
-        if (response.getStatusCode() == HttpStatus.CREATED) {
-            LOGGER.info("Paypal order captured");
-            return ResponseEntity.status(response.getStatusCode()).body(response.getBody());
-        } else {
-            LOGGER.error("Failed to capture paypal order");
-            return ResponseEntity.status(response.getStatusCode()).body("Failed to capture paypal order");
+            if (response.getStatusCode() == HttpStatus.CREATED) {
+                LOGGER.info("Paypal order captured");
+                return ResponseEntity.status(response.getStatusCode()).body(response.getBody());
+            } else {
+                LOGGER.error("Failed to capture paypal order");
+                return ResponseEntity.status(response.getStatusCode()).body("Failed to capture paypal order");
+            }
+
+        } catch (HttpClientErrorException ex) {
+            LOGGER.error(ex.getMessage(), ex);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to capture paypal order");
+        } catch (PaypalAccessTokenException ex) {
+            LOGGER.error(ex.getMessage(), ex);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
     }
 
@@ -139,6 +150,4 @@ public class PaypalService {
         }
 
     }
-
-
 }
