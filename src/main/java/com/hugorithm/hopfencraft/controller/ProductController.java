@@ -64,7 +64,6 @@ public class ProductController {
                 )
         ).orElseGet(() -> ResponseEntity.notFound().build());
     }
-    //TODO: make product have the user who registered it
     @PostMapping("/register")
     public ResponseEntity<ProductDTO> registerProduct(@AuthenticationPrincipal Jwt jwt, @Valid @RequestBody ProductRegistrationDTO body) {
         return productService.registerProduct(jwt, body.getBrand(), body.getName(),body.getDescription(), body.getQuantity(), body.getPrice());

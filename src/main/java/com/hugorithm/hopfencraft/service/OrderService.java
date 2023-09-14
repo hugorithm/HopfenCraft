@@ -3,10 +3,12 @@ package com.hugorithm.hopfencraft.service;
 import com.hugorithm.hopfencraft.dto.CartItemDTO;
 import com.hugorithm.hopfencraft.dto.OrderDTO;
 import com.hugorithm.hopfencraft.dto.ProductDTO;
+import com.hugorithm.hopfencraft.enums.OrderStatus;
 import com.hugorithm.hopfencraft.exception.order.OrderCartIsEmptyException;
 import com.hugorithm.hopfencraft.model.ApplicationUser;
 import com.hugorithm.hopfencraft.model.CartItem;
 import com.hugorithm.hopfencraft.model.Order;
+import com.hugorithm.hopfencraft.repository.CartItemRepository;
 import com.hugorithm.hopfencraft.repository.OrderRepository;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
@@ -20,7 +22,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -30,6 +31,7 @@ import java.util.stream.Collectors;
 public class OrderService {
     private final JwtService jwtService;
     private final OrderRepository orderRepository;
+    private final CartItemRepository cartItemRepository;
     private final static Logger LOGGER = LoggerFactory.getLogger(OrderService.class);
 
     private List<CartItemDTO> convertCartItemIntoDTO(List<CartItem> cartItems){
@@ -68,9 +70,18 @@ public class OrderService {
 
             Order order = new Order(user, total);
             order.setOrderItems(cartItems);
+            order.setOrderStatus(OrderStatus.PENDING);
 
             orderRepository.save(order);
-            return ResponseEntity.status(HttpStatus.CREATED).body(new OrderDTO(total, convertCartItemIntoDTO(cartItems), order.getOrderDate()));
+
+            for (CartItem cartItem : cartItems) {
+                cartItem.setOrder(order);
+                cartItemRepository.save(cartItem);
+            }
+
+            List<CartItemDTO> cartItemsDTO = convertCartItemIntoDTO(cartItems);
+
+            return ResponseEntity.status(HttpStatus.CREATED).body(new OrderDTO(total, cartItemsDTO, order.getOrderDate()));
         } catch (UsernameNotFoundException | OrderCartIsEmptyException ex) {
             LOGGER.error(ex.getMessage(), ex);
             return ResponseEntity.badRequest().build();

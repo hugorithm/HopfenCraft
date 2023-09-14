@@ -20,7 +20,7 @@ public class CartItem {
     private Product product;
     @ManyToOne
     private ApplicationUser user;
-    @ManyToOne()
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "order_id")
     private Order order;
     private int quantity;
