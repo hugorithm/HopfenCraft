@@ -18,8 +18,8 @@ public class PaypalController {
     }
 
     @PostMapping("/api/orders/{orderId}/capture")
-    public ResponseEntity<Object> capturePayment(@AuthenticationPrincipal Jwt jwt, @PathVariable("orderId") String orderId) {
-        return paypalService.capturePayment(jwt, orderId);
+    public ResponseEntity<Object> capturePayment(@AuthenticationPrincipal Jwt jwt, @RequestBody PaymentRequestDTO body, @PathVariable("orderId") String paypalOrderId) {
+        return paypalService.capturePayment(jwt, body.getOrderId(), paypalOrderId);
     }
 
     @PostMapping("/api/orders/create-order")

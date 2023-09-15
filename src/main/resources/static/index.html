@@ -33,8 +33,12 @@
                     return fetch(`http://localhost:8080/paypal/api/orders/${data.orderID}/capture`, {
                       method: "post",
                         headers: {
-                            "Authorization" : "Bearer eyJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJzZWxmIiwic3ViIjoiYWRtaW4iLCJleHAiOjE2OTQ4MTQ5NjgsImlhdCI6MTY5NDgwNzc2OCwicm9sZXMiOiJBRE1JTiJ9.E1YkxuxRvC4zaAVXdvF18ZW8zQ5Y2DvH4giz4BWe6gKe944DwaoqHS4p56rvU_ZWcedXyZTNPqgFqWNK3Aer2Sh3NlmFU7u2s3SIrJBNeuNo4IBHg4lTCEoV98gMgFsTst3wHMO4QQHaPRonoAz0NqKDBKdR2a-hxpbnmIRfaKld8yDOkA4-t17WGZlErm-CSxbr9YyZ8lwXkYy_VG17uH6C2Oeaip-8sZ2d7g8m9l001Ox43jWNbz7ouJYOVhwXujzEspb9TaFSILnhXd1Mkktf6G4fvYt5qHIep0avOwMofPQaMXE7BKnrhWQW6qf7BYMs5GoyktqDqVwuFTt9iw"
-                        }
+                            "Authorization" : "Bearer eyJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJzZWxmIiwic3ViIjoiYWRtaW4iLCJleHAiOjE2OTQ4MTQ5NjgsImlhdCI6MTY5NDgwNzc2OCwicm9sZXMiOiJBRE1JTiJ9.E1YkxuxRvC4zaAVXdvF18ZW8zQ5Y2DvH4giz4BWe6gKe944DwaoqHS4p56rvU_ZWcedXyZTNPqgFqWNK3Aer2Sh3NlmFU7u2s3SIrJBNeuNo4IBHg4lTCEoV98gMgFsTst3wHMO4QQHaPRonoAz0NqKDBKdR2a-hxpbnmIRfaKld8yDOkA4-t17WGZlErm-CSxbr9YyZ8lwXkYy_VG17uH6C2Oeaip-8sZ2d7g8m9l001Ox43jWNbz7ouJYOVhwXujzEspb9TaFSILnhXd1Mkktf6G4fvYt5qHIep0avOwMofPQaMXE7BKnrhWQW6qf7BYMs5GoyktqDqVwuFTt9iw",
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify({
+                            orderId: "1",
+                        })
                     })
                       .then(response => response.json())
                       .then(orderData => {

@@ -1,6 +1,8 @@
 package com.hugorithm.hopfencraft.service;
 
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -29,7 +31,6 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.Base64;
-
 @Service
 @Transactional
 public class PaypalService {
@@ -85,9 +86,18 @@ public class PaypalService {
         }
     }
 
-    public ResponseEntity<Object> capturePayment(Jwt jwt, String orderId) {
+    public ResponseEntity<Object> capturePayment(Jwt jwt, Long orderId, String paypalOrderId) {
         try {
             ApplicationUser user = jwtService.getUserFromJwt(jwt);
+            Order order = orderRepository.findById(orderId).orElseThrow(() -> new OrderNotFoundException("Order not found with id: %s", orderId));
+
+            if (!order.getUser().getUserId().equals(user.getUserId())) {
+                throw new OrderUserMismatchException("Order user id: %s does not match user id: %s", order.getUser().getUserId(), user.getUserId());
+            }
+
+            if (order.getOrderStatus().equals(OrderStatus.PAID) || order.getOrderStatus().equals(OrderStatus.CANCELED)) {
+                throw new OrderPaymentException("Order status is PAID or CANCELED");
+            }
 
             String accessToken = generateAccessToken();
             HttpHeaders headers = new HttpHeaders();
@@ -101,7 +111,7 @@ public class PaypalService {
             HttpEntity<String> entity = new HttpEntity<String>(null, headers);
 
             ResponseEntity<Object> response = restTemplate.exchange(
-                    PAYPAL_BASE_URL + "/v2/checkout/orders/" + orderId + "/capture",
+                    PAYPAL_BASE_URL + "/v2/checkout/orders/" + paypalOrderId + "/capture",
                     HttpMethod.POST,
                     entity,
                     Object.class
@@ -109,6 +119,17 @@ public class PaypalService {
 
             if (response.getStatusCode() == HttpStatus.CREATED) {
                 LOGGER.info("Paypal order captured");
+
+                // Convert response body Object to Json and get id
+                ObjectMapper om = new ObjectMapper();
+                String responseBodyJson = om.writeValueAsString(response.getBody());
+                JsonNode responseBody = om.readTree(responseBodyJson);
+                String transactionId = responseBody.get("id").asText();
+
+                order.setPaymentTransactionId(transactionId);
+                order.setOrderStatus(OrderStatus.PAID);
+                orderRepository.save(order);
+
                 return ResponseEntity.status(response.getStatusCode()).body(response.getBody());
             } else {
                 LOGGER.error("Failed to capture paypal order");
@@ -118,7 +139,7 @@ public class PaypalService {
         } catch (HttpClientErrorException ex) {
             LOGGER.error(ex.getMessage(), ex);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to capture paypal order");
-        } catch (PaypalAccessTokenException ex) {
+        } catch (PaypalAccessTokenException | JsonProcessingException ex) {
             LOGGER.error(ex.getMessage(), ex);
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
