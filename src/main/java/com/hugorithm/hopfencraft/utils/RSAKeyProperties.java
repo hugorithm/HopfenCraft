@@ -33,10 +33,7 @@ public class RSAKeyProperties {
 
         KeyFactory keyFactory = KeyFactory.getInstance("RSA");
 
-        RSAPublicKey publicKey = (RSAPublicKey) keyFactory.generatePublic(publicKeySpec);
-        RSAPrivateKey privateKey = (RSAPrivateKey) keyFactory.generatePrivate(privateKeySpec);
-
-        this.publicKey = publicKey;
-        this.privateKey = privateKey;
+        this.publicKey = (RSAPublicKey) keyFactory.generatePublic(publicKeySpec);
+        this.privateKey = (RSAPrivateKey) keyFactory.generatePrivate(privateKeySpec);
     }
 }
