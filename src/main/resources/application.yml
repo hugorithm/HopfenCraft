@@ -37,3 +37,11 @@ paypal:
   client:
     id: ${PAYPAL_CLIENT_ID}
     secret: ${PAYPAL_CLIENT_SECRET}
+jwt:
+  rsa:
+    public:
+      modulus: ${RSA_PUBLIC_MODULUS}
+      exponent: ${RSA_PUBLIC_EXPONENT}
+    private:
+      modulus: ${RSA_PRIVATE_MODULUS}
+      exponent: ${RSA_PRIVATE_EXPONENT}
