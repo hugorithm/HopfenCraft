@@ -24,19 +24,19 @@ import java.util.Base64;
 @Transactional
 public class PaypalService {
     private final JwtService jwtService;
-    private final String clientId;
-    private final String clientSecret;
+    private final String CLIENT_ID;
+    private final String CLIENT_SECRET;
     private final static Logger LOGGER = LoggerFactory.getLogger(PaypalService.class);
     //Needs to be changed with live url for production
-    private final String PAYPAL_BASE_URL = "https://api-m.sandbox.paypal.com";
+    private final static String PAYPAL_BASE_URL = "https://api-m.sandbox.paypal.com";
 
     @Autowired
     public PaypalService(JwtService jwtService,
                          @Value("${paypal.client.id}") String clientId,
                          @Value("${paypal.client.secret}") String clientSecret) {
         this.jwtService = jwtService;
-        this.clientId = clientId;
-        this.clientSecret = clientSecret;
+        this.CLIENT_ID = clientId;
+        this.CLIENT_SECRET = clientSecret;
     }
 
     private String getAuth(String clientId, String clientSecret) {
@@ -45,7 +45,7 @@ public class PaypalService {
     }
 
     private String generateAccessToken() {
-        String auth = this.getAuth(this.clientId, this.clientSecret);
+        String auth = this.getAuth(CLIENT_ID, CLIENT_SECRET);
 
         RestTemplate restTemplate = new RestTemplate();
 
