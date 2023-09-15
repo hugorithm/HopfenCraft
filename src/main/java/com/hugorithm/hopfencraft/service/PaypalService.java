@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.LinkedMultiValueMap;
@@ -72,7 +73,7 @@ public class PaypalService {
         }
     }
 
-    public ResponseEntity<Object> capturePayment(String orderId) {
+    public ResponseEntity<Object> capturePayment(Jwt jwt, String orderId) {
         try {
             String accessToken = generateAccessToken();
             HttpHeaders headers = new HttpHeaders();
@@ -109,7 +110,7 @@ public class PaypalService {
         }
     }
 
-    public ResponseEntity<Object> createOrder(String total, String currency) {
+    public ResponseEntity<Object> createOrder(Jwt jwt, String total, String currency) {
         try {
             String accessToken = generateAccessToken();
             RestTemplate restTemplate = new RestTemplate();
