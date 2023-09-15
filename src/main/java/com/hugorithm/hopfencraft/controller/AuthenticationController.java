@@ -1,9 +1,9 @@
 package com.hugorithm.hopfencraft.controller;
 
-import com.hugorithm.hopfencraft.dto.LoginDTO;
-import com.hugorithm.hopfencraft.dto.LoginResponseDTO;
-import com.hugorithm.hopfencraft.dto.UserRegistrationDTO;
-import com.hugorithm.hopfencraft.dto.UserRegistrationResponseDTO;
+import com.hugorithm.hopfencraft.dto.authentication.LoginDTO;
+import com.hugorithm.hopfencraft.dto.authentication.LoginResponseDTO;
+import com.hugorithm.hopfencraft.dto.authentication.UserRegistrationDTO;
+import com.hugorithm.hopfencraft.dto.authentication.UserRegistrationResponseDTO;
 import com.hugorithm.hopfencraft.service.AuthenticationService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;

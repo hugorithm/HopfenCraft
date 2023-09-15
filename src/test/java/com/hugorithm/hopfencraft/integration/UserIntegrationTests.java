@@ -1,9 +1,9 @@
 package com.hugorithm.hopfencraft.integration;
 
 import com.hugorithm.hopfencraft.config.TestConfig;
-import com.hugorithm.hopfencraft.dto.LoginDTO;
-import com.hugorithm.hopfencraft.dto.LoginResponseDTO;
-import com.hugorithm.hopfencraft.dto.PasswordResetDTO;
+import com.hugorithm.hopfencraft.dto.authentication.LoginDTO;
+import com.hugorithm.hopfencraft.dto.authentication.LoginResponseDTO;
+import com.hugorithm.hopfencraft.dto.authentication.PasswordResetDTO;
 import com.hugorithm.hopfencraft.model.ApplicationUser;
 import com.hugorithm.hopfencraft.repository.UserRepository;
 import com.hugorithm.hopfencraft.service.TokenService;

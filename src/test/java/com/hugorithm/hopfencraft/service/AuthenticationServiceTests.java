@@ -1,10 +1,10 @@
 package com.hugorithm.hopfencraft.service;
 
 import com.hugorithm.hopfencraft.config.DataInitialization;
-import com.hugorithm.hopfencraft.dto.LoginDTO;
-import com.hugorithm.hopfencraft.dto.LoginResponseDTO;
-import com.hugorithm.hopfencraft.dto.UserRegistrationDTO;
-import com.hugorithm.hopfencraft.dto.UserRegistrationResponseDTO;
+import com.hugorithm.hopfencraft.dto.authentication.LoginDTO;
+import com.hugorithm.hopfencraft.dto.authentication.LoginResponseDTO;
+import com.hugorithm.hopfencraft.dto.authentication.UserRegistrationDTO;
+import com.hugorithm.hopfencraft.dto.authentication.UserRegistrationResponseDTO;
 import com.hugorithm.hopfencraft.model.ApplicationUser;
 import com.hugorithm.hopfencraft.model.Role;
 import com.hugorithm.hopfencraft.repository.RoleRepository;

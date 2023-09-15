@@ -1,9 +1,9 @@
 package com.hugorithm.hopfencraft.integration;
 
-import com.hugorithm.hopfencraft.dto.LoginDTO;
-import com.hugorithm.hopfencraft.dto.LoginResponseDTO;
-import com.hugorithm.hopfencraft.dto.UserRegistrationDTO;
-import com.hugorithm.hopfencraft.dto.UserRegistrationResponseDTO;
+import com.hugorithm.hopfencraft.dto.authentication.LoginDTO;
+import com.hugorithm.hopfencraft.dto.authentication.LoginResponseDTO;
+import com.hugorithm.hopfencraft.dto.authentication.UserRegistrationDTO;
+import com.hugorithm.hopfencraft.dto.authentication.UserRegistrationResponseDTO;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

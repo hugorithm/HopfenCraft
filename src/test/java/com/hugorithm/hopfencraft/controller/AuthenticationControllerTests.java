@@ -1,7 +1,7 @@
 package com.hugorithm.hopfencraft.controller;
 
-import com.hugorithm.hopfencraft.dto.UserRegistrationDTO;
-import com.hugorithm.hopfencraft.dto.UserRegistrationResponseDTO;
+import com.hugorithm.hopfencraft.dto.authentication.UserRegistrationDTO;
+import com.hugorithm.hopfencraft.dto.authentication.UserRegistrationResponseDTO;
 import com.hugorithm.hopfencraft.service.AuthenticationService;
 import com.hugorithm.hopfencraft.utils.JsonToStringConverter;
 import org.junit.jupiter.api.Test;

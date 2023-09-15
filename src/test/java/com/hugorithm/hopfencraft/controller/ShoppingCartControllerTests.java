@@ -1,10 +1,10 @@
 package com.hugorithm.hopfencraft.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.hugorithm.hopfencraft.dto.CartItemDTO;
-import com.hugorithm.hopfencraft.dto.CartRegistrationDTO;
-import com.hugorithm.hopfencraft.dto.CartResponseDTO;
-import com.hugorithm.hopfencraft.dto.ProductDTO;
+import com.hugorithm.hopfencraft.dto.cart.CartItemDTO;
+import com.hugorithm.hopfencraft.dto.cart.CartRegistrationDTO;
+import com.hugorithm.hopfencraft.dto.cart.CartResponseDTO;
+import com.hugorithm.hopfencraft.dto.product.ProductDTO;
 import com.hugorithm.hopfencraft.service.ShoppingCartService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
