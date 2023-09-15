@@ -1,5 +1,6 @@
-package com.hugorithm.hopfencraft.dto;
+package com.hugorithm.hopfencraft.dto.cart;
 
+import com.hugorithm.hopfencraft.dto.product.ProductDTO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

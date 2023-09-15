@@ -1,4 +1,4 @@
-package com.hugorithm.hopfencraft.dto;
+package com.hugorithm.hopfencraft.dto.authentication;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

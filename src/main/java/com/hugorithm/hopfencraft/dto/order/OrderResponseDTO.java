@@ -1,6 +1,7 @@
-package com.hugorithm.hopfencraft.dto;
+package com.hugorithm.hopfencraft.dto.order;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.hugorithm.hopfencraft.dto.cart.CartItemDTO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -12,7 +13,7 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class OrderDTO {
+public class OrderResponseDTO {
     @JsonFormat(shape = JsonFormat.Shape.STRING)
     private BigDecimal total;
     private List<CartItemDTO> cartItems;

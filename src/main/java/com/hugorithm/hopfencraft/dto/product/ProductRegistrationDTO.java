@@ -1,4 +1,4 @@
-package com.hugorithm.hopfencraft.dto;
+package com.hugorithm.hopfencraft.dto.product;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.hugorithm.hopfencraft.validators.PositiveBigDecimal;

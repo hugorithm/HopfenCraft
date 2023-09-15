@@ -1,17 +1,21 @@
-package com.hugorithm.hopfencraft.dto;
+package com.hugorithm.hopfencraft.dto.product;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.hugorithm.hopfencraft.validators.PositiveBigDecimal;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class ProductDTO {
+public class ProductUpdateDTO {
+    @Positive
+    @NotNull
     private Long productId;
     private String brand;
     private String name;
@@ -19,12 +23,4 @@ public class ProductDTO {
     private int quantity;
     @JsonFormat(shape = JsonFormat.Shape.STRING)
     private BigDecimal price;
-    private LocalDateTime registerDateTime;
-    public ProductDTO(String brand, String name, String description, int quantity, BigDecimal price) {
-        this.brand = brand;
-        this.name = name;
-        this.description = description;
-        this.quantity = quantity;
-        this.price = price;
-    }
 }

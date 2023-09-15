@@ -1,4 +1,4 @@
-package com.hugorithm.hopfencraft.dto;
+package com.hugorithm.hopfencraft.dto.cart;
 
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
