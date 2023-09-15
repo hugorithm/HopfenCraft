@@ -17,6 +17,7 @@
                     return fetch("http://localhost:8080/paypal/api/orders/create-order", {
                       method: "post",
                         headers: {
+                            "Authorization" : "Bearer ",
                             "Content-Type": "application/json"
                         },
                       body: JSON.stringify({
@@ -32,6 +33,9 @@
                   onApprove: (data, actions) => {
                     return fetch(`http://localhost:8080/paypal/api/orders/${data.orderID}/capture`, {
                       method: "post",
+                        headers: {
+                            "Authorization" : "Bearer "
+                        }
                     })
                       .then(response => response.json())
                       .then(orderData => {
