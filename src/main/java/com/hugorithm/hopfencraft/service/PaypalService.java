@@ -13,6 +13,7 @@ import com.hugorithm.hopfencraft.exception.order.OrderNotFoundException;
 import com.hugorithm.hopfencraft.exception.order.OrderUserMismatchException;
 import com.hugorithm.hopfencraft.exception.paypal.PaypalAccessTokenException;
 import com.hugorithm.hopfencraft.model.ApplicationUser;
+import com.hugorithm.hopfencraft.model.CartItem;
 import com.hugorithm.hopfencraft.model.Order;
 import com.hugorithm.hopfencraft.repository.OrderRepository;
 import org.json.JSONObject;
@@ -124,11 +125,23 @@ public class PaypalService {
                 ObjectMapper om = new ObjectMapper();
                 String responseBodyJson = om.writeValueAsString(response.getBody());
                 JsonNode responseBody = om.readTree(responseBodyJson);
-                String transactionId = responseBody.get("id").asText();
 
-                order.setPaymentTransactionId(transactionId);
+                JsonNode purchaseUnits = responseBody.path("purchase_units");
+                if (purchaseUnits.isArray() && !purchaseUnits.isEmpty()) {
+                    JsonNode payments = purchaseUnits.get(0).path("payments");
+                    if (payments != null) {
+                        JsonNode captures = payments.path("captures");
+                        if (captures.isArray() && !captures.isEmpty()) {
+                            JsonNode transaction = captures.get(0);
+                            order.setPaymentTransactionId(transaction.path("id").asText());
+                            order.setPaymentTransactionStatus(transaction.path("status").asText());
+                        }
+                    }
+                }
+
                 order.setOrderStatus(OrderStatus.PAID);
                 orderRepository.save(order);
+
 
                 return ResponseEntity.status(response.getStatusCode()).body(response.getBody());
             } else {
@@ -176,7 +189,32 @@ public class PaypalService {
             ObjectNode unitNode = purchaseUnitsNode.addObject();
             ObjectNode amountNode = unitNode.putObject("amount");
             amountNode.put("currency_code", order.getCurrency());
-            amountNode.put("value", order.getTotal());
+            amountNode.put("value", order.getTotal().toString());
+
+            ObjectNode breakdown = amountNode.putObject("breakdown");
+
+            // Create an "item_total" object within the breakdown item
+            ObjectNode itemTotal = breakdown.putObject("item_total");
+
+            itemTotal.put("currency_code", order.getCurrency());
+            itemTotal.put("value", order.getTotal().toString());
+            ArrayNode items = unitNode.putArray("items");
+
+            for (CartItem orderItem : order.getOrderItems()) {
+                ObjectNode item = items.addObject();
+                item.put("name", orderItem.getProduct().getName());
+                item.put("description", orderItem.getProduct().getDescription());
+                //TODO: Add sku to product as long as a productCode
+                item.put("sku", orderItem.getProduct().getProductId().toString());
+
+                ObjectNode unitAmount1 = item.putObject("unit_amount");
+                unitAmount1.put("currency_code", order.getCurrency());
+                unitAmount1.put("value", orderItem.getProduct().getPrice().toString());
+
+                item.put("quantity", String.valueOf(orderItem.getQuantity()));
+                item.put("category", "PHYSICAL_GOODS");
+            }
+
             String requestJson = jsonNode.toString();
 
             HttpEntity<String> entity = new HttpEntity<>(requestJson, headers);

@@ -43,6 +43,8 @@ public class Order {
 
     @Column(name = "payment_transaction_id")
     private String paymentTransactionId;
+    @Column(name = "payment_transaction_status")
+    private String paymentTransactionStatus;
 
     // Shipping Address fields
     private String shippingName;
