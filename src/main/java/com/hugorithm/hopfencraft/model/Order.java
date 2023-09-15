@@ -62,6 +62,8 @@ public class Order {
 
     //TODO: Delete this field
     private BigDecimal total;
+    private String currency;
+
     public Order(ApplicationUser user, BigDecimal total) {
         this.user = user;
         this.total = total;

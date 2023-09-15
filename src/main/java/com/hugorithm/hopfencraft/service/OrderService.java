@@ -71,6 +71,8 @@ public class OrderService {
             Order order = new Order(user, total);
             order.setOrderItems(cartItems);
             order.setOrderStatus(OrderStatus.PENDING);
+            //TODO: This is hardcoded for now but will not be later
+            order.setCurrency("EUR");
 
             Order savedOrder = orderRepository.save(order);
 

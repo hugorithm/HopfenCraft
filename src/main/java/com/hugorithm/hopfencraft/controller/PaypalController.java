@@ -1,6 +1,6 @@
 package com.hugorithm.hopfencraft.controller;
 
-import com.hugorithm.hopfencraft.dto.PaymentRequestDTO;
+import com.hugorithm.hopfencraft.dto.paypal.PaymentRequestDTO;
 import com.hugorithm.hopfencraft.service.PaypalService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -24,7 +24,7 @@ public class PaypalController {
 
     @PostMapping("/api/orders/create-order")
     public ResponseEntity<Object> createOrder(@AuthenticationPrincipal Jwt jwt, @RequestBody PaymentRequestDTO body) {
-        return paypalService.createOrder(jwt, body.getTotal(), body.getCurrency());
+        return paypalService.createOrder(jwt, body.getOrderId());
     }
 
 }

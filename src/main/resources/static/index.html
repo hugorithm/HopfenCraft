@@ -17,7 +17,7 @@
                     return fetch("http://localhost:8080/paypal/api/orders/create-order", {
                       method: "post",
                         headers: {
-                            "Authorization" : "Bearer ",
+                            "Authorization" : "Bearer eyJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJzZWxmIiwic3ViIjoiaHVnbyIsImV4cCI6MTY5NDc5OTA2MCwiaWF0IjoxNjk0NzkxODYwLCJyb2xlcyI6IlVTRVIifQ.ytYNuqY463EhUovwlc6fu0qPceC06HUBtbr5Id5rMPYmbnQSrU1A-1ANythN4-pyxEPtMrzuiMo4f4RQQSXn03gD8e-51NVOChnBfCX2C4cM_apQ_LZZ8UNe-UQnQt0JftOjAH9HJj3kWg7HthcsFITY-n5vDpOgpMklXOzkBK_jIM25zE5O351l5WAzAOCAUdOxdvn-CEhRKjark-DOgIVx8HnHnmD4fPVuctQ8mqh-iEDLlDfCQ5As2q3BQznCMcUrq_3ckPzcxEk-1O_ndELaQS81TJd5CXgAW3lrhybJbtxhDbRzKY4uZyF53-43Yz22jk4Jz71vuaI1Gjua0A",
                             "Content-Type": "application/json"
                         },
                       body: JSON.stringify({
@@ -34,7 +34,7 @@
                     return fetch(`http://localhost:8080/paypal/api/orders/${data.orderID}/capture`, {
                       method: "post",
                         headers: {
-                            "Authorization" : "Bearer "
+                            "Authorization" : "Bearer eyJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJzZWxmIiwic3ViIjoiaHVnbyIsImV4cCI6MTY5NDc5OTA2MCwiaWF0IjoxNjk0NzkxODYwLCJyb2xlcyI6IlVTRVIifQ.ytYNuqY463EhUovwlc6fu0qPceC06HUBtbr5Id5rMPYmbnQSrU1A-1ANythN4-pyxEPtMrzuiMo4f4RQQSXn03gD8e-51NVOChnBfCX2C4cM_apQ_LZZ8UNe-UQnQt0JftOjAH9HJj3kWg7HthcsFITY-n5vDpOgpMklXOzkBK_jIM25zE5O351l5WAzAOCAUdOxdvn-CEhRKjark-DOgIVx8HnHnmD4fPVuctQ8mqh-iEDLlDfCQ5As2q3BQznCMcUrq_3ckPzcxEk-1O_ndELaQS81TJd5CXgAW3lrhybJbtxhDbRzKY4uZyF53-43Yz22jk4Jz71vuaI1Gjua0A"
                         }
                     })
                       .then(response => response.json())

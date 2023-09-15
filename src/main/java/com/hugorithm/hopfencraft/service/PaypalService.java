@@ -4,13 +4,19 @@ package com.hugorithm.hopfencraft.service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.hugorithm.hopfencraft.exception.order.OrderNotFoundException;
+import com.hugorithm.hopfencraft.exception.order.OrderUserMismatchException;
 import com.hugorithm.hopfencraft.exception.paypal.PaypalAccessTokenException;
+import com.hugorithm.hopfencraft.model.ApplicationUser;
+import com.hugorithm.hopfencraft.model.Order;
+import com.hugorithm.hopfencraft.repository.OrderRepository;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,6 +31,7 @@ import java.util.Base64;
 @Transactional
 public class PaypalService {
     private final JwtService jwtService;
+    private final OrderRepository orderRepository;
     private final String CLIENT_ID;
     private final String CLIENT_SECRET;
     private final static Logger LOGGER = LoggerFactory.getLogger(PaypalService.class);
@@ -33,9 +40,11 @@ public class PaypalService {
 
     @Autowired
     public PaypalService(JwtService jwtService,
+                         OrderRepository orderRepository,
                          @Value("${paypal.client.id}") String clientId,
                          @Value("${paypal.client.secret}") String clientSecret) {
         this.jwtService = jwtService;
+        this.orderRepository = orderRepository;
         this.CLIENT_ID = clientId;
         this.CLIENT_SECRET = clientSecret;
     }
@@ -110,8 +119,15 @@ public class PaypalService {
         }
     }
 
-    public ResponseEntity<Object> createOrder(Jwt jwt, String total, String currency) {
+    public ResponseEntity<Object> createOrder(Jwt jwt, Long orderId) {
         try {
+            ApplicationUser user = jwtService.getUserFromJwt(jwt);
+            Order order = orderRepository.findById(orderId).orElseThrow(() -> new OrderNotFoundException("Order not found with id: {}", orderId));
+
+            if (!order.getUser().getUserId().equals(user.getUserId())) {
+                throw new OrderUserMismatchException("Order user id: {} does not match user id: {}", order.getUser().getUserId(), user.getUserId());
+            }
+
             String accessToken = generateAccessToken();
             RestTemplate restTemplate = new RestTemplate();
 
@@ -129,8 +145,8 @@ public class PaypalService {
             ArrayNode purchaseUnitsNode = jsonNode.putArray("purchase_units");
             ObjectNode unitNode = purchaseUnitsNode.addObject();
             ObjectNode amountNode = unitNode.putObject("amount");
-            amountNode.put("currency_code", currency);
-            amountNode.put("value", total);
+            amountNode.put("currency_code", order.getCurrency());
+            amountNode.put("value", order.getTotal());
             String requestJson = jsonNode.toString();
 
             HttpEntity<String> entity = new HttpEntity<String>(requestJson, headers);
@@ -149,9 +165,12 @@ public class PaypalService {
                 LOGGER.error("Failed to create paypal order");
                 return ResponseEntity.status(response.getStatusCode()).build();
             }
-        } catch (PaypalAccessTokenException ex) {
+        } catch (PaypalAccessTokenException | OrderUserMismatchException ex) {
             LOGGER.error(ex.getMessage(), ex);
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        } catch (UsernameNotFoundException ex) {
+            LOGGER.error(ex.getMessage(), ex);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }
 }

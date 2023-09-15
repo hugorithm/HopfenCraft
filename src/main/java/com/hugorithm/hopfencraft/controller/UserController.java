@@ -1,6 +1,6 @@
 package com.hugorithm.hopfencraft.controller;
 
-import com.hugorithm.hopfencraft.dto.PasswordResetDTO;
+import com.hugorithm.hopfencraft.dto.authentication.PasswordResetDTO;
 import com.hugorithm.hopfencraft.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
