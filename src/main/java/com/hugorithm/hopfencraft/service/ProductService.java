@@ -70,7 +70,8 @@ public class ProductService {
 
     public ResponseEntity<ProductDTO> updateProduct(Long productId, String brand, String name, String description, Integer quantity, BigDecimal price) {
         try {
-            Product product = productRepository.findById(productId).orElseThrow(() -> new ProductNotFoundException("Product not found with id: {} ", productId));
+            Product product = productRepository.findById(productId)
+                    .orElseThrow(() -> new ProductNotFoundException("Product not found with id: %s", productId));
 
             if (brand != null && !brand.isBlank()) {
                 product.setBrand(brand);
@@ -129,7 +130,7 @@ public class ProductService {
     public ResponseEntity<String> removeProduct(Long productId) {
         try {
             Product product = productRepository.findById(productId)
-                    .orElseThrow(() -> new ProductNotFoundException("Product not found with id: {}", productId));
+                    .orElseThrow(() -> new ProductNotFoundException("Product not found with id: %s", productId));
 
             productRepository.delete(product);
 

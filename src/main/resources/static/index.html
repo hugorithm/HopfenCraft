@@ -17,12 +17,11 @@
                     return fetch("http://localhost:8080/paypal/api/orders/create-order", {
                       method: "post",
                         headers: {
-                            "Authorization" : "Bearer eyJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJzZWxmIiwic3ViIjoiaHVnbyIsImV4cCI6MTY5NDc5OTA2MCwiaWF0IjoxNjk0NzkxODYwLCJyb2xlcyI6IlVTRVIifQ.ytYNuqY463EhUovwlc6fu0qPceC06HUBtbr5Id5rMPYmbnQSrU1A-1ANythN4-pyxEPtMrzuiMo4f4RQQSXn03gD8e-51NVOChnBfCX2C4cM_apQ_LZZ8UNe-UQnQt0JftOjAH9HJj3kWg7HthcsFITY-n5vDpOgpMklXOzkBK_jIM25zE5O351l5WAzAOCAUdOxdvn-CEhRKjark-DOgIVx8HnHnmD4fPVuctQ8mqh-iEDLlDfCQ5As2q3BQznCMcUrq_3ckPzcxEk-1O_ndELaQS81TJd5CXgAW3lrhybJbtxhDbRzKY4uZyF53-43Yz22jk4Jz71vuaI1Gjua0A",
+                            "Authorization" : "Bearer eyJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJzZWxmIiwic3ViIjoiYWRtaW4iLCJleHAiOjE2OTQ4MTQ5NjgsImlhdCI6MTY5NDgwNzc2OCwicm9sZXMiOiJBRE1JTiJ9.E1YkxuxRvC4zaAVXdvF18ZW8zQ5Y2DvH4giz4BWe6gKe944DwaoqHS4p56rvU_ZWcedXyZTNPqgFqWNK3Aer2Sh3NlmFU7u2s3SIrJBNeuNo4IBHg4lTCEoV98gMgFsTst3wHMO4QQHaPRonoAz0NqKDBKdR2a-hxpbnmIRfaKld8yDOkA4-t17WGZlErm-CSxbr9YyZ8lwXkYy_VG17uH6C2Oeaip-8sZ2d7g8m9l001Ox43jWNbz7ouJYOVhwXujzEspb9TaFSILnhXd1Mkktf6G4fvYt5qHIep0avOwMofPQaMXE7BKnrhWQW6qf7BYMs5GoyktqDqVwuFTt9iw",
                             "Content-Type": "application/json"
                         },
                       body: JSON.stringify({
-                          total: "25.43",
-                          currency: "EUR"
+                          orderId: "1",
                       })
 
                     })
@@ -34,7 +33,7 @@
                     return fetch(`http://localhost:8080/paypal/api/orders/${data.orderID}/capture`, {
                       method: "post",
                         headers: {
-                            "Authorization" : "Bearer eyJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJzZWxmIiwic3ViIjoiaHVnbyIsImV4cCI6MTY5NDc5OTA2MCwiaWF0IjoxNjk0NzkxODYwLCJyb2xlcyI6IlVTRVIifQ.ytYNuqY463EhUovwlc6fu0qPceC06HUBtbr5Id5rMPYmbnQSrU1A-1ANythN4-pyxEPtMrzuiMo4f4RQQSXn03gD8e-51NVOChnBfCX2C4cM_apQ_LZZ8UNe-UQnQt0JftOjAH9HJj3kWg7HthcsFITY-n5vDpOgpMklXOzkBK_jIM25zE5O351l5WAzAOCAUdOxdvn-CEhRKjark-DOgIVx8HnHnmD4fPVuctQ8mqh-iEDLlDfCQ5As2q3BQznCMcUrq_3ckPzcxEk-1O_ndELaQS81TJd5CXgAW3lrhybJbtxhDbRzKY4uZyF53-43Yz22jk4Jz71vuaI1Gjua0A"
+                            "Authorization" : "Bearer eyJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJzZWxmIiwic3ViIjoiYWRtaW4iLCJleHAiOjE2OTQ4MTQ5NjgsImlhdCI6MTY5NDgwNzc2OCwicm9sZXMiOiJBRE1JTiJ9.E1YkxuxRvC4zaAVXdvF18ZW8zQ5Y2DvH4giz4BWe6gKe944DwaoqHS4p56rvU_ZWcedXyZTNPqgFqWNK3Aer2Sh3NlmFU7u2s3SIrJBNeuNo4IBHg4lTCEoV98gMgFsTst3wHMO4QQHaPRonoAz0NqKDBKdR2a-hxpbnmIRfaKld8yDOkA4-t17WGZlErm-CSxbr9YyZ8lwXkYy_VG17uH6C2Oeaip-8sZ2d7g8m9l001Ox43jWNbz7ouJYOVhwXujzEspb9TaFSILnhXd1Mkktf6G4fvYt5qHIep0avOwMofPQaMXE7BKnrhWQW6qf7BYMs5GoyktqDqVwuFTt9iw"
                         }
                     })
                       .then(response => response.json())

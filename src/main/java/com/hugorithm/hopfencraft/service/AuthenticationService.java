@@ -50,13 +50,13 @@ public class AuthenticationService {
             Optional<ApplicationUser> existingUser = userRepository.findByUsername(username);
 
             if (existingUser.isPresent()) {
-                throw new UsernameAlreadyExistsException("Username {} is already taken", username);
+                throw new UsernameAlreadyExistsException("Username %s is already taken", username);
             }
 
             Optional<ApplicationUser> existingEmail = userRepository.findByEmail(email);
 
             if (existingEmail.isPresent()) {
-                throw new EmailAlreadyTakenException("Email {} is already taken", email);
+                throw new EmailAlreadyTakenException("Email %s is already taken", email);
             }
 
             String encodedPassword = passwordEncoder.encode(password);

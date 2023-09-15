@@ -83,7 +83,13 @@ public class OrderService {
 
             List<CartItemDTO> cartItemsDTO = convertCartItemIntoDTO(cartItems);
 
-            return ResponseEntity.status(HttpStatus.CREATED).body(new OrderResponseDTO(total, cartItemsDTO, order.getOrderDate()));
+            return ResponseEntity.status(HttpStatus.CREATED)
+                    .body(new OrderResponseDTO(
+                            savedOrder.getOrderId(),
+                            savedOrder.getTotal(),
+                            cartItemsDTO,
+                            savedOrder.getOrderDate()
+                    ));
         } catch (UsernameNotFoundException | OrderCartIsEmptyException ex) {
             LOGGER.error(ex.getMessage(), ex);
             return ResponseEntity.badRequest().build();

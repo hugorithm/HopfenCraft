@@ -14,6 +14,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class OrderResponseDTO {
+    private Long orderId;
     @JsonFormat(shape = JsonFormat.Shape.STRING)
     private BigDecimal total;
     private List<CartItemDTO> cartItems;

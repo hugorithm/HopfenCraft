@@ -4,6 +4,9 @@ package com.hugorithm.hopfencraft.service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.hugorithm.hopfencraft.enums.OrderStatus;
+import com.hugorithm.hopfencraft.enums.PaymentMethod;
+import com.hugorithm.hopfencraft.exception.order.OrderPaymentException;
 import com.hugorithm.hopfencraft.exception.order.OrderNotFoundException;
 import com.hugorithm.hopfencraft.exception.order.OrderUserMismatchException;
 import com.hugorithm.hopfencraft.exception.paypal.PaypalAccessTokenException;
@@ -84,6 +87,8 @@ public class PaypalService {
 
     public ResponseEntity<Object> capturePayment(Jwt jwt, String orderId) {
         try {
+            ApplicationUser user = jwtService.getUserFromJwt(jwt);
+
             String accessToken = generateAccessToken();
             HttpHeaders headers = new HttpHeaders();
             RestTemplate restTemplate = new RestTemplate();
@@ -122,10 +127,14 @@ public class PaypalService {
     public ResponseEntity<Object> createOrder(Jwt jwt, Long orderId) {
         try {
             ApplicationUser user = jwtService.getUserFromJwt(jwt);
-            Order order = orderRepository.findById(orderId).orElseThrow(() -> new OrderNotFoundException("Order not found with id: {}", orderId));
+            Order order = orderRepository.findById(orderId).orElseThrow(() -> new OrderNotFoundException("Order not found with id: %s", orderId));
 
             if (!order.getUser().getUserId().equals(user.getUserId())) {
-                throw new OrderUserMismatchException("Order user id: {} does not match user id: {}", order.getUser().getUserId(), user.getUserId());
+                throw new OrderUserMismatchException("Order user id: %s does not match user id: %s", order.getUser().getUserId(), user.getUserId());
+            }
+
+            if (order.getOrderStatus().equals(OrderStatus.PAID) || order.getOrderStatus().equals(OrderStatus.CANCELED)) {
+                throw new OrderPaymentException("Order status is PAID or CANCELED");
             }
 
             String accessToken = generateAccessToken();
@@ -149,7 +158,7 @@ public class PaypalService {
             amountNode.put("value", order.getTotal());
             String requestJson = jsonNode.toString();
 
-            HttpEntity<String> entity = new HttpEntity<String>(requestJson, headers);
+            HttpEntity<String> entity = new HttpEntity<>(requestJson, headers);
 
             ResponseEntity<Object> response = restTemplate.exchange(
                     PAYPAL_BASE_URL + "/v2/checkout/orders",
@@ -160,12 +169,16 @@ public class PaypalService {
 
             if (response.getStatusCode() == HttpStatus.CREATED) {
                 LOGGER.info("Paypal order created");
+                order.setOrderStatus(OrderStatus.PROCESSING);
+                order.setPaymentMethod(PaymentMethod.PAYPAL);
+                orderRepository.save(order);
+
                 return ResponseEntity.status(response.getStatusCode()).body(response.getBody());
             } else {
                 LOGGER.error("Failed to create paypal order");
                 return ResponseEntity.status(response.getStatusCode()).build();
             }
-        } catch (PaypalAccessTokenException | OrderUserMismatchException ex) {
+        } catch (PaypalAccessTokenException | OrderUserMismatchException | OrderPaymentException ex) {
             LOGGER.error(ex.getMessage(), ex);
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         } catch (UsernameNotFoundException ex) {
