@@ -1,7 +1,7 @@
 package com.hugorithm.hopfencraft.controller;
 
-import com.hugorithm.hopfencraft.dto.CartRegistrationDTO;
-import com.hugorithm.hopfencraft.dto.CartResponseDTO;
+import com.hugorithm.hopfencraft.dto.cart.CartRegistrationDTO;
+import com.hugorithm.hopfencraft.dto.cart.CartResponseDTO;
 import com.hugorithm.hopfencraft.service.ShoppingCartService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Positive;

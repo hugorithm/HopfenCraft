@@ -1,8 +1,8 @@
 package com.hugorithm.hopfencraft.controller;
 
-import com.hugorithm.hopfencraft.dto.ProductDTO;
-import com.hugorithm.hopfencraft.dto.ProductRegistrationDTO;
-import com.hugorithm.hopfencraft.dto.ProductUpdateDTO;
+import com.hugorithm.hopfencraft.dto.product.ProductDTO;
+import com.hugorithm.hopfencraft.dto.product.ProductRegistrationDTO;
+import com.hugorithm.hopfencraft.dto.product.ProductUpdateDTO;
 import com.hugorithm.hopfencraft.model.Product;
 import com.hugorithm.hopfencraft.service.ProductService;
 import jakarta.validation.Valid;

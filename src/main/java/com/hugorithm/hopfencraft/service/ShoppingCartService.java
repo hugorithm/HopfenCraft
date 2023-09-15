@@ -1,8 +1,8 @@
 package com.hugorithm.hopfencraft.service;
 
-import com.hugorithm.hopfencraft.dto.CartItemDTO;
-import com.hugorithm.hopfencraft.dto.CartResponseDTO;
-import com.hugorithm.hopfencraft.dto.ProductDTO;
+import com.hugorithm.hopfencraft.dto.cart.CartItemDTO;
+import com.hugorithm.hopfencraft.dto.cart.CartResponseDTO;
+import com.hugorithm.hopfencraft.dto.product.ProductDTO;
 import com.hugorithm.hopfencraft.exception.cart.CartItemNotFoundException;
 import com.hugorithm.hopfencraft.exception.cart.CartItemQuantityExceedsAvailableException;
 import com.hugorithm.hopfencraft.exception.product.ProductNotFoundException;

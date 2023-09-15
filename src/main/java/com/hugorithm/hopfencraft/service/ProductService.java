@@ -1,6 +1,6 @@
 package com.hugorithm.hopfencraft.service;
 
-import com.hugorithm.hopfencraft.dto.ProductDTO;
+import com.hugorithm.hopfencraft.dto.product.ProductDTO;
 import com.hugorithm.hopfencraft.exception.product.ProductAlreadyExistsException;
 import com.hugorithm.hopfencraft.exception.product.ProductNotFoundException;
 import com.hugorithm.hopfencraft.exception.product.ProductUpdateException;
@@ -70,7 +70,7 @@ public class ProductService {
 
     public ResponseEntity<ProductDTO> updateProduct(Long productId, String brand, String name, String description, Integer quantity, BigDecimal price) {
         try {
-            Product product = productRepository.findById(productId).orElseThrow(() -> new ProductNotFoundException(String.format("Product not found with id: %s", productId)));
+            Product product = productRepository.findById(productId).orElseThrow(() -> new ProductNotFoundException("Product not found with id: {} ", productId));
 
             if (brand != null && !brand.isBlank()) {
                 product.setBrand(brand);
@@ -129,7 +129,7 @@ public class ProductService {
     public ResponseEntity<String> removeProduct(Long productId) {
         try {
             Product product = productRepository.findById(productId)
-                    .orElseThrow(() -> new ProductNotFoundException(String.format("Product not found with id: %s", productId)));
+                    .orElseThrow(() -> new ProductNotFoundException("Product not found with id: {}", productId));
 
             productRepository.delete(product);
 

@@ -1,6 +1,6 @@
 package com.hugorithm.hopfencraft.controller;
 
-import com.hugorithm.hopfencraft.dto.OrderDTO;
+import com.hugorithm.hopfencraft.dto.order.OrderResponseDTO;
 import com.hugorithm.hopfencraft.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +20,7 @@ public class OrderController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<OrderDTO> createOrder(@AuthenticationPrincipal Jwt jwt){
+    public ResponseEntity<OrderResponseDTO> createOrder(@AuthenticationPrincipal Jwt jwt){
         return orderService.createOrder(jwt);
     }
 }

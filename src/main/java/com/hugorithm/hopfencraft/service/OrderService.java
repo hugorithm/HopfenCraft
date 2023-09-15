@@ -1,8 +1,8 @@
 package com.hugorithm.hopfencraft.service;
 
-import com.hugorithm.hopfencraft.dto.CartItemDTO;
-import com.hugorithm.hopfencraft.dto.OrderDTO;
-import com.hugorithm.hopfencraft.dto.ProductDTO;
+import com.hugorithm.hopfencraft.dto.cart.CartItemDTO;
+import com.hugorithm.hopfencraft.dto.order.OrderResponseDTO;
+import com.hugorithm.hopfencraft.dto.product.ProductDTO;
 import com.hugorithm.hopfencraft.enums.OrderStatus;
 import com.hugorithm.hopfencraft.exception.order.OrderCartIsEmptyException;
 import com.hugorithm.hopfencraft.model.ApplicationUser;
@@ -53,7 +53,7 @@ public class OrderService {
                 .collect(Collectors.toList());
     }
 
-    public ResponseEntity<OrderDTO> createOrder(Jwt jwt) {
+    public ResponseEntity<OrderResponseDTO> createOrder(Jwt jwt) {
         try {
             ApplicationUser user = jwtService.getUserFromJwt(jwt);
             List<CartItem> cartItems = user.getCartItems();
@@ -81,7 +81,7 @@ public class OrderService {
 
             List<CartItemDTO> cartItemsDTO = convertCartItemIntoDTO(cartItems);
 
-            return ResponseEntity.status(HttpStatus.CREATED).body(new OrderDTO(total, cartItemsDTO, order.getOrderDate()));
+            return ResponseEntity.status(HttpStatus.CREATED).body(new OrderResponseDTO(total, cartItemsDTO, order.getOrderDate()));
         } catch (UsernameNotFoundException | OrderCartIsEmptyException ex) {
             LOGGER.error(ex.getMessage(), ex);
             return ResponseEntity.badRequest().build();

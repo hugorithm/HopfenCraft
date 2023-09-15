@@ -3,7 +3,7 @@ import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
-import com.hugorithm.hopfencraft.dto.UserRegistrationResponseDTO;
+import com.hugorithm.hopfencraft.dto.authentication.UserRegistrationResponseDTO;
 import com.hugorithm.hopfencraft.enums.EmailType;
 import com.hugorithm.hopfencraft.exception.email.EmailAlreadyTakenException;
 import com.hugorithm.hopfencraft.exception.auth.UsernameAlreadyExistsException;
@@ -25,7 +25,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.hugorithm.hopfencraft.model.ApplicationUser;
 import com.hugorithm.hopfencraft.model.Role;
 import com.hugorithm.hopfencraft.repository.UserRepository;
-import com.hugorithm.hopfencraft.dto.LoginResponseDTO;
+import com.hugorithm.hopfencraft.dto.authentication.LoginResponseDTO;
 import com.hugorithm.hopfencraft.repository.RoleRepository;
 
 import javax.management.relation.RoleNotFoundException;
@@ -50,13 +50,13 @@ public class AuthenticationService {
             Optional<ApplicationUser> existingUser = userRepository.findByUsername(username);
 
             if (existingUser.isPresent()) {
-                throw new UsernameAlreadyExistsException(String.format("Username %s is already taken", username));
+                throw new UsernameAlreadyExistsException("Username {} is already taken", username);
             }
 
             Optional<ApplicationUser> existingEmail = userRepository.findByEmail(email);
 
             if (existingEmail.isPresent()) {
-                throw new EmailAlreadyTakenException(String.format("Email %s is already taken", email));
+                throw new EmailAlreadyTakenException("Email {} is already taken", email);
             }
 
             String encodedPassword = passwordEncoder.encode(password);
