@@ -1,6 +1,7 @@
 package com.hugorithm.hopfencraft.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -8,6 +9,7 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.Random;
 
 @Entity
 @Table(name = "products")
@@ -19,13 +21,13 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "product_id")
     private Long productId;
-    private String productCode;
     private String sku;
+    @NotBlank
     private String brand;
     @Column(unique = true)
     private String name;
     private String description;
-    private int quantity;
+    private int stockQuantity;
     private BigDecimal price;
     @CreationTimestamp
     private LocalDateTime registerDateTime;
@@ -36,9 +38,10 @@ public class Product {
         this.brand = brand;
         this.name = name;
         this.description = description;
-        this.quantity = quantity;
+        this.stockQuantity = quantity;
         this.price = price;
         this.user = user;
+        this.sku = generateProductCode(brand, name);
     }
 
     public Product(Long productId, String brand, String name, String description, int quantity, BigDecimal price) {
@@ -46,7 +49,23 @@ public class Product {
         this.brand = brand;
         this.name = name;
         this.description = description;
-        this.quantity = quantity;
+        this.stockQuantity = quantity;
         this.price = price;
+        this.sku = generateProductCode(brand, name);
+    }
+
+    private String generateProductCode(String brand, String name){
+        String replacedName = name.replaceAll("\\s", "");
+        String replacedBrand = brand.replaceAll("\\s", "");
+        return replacedBrand.substring(0, 2).toUpperCase() +
+                generateRandomNumber() +
+                replacedName.substring(replacedName.length() - 3).toUpperCase() +
+                generateRandomNumber();
+    }
+
+    private String generateRandomNumber() {
+        Random random = new Random();
+        int randomNumber = random.nextInt(100);
+        return String.format("%02d", randomNumber);
     }
 }
