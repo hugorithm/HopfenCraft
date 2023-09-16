@@ -82,9 +82,12 @@ public class ShoppingCartService {
                 throw new CartItemQuantityExceedsAvailableException("Requested quantity exceeds available quantity");
             }
 
-        } catch (UsernameNotFoundException | ProductNotFoundException | CartItemQuantityExceedsAvailableException ex) {
+        } catch (UsernameNotFoundException | ProductNotFoundException ex) {
             LOGGER.error(ex.getMessage(), ex);
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        } catch (CartItemQuantityExceedsAvailableException ex) {
+            LOGGER.error(ex.getMessage(), ex);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
     }
 
