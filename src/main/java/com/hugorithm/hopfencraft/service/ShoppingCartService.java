@@ -48,7 +48,7 @@ public class ShoppingCartService {
                                 ci.getProduct().getBrand(),
                                 ci.getProduct().getName(),
                                 ci.getProduct().getDescription(),
-                                ci.getProduct().getQuantity(),
+                                ci.getProduct().getStockQuantity(),
                                 ci.getProduct().getPrice(),
                                 ci.getProduct().getRegisterDateTime()
                         ),
@@ -71,7 +71,7 @@ public class ShoppingCartService {
                     .mapToInt(CartItem::getQuantity)
                     .sum();
 
-            if (quantity + totalQuantity <= product.getQuantity()) {
+            if (quantity + totalQuantity <= product.getStockQuantity()) {
                 CartItem cartItem = new CartItem(product, user, quantity);
 
                 cartItemRepository.save(cartItem);

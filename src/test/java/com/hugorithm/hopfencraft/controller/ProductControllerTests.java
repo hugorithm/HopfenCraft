@@ -257,6 +257,7 @@ public class ProductControllerTests {
         Long productId = 1L;
         Product existingProduct = new Product(
                 productId,
+                "SKU01",
                 "Existing Brand",
                 "Existing Product",
                 "Existing Description",
@@ -275,7 +276,7 @@ public class ProductControllerTests {
                 .andExpect(jsonPath("$.brand", equalTo(existingProduct.getBrand())))
                 .andExpect(jsonPath("$.name", equalTo(existingProduct.getName())))
                 .andExpect(jsonPath("$.description", equalTo(existingProduct.getDescription())))
-                .andExpect(jsonPath("$.quantity", equalTo(existingProduct.getQuantity())))
+                .andExpect(jsonPath("$.quantity", equalTo(existingProduct.getStockQuantity())))
                 .andExpect(jsonPath("$.price", equalTo(existingProduct.getPrice().toString())));
     }
 

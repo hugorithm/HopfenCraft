@@ -40,7 +40,7 @@ public class ProductController {
                         p.getBrand(),
                         p.getName(),
                         p.getDescription(),
-                        p.getQuantity(),
+                        p.getStockQuantity(),
                         p.getPrice(),
                         p.getRegisterDateTime()
                 )
@@ -57,7 +57,7 @@ public class ProductController {
                     p.getBrand(),
                     p.getName(),
                     p.getDescription(),
-                    p.getQuantity(),
+                    p.getStockQuantity(),
                     p.getPrice(),
                     p.getRegisterDateTime()
                     )

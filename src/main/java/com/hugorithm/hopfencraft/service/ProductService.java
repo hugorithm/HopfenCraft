@@ -47,7 +47,7 @@ public class ProductService {
                     p.getBrand(),
                     p.getName(),
                     p.getDescription(),
-                    p.getQuantity(),
+                    p.getStockQuantity(),
                     p.getPrice(),
                     p.getRegisterDateTime()
             ));
@@ -87,7 +87,7 @@ public class ProductService {
 
             if (quantity != null) {
                 if (quantity >= 0) {
-                    product.setQuantity(quantity);
+                    product.setStockQuantity(quantity);
                 } else {
                     throw new ProductUpdateException("Quantity must be positive or zero");
                 }
@@ -113,7 +113,7 @@ public class ProductService {
                     product.getBrand(),
                     product.getName(),
                     product.getDescription(),
-                    product.getQuantity(),
+                    product.getStockQuantity(),
                     product.getPrice(),
                     product.getRegisterDateTime()
             ));

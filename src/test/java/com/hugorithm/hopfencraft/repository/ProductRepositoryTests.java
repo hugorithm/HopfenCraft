@@ -98,7 +98,7 @@ public class ProductRepositoryTests {
         user.setEmail("testuser@example.com");
         //Arrange
         Product product = new Product("Paulaner", "Paulaner Weissbier", "Weiss", 10, new BigDecimal("2.39"), user);
-        int q = product.getQuantity();
+        int q = product.getStockQuantity();
         String b = product.getBrand();
         String n = product.getName();
         String d = product.getDescription();
@@ -112,7 +112,7 @@ public class ProductRepositoryTests {
         Product repoProduct = productRepository.findById(product.getProductId()).get();
         repoProduct.setBrand("Franziskaner");
         repoProduct.setName("Franziskaner Hefeweizen");
-        repoProduct.setQuantity(8);
+        repoProduct.setStockQuantity(8);
         repoProduct.setDescription("weizen");
         repoProduct.setPrice(new BigDecimal("1.99"));
         repoProduct.setRegisterDateTime(LocalDateTime.now());
@@ -125,7 +125,7 @@ public class ProductRepositoryTests {
         Assertions.assertThat(updatedProduct.getDescription()).isNotNull();
         Assertions.assertThat(updatedProduct.getPrice()).isNotNull();
         Assertions.assertThat(updatedProduct.getRegisterDateTime()).isNotNull();
-        Assertions.assertThat(updatedProduct.getQuantity()).isNotEqualTo(q);
+        Assertions.assertThat(updatedProduct.getStockQuantity()).isNotEqualTo(q);
         Assertions.assertThat(updatedProduct.getBrand()).isNotEqualTo(b);
         Assertions.assertThat(updatedProduct.getName()).isNotEqualTo(n);
         Assertions.assertThat(updatedProduct.getDescription()).isNotEqualTo(d);
