@@ -4,12 +4,15 @@ import com.hugorithm.hopfencraft.dto.cart.CartItemDTO;
 import com.hugorithm.hopfencraft.dto.order.OrderResponseDTO;
 import com.hugorithm.hopfencraft.dto.product.ProductDTO;
 import com.hugorithm.hopfencraft.enums.OrderStatus;
+import com.hugorithm.hopfencraft.exception.order.InsufficientStockException;
 import com.hugorithm.hopfencraft.exception.order.OrderCartIsEmptyException;
 import com.hugorithm.hopfencraft.model.ApplicationUser;
 import com.hugorithm.hopfencraft.model.CartItem;
 import com.hugorithm.hopfencraft.model.Order;
+import com.hugorithm.hopfencraft.model.Product;
 import com.hugorithm.hopfencraft.repository.CartItemRepository;
 import com.hugorithm.hopfencraft.repository.OrderRepository;
+import com.hugorithm.hopfencraft.repository.ProductRepository;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,6 +35,7 @@ public class OrderService {
     private final JwtService jwtService;
     private final OrderRepository orderRepository;
     private final CartItemRepository cartItemRepository;
+    private final ProductRepository productRepository;
     private final static Logger LOGGER = LoggerFactory.getLogger(OrderService.class);
 
     private List<CartItemDTO> convertCartItemIntoDTO(List<CartItem> cartItems){
@@ -43,7 +47,7 @@ public class OrderService {
                                 ci.getProduct().getBrand(),
                                 ci.getProduct().getName(),
                                 ci.getProduct().getDescription(),
-                                ci.getProduct().getQuantity(),
+                                ci.getProduct().getStockQuantity(),
                                 ci.getProduct().getPrice(),
                                 ci.getProduct().getRegisterDateTime()
                         ),
@@ -93,6 +97,26 @@ public class OrderService {
         } catch (UsernameNotFoundException | OrderCartIsEmptyException ex) {
             LOGGER.error(ex.getMessage(), ex);
             return ResponseEntity.badRequest().build();
+        }
+    }
+
+    public void updateStock(Order order) {
+        try {
+            for (CartItem orderItem : order.getOrderItems()) {
+                Product product = orderItem.getProduct();
+                int orderedQuantity = orderItem.getQuantity();
+                int currentStock = product.getStockQuantity();
+
+                if (currentStock < orderedQuantity) {
+                    throw new InsufficientStockException("Insufficient stock for product: %s", product.getProductId());
+                }
+
+                // Update stock quantity
+                product.setStockQuantity(currentStock - orderedQuantity);
+                productRepository.save(product);
+            }
+        } catch (InsufficientStockException ex) {
+            LOGGER.error(ex.getMessage(), ex);
         }
     }
 }

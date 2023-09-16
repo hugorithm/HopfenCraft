@@ -37,6 +37,7 @@ import java.util.Base64;
 public class PaypalService {
     private final JwtService jwtService;
     private final OrderRepository orderRepository;
+    private final OrderService orderService;
     private final String CLIENT_ID;
     private final String CLIENT_SECRET;
     private final static Logger LOGGER = LoggerFactory.getLogger(PaypalService.class);
@@ -46,10 +47,11 @@ public class PaypalService {
     @Autowired
     public PaypalService(JwtService jwtService,
                          OrderRepository orderRepository,
-                         @Value("${paypal.client.id}") String clientId,
+                         OrderService orderService, @Value("${paypal.client.id}") String clientId,
                          @Value("${paypal.client.secret}") String clientSecret) {
         this.jwtService = jwtService;
         this.orderRepository = orderRepository;
+        this.orderService = orderService;
         this.CLIENT_ID = clientId;
         this.CLIENT_SECRET = clientSecret;
     }
@@ -140,8 +142,10 @@ public class PaypalService {
                 }
 
                 order.setOrderStatus(OrderStatus.PAID);
-                orderRepository.save(order);
 
+                //TODO: Check if this works tomorrow. I'm tired :D
+                Order savedOrder = orderRepository.save(order);
+                orderService.updateStock(savedOrder);
 
                 return ResponseEntity.status(response.getStatusCode()).body(response.getBody());
             } else {
@@ -205,7 +209,7 @@ public class PaypalService {
                 item.put("name", orderItem.getProduct().getName());
                 item.put("description", orderItem.getProduct().getDescription());
                 //TODO: Add sku to product as long as a productCode
-                item.put("sku", orderItem.getProduct().getProductId().toString());
+                item.put("sku", orderItem.getProduct().getSku());
 
                 ObjectNode unitAmount1 = item.putObject("unit_amount");
                 unitAmount1.put("currency_code", order.getCurrency());
