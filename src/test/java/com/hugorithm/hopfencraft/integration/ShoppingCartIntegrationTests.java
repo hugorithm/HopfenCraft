@@ -240,7 +240,7 @@ public class ShoppingCartIntegrationTests {
                 CartResponseDTO.class
         );
         // Assert that the response has status code Bad Request (400) indicating that the quantity is invalid
-        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
         assertNull(response.getBody());
     }
 
