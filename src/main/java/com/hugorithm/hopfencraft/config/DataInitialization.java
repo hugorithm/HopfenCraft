@@ -59,18 +59,18 @@ public class DataInitialization implements CommandLineRunner {
 
         //Add products
 
-        Product p1 = new Product("Paulaner", "Paulaner", "Weiss", 10, new BigDecimal("2.39"), Currency.EUR, admin);
-        Product p2 = new Product("Franziskaner", "Franziskaner", "Weiss", 31, new BigDecimal("2.29"), Currency.EUR, admin);
-        Product p3 = new Product("La Choufe", "La Choufe", "Belgium Gold", 14, new BigDecimal("3.57"), Currency.EUR, admin);
-        Product p4 = new Product("Benediktiner", "Benediktiner", "Weiss", 10, new BigDecimal("2.39"), Currency.EUR, admin);
-        Product p5 = new Product("Spaten", "Spaten", "Weiss", 31, new BigDecimal("2.29"), Currency.EUR, admin);
-        Product p6 = new Product("Ayinger", "Ayinger", "Belgium Gold", 14, new BigDecimal("3.57"), Currency.EUR, admin);
-        Product p7 = new Product("Krombacher", "Krombacher", "Weiss", 10, new BigDecimal("2.39"), Currency.EUR, admin);
-        Product p8 = new Product("Erdinger", "Erdinger", "Weiss", 31, new BigDecimal("2.29"), Currency.EUR, admin);
-        Product p9 = new Product("Augistiner", "Augistiner", "Belgium Gold", 14, new BigDecimal("3.57"), Currency.EUR, admin);
-        Product p10 = new Product("Kapunziner", "Kapunziner", "Weiss", 10, new BigDecimal("2.39"), Currency.EUR, admin);
-        Product p11 = new Product("Munchener", "Munchener", "Weiss", 31, new BigDecimal("2.29"), Currency.EUR, admin);
-        Product p12 = new Product("La Choufe 2", "La Choufe 2", "Belgium Gold", 14, new BigDecimal("3.57"), Currency.EUR, admin);
+        Product p1 = new Product("Paulaner", "Paulaner Weissbier", "German Hefe Weissbier, 5,5%. 50 cl", 10, new BigDecimal("2.06"), Currency.EUR, admin);
+        Product p2 = new Product("Weihenstephaner", "Weihenstephaner Hefeweissbier", "Blonde beer from Gemrany. 5,4%. 50 cl. ", 31, new BigDecimal("1.90"), Currency.EUR, admin);
+        Product p3 = new Product("Franziskaner", "Franziskaner Weissbier Naturtrüb", "German wheat beer, Weissbier style, 5%. 50 cl", 14, new BigDecimal("1.57"), Currency.EUR, admin);
+        Product p4 = new Product("Schneider", "Schneider Weisse Aventinus Tap 6", "Bavaria's oldest wheat Doppelbock, 8,2%. 50 cl", 10, new BigDecimal("2.19"), Currency.EUR, admin);
+        Product p5 = new Product("Ayinger", "Ayinger Lager Hell", "Typical Munich Hell Lager, mild and very pleasant taste, 4.9%. 50 cl.", 31, new BigDecimal("2.09"), Currency.EUR, admin);
+        Product p6 = new Product("Ayinger", "Ayinger Braüweisse", "Classic Bavarian wheat-beer, 5,1%. 50 cl", 14, new BigDecimal("2.50"), Currency.EUR, admin);
+        Product p7 = new Product("Schneider", "Schneider Weisse Tap 1 Meine helle Weisse", "German Hefeweizen, 5,2%. 50 cl", 10, new BigDecimal("1.98"), Currency.EUR, admin);
+        Product p8 = new Product("Warsteiner", "Warsteiner Premium Beer", "German Pilsner made from the highest quality ingredients, 4.8%, 33 cl", 31, new BigDecimal("2.01"), Currency.EUR, admin);
+        Product p9 = new Product("Spaten", "Spaten Münchner Hell", "German wheat beer brewed with German hops, 5.2%. 50 cl.", 14, new BigDecimal("2.06"), Currency.EUR, admin);
+        Product p10 = new Product("Ayinger", "Ayinger Urweisse", "Wheat beer with an amber colour and an intense and complex character, 5.8%. 50 cl.", 10, new BigDecimal("2.53"), Currency.EUR, admin);
+        Product p11 = new Product("Chouffe", "La Chouffe", "Belgian Strong Pale Ale, 8%. 33 cl.", 31, new BigDecimal("3.79"), Currency.EUR, admin);
+        Product p12 = new Product("Erdinger", "Erdinger Weissbier", "Classic Bavarian Weissbier, fermented in the bottle 5.3%, 50 cl", 14, new BigDecimal("2.11"), Currency.EUR, admin);
 
         List<Product> ps = Arrays.asList(p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12);
         productRepository.saveAll(ps);
