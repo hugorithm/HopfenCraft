@@ -22,6 +22,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
@@ -108,7 +109,8 @@ public class ProductService {
                 throw new ProductUpdateException("No fields to update");
             }
 
-           Product savedProduct = productRepository.save(product);
+            product.setUpdatedDate(LocalDateTime.now());
+            Product savedProduct = productRepository.save(product);
 
             return ResponseEntity.ok(new ProductDTO(
                     savedProduct.getProductId(),

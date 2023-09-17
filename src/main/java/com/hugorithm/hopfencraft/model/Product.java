@@ -34,6 +34,7 @@ public class Product {
     private Currency currency;
     @CreationTimestamp
     private LocalDateTime registerDateTime;
+    private LocalDateTime updatedDate;
     @ManyToOne
     private ApplicationUser user;
 
