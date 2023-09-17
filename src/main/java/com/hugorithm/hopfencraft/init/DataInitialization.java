@@ -1,6 +1,5 @@
 package com.hugorithm.hopfencraft.init;
 
-import com.hugorithm.hopfencraft.enums.Currency;
 import com.hugorithm.hopfencraft.model.ApplicationUser;
 import com.hugorithm.hopfencraft.model.Product;
 import com.hugorithm.hopfencraft.model.Role;
