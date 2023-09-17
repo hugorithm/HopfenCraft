@@ -10,8 +10,6 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Table(name = "orders")
@@ -26,9 +24,6 @@ public class Order {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private ApplicationUser user;
-
-    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private List<CartItem> orderItems;
 
     @Column(name = "order_date")
     @CreationTimestamp
@@ -72,11 +67,6 @@ public class Order {
     public Order(ApplicationUser user, BigDecimal total) {
         this.user = user;
         this.total = total;
-        this.orderItems = new ArrayList<>();
     }
 
-    public void setOrderItems(List<CartItem> orderItems) {
-        this.orderItems.clear(); // Clear existing references
-        this.orderItems.addAll(orderItems); // Add the new order items
-    }
 }
