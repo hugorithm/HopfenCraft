@@ -1,5 +1,6 @@
 package com.hugorithm.hopfencraft.config;
 
+import com.hugorithm.hopfencraft.enums.Currency;
 import com.hugorithm.hopfencraft.model.ApplicationUser;
 import com.hugorithm.hopfencraft.model.Product;
 import com.hugorithm.hopfencraft.model.Role;
@@ -58,18 +59,18 @@ public class DataInitialization implements CommandLineRunner {
 
         //Add products
 
-        Product p1 = new Product("Paulaner", "Paulaner", "Weiss", 10, new BigDecimal("2.39"), admin);
-        Product p2 = new Product("Franziskaner", "Franziskaner", "Weiss", 31, new BigDecimal("2.29"), admin);
-        Product p3 = new Product("La Choufe", "La Choufe", "Belgium Gold", 14, new BigDecimal("3.57"), admin);
-        Product p4 = new Product("Benediktiner", "Benediktiner", "Weiss", 10, new BigDecimal("2.39"), admin);
-        Product p5 = new Product("Spaten", "Spaten", "Weiss", 31, new BigDecimal("2.29"), admin);
-        Product p6 = new Product("Ayinger", "Ayinger", "Belgium Gold", 14, new BigDecimal("3.57"), admin);
-        Product p7 = new Product("Krombacher", "Krombacher", "Weiss", 10, new BigDecimal("2.39"), admin);
-        Product p8 = new Product("Erdinger", "Erdinger", "Weiss", 31, new BigDecimal("2.29"), admin);
-        Product p9 = new Product("Augistiner", "Augistiner", "Belgium Gold", 14, new BigDecimal("3.57"), admin);
-        Product p10 = new Product("Kapunziner", "Kapunziner", "Weiss", 10, new BigDecimal("2.39"), admin);
-        Product p11 = new Product("Munchener", "Munchener", "Weiss", 31, new BigDecimal("2.29"), admin);
-        Product p12 = new Product("La Choufe 2", "La Choufe 2", "Belgium Gold", 14, new BigDecimal("3.57"), admin);
+        Product p1 = new Product("Paulaner", "Paulaner", "Weiss", 10, new BigDecimal("2.39"), Currency.EUR, admin);
+        Product p2 = new Product("Franziskaner", "Franziskaner", "Weiss", 31, new BigDecimal("2.29"), Currency.EUR, admin);
+        Product p3 = new Product("La Choufe", "La Choufe", "Belgium Gold", 14, new BigDecimal("3.57"), Currency.EUR, admin);
+        Product p4 = new Product("Benediktiner", "Benediktiner", "Weiss", 10, new BigDecimal("2.39"), Currency.EUR, admin);
+        Product p5 = new Product("Spaten", "Spaten", "Weiss", 31, new BigDecimal("2.29"), Currency.EUR, admin);
+        Product p6 = new Product("Ayinger", "Ayinger", "Belgium Gold", 14, new BigDecimal("3.57"), Currency.EUR, admin);
+        Product p7 = new Product("Krombacher", "Krombacher", "Weiss", 10, new BigDecimal("2.39"), Currency.EUR, admin);
+        Product p8 = new Product("Erdinger", "Erdinger", "Weiss", 31, new BigDecimal("2.29"), Currency.EUR, admin);
+        Product p9 = new Product("Augistiner", "Augistiner", "Belgium Gold", 14, new BigDecimal("3.57"), Currency.EUR, admin);
+        Product p10 = new Product("Kapunziner", "Kapunziner", "Weiss", 10, new BigDecimal("2.39"), Currency.EUR, admin);
+        Product p11 = new Product("Munchener", "Munchener", "Weiss", 31, new BigDecimal("2.29"), Currency.EUR, admin);
+        Product p12 = new Product("La Choufe 2", "La Choufe 2", "Belgium Gold", 14, new BigDecimal("3.57"), Currency.EUR, admin);
 
         List<Product> ps = Arrays.asList(p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12);
         productRepository.saveAll(ps);

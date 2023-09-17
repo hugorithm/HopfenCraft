@@ -1,6 +1,7 @@
 package com.hugorithm.hopfencraft.dto.product;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.hugorithm.hopfencraft.enums.Currency;
 import com.hugorithm.hopfencraft.validators.PositiveBigDecimal;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -27,4 +28,5 @@ public class ProductRegistrationDTO {
     @PositiveBigDecimal
     @NotNull
     private BigDecimal price;
+    private Currency currency;
 }

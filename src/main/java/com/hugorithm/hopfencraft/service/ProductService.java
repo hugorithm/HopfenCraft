@@ -1,6 +1,7 @@
 package com.hugorithm.hopfencraft.service;
 
 import com.hugorithm.hopfencraft.dto.product.ProductDTO;
+import com.hugorithm.hopfencraft.enums.Currency;
 import com.hugorithm.hopfencraft.exception.product.ProductAlreadyExistsException;
 import com.hugorithm.hopfencraft.exception.product.ProductNotFoundException;
 import com.hugorithm.hopfencraft.exception.product.ProductUpdateException;
@@ -33,7 +34,7 @@ public class ProductService {
     private final JwtService jwtService;
     private final static Logger LOGGER = LoggerFactory.getLogger(ProductService.class);
 
-    public ResponseEntity<ProductDTO> registerProduct(Jwt jwt, String brand, String name, String description, int quantity, BigDecimal price) {
+    public ResponseEntity<ProductDTO> registerProduct(Jwt jwt, String brand, String name, String description, int quantity, BigDecimal price, Currency currency) {
         try {
             Optional<Product> product = productRepository.findProductByName(name);
 
@@ -41,7 +42,7 @@ public class ProductService {
                 throw new ProductAlreadyExistsException("Product already exists");
             }
             ApplicationUser user = jwtService.getUserFromJwt(jwt);
-            Product p = productRepository.save(new Product(brand, name, description, quantity, price, user));
+            Product p = productRepository.save(new Product(brand, name, description, quantity, price, currency, user));
             return ResponseEntity.status(HttpStatus.CREATED).body(new ProductDTO(
                     p.getProductId(),
                     p.getBrand(),
@@ -49,6 +50,7 @@ public class ProductService {
                     p.getDescription(),
                     p.getStockQuantity(),
                     p.getPrice(),
+                    p.getCurrency(),
                     p.getRegisterDateTime()
             ));
         } catch (NoSuchElementException | UsernameNotFoundException ex) {
@@ -106,16 +108,17 @@ public class ProductService {
                 throw new ProductUpdateException("No fields to update");
             }
 
-            productRepository.save(product);
+           Product savedProduct = productRepository.save(product);
 
             return ResponseEntity.ok(new ProductDTO(
-                    product.getProductId(),
-                    product.getBrand(),
-                    product.getName(),
-                    product.getDescription(),
-                    product.getStockQuantity(),
-                    product.getPrice(),
-                    product.getRegisterDateTime()
+                    savedProduct.getProductId(),
+                    savedProduct.getBrand(),
+                    savedProduct.getName(),
+                    savedProduct.getDescription(),
+                    savedProduct.getStockQuantity(),
+                    savedProduct.getPrice(),
+                    savedProduct.getCurrency(),
+                    savedProduct.getRegisterDateTime()
             ));
 
         } catch (ProductNotFoundException ex) {

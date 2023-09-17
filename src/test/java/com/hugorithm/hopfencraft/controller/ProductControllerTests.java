@@ -3,6 +3,7 @@ package com.hugorithm.hopfencraft.controller;
 import com.hugorithm.hopfencraft.dto.product.ProductDTO;
 import com.hugorithm.hopfencraft.dto.product.ProductRegistrationDTO;
 import com.hugorithm.hopfencraft.dto.product.ProductUpdateDTO;
+import com.hugorithm.hopfencraft.enums.Currency;
 import com.hugorithm.hopfencraft.model.ApplicationUser;
 import com.hugorithm.hopfencraft.model.Product;
 import com.hugorithm.hopfencraft.service.ProductService;
@@ -64,7 +65,8 @@ public class ProductControllerTests {
                 "Paulaner Weizen",
                 "Weiss",
                 10,
-                price
+                price,
+                Currency.EUR
         );
 
         // Define the expected response from the service
@@ -75,6 +77,7 @@ public class ProductControllerTests {
                 "Weiss",
                 10,
                 price,
+                Currency.EUR,
                 LocalDateTime.now()
         );
 
@@ -85,7 +88,8 @@ public class ProductControllerTests {
                 eq(validInput.getName()),
                 eq(validInput.getDescription()),
                 eq(validInput.getQuantity()),
-                eq(validInput.getPrice())
+                eq(validInput.getPrice()),
+                eq(validInput.getCurrency())
         )).thenReturn(ResponseEntity.status(HttpStatus.CREATED).body(expectedResponse));
 
         // Perform the POST request using mockMvc
@@ -108,7 +112,8 @@ public class ProductControllerTests {
                 eq(validInput.getName()),
                 eq(validInput.getDescription()),
                 eq(validInput.getQuantity()),
-                eq(validInput.getPrice())
+                eq(validInput.getPrice()),
+                eq(validInput.getCurrency())
         );
     }
 
@@ -128,7 +133,8 @@ public class ProductControllerTests {
                 "bb",
                 "cc",
                 10,
-                new BigDecimal("-2.6")
+                new BigDecimal("-2.6"),
+                Currency.EUR
         );
 
         mockMvc.perform(post("/product/register")
@@ -142,7 +148,8 @@ public class ProductControllerTests {
                 "bb",
                 "cc",
                 -10,
-                new BigDecimal("2.6")
+                new BigDecimal("2.6"),
+                Currency.EUR
         );
 
         mockMvc.perform(post("/product/register")
@@ -159,7 +166,8 @@ public class ProductControllerTests {
                 "Paulaner Weizen",
                 "Weiss",
                 10,
-                new BigDecimal("2.39")
+                new BigDecimal("2.39"),
+                Currency.EUR
         );
 
         // Simulate the ProductService returning a conflict response
@@ -169,7 +177,8 @@ public class ProductControllerTests {
                 eq(existingProduct.getName()),
                 eq(existingProduct.getDescription()),
                 eq(existingProduct.getQuantity()),
-                eq(existingProduct.getPrice())
+                eq(existingProduct.getPrice()),
+                eq(existingProduct.getCurrency())
         )).thenReturn(ResponseEntity.status(HttpStatus.CONFLICT).build());
 
         mockMvc.perform(post("/product/register")
@@ -187,7 +196,8 @@ public class ProductControllerTests {
                 "Invalid Description",
                 "Category",
                 10,
-                new BigDecimal("-1.0")
+                new BigDecimal("-1.0"),
+                Currency.EUR
         );
 
         mockMvc.perform(post("/product/register")
@@ -201,7 +211,8 @@ public class ProductControllerTests {
                 "Invalid Description",
                 "Category",
                 10,
-                BigDecimal.ZERO
+                BigDecimal.ZERO,
+                Currency.EUR
         );
 
         mockMvc.perform(post("/product/register")
@@ -213,18 +224,18 @@ public class ProductControllerTests {
     @Test
     public void GetProducts_Paginated_ReturnsPageOfProducts() throws Exception {
         // Define test data with multiple products
-        Product p1 = new Product(1L,"Paulaner", "Paulaner", "Weiss", 10, new BigDecimal("2.39"));
-        Product p2 = new Product(2L, "Franziskaner", "Franziskaner", "Weiss", 31, new BigDecimal("2.29"));
-        Product p3 = new Product(3L, "La Choufe", "La Choufe", "Belgium Gold", 14, new BigDecimal("3.57"));
-        Product p4 = new Product(4L,"Benediktiner", "Benediktiner", "Weiss", 10, new BigDecimal("2.39"));
-        Product p5 = new Product(5L, "Spaten", "Spaten", "Weiss", 31, new BigDecimal("2.29"));
-        Product p6 = new Product(6L, "Ayinger", "Ayinger", "Belgium Gold", 14, new BigDecimal("3.57"));
-        Product p7 = new Product(7L, "Krombacher", "Krombacher", "Weiss", 10, new BigDecimal("2.39"));
-        Product p8 = new Product(8L,"Erdinger", "Erdinger", "Weiss", 31, new BigDecimal("2.29"));
-        Product p9 = new Product(9L,"Augistiner", "Augistiner", "Belgium Gold", 14, new BigDecimal("3.57"));
-        Product p10 = new Product(10L,"Kapunziner", "Kapunziner", "Weiss", 10, new BigDecimal("2.39"));
-        Product p11 = new Product(11L,"Munchener", "Munchener", "Weiss", 31, new BigDecimal("2.29"));
-        Product p12 = new Product(12L,"La Choufe 2", "La Choufe 2", "Belgium Gold", 14, new BigDecimal("3.57"));
+        Product p1 = new Product(1L,"Paulaner", "Paulaner", "Weiss", 10, new BigDecimal("2.39"), Currency.EUR);
+        Product p2 = new Product(2L, "Franziskaner", "Franziskaner", "Weiss", 31, new BigDecimal("2.29"), Currency.EUR);
+        Product p3 = new Product(3L, "La Choufe", "La Choufe", "Belgium Gold", 14, new BigDecimal("3.57"), Currency.EUR);
+        Product p4 = new Product(4L,"Benediktiner", "Benediktiner", "Weiss", 10, new BigDecimal("2.39"), Currency.EUR);
+        Product p5 = new Product(5L, "Spaten", "Spaten", "Weiss", 31, new BigDecimal("2.29"), Currency.EUR);
+        Product p6 = new Product(6L, "Ayinger", "Ayinger", "Belgium Gold", 14, new BigDecimal("3.57"), Currency.EUR);
+        Product p7 = new Product(7L, "Krombacher", "Krombacher", "Weiss", 10, new BigDecimal("2.39"), Currency.EUR);
+        Product p8 = new Product(8L,"Erdinger", "Erdinger", "Weiss", 31, new BigDecimal("2.29"), Currency.EUR);
+        Product p9 = new Product(9L,"Augistiner", "Augistiner", "Belgium Gold", 14, new BigDecimal("3.57"), Currency.EUR);
+        Product p10 = new Product(10L,"Kapunziner", "Kapunziner", "Weiss", 10, new BigDecimal("2.39"), Currency.EUR);
+        Product p11 = new Product(11L,"Munchener", "Munchener", "Weiss", 31, new BigDecimal("2.29"), Currency.EUR);
+        Product p12 = new Product(12L,"La Choufe 2", "La Choufe 2", "Belgium Gold", 14, new BigDecimal("3.57"), Currency.EUR);
 
         List<Product> products = Arrays.asList(p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12);
 
@@ -263,6 +274,7 @@ public class ProductControllerTests {
                 "Existing Description",
                 5,
                 new BigDecimal("4.99"),
+                Currency.EUR,
                 LocalDateTime.now(),
                 user
         );
@@ -314,6 +326,7 @@ public class ProductControllerTests {
                 "Updated Description",
                 20,
                 new BigDecimal("9.99"),
+                Currency.EUR,
                 dt
         );
 

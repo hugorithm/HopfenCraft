@@ -42,6 +42,7 @@ public class ProductController {
                         p.getDescription(),
                         p.getStockQuantity(),
                         p.getPrice(),
+                        p.getCurrency(),
                         p.getRegisterDateTime()
                 )
         );
@@ -59,6 +60,7 @@ public class ProductController {
                     p.getDescription(),
                     p.getStockQuantity(),
                     p.getPrice(),
+                    p.getCurrency(),
                     p.getRegisterDateTime()
                     )
                 )
@@ -66,7 +68,7 @@ public class ProductController {
     }
     @PostMapping("/register")
     public ResponseEntity<ProductDTO> registerProduct(@AuthenticationPrincipal Jwt jwt, @Valid @RequestBody ProductRegistrationDTO body) {
-        return productService.registerProduct(jwt, body.getBrand(), body.getName(),body.getDescription(), body.getQuantity(), body.getPrice());
+        return productService.registerProduct(jwt, body.getBrand(), body.getName(),body.getDescription(), body.getQuantity(), body.getPrice(), body.getCurrency());
     }
 
     @PutMapping("/update")

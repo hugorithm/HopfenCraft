@@ -1,5 +1,6 @@
 package com.hugorithm.hopfencraft.model;
 
+import com.hugorithm.hopfencraft.enums.Currency;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
@@ -29,28 +30,32 @@ public class Product {
     private String description;
     private int stockQuantity;
     private BigDecimal price;
+    @Enumerated(EnumType.STRING)
+    private Currency currency;
     @CreationTimestamp
     private LocalDateTime registerDateTime;
     @ManyToOne
     private ApplicationUser user;
 
-    public Product(String brand, String name, String description, int quantity, BigDecimal price, ApplicationUser user) {
+    public Product(String brand, String name, String description, int quantity, BigDecimal price, Currency currency, ApplicationUser user) {
         this.brand = brand;
         this.name = name;
         this.description = description;
         this.stockQuantity = quantity;
         this.price = price;
         this.user = user;
+        this.currency = currency;
         this.sku = generateProductCode(brand, name);
     }
 
-    public Product(Long productId, String brand, String name, String description, int quantity, BigDecimal price) {
+    public Product(Long productId, String brand, String name, String description, int quantity, BigDecimal price, Currency currency) {
         this.productId = productId;
         this.brand = brand;
         this.name = name;
         this.description = description;
         this.stockQuantity = quantity;
         this.price = price;
+        this.currency = currency;
         this.sku = generateProductCode(brand, name);
     }
 
