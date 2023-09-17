@@ -3,6 +3,7 @@ package com.hugorithm.hopfencraft.service;
 import com.hugorithm.hopfencraft.dto.cart.CartItemDTO;
 import com.hugorithm.hopfencraft.dto.order.OrderResponseDTO;
 import com.hugorithm.hopfencraft.dto.product.ProductDTO;
+import com.hugorithm.hopfencraft.enums.Currency;
 import com.hugorithm.hopfencraft.enums.OrderStatus;
 import com.hugorithm.hopfencraft.exception.order.InsufficientStockException;
 import com.hugorithm.hopfencraft.exception.order.OrderCartIsEmptyException;
@@ -13,6 +14,7 @@ import com.hugorithm.hopfencraft.model.Product;
 import com.hugorithm.hopfencraft.repository.CartItemRepository;
 import com.hugorithm.hopfencraft.repository.OrderRepository;
 import com.hugorithm.hopfencraft.repository.ProductRepository;
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -49,6 +51,7 @@ public class OrderService {
                                 ci.getProduct().getDescription(),
                                 ci.getProduct().getStockQuantity(),
                                 ci.getProduct().getPrice(),
+                                ci.getProduct().getCurrency(),
                                 ci.getProduct().getRegisterDateTime()
                         ),
                         ci.getQuantity(),
@@ -57,7 +60,7 @@ public class OrderService {
                 .collect(Collectors.toList());
     }
 
-    public ResponseEntity<OrderResponseDTO> createOrder(Jwt jwt) {
+    public ResponseEntity<OrderResponseDTO> createOrder(Jwt jwt, Currency currency) {
         try {
             ApplicationUser user = jwtService.getUserFromJwt(jwt);
             List<CartItem> cartItems = user.getCartItems();
@@ -75,8 +78,7 @@ public class OrderService {
             Order order = new Order(user, total);
             order.setOrderItems(cartItems);
             order.setOrderStatus(OrderStatus.PENDING);
-            //TODO: This is hardcoded for now but will not be later
-            order.setCurrency("EUR");
+            order.setCurrency(currency);
 
             Order savedOrder = orderRepository.save(order);
 
@@ -91,6 +93,7 @@ public class OrderService {
                     .body(new OrderResponseDTO(
                             savedOrder.getOrderId(),
                             savedOrder.getTotal(),
+                            savedOrder.getCurrency().toString(),
                             cartItemsDTO,
                             savedOrder.getOrderDate()
                     ));

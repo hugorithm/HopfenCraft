@@ -1,5 +1,6 @@
 package com.hugorithm.hopfencraft.model;
 
+import com.hugorithm.hopfencraft.enums.Currency;
 import com.hugorithm.hopfencraft.enums.OrderStatus;
 import com.hugorithm.hopfencraft.enums.PaymentMethod;
 import jakarta.persistence.*;
@@ -64,9 +65,9 @@ public class Order {
     private String billingPostalCode;
     private String billingCountry;
 
-    //TODO: Delete this field
     private BigDecimal total;
-    private String currency;
+    @Enumerated(EnumType.STRING)
+    private Currency currency;
 
     public Order(ApplicationUser user, BigDecimal total) {
         this.user = user;
