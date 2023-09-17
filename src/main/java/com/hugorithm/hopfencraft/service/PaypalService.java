@@ -31,7 +31,6 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
-import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
@@ -116,7 +115,7 @@ public class PaypalService {
             headers.add("Accept", "application/json");
             headers.setContentType(MediaType.APPLICATION_JSON);
 
-            HttpEntity<String> entity = new HttpEntity<String>(null, headers);
+            HttpEntity<String> entity = new HttpEntity<>(null, headers);
 
             ResponseEntity<Object> response = restTemplate.exchange(
                     PAYPAL_BASE_URL + "/v2/checkout/orders/" + paypalOrderId + "/capture",
