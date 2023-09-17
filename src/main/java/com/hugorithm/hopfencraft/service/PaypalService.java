@@ -204,7 +204,7 @@ public class PaypalService {
             ArrayNode purchaseUnitsNode = jsonNode.putArray("purchase_units");
             ObjectNode unitNode = purchaseUnitsNode.addObject();
             ObjectNode amountNode = unitNode.putObject("amount");
-            amountNode.put("currency_code", order.getCurrency());
+            amountNode.put("currency_code", order.getCurrency().toString());
             amountNode.put("value", order.getTotal().toString());
 
             ObjectNode breakdown = amountNode.putObject("breakdown");
@@ -212,7 +212,7 @@ public class PaypalService {
             // Create an "item_total" object within the breakdown item
             ObjectNode itemTotal = breakdown.putObject("item_total");
 
-            itemTotal.put("currency_code", order.getCurrency());
+            itemTotal.put("currency_code", order.getCurrency().toString());
             itemTotal.put("value", order.getTotal().toString());
             ArrayNode items = unitNode.putArray("items");
 
@@ -220,11 +220,10 @@ public class PaypalService {
                 ObjectNode item = items.addObject();
                 item.put("name", orderItem.getProduct().getName());
                 item.put("description", orderItem.getProduct().getDescription());
-                //TODO: Add sku to product as long as a productCode
                 item.put("sku", orderItem.getProduct().getSku());
 
                 ObjectNode unitAmount1 = item.putObject("unit_amount");
-                unitAmount1.put("currency_code", order.getCurrency());
+                unitAmount1.put("currency_code", orderItem.getProduct().getCurrency().toString());
                 unitAmount1.put("value", orderItem.getProduct().getPrice().toString());
 
                 item.put("quantity", String.valueOf(orderItem.getQuantity()));
