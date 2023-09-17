@@ -46,7 +46,7 @@ public class ProductServiceTests {
         user.setUsername("testuser");
         user.setEmail("testuser@example.com");
         // Create a valid product DTO
-        ProductDTO validProductDTO = new ProductDTO(null, "TestBrand", "TestName", "TestDescription", 10, new BigDecimal("19.99"), Currency.EUR , null);
+        ProductDTO validProductDTO = new ProductDTO(null, "TestBrand", "TestName", "TestDescription", 10, new BigDecimal("19.99"), Currency.EUR ,null);
 
         // Mock the product repository to return an empty Optional, indicating the product does not exist
         when(productRepository.findProductByName("TestName")).thenReturn(Optional.empty());
@@ -54,7 +54,7 @@ public class ProductServiceTests {
         when(jwtService.getUserFromJwt(any())).thenReturn(user);
 
         // Mock the product repository to save the product and return it
-        Product savedProduct = new Product("TestBrand", "TestName", "TestDescription", 10, new BigDecimal("19.99"), Currency.EUR, user);
+        Product savedProduct = new Product("TestBrand", "TestName", "TestDescription", 10, new BigDecimal("19.99"), user);
         when(productRepository.save(any())).thenReturn(savedProduct);
 
         // Call the service method
@@ -113,11 +113,12 @@ public class ProductServiceTests {
         user.setUsername("testuser");
         user.setEmail("testuser@example.com");
         Long productId = 1L;
-        Product existingProduct = new Product("TestBrand", "TestName", "TestDescription", 5, new BigDecimal("19.99"), Currency.EUR, user);
+        Product existingProduct = new Product("TestBrand", "TestName", "TestDescription", 5, new BigDecimal("19.99"), user);
         existingProduct.setProductId(productId);
 
         // Mock the product repository to return the existing product
         when(productRepository.findById(productId)).thenReturn(Optional.of(existingProduct));
+        when(productRepository.save(existingProduct)).thenReturn(existingProduct);
 
         // Call the service method to update the product
         ResponseEntity<ProductDTO> response = productService.updateProduct(
@@ -169,7 +170,7 @@ public class ProductServiceTests {
         user.setUsername("testuser");
         user.setEmail("testuser@example.com");
         Long productId = 1L;
-        Product existingProduct = new Product("TestBrand", "TestName", "TestDescription", 5, new BigDecimal("19.99"), Currency.EUR, user);
+        Product existingProduct = new Product("TestBrand", "TestName", "TestDescription", 5, new BigDecimal("19.99"), user);
         existingProduct.setProductId(productId);
 
         // Mock the product repository to return the existing product
@@ -196,7 +197,7 @@ public class ProductServiceTests {
         user.setUsername("testuser");
         user.setEmail("testuser@example.com");
         Long productId = 1L;
-        Product existingProduct = new Product("TestBrand", "TestName", "TestDescription", 5, new BigDecimal("19.99"), Currency.EUR, user);
+        Product existingProduct = new Product("TestBrand", "TestName", "TestDescription", 5, new BigDecimal("19.99"), user);
         existingProduct.setProductId(productId);
 
         // Mock the product repository to return the existing product
@@ -256,9 +257,9 @@ public class ProductServiceTests {
         // Mock data initialization to return a sample page of products
         Pageable pageable = Pageable.ofSize(5).withPage(0);
         when(productRepository.findAll(pageable)).thenReturn(new PageImpl<>(Arrays.asList(
-                new Product("Brand1", "Product1", "Description1", 5, new BigDecimal("19.99"), Currency.EUR, user),
-                new Product("Brand2", "Product2", "Description2", 10, new BigDecimal("29.99"), Currency.EUR, user),
-                new Product("Brand3", "Product3", "Description3", 15, new BigDecimal("39.99"), Currency.EUR, user)
+                new Product("Brand1", "Product1", "Description1", 5, new BigDecimal("19.99"), user),
+                new Product("Brand2", "Product2", "Description2", 10, new BigDecimal("29.99"), user),
+                new Product("Brand3", "Product3", "Description3", 15, new BigDecimal("39.99"), user)
         )));
 
         // Call the service method to retrieve all products
@@ -276,7 +277,7 @@ public class ProductServiceTests {
         user.setUsername("testuser");
         user.setEmail("testuser@example.com");
         Long productId = 1L;
-        Product existingProduct = new Product("Brand", "Product", "Description", 5, new BigDecimal("19.99"), Currency.EUR, user);
+        Product existingProduct = new Product("Brand", "Product", "Description", 5, new BigDecimal("19.99"), user);
         existingProduct.setProductId(productId);
 
         // Mock the product repository to return the existing product
