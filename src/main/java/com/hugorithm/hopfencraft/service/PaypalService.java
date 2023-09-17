@@ -29,6 +29,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import java.time.ZoneId;
@@ -42,6 +43,7 @@ public class PaypalService {
     private final JwtService jwtService;
     private final OrderRepository orderRepository;
     private final OrderService orderService;
+    private final ShoppingCartService shoppingCartService;
     private final String CLIENT_ID;
     private final String CLIENT_SECRET;
     private final static Logger LOGGER = LoggerFactory.getLogger(PaypalService.class);
@@ -51,11 +53,12 @@ public class PaypalService {
     @Autowired
     public PaypalService(JwtService jwtService,
                          OrderRepository orderRepository,
-                         OrderService orderService, @Value("${paypal.client.id}") String clientId,
+                         OrderService orderService, ShoppingCartService shoppingCartService, @Value("${paypal.client.id}") String clientId,
                          @Value("${paypal.client.secret}") String clientSecret) {
         this.jwtService = jwtService;
         this.orderRepository = orderRepository;
         this.orderService = orderService;
+        this.shoppingCartService = shoppingCartService;
         this.CLIENT_ID = clientId;
         this.CLIENT_SECRET = clientSecret;
     }
@@ -66,30 +69,35 @@ public class PaypalService {
     }
 
     private String generateAccessToken() {
-        String auth = this.getAuth(CLIENT_ID, CLIENT_SECRET);
+        try {
+            String auth = this.getAuth(CLIENT_ID, CLIENT_SECRET);
 
-        RestTemplate restTemplate = new RestTemplate();
+            RestTemplate restTemplate = new RestTemplate();
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
-        headers.set("Authorization", "Basic " + auth);
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+            headers.set("Authorization", "Basic " + auth);
 
-        MultiValueMap<String, String> requestBody = new LinkedMultiValueMap<>();
-        HttpEntity<?> request = new HttpEntity<>(requestBody, headers);
-        requestBody.add("grant_type", "client_credentials");
+            MultiValueMap<String, String> requestBody = new LinkedMultiValueMap<>();
+            HttpEntity<?> request = new HttpEntity<>(requestBody, headers);
+            requestBody.add("grant_type", "client_credentials");
 
-        ResponseEntity<String> response = restTemplate.postForEntity(
-                PAYPAL_BASE_URL +"/v1/oauth2/token",
-                request,
-                String.class
-        );
+            ResponseEntity<String> response = restTemplate.postForEntity(
+                    PAYPAL_BASE_URL + "/v1/oauth2/token",
+                    request,
+                    String.class
+            );
 
-        if (response.getStatusCode() == HttpStatus.OK) {
-            LOGGER.info("Token generated successfully");
-            return new JSONObject(response.getBody()).getString("access_token");
-        } else {
-            LOGGER.error("Failed to get Access Token Status code: {}",response.getStatusCode());
-            throw new PaypalAccessTokenException("Failed to get Access Token, Status Code: " + response.getStatusCode());
+            if (response.getStatusCode() == HttpStatus.OK) {
+                LOGGER.info("Token generated successfully");
+                return new JSONObject(response.getBody()).getString("access_token");
+            } else {
+                LOGGER.error("Failed to get Access Token Status code: {}", response.getStatusCode());
+                throw new PaypalAccessTokenException("Failed to get Access Token, Status Code: " + response.getStatusCode());
+            }
+        } catch (HttpServerErrorException ex) {
+            LOGGER.error(ex.getMessage(), ex);
+            throw new OrderPaymentException("Failed to generate paypal oAuth2 token");
         }
     }
 
@@ -158,6 +166,7 @@ public class PaypalService {
 
                 Order savedOrder = orderRepository.save(order);
                 orderService.updateStock(savedOrder);
+                shoppingCartService.clearShoppingCart(user);
 
                 return ResponseEntity.status(response.getStatusCode()).body(response.getBody());
             } else {
@@ -216,7 +225,7 @@ public class PaypalService {
             itemTotal.put("value", order.getTotal().toString());
             ArrayNode items = unitNode.putArray("items");
 
-            for (CartItem orderItem : order.getOrderItems()) {
+            for (CartItem orderItem : order.getUser().getCartItems()) {
                 ObjectNode item = items.addObject();
                 item.put("name", orderItem.getProduct().getName());
                 item.put("description", orderItem.getProduct().getDescription());
@@ -258,6 +267,9 @@ public class PaypalService {
         } catch (UsernameNotFoundException ex) {
             LOGGER.error(ex.getMessage(), ex);
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        } catch (HttpServerErrorException ex) {
+            LOGGER.error(ex.getMessage(), ex);
+            return ResponseEntity.status(HttpStatus.BAD_GATEWAY).build();
         }
     }
 }
