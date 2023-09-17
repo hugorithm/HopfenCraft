@@ -1,5 +1,6 @@
 package com.hugorithm.hopfencraft.config;
 
+import com.hugorithm.hopfencraft.init.DataInitialization;
 import com.hugorithm.hopfencraft.repository.ProductRepository;
 import com.hugorithm.hopfencraft.repository.RoleRepository;
 import com.hugorithm.hopfencraft.repository.UserRepository;
