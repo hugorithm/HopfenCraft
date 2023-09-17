@@ -20,23 +20,18 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "order_id")
     private Long orderId;
-
     @ManyToOne
     @JoinColumn(name = "user_id")
     private ApplicationUser user;
-
     @Column(name = "order_date")
     @CreationTimestamp
     private LocalDateTime orderDate;
-
     @Enumerated(EnumType.STRING)
     @Column(name = "order_status")
     private OrderStatus orderStatus;
-
     @Enumerated(EnumType.STRING)
     @Column(name = "payment_method")
     private PaymentMethod paymentMethod;
-
     @Column(name = "payment_transaction_id")
     private String paymentTransactionId;
     @Column(name = "payment_transaction_status")
@@ -62,7 +57,7 @@ public class Order {
 
     private BigDecimal total;
     @Enumerated(EnumType.STRING)
-    private Currency currency;
+    private final Currency currency = Currency.EUR;
 
     public Order(ApplicationUser user, BigDecimal total) {
         this.user = user;

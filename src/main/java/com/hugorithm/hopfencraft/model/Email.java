@@ -19,7 +19,6 @@ public class Email {
     private LocalDateTime emailSendDate;
     @ManyToOne
     private ApplicationUser user;
-
     @Enumerated(EnumType.STRING)
     private EmailType emailType;
 

@@ -3,7 +3,6 @@ package com.hugorithm.hopfencraft.service;
 import com.hugorithm.hopfencraft.dto.cart.CartItemDTO;
 import com.hugorithm.hopfencraft.dto.order.OrderResponseDTO;
 import com.hugorithm.hopfencraft.dto.product.ProductDTO;
-import com.hugorithm.hopfencraft.enums.Currency;
 import com.hugorithm.hopfencraft.enums.OrderStatus;
 import com.hugorithm.hopfencraft.exception.order.InsufficientStockException;
 import com.hugorithm.hopfencraft.exception.order.OrderCartIsEmptyException;
@@ -57,7 +56,7 @@ public class OrderService {
                 .collect(Collectors.toList());
     }
 
-    public ResponseEntity<OrderResponseDTO> createOrder(Jwt jwt, Currency currency) {
+    public ResponseEntity<OrderResponseDTO> createOrder(Jwt jwt) {
         try {
             ApplicationUser user = jwtService.getUserFromJwt(jwt);
             List<CartItem> cartItems = user.getCartItems();
@@ -74,7 +73,6 @@ public class OrderService {
 
             Order order = new Order(user, total);
             order.setOrderStatus(OrderStatus.PENDING);
-            order.setCurrency(currency);
 
             Order savedOrder = orderRepository.save(order);
 
