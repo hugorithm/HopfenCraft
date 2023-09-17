@@ -11,10 +11,8 @@ import com.hugorithm.hopfencraft.model.ApplicationUser;
 import com.hugorithm.hopfencraft.model.CartItem;
 import com.hugorithm.hopfencraft.model.Order;
 import com.hugorithm.hopfencraft.model.Product;
-import com.hugorithm.hopfencraft.repository.CartItemRepository;
 import com.hugorithm.hopfencraft.repository.OrderRepository;
 import com.hugorithm.hopfencraft.repository.ProductRepository;
-import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,7 +34,6 @@ import java.util.stream.Collectors;
 public class OrderService {
     private final JwtService jwtService;
     private final OrderRepository orderRepository;
-    private final CartItemRepository cartItemRepository;
     private final ProductRepository productRepository;
     private final static Logger LOGGER = LoggerFactory.getLogger(OrderService.class);
 
@@ -76,16 +73,10 @@ public class OrderService {
             }).reduce(BigDecimal.ZERO, BigDecimal::add);
 
             Order order = new Order(user, total);
-            order.setOrderItems(cartItems);
             order.setOrderStatus(OrderStatus.PENDING);
             order.setCurrency(currency);
 
             Order savedOrder = orderRepository.save(order);
-
-            for (CartItem cartItem : cartItems) {
-                cartItem.setOrder(savedOrder);
-                cartItemRepository.save(cartItem);
-            }
 
             List<CartItemDTO> cartItemsDTO = convertCartItemIntoDTO(cartItems);
 
@@ -105,7 +96,7 @@ public class OrderService {
 
     public void updateStock(Order order) {
         try {
-            for (CartItem orderItem : order.getOrderItems()) {
+            for (CartItem orderItem : order.getUser().getCartItems()) {
                 Product product = orderItem.getProduct();
                 int orderedQuantity = orderItem.getQuantity();
                 int currentStock = product.getStockQuantity();
