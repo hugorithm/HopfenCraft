@@ -1,4 +1,4 @@
-package com.hugorithm.hopfencraft.config;
+package com.hugorithm.hopfencraft.init;
 
 import com.hugorithm.hopfencraft.enums.Currency;
 import com.hugorithm.hopfencraft.model.ApplicationUser;
