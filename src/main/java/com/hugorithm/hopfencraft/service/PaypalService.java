@@ -223,7 +223,7 @@ public class PaypalService {
                 item.put("sku", orderItem.getProduct().getSku());
 
                 ObjectNode unitAmount1 = item.putObject("unit_amount");
-                unitAmount1.put("currency_code", orderItem.getProduct().getCurrency().toString());
+                unitAmount1.put("currency_code", order.getCurrency().toString());
                 unitAmount1.put("value", orderItem.getProduct().getPrice().toString());
 
                 item.put("quantity", String.valueOf(orderItem.getQuantity()));
