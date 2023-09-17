@@ -1,7 +1,6 @@
 package com.hugorithm.hopfencraft.dto.product;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.hugorithm.hopfencraft.validators.PositiveBigDecimal;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
@@ -20,7 +19,7 @@ public class ProductUpdateDTO {
     private String brand;
     private String name;
     private String description;
-    private int quantity;
+    private Integer quantity;
     @JsonFormat(shape = JsonFormat.Shape.STRING)
     private BigDecimal price;
 }
