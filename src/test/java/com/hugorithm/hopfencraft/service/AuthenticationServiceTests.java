@@ -1,6 +1,6 @@
 package com.hugorithm.hopfencraft.service;
 
-import com.hugorithm.hopfencraft.config.DataInitialization;
+import com.hugorithm.hopfencraft.init.DataInitialization;
 import com.hugorithm.hopfencraft.dto.authentication.LoginDTO;
 import com.hugorithm.hopfencraft.dto.authentication.LoginResponseDTO;
 import com.hugorithm.hopfencraft.dto.authentication.UserRegistrationDTO;
