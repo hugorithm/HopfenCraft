@@ -156,15 +156,13 @@ public class PaypalService {
                             );
 
                             order.setPaymentTransactionDate(utcDateTime.withZoneSameInstant(ZoneId.of("Europe/Lisbon")).toLocalDateTime());
-
                         }
                     }
                 }
 
                 order.setOrderStatus(OrderStatus.PAID);
-
-
                 Order savedOrder = orderRepository.save(order);
+
                 orderService.updateStock(savedOrder);
                 shoppingCartService.clearShoppingCart(user);
 

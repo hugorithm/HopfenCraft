@@ -43,7 +43,7 @@ public class ProductService {
                 throw new ProductAlreadyExistsException("Product already exists");
             }
             ApplicationUser user = jwtService.getUserFromJwt(jwt);
-            Product p = productRepository.save(new Product(brand, name, description, quantity, price, currency, user));
+            Product p = productRepository.save(new Product(brand, name, description, quantity, price, user));
             return ResponseEntity.status(HttpStatus.CREATED).body(new ProductDTO(
                     p.getProductId(),
                     p.getBrand(),

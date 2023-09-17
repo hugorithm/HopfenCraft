@@ -14,9 +14,9 @@ import java.util.Random;
 
 @Entity
 @Table(name = "products")
-@Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Data
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,32 +31,30 @@ public class Product {
     private int stockQuantity;
     private BigDecimal price;
     @Enumerated(EnumType.STRING)
-    private Currency currency;
+    private final Currency currency = Currency.EUR;
     @CreationTimestamp
     private LocalDateTime registerDateTime;
     private LocalDateTime updatedDate;
     @ManyToOne
     private ApplicationUser user;
 
-    public Product(String brand, String name, String description, int quantity, BigDecimal price, Currency currency, ApplicationUser user) {
+    public Product(String brand, String name, String description, int quantity, BigDecimal price, ApplicationUser user) {
         this.brand = brand;
         this.name = name;
         this.description = description;
         this.stockQuantity = quantity;
         this.price = price;
         this.user = user;
-        this.currency = currency;
         this.sku = generateProductCode(brand, name);
     }
 
-    public Product(Long productId, String brand, String name, String description, int quantity, BigDecimal price, Currency currency) {
+    public Product(Long productId, String brand, String name, String description, int quantity, BigDecimal price) {
         this.productId = productId;
         this.brand = brand;
         this.name = name;
         this.description = description;
         this.stockQuantity = quantity;
         this.price = price;
-        this.currency = currency;
         this.sku = generateProductCode(brand, name);
     }
 
