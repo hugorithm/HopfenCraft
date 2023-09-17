@@ -11,6 +11,7 @@ import com.hugorithm.hopfencraft.model.CartItem;
 import com.hugorithm.hopfencraft.model.Product;
 import com.hugorithm.hopfencraft.repository.CartItemRepository;
 import com.hugorithm.hopfencraft.repository.ProductRepository;
+import com.hugorithm.hopfencraft.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,6 +33,7 @@ import java.util.stream.Collectors;
 public class ShoppingCartService {
     private final CartItemRepository cartItemRepository;
     private final ProductRepository productRepository;
+    private final UserRepository userRepository;
     private final JwtService jwtService;
     private final static Logger LOGGER = LoggerFactory.getLogger(ShoppingCartService.class);
 
@@ -130,6 +132,13 @@ public class ShoppingCartService {
             LOGGER.error(ex.getMessage(), ex);
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
+    }
+
+    public void clearShoppingCart(ApplicationUser user){
+        List<CartItem> cartItems =  cartItemRepository.findAllByUser(user);
+        user.getCartItems().clear();
+        cartItemRepository.deleteAll(cartItems);
+        userRepository.save(user);
     }
 
 }
