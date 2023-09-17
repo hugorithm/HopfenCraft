@@ -1,5 +1,6 @@
 package com.hugorithm.hopfencraft.repository;
 
+import com.hugorithm.hopfencraft.enums.Currency;
 import com.hugorithm.hopfencraft.model.ApplicationUser;
 import com.hugorithm.hopfencraft.model.Product;
 import org.assertj.core.api.Assertions;
@@ -28,7 +29,7 @@ public class ProductRepositoryTests {
         user.setEmail("testuser@example.com");
 
         //Arrange
-        Product product = new Product("Paulaner", "Paulaner", "Weiss", 10, new BigDecimal("2.39"), user);
+        Product product = new Product("Paulaner", "Paulaner", "Weiss", 10, new BigDecimal("2.39"), Currency.EUR, user);
 
         //Act
         Product savedProduct = productRepository.save(product);
@@ -44,8 +45,8 @@ public class ProductRepositoryTests {
         user.setUsername("testuser");
         user.setEmail("testuser@example.com");
         //Arrange
-        Product product = new Product("Paulaner", "Paulaner Weissbier", "Weiss", 10, new BigDecimal("2.39"), user);
-        Product product2 = new Product("Franziskaner", "Franziskaner Hefeweizen", "Weiss", 11, new BigDecimal("2.99"), user);
+        Product product = new Product("Paulaner", "Paulaner Weissbier", "Weiss", 10, new BigDecimal("2.39"), Currency.EUR, user);
+        Product product2 = new Product("Franziskaner", "Franziskaner Hefeweizen", "Weiss", 11, new BigDecimal("2.99"), Currency.EUR, user);
 
         //Act
         userRepository.save(user);
@@ -64,7 +65,7 @@ public class ProductRepositoryTests {
         user.setUsername("testuser");
         user.setEmail("testuser@example.com");
         //Arrange
-        Product product = new Product("Paulaner", "Paulaner Weissbier", "Weiss", 10, new BigDecimal("2.39"), user);
+        Product product = new Product("Paulaner", "Paulaner Weissbier", "Weiss", 10, new BigDecimal("2.39"), Currency.EUR, user);
 
         //Act
         productRepository.save(product);
@@ -80,7 +81,7 @@ public class ProductRepositoryTests {
         user.setUsername("testuser");
         user.setEmail("testuser@example.com");
         //Arrange
-        Product product = new Product("Paulaner", "Paulaner Weissbier", "Weiss", 10, new BigDecimal("2.39"), user);
+        Product product = new Product("Paulaner", "Paulaner Weissbier", "Weiss", 10, new BigDecimal("2.39"), Currency.EUR, user);
 
         //Act
         userRepository.save(user);
@@ -97,7 +98,7 @@ public class ProductRepositoryTests {
         user.setUsername("testuser");
         user.setEmail("testuser@example.com");
         //Arrange
-        Product product = new Product("Paulaner", "Paulaner Weissbier", "Weiss", 10, new BigDecimal("2.39"), user);
+        Product product = new Product("Paulaner", "Paulaner Weissbier", "Weiss", 10, new BigDecimal("2.39"), Currency.EUR, user);
         int q = product.getStockQuantity();
         String b = product.getBrand();
         String n = product.getName();
@@ -140,7 +141,7 @@ public class ProductRepositoryTests {
         user.setUsername("testuser");
         user.setEmail("testuser@example.com");
         //Arrange
-        Product product = new Product("Paulaner", "Paulaner Weissbier", "Weiss", 10, new BigDecimal("2.39"), user);
+        Product product = new Product("Paulaner", "Paulaner Weissbier", "Weiss", 10, new BigDecimal("2.39"), Currency.EUR, user);
 
         //Act
         productRepository.save(product);

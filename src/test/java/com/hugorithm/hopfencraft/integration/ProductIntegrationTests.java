@@ -6,6 +6,7 @@ import com.hugorithm.hopfencraft.dto.authentication.LoginResponseDTO;
 import com.hugorithm.hopfencraft.dto.product.ProductDTO;
 import com.hugorithm.hopfencraft.dto.product.ProductRegistrationDTO;
 import com.hugorithm.hopfencraft.dto.product.ProductUpdateDTO;
+import com.hugorithm.hopfencraft.enums.Currency;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -51,7 +52,8 @@ public class ProductIntegrationTests {
                 "Test Name",
                 "Test Description",
                 10,
-                new BigDecimal("19.99")
+                new BigDecimal("19.99"),
+                Currency.EUR
         );
 
         HttpHeaders headers = new HttpHeaders();
@@ -97,7 +99,8 @@ public class ProductIntegrationTests {
                 "Test Name",
                 "Test Description",
                 -5,
-                new BigDecimal("19.99")
+                new BigDecimal("19.99"),
+                Currency.EUR
         );
 
         HttpHeaders headers = new HttpHeaders();
@@ -136,7 +139,8 @@ public class ProductIntegrationTests {
                 "Test Name",
                 "Test Description",
                 10,
-                new BigDecimal("19.99")
+                new BigDecimal("19.99"),
+                Currency.EUR
         );
 
         HttpHeaders headers = new HttpHeaders();
@@ -202,21 +206,25 @@ public class ProductIntegrationTests {
                 "Name 1",
                 "Description 1",
                 5,
-                new BigDecimal("10.99")
+                new BigDecimal("10.99"),
+                Currency.EUR
         );
         ProductRegistrationDTO product2 = new ProductRegistrationDTO(
                 "Brand 2",
                 "Name 2",
                 "Description 2",
                 8,
-                new BigDecimal("15.99")
+                new BigDecimal("15.99"),
+                Currency.EUR
+
         );
         ProductRegistrationDTO product3 = new ProductRegistrationDTO(
                 "Brand 3",
                 "Name 3",
                 "Description 3",
                 3,
-                new BigDecimal("7.99")
+                new BigDecimal("7.99"),
+                Currency.EUR
         );
 
         HttpHeaders headers = new HttpHeaders();
@@ -268,7 +276,8 @@ public class ProductIntegrationTests {
                 "Test Name",
                 "Test Description",
                 10,
-                new BigDecimal("19.99")
+                new BigDecimal("19.99"),
+                Currency.EUR
         );
 
         HttpHeaders headers = new HttpHeaders();
@@ -342,7 +351,8 @@ public class ProductIntegrationTests {
                 "Test Name",
                 "Test Description",
                 10,
-                new BigDecimal("19.99")
+                new BigDecimal("19.99"),
+                Currency.EUR
         );
 
         HttpHeaders headers = new HttpHeaders();

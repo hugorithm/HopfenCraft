@@ -1,5 +1,6 @@
 package com.hugorithm.hopfencraft.repository;
 
+import com.hugorithm.hopfencraft.enums.Currency;
 import com.hugorithm.hopfencraft.model.*;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -34,7 +35,7 @@ public class CartItemRepositoryTests {
         Set<Role> roles = new HashSet<>();
         roles.add(role);
         ApplicationUser user = new ApplicationUser("user1", "Password123!", "email@example.com", roles);
-        Product product = new Product("Paulaner", "Paulaner Weissbier", "Weiss", 10, new BigDecimal("2.39"), user);
+        Product product = new Product("Paulaner", "Paulaner Weissbier", "Weiss", 10, new BigDecimal("2.39"), Currency.EUR, user);
         CartItem cartItem = new CartItem(product, user, 2);
 
         //Act
@@ -52,7 +53,7 @@ public class CartItemRepositoryTests {
         Set<Role> roles = new HashSet<>();
         roles.add(role);
         ApplicationUser user = new ApplicationUser("user1", "Password123!", "email@example.com", roles);
-        Product product = new Product("Paulaner", "Paulaner Weissbier", "Weiss", 10, new BigDecimal("2.39"), user);
+        Product product = new Product("Paulaner", "Paulaner Weissbier", "Weiss", 10, new BigDecimal("2.39"), Currency.EUR, user);
         CartItem cartItem = new CartItem(product, user, 2);
         CartItem cartItem2 = new CartItem(product, user, 3);
 
@@ -81,7 +82,7 @@ public class CartItemRepositoryTests {
         Set<Role> roles = new HashSet<>();
         roles.add(role);
         ApplicationUser user = new ApplicationUser("user1", "Password123!", "email@example.com", roles);
-        Product product = new Product("Paulaner", "Paulaner Weissbier", "Weiss", 10, new BigDecimal("2.39"), user);
+        Product product = new Product("Paulaner", "Paulaner Weissbier", "Weiss", 10, new BigDecimal("2.39"), Currency.EUR, user);
         CartItem cartItem = new CartItem(product, user, 2);
 
         //Act
@@ -100,8 +101,8 @@ public class CartItemRepositoryTests {
         roles.add(role);
         ApplicationUser user = new ApplicationUser("user1", "Password123!", "email@example.com", roles);
         ApplicationUser user2 = new ApplicationUser("user2", "Password123!", "email@example.com", roles);
-        Product product = new Product("Paulaner", "Paulaner Weissbier", "Weiss", 10, new BigDecimal("2.39"), user);
-        Product product2 = new Product("Paulaner", "Paulaner Helles", "Lager", 10, new BigDecimal("2.59"), user);
+        Product product = new Product("Paulaner", "Paulaner Weissbier", "Weiss", 10, new BigDecimal("2.39"), Currency.EUR, user);
+        Product product2 = new Product("Paulaner", "Paulaner Helles", "Lager", 10, new BigDecimal("2.59"), Currency.EUR, user);
         CartItem cartItem = new CartItem(product, user, 2);
         int q = cartItem.getQuantity();
         Product p = cartItem.getProduct();
@@ -137,7 +138,7 @@ public class CartItemRepositoryTests {
         Set<Role> roles = new HashSet<>();
         roles.add(role);
         ApplicationUser user = new ApplicationUser("user1", "Password123!", "email@example.com", roles);
-        Product product = new Product("Paulaner", "Paulaner Weissbier", "Weiss", 10, new BigDecimal("2.39"), user);
+        Product product = new Product("Paulaner", "Paulaner Weissbier", "Weiss", 10, new BigDecimal("2.39"), Currency.EUR, user);
         CartItem cartItem = new CartItem(product, user, 2);
 
         //Act
