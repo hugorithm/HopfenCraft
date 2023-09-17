@@ -224,18 +224,18 @@ public class ProductControllerTests {
     @Test
     public void GetProducts_Paginated_ReturnsPageOfProducts() throws Exception {
         // Define test data with multiple products
-        Product p1 = new Product(1L,"Paulaner", "Paulaner", "Weiss", 10, new BigDecimal("2.39"), Currency.EUR);
-        Product p2 = new Product(2L, "Franziskaner", "Franziskaner", "Weiss", 31, new BigDecimal("2.29"), Currency.EUR);
-        Product p3 = new Product(3L, "La Choufe", "La Choufe", "Belgium Gold", 14, new BigDecimal("3.57"), Currency.EUR);
-        Product p4 = new Product(4L,"Benediktiner", "Benediktiner", "Weiss", 10, new BigDecimal("2.39"), Currency.EUR);
-        Product p5 = new Product(5L, "Spaten", "Spaten", "Weiss", 31, new BigDecimal("2.29"), Currency.EUR);
-        Product p6 = new Product(6L, "Ayinger", "Ayinger", "Belgium Gold", 14, new BigDecimal("3.57"), Currency.EUR);
-        Product p7 = new Product(7L, "Krombacher", "Krombacher", "Weiss", 10, new BigDecimal("2.39"), Currency.EUR);
-        Product p8 = new Product(8L,"Erdinger", "Erdinger", "Weiss", 31, new BigDecimal("2.29"), Currency.EUR);
-        Product p9 = new Product(9L,"Augistiner", "Augistiner", "Belgium Gold", 14, new BigDecimal("3.57"), Currency.EUR);
-        Product p10 = new Product(10L,"Kapunziner", "Kapunziner", "Weiss", 10, new BigDecimal("2.39"), Currency.EUR);
-        Product p11 = new Product(11L,"Munchener", "Munchener", "Weiss", 31, new BigDecimal("2.29"), Currency.EUR);
-        Product p12 = new Product(12L,"La Choufe 2", "La Choufe 2", "Belgium Gold", 14, new BigDecimal("3.57"), Currency.EUR);
+        Product p1 = new Product(1L,"Paulaner", "Paulaner", "Weiss", 10, new BigDecimal("2.39"));
+        Product p2 = new Product(2L, "Franziskaner", "Franziskaner", "Weiss", 31, new BigDecimal("2.29"));
+        Product p3 = new Product(3L, "La Choufe", "La Choufe", "Belgium Gold", 14, new BigDecimal("3.57"));
+        Product p4 = new Product(4L,"Benediktiner", "Benediktiner", "Weiss", 10, new BigDecimal("2.39"));
+        Product p5 = new Product(5L, "Spaten", "Spaten", "Weiss", 31, new BigDecimal("2.29"));
+        Product p6 = new Product(6L, "Ayinger", "Ayinger", "Belgium Gold", 14, new BigDecimal("3.57"));
+        Product p7 = new Product(7L, "Krombacher", "Krombacher", "Weiss", 10, new BigDecimal("2.39"));
+        Product p8 = new Product(8L,"Erdinger", "Erdinger", "Weiss", 31, new BigDecimal("2.29"));
+        Product p9 = new Product(9L,"Augistiner", "Augistiner", "Belgium Gold", 14, new BigDecimal("3.57"));
+        Product p10 = new Product(10L,"Kapunziner", "Kapunziner", "Weiss", 10, new BigDecimal("2.39"));
+        Product p11 = new Product(11L,"Munchener", "Munchener", "Weiss", 31, new BigDecimal("2.29"));
+        Product p12 = new Product(12L,"La Choufe 2", "La Choufe 2", "Belgium Gold", 14, new BigDecimal("3.57"));
 
         List<Product> products = Arrays.asList(p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12);
 
@@ -274,7 +274,7 @@ public class ProductControllerTests {
                 "Existing Description",
                 5,
                 new BigDecimal("4.99"),
-                Currency.EUR,
+                LocalDateTime.now(),
                 LocalDateTime.now(),
                 user
         );
