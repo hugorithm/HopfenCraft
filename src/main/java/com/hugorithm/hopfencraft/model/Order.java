@@ -45,6 +45,8 @@ public class Order {
     private String paymentTransactionId;
     @Column(name = "payment_transaction_status")
     private String paymentTransactionStatus;
+    @Column(name = "payment_transaction_date")
+    private LocalDateTime paymentTransactionDate;
 
     // Shipping Address fields
     private String shippingName;

@@ -31,6 +31,11 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Base64;
 @Service
 @Transactional
@@ -137,13 +142,21 @@ public class PaypalService {
                             JsonNode transaction = captures.get(0);
                             order.setPaymentTransactionId(transaction.path("id").asText());
                             order.setPaymentTransactionStatus(transaction.path("status").asText());
+
+                            ZonedDateTime utcDateTime = ZonedDateTime.parse(
+                                    transaction.path("create_time").asText(),
+                                    DateTimeFormatter.ISO_DATE_TIME.withZone(ZoneOffset.UTC)
+                            );
+
+                            order.setPaymentTransactionDate(utcDateTime.withZoneSameInstant(ZoneId.of("Europe/Lisbon")).toLocalDateTime());
+
                         }
                     }
                 }
 
                 order.setOrderStatus(OrderStatus.PAID);
 
-                //TODO: Check if this works tomorrow. I'm tired :D
+
                 Order savedOrder = orderRepository.save(order);
                 orderService.updateStock(savedOrder);
 
