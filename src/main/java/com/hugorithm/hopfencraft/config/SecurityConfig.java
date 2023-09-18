@@ -16,6 +16,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -86,7 +87,9 @@ public class SecurityConfig {
                   //TODO: ONLY FOR TESTING PURPOSES. DELETE LATER
                   auth.requestMatchers("/index.html").permitAll();
                   auth.anyRequest().authenticated();
-              });
+              })
+                .formLogin(Customizer.withDefaults()) //TODO: Both of these are just for testing, might delete later
+                .oauth2Login(Customizer.withDefaults());
 
 
 

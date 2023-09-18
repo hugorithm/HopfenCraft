@@ -32,6 +32,13 @@ spring:
         starttls:
           enable:
             true
+  security:
+    oauth2:
+      client:
+        registration:
+          github:
+            client-id: ${GITHUB_CLIENT}
+            client-secret: ${GITHUB_SECRET}
 paypal:
   mode: sandbox
   client:
