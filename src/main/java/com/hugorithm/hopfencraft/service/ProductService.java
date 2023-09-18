@@ -139,7 +139,6 @@ public class ProductService {
                     .orElseThrow(() -> new ProductNotFoundException("Product not found with id: %s", productId));
 
             productRepository.delete(product);
-
             return ResponseEntity.ok("Product removed successfully");
         } catch (ProductNotFoundException ex) {
             LOGGER.error(ex.getMessage(), ex);

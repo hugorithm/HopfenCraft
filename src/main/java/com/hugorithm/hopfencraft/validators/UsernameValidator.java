@@ -8,8 +8,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class UsernameValidator implements ConstraintValidator<Username, String> {
-    private static final String EMAIL_REGEX = "^[a-zA-Z0-9_-]{3,20}$";
-    private static final Pattern pattern = Pattern.compile(EMAIL_REGEX);
+    private static final String USERNAME_REGEX = "^[a-zA-Z0-9_.-]{3,20}$";
+    private static final Pattern pattern = Pattern.compile(USERNAME_REGEX);
     @Override
     public void initialize(Username constraintAnnotation) {
     }
