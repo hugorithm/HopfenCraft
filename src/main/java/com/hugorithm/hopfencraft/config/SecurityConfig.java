@@ -48,7 +48,7 @@ public class SecurityConfig {
     }
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-          http.csrf(AbstractHttpConfigurer::disable)
+          http.csrf(AbstractHttpConfigurer::disable) //TODO: Remove this when front-end is made. X-XSRF-TOKEN header
               .authorizeHttpRequests(auth -> {
                   auth.requestMatchers("/auth/**").permitAll();
                   auth.requestMatchers("/admin/**").hasRole("ADMIN");
