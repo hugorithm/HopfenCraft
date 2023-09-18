@@ -1,16 +1,36 @@
 package com.hugorithm.hopfencraft.controller;
 
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.hugorithm.hopfencraft.dto.user.ApplicationUserDTO;
+import com.hugorithm.hopfencraft.service.AdminService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/admin")
 @CrossOrigin("*")
 public class AdminController {
-    @GetMapping("/")
-    public String helloAdminController(){
-        return "admin access level";
+    private final AdminService adminService;
+
+    @Autowired
+    public AdminController(AdminService adminService) {
+        this.adminService = adminService;
+    }
+
+    @GetMapping("/users")
+    public ResponseEntity<List<ApplicationUserDTO>> getUsers(){
+        return adminService.getUsers();
+    }
+
+    @GetMapping("/user/{userId}")
+    public  ResponseEntity<ApplicationUserDTO> getUserById(@PathVariable Long userId) {
+        return adminService.getUserById(userId);
+    }
+
+    @GetMapping("/user/{username}")
+    public ResponseEntity<ApplicationUserDTO> getUserByUsername(@PathVariable String username) {
+        return adminService.getUserByUsername(username);
     }
 }
