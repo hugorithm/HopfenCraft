@@ -26,7 +26,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -59,7 +58,7 @@ public class ShoppingCartService {
                         ci.getQuantity(),
                         ci.getAddedDateTime()
                 ))
-                .collect(Collectors.toList());
+                .toList();
 
         return ResponseEntity.ok(new CartResponseDTO(cartItemDTOs));
     }

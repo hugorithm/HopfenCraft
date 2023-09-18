@@ -25,7 +25,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -53,7 +52,7 @@ public class OrderService {
                         ci.getQuantity(),
                         ci.getAddedDateTime()
                 ))
-                .collect(Collectors.toList());
+                .toList();
     }
 
     public ResponseEntity<OrderResponseDTO> createOrder(Jwt jwt) {
