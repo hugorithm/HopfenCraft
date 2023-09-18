@@ -22,11 +22,11 @@ public class AuthenticationController {
 
     @PostMapping("/register")
     public ResponseEntity<UserRegistrationResponseDTO> registerUser(@RequestBody @Valid UserRegistrationDTO body) {
-        return authenticationService.registerUser(body.getUsername(), body.getPassword(), body.getEmail());
+        return authenticationService.registerUser(body);
     }
 
     @PostMapping("/login")
     public ResponseEntity<LoginResponseDTO> login(@RequestBody @Valid LoginDTO body) {
-        return authenticationService.login(body.getUsername(), body.getPassword());
+        return authenticationService.login(body);
     }
 }

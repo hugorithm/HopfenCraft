@@ -20,7 +20,7 @@ public class UsernameValidator implements ConstraintValidator<Username, String> 
         if (matcher.matches()) {
             return true;
         } else {
-            throw new UsernameNotValidException("Username not valid");
+            throw new UsernameNotValidException("Invalid username");
         }
     }
 }

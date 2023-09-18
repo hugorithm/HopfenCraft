@@ -3,6 +3,8 @@ import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
+import com.hugorithm.hopfencraft.dto.authentication.LoginDTO;
+import com.hugorithm.hopfencraft.dto.authentication.UserRegistrationDTO;
 import com.hugorithm.hopfencraft.dto.authentication.UserRegistrationResponseDTO;
 import com.hugorithm.hopfencraft.enums.EmailType;
 import com.hugorithm.hopfencraft.exception.email.EmailAlreadyTakenException;
@@ -43,9 +45,9 @@ public class AuthenticationService {
     private final EmailService emailService;
     private final static Logger LOGGER = LoggerFactory.getLogger(AuthenticationService.class);
 
-    public ResponseEntity<UserRegistrationResponseDTO> registerUser(String username, String password, String email){
+    public ResponseEntity<UserRegistrationResponseDTO> registerUser(UserRegistrationDTO body){
         try {
-            username = username.toLowerCase();
+            String username = body.getUsername().toLowerCase();
 
             Optional<ApplicationUser> existingUser = userRepository.findByUsername(username);
 
@@ -53,19 +55,28 @@ public class AuthenticationService {
                 throw new UsernameAlreadyExistsException("Username %s is already taken", username);
             }
 
-            Optional<ApplicationUser> existingEmail = userRepository.findByEmail(email);
+            Optional<ApplicationUser> existingEmail = userRepository.findByEmail(body.getEmail());
 
             if (existingEmail.isPresent()) {
-                throw new EmailAlreadyTakenException("Email %s is already taken", email);
+                throw new EmailAlreadyTakenException("Email %s is already taken", body.getEmail());
             }
 
-            String encodedPassword = passwordEncoder.encode(password);
+            String encodedPassword = passwordEncoder.encode(body.getPassword());
             Role userRole = roleRepository.findByAuthority("USER").orElseThrow(() -> new RoleNotFoundException("Role not Found"));
 
             Set<Role> authorities = new HashSet<>();
             authorities.add(userRole);
 
-            ApplicationUser user = new ApplicationUser(username, encodedPassword, email, authorities);
+            ApplicationUser user = new ApplicationUser(
+                    username,
+                    encodedPassword,
+                    body.getEmail(),
+                    authorities,
+                    body.getFirstName(),
+                    body.getLastName(),
+                    body.getDateOfBirth(),
+                    body.getPhoneNumber()
+            );
             userRepository.save(user);
 
             String message = emailService.buildWelcomeEmail(username);
@@ -73,7 +84,14 @@ public class AuthenticationService {
 
             emailService.sendEmail(user.getEmail(), subject, message, user, EmailType.REGISTRATION);
 
-            UserRegistrationResponseDTO userDto = new UserRegistrationResponseDTO(username, email);
+            UserRegistrationResponseDTO userDto = new UserRegistrationResponseDTO(
+                    username,
+                    body.getEmail(),
+                    body.getFirstName(),
+                    body.getLastName(),
+                    body.getDateOfBirth(),
+                    body.getPhoneNumber()
+            );
 
             return ResponseEntity.status(HttpStatus.CREATED).body(userDto);
         } catch (UsernameAlreadyExistsException | EmailAlreadyTakenException | RoleNotFoundException ex) {
@@ -82,11 +100,11 @@ public class AuthenticationService {
         }
     }
 
-    public ResponseEntity<LoginResponseDTO> login(String username, String password){
+    public ResponseEntity<LoginResponseDTO> login(LoginDTO body){
         try {
-            Authentication auth = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
+            Authentication auth = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(body.getUsername(), body.getPassword()));
             String token = tokenService.generateJwt(auth);
-            ApplicationUser user = userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("User not found"));
+            ApplicationUser user = userRepository.findByUsername(body.getUsername()).orElseThrow(() -> new UsernameNotFoundException("User not found"));
             LoginResponseDTO response = new LoginResponseDTO(user.getUsername(), user.getEmail(), token);
 
             return ResponseEntity.ok(response);
