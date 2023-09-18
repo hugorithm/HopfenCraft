@@ -46,7 +46,7 @@ public class OrderService {
                                 ci.getProduct().getDescription(),
                                 ci.getProduct().getStockQuantity(),
                                 ci.getProduct().getPrice(),
-                                ci.getProduct().getCurrency(),
+                                Product.getCurrency(),
                                 ci.getProduct().getRegisterDateTime()
                         ),
                         ci.getQuantity(),
@@ -81,7 +81,7 @@ public class OrderService {
                     .body(new OrderResponseDTO(
                             savedOrder.getOrderId(),
                             savedOrder.getTotal(),
-                            savedOrder.getCurrency().toString(),
+                            Order.getCurrency().toString(),
                             cartItemsDTO,
                             savedOrder.getOrderDate()
                     ));

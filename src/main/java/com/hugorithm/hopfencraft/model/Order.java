@@ -5,6 +5,7 @@ import com.hugorithm.hopfencraft.enums.OrderStatus;
 import com.hugorithm.hopfencraft.enums.PaymentMethod;
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -57,7 +58,8 @@ public class Order {
 
     private BigDecimal total;
     @Enumerated(EnumType.STRING)
-    private final Currency currency = Currency.EUR;
+    @Getter
+    private static final Currency currency = Currency.EUR;
 
     public Order(ApplicationUser user, BigDecimal total) {
         this.user = user;

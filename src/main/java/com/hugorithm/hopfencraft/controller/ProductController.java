@@ -42,7 +42,7 @@ public class ProductController {
                         p.getDescription(),
                         p.getStockQuantity(),
                         p.getPrice(),
-                        p.getCurrency(),
+                        Product.getCurrency(),
                         p.getRegisterDateTime()
                 )
         );
@@ -60,7 +60,7 @@ public class ProductController {
                     p.getDescription(),
                     p.getStockQuantity(),
                     p.getPrice(),
-                    p.getCurrency(),
+                    Product.getCurrency(),
                     p.getRegisterDateTime()
                     )
                 )

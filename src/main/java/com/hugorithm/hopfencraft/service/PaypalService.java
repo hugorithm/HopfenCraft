@@ -16,6 +16,7 @@ import com.hugorithm.hopfencraft.exception.paypal.PaypalAccessTokenException;
 import com.hugorithm.hopfencraft.model.ApplicationUser;
 import com.hugorithm.hopfencraft.model.CartItem;
 import com.hugorithm.hopfencraft.model.Order;
+import com.hugorithm.hopfencraft.model.Product;
 import com.hugorithm.hopfencraft.repository.OrderRepository;
 import org.json.JSONObject;
 import org.slf4j.Logger;
@@ -214,7 +215,7 @@ public class PaypalService {
             ArrayNode purchaseUnitsNode = jsonNode.putArray("purchase_units");
             ObjectNode unitNode = purchaseUnitsNode.addObject();
             ObjectNode amountNode = unitNode.putObject("amount");
-            amountNode.put("currency_code", order.getCurrency().toString());
+            amountNode.put("currency_code", Order.getCurrency().toString());
             amountNode.put("value", order.getTotal().toString());
 
             ObjectNode breakdown = amountNode.putObject("breakdown");
@@ -222,7 +223,7 @@ public class PaypalService {
             // Create an "item_total" object within the breakdown item
             ObjectNode itemTotal = breakdown.putObject("item_total");
 
-            itemTotal.put("currency_code", order.getCurrency().toString());
+            itemTotal.put("currency_code", Order.getCurrency().toString());
             itemTotal.put("value", order.getTotal().toString());
             ArrayNode items = unitNode.putArray("items");
 
@@ -233,7 +234,7 @@ public class PaypalService {
                 item.put("sku", orderItem.getProduct().getSku());
 
                 ObjectNode unitAmount1 = item.putObject("unit_amount");
-                unitAmount1.put("currency_code", order.getCurrency().toString());
+                unitAmount1.put("currency_code", Product.getCurrency().toString());
                 unitAmount1.put("value", orderItem.getProduct().getPrice().toString());
 
                 item.put("quantity", String.valueOf(orderItem.getQuantity()));

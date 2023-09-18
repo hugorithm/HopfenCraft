@@ -52,7 +52,7 @@ public class ProductService {
                     p.getDescription(),
                     p.getStockQuantity(),
                     p.getPrice(),
-                    p.getCurrency(),
+                    Product.getCurrency(),
                     p.getRegisterDateTime()
             ));
         } catch (NoSuchElementException | UsernameNotFoundException ex) {
@@ -120,7 +120,7 @@ public class ProductService {
                     savedProduct.getDescription(),
                     savedProduct.getStockQuantity(),
                     savedProduct.getPrice(),
-                    savedProduct.getCurrency(),
+                    Product.getCurrency(),
                     savedProduct.getRegisterDateTime()
             ));
 

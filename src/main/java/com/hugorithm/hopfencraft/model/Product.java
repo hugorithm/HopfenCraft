@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -31,7 +32,8 @@ public class Product {
     private int stockQuantity;
     private BigDecimal price;
     @Enumerated(EnumType.STRING)
-    private final Currency currency = Currency.EUR;
+    @Getter
+    private static final Currency currency = Currency.EUR;
     @CreationTimestamp
     private LocalDateTime registerDateTime;
     private LocalDateTime updatedDate;
