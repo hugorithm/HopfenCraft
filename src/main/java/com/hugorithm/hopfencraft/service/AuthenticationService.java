@@ -45,9 +45,9 @@ public class AuthenticationService {
     private final EmailService emailService;
     private final static Logger LOGGER = LoggerFactory.getLogger(AuthenticationService.class);
 
-    public ResponseEntity<UserRegistrationResponseDTO> registerUser(UserRegistrationDTO body){
+    public ResponseEntity<UserRegistrationResponseDTO> registerUser(UserRegistrationDTO dto){
         try {
-            String username = body.getUsername().toLowerCase();
+            String username = dto.getUsername().toLowerCase();
 
             Optional<ApplicationUser> existingUser = userRepository.findByUsername(username);
 
@@ -55,13 +55,13 @@ public class AuthenticationService {
                 throw new UsernameAlreadyExistsException("Username %s is already taken", username);
             }
 
-            Optional<ApplicationUser> existingEmail = userRepository.findByEmail(body.getEmail());
+            Optional<ApplicationUser> existingEmail = userRepository.findByEmail(dto.getEmail());
 
             if (existingEmail.isPresent()) {
-                throw new EmailAlreadyTakenException("Email %s is already taken", body.getEmail());
+                throw new EmailAlreadyTakenException("Email %s is already taken", dto.getEmail());
             }
 
-            String encodedPassword = passwordEncoder.encode(body.getPassword());
+            String encodedPassword = passwordEncoder.encode(dto.getPassword());
             Role userRole = roleRepository.findByAuthority("USER").orElseThrow(() -> new RoleNotFoundException("Role not Found"));
 
             Set<Role> authorities = new HashSet<>();
@@ -70,12 +70,12 @@ public class AuthenticationService {
             ApplicationUser user = new ApplicationUser(
                     username,
                     encodedPassword,
-                    body.getEmail(),
+                    dto.getEmail(),
                     authorities,
-                    body.getFirstName(),
-                    body.getLastName(),
-                    body.getDateOfBirth(),
-                    body.getPhoneNumber()
+                    dto.getFirstName(),
+                    dto.getLastName(),
+                    dto.getDateOfBirth(),
+                    dto.getPhoneNumber()
             );
             userRepository.save(user);
 
@@ -86,11 +86,11 @@ public class AuthenticationService {
 
             UserRegistrationResponseDTO userDto = new UserRegistrationResponseDTO(
                     username,
-                    body.getEmail(),
-                    body.getFirstName(),
-                    body.getLastName(),
-                    body.getDateOfBirth(),
-                    body.getPhoneNumber()
+                    dto.getEmail(),
+                    dto.getFirstName(),
+                    dto.getLastName(),
+                    dto.getDateOfBirth(),
+                    dto.getPhoneNumber()
             );
 
             return ResponseEntity.status(HttpStatus.CREATED).body(userDto);
@@ -100,11 +100,11 @@ public class AuthenticationService {
         }
     }
 
-    public ResponseEntity<LoginResponseDTO> login(LoginDTO body){
+    public ResponseEntity<LoginResponseDTO> login(LoginDTO dto){
         try {
-            Authentication auth = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(body.getUsername(), body.getPassword()));
+            Authentication auth = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(dto.getUsername(), dto.getPassword()));
             String token = tokenService.generateJwt(auth);
-            ApplicationUser user = userRepository.findByUsername(body.getUsername()).orElseThrow(() -> new UsernameNotFoundException("User not found"));
+            ApplicationUser user = userRepository.findByUsername(dto.getUsername()).orElseThrow(() -> new UsernameNotFoundException("User not found"));
             LoginResponseDTO response = new LoginResponseDTO(user.getUsername(), user.getEmail(), token);
 
             return ResponseEntity.ok(response);

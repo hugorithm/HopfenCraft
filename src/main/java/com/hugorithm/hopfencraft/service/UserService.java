@@ -1,5 +1,6 @@
 package com.hugorithm.hopfencraft.service;
 
+import com.hugorithm.hopfencraft.dto.authentication.PasswordResetDTO;
 import com.hugorithm.hopfencraft.enums.EmailType;
 import com.hugorithm.hopfencraft.exception.auth.InvalidTokenException;
 import com.hugorithm.hopfencraft.exception.auth.PasswordMismatchException;
@@ -129,20 +130,20 @@ public class UserService implements UserDetailsService {
     }
 
     //TODO: Implement google reCaptcha
-    public ResponseEntity<?> resetPassword(Jwt jwt, String token, String oldPassword, String newPassword, String newPasswordConfirmation) {
+    public ResponseEntity<?> resetPassword(Jwt jwt, String token, PasswordResetDTO dto) {
         try {
             ApplicationUser user = verifyPasswordResetToken(jwt, token);
 
-            if (!passwordEncoder.matches(oldPassword, user.getPassword())) {
+            if (!passwordEncoder.matches(dto.getOldPassword(), user.getPassword())) {
                 throw new WrongCredentialsException("Wrong credentials");
             }
 
-            if (oldPassword.equals(newPassword)) {
+            if (dto.getOldPassword().equals(dto.getNewPassword())) {
                 throw new SamePasswordException("New password must be different from the old password");
             }
 
-            if (newPassword.equals(newPasswordConfirmation)) {
-                String encodedPassword = passwordEncoder.encode(newPassword);
+            if (dto.getNewPassword().equals(dto.getNewPasswordConfirmation())) {
+                String encodedPassword = passwordEncoder.encode(dto.getNewPassword());
                 user.setPassword(encodedPassword);
                 user.setPasswordResetToken(null);
                 user.setPasswordResetTokenExpiration(null);

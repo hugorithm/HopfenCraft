@@ -1,6 +1,7 @@
 package com.hugorithm.hopfencraft.service;
 
 import com.hugorithm.hopfencraft.dto.cart.CartItemDTO;
+import com.hugorithm.hopfencraft.dto.cart.CartRegistrationDTO;
 import com.hugorithm.hopfencraft.dto.cart.CartResponseDTO;
 import com.hugorithm.hopfencraft.dto.product.ProductDTO;
 import com.hugorithm.hopfencraft.exception.cart.CartItemNotFoundException;
@@ -62,20 +63,20 @@ public class ShoppingCartService {
 
         return ResponseEntity.ok(new CartResponseDTO(cartItemDTOs));
     }
-    public ResponseEntity<CartResponseDTO> addToCart(Jwt jwt, Long productId, int quantity) {
+    public ResponseEntity<CartResponseDTO> addToCart(Jwt jwt, CartRegistrationDTO dto) {
         try {
             ApplicationUser user = jwtService.getUserFromJwt(jwt);
-            Product product = getProductFromRepoById(productId);
+            Product product = getProductFromRepoById(dto.getProductId());
 
             List<CartItem> cartItems = user.getCartItems();
 
             int totalQuantity = cartItems.stream()
-                    .filter(cartItem -> cartItem.getProduct().getProductId().equals(productId))
+                    .filter(cartItem -> cartItem.getProduct().getProductId().equals(dto.getProductId()))
                     .mapToInt(CartItem::getQuantity)
                     .sum();
 
-            if (quantity + totalQuantity <= product.getStockQuantity()) {
-                CartItem cartItem = new CartItem(product, user, quantity);
+            if (dto.getQuantity() + totalQuantity <= product.getStockQuantity()) {
+                CartItem cartItem = new CartItem(product, user, dto.getQuantity());
 
                 cartItemRepository.save(cartItem);
                 cartItems.add(cartItem);

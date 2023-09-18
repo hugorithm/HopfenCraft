@@ -68,12 +68,12 @@ public class ProductController {
     }
     @PostMapping("/register")
     public ResponseEntity<ProductDTO> registerProduct(@AuthenticationPrincipal Jwt jwt, @Valid @RequestBody ProductRegistrationDTO body) {
-        return productService.registerProduct(jwt, body.getBrand(), body.getName(),body.getDescription(), body.getQuantity(), body.getPrice(), body.getCurrency());
+        return productService.registerProduct(jwt, body);
     }
 
     @PutMapping("/update")
     public ResponseEntity<ProductDTO> updateProduct(@Valid @RequestBody ProductUpdateDTO body) {
-        return productService.updateProduct(body.getProductId(), body.getBrand(), body.getName(), body.getDescription(), body.getQuantity(), body.getPrice());
+        return productService.updateProduct(body);
     }
 
     @DeleteMapping("/remove/{productId}")

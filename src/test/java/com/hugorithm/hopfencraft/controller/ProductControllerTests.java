@@ -84,12 +84,7 @@ public class ProductControllerTests {
         // Mock the productService.registerProduct method to return the expected response
         when(productService.registerProduct(
                 same(mockJwt),
-                eq(validInput.getBrand()),
-                eq(validInput.getName()),
-                eq(validInput.getDescription()),
-                eq(validInput.getQuantity()),
-                eq(validInput.getPrice()),
-                eq(validInput.getCurrency())
+                eq(validInput)
         )).thenReturn(ResponseEntity.status(HttpStatus.CREATED).body(expectedResponse));
 
         // Perform the POST request using mockMvc
@@ -108,12 +103,7 @@ public class ProductControllerTests {
         // Verify that the productService.registerProduct method was called with the expected arguments
         verify(productService).registerProduct(
                same(mockJwt),
-                eq(validInput.getBrand()),
-                eq(validInput.getName()),
-                eq(validInput.getDescription()),
-                eq(validInput.getQuantity()),
-                eq(validInput.getPrice()),
-                eq(validInput.getCurrency())
+                eq(validInput)
         );
     }
 
@@ -173,12 +163,7 @@ public class ProductControllerTests {
         // Simulate the ProductService returning a conflict response
         when(productService.registerProduct(
                 same(mockJwt),
-                eq(existingProduct.getBrand()),
-                eq(existingProduct.getName()),
-                eq(existingProduct.getDescription()),
-                eq(existingProduct.getQuantity()),
-                eq(existingProduct.getPrice()),
-                eq(existingProduct.getCurrency())
+                eq(existingProduct)
         )).thenReturn(ResponseEntity.status(HttpStatus.CONFLICT).build());
 
         mockMvc.perform(post("/product/register")
@@ -330,14 +315,7 @@ public class ProductControllerTests {
                 dt
         );
 
-        when(productService.updateProduct(
-                validInput.getProductId(),
-                validInput.getBrand(),
-                validInput.getName(),
-                validInput.getDescription(),
-                validInput.getQuantity(),
-                validInput.getPrice()
-        )).thenReturn(ResponseEntity.ok(expectedUpdatedProduct));
+        when(productService.updateProduct(validInput)).thenReturn(ResponseEntity.ok(expectedUpdatedProduct));
 
         mockMvc.perform(put("/product/update")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -363,14 +341,7 @@ public class ProductControllerTests {
                 new BigDecimal("9.99")
         );
 
-        when(productService.updateProduct(
-                invalidInput.getProductId(),
-                invalidInput.getBrand(),
-                invalidInput.getName(),
-                invalidInput.getDescription(),
-                invalidInput.getQuantity(),
-                invalidInput.getPrice()
-        )).thenReturn(ResponseEntity.badRequest().build());
+        when(productService.updateProduct(invalidInput)).thenReturn(ResponseEntity.badRequest().build());
 
         mockMvc.perform(put("/product/update")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -387,14 +358,7 @@ public class ProductControllerTests {
         invalidInput.setQuantity(10);
         invalidInput.setPrice(new BigDecimal("2.50"));
 
-        when(productService.updateProduct(
-                invalidInput.getProductId(),
-                invalidInput.getBrand(),
-                invalidInput.getName(),
-                invalidInput.getDescription(),
-                invalidInput.getQuantity(),
-                invalidInput.getPrice()
-        )).thenReturn(ResponseEntity.badRequest().build());
+        when(productService.updateProduct(invalidInput)).thenReturn(ResponseEntity.badRequest().build());
 
         mockMvc.perform(put("/product/update")
                         .contentType(MediaType.APPLICATION_JSON)

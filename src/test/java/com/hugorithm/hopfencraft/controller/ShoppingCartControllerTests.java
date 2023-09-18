@@ -75,7 +75,7 @@ public class ShoppingCartControllerTests {
         // Mock the behavior of your shoppingCartService to return a CartResponseDTO
         CartResponseDTO cartResponseDTO = new CartResponseDTO(Collections.emptyList());
 
-        when(shoppingCartService.addToCart(mockJwt, 1L, 2)).thenReturn(ResponseEntity.ok(cartResponseDTO));
+        when(shoppingCartService.addToCart(mockJwt, cartRegistrationDTO)).thenReturn(ResponseEntity.ok(cartResponseDTO));
 
         // Convert the DTO to JSON
         String requestBody = new ObjectMapper().writeValueAsString(cartRegistrationDTO);

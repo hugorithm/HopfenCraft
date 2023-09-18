@@ -1,6 +1,8 @@
 package com.hugorithm.hopfencraft.service;
 
 import com.hugorithm.hopfencraft.dto.product.ProductDTO;
+import com.hugorithm.hopfencraft.dto.product.ProductRegistrationDTO;
+import com.hugorithm.hopfencraft.dto.product.ProductUpdateDTO;
 import com.hugorithm.hopfencraft.enums.Currency;
 import com.hugorithm.hopfencraft.model.ApplicationUser;
 import com.hugorithm.hopfencraft.model.Product;
@@ -46,7 +48,7 @@ public class ProductServiceTests {
         user.setUsername("testuser");
         user.setEmail("testuser@example.com");
         // Create a valid product DTO
-        ProductDTO validProductDTO = new ProductDTO(null, "TestBrand", "TestName", "TestDescription", 10, new BigDecimal("19.99"), Currency.EUR ,null);
+        ProductRegistrationDTO validProductDTO = new ProductRegistrationDTO("TestBrand", "TestName", "TestDescription", 10, new BigDecimal("19.99"), Currency.EUR );
 
         // Mock the product repository to return an empty Optional, indicating the product does not exist
         when(productRepository.findProductByName("TestName")).thenReturn(Optional.empty());
@@ -60,12 +62,8 @@ public class ProductServiceTests {
         // Call the service method
         ResponseEntity<ProductDTO> response = productService.registerProduct(
                 mock(Jwt.class),
-                validProductDTO.getBrand(),
-                validProductDTO.getName(),
-                validProductDTO.getDescription(),
-                validProductDTO.getQuantity(),
-                validProductDTO.getPrice(),
-                validProductDTO.getCurrency()
+                validProductDTO
+
         );
 
         // Assert the expected behavior
@@ -86,7 +84,7 @@ public class ProductServiceTests {
         user.setUsername("testuser");
         user.setEmail("testuser@example.com");
         // Create a valid product DTO
-        ProductDTO validProductDTO = new ProductDTO(null, "TestBrand", "TestName", "TestDescription", 10, new BigDecimal("19.99"), Currency.EUR, null);
+        ProductRegistrationDTO validProductDTO = new ProductRegistrationDTO("TestBrand", "TestName", "TestDescription", 10, new BigDecimal("19.99"), Currency.EUR);
 
         // Mock the product repository to return a non-empty Optional, indicating the product already exists
         when(productRepository.findProductByName("TestName")).thenReturn(Optional.of(new Product()));
@@ -94,12 +92,7 @@ public class ProductServiceTests {
         // Call the service method
         ResponseEntity<ProductDTO> response = productService.registerProduct(
                 mock(Jwt.class),
-                validProductDTO.getBrand(),
-                validProductDTO.getName(),
-                validProductDTO.getDescription(),
-                validProductDTO.getQuantity(),
-                validProductDTO.getPrice(),
-                validProductDTO.getCurrency()
+                validProductDTO
         );
 
         // Assert the expected behavior
@@ -120,14 +113,18 @@ public class ProductServiceTests {
         when(productRepository.findById(productId)).thenReturn(Optional.of(existingProduct));
         when(productRepository.save(existingProduct)).thenReturn(existingProduct);
 
+
+
         // Call the service method to update the product
         ResponseEntity<ProductDTO> response = productService.updateProduct(
-                productId,
-                "UpdatedBrand",
-                "UpdatedName",
-                "UpdatedDescription",
-                10,
-                new BigDecimal("29.99")
+                new ProductUpdateDTO(
+                    productId,
+                    "UpdatedBrand",
+                    "UpdatedName",
+                    "UpdatedDescription",
+                    10,
+                    new BigDecimal("29.99")
+                )
         );
 
         // Assert the expected behavior
@@ -151,12 +148,14 @@ public class ProductServiceTests {
 
         // Call the service method to update the product
         ResponseEntity<ProductDTO> response = productService.updateProduct(
-                productId,
-                "UpdatedBrand",
-                "UpdatedName",
-                "UpdatedDescription",
-                10,
-                new BigDecimal("29.99")
+                new ProductUpdateDTO(
+                    productId,
+                    "UpdatedBrand",
+                    "UpdatedName",
+                    "UpdatedDescription",
+                    10,
+                    new BigDecimal("29.99")
+                )
         );
 
         // Assert the expected behavior
@@ -178,12 +177,14 @@ public class ProductServiceTests {
 
         // Call the service method to update the product with a negative quantity
         ResponseEntity<ProductDTO> response = productService.updateProduct(
-                productId,
-                "UpdatedBrand",
-                "UpdatedName",
-                "UpdatedDescription",
-                -5,
-                new BigDecimal("29.99")
+                new ProductUpdateDTO(
+                    productId,
+                    "UpdatedBrand",
+                    "UpdatedName",
+                    "UpdatedDescription",
+                    -5,
+                    new BigDecimal("29.99")
+                )
         );
 
         // Assert the expected behavior
@@ -205,12 +206,14 @@ public class ProductServiceTests {
 
         // Call the service method to update the product with a negative price
         ResponseEntity<ProductDTO> response = productService.updateProduct(
-                productId,
-                "UpdatedBrand",
-                "UpdatedName",
-                "UpdatedDescription",
-                10,
-                new BigDecimal("-5.00")
+                new ProductUpdateDTO(
+                    productId,
+                    "UpdatedBrand",
+                    "UpdatedName",
+                    "UpdatedDescription",
+                    10,
+                    new BigDecimal("-5.00")
+                )
         );
 
         // Assert the expected behavior

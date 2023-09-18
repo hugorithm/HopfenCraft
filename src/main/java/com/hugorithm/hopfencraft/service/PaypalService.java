@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.hugorithm.hopfencraft.dto.paypal.PaymentRequestDTO;
 import com.hugorithm.hopfencraft.enums.OrderStatus;
 import com.hugorithm.hopfencraft.enums.PaymentMethod;
 import com.hugorithm.hopfencraft.exception.order.OrderPaymentException;
@@ -101,10 +102,11 @@ public class PaypalService {
         }
     }
 
-    public ResponseEntity<Object> capturePayment(Jwt jwt, Long orderId, String paypalOrderId) {
+    public ResponseEntity<Object> capturePayment(Jwt jwt, PaymentRequestDTO dto, String paypalOrderId) {
         try {
             ApplicationUser user = jwtService.getUserFromJwt(jwt);
-            Order order = orderRepository.findById(orderId).orElseThrow(() -> new OrderNotFoundException("Order not found with id: %s", orderId));
+            Order order = orderRepository.findById(dto.getOrderId())
+                    .orElseThrow(() -> new OrderNotFoundException("Order not found with id: %s", dto.getOrderId()));
 
             if (!order.getUser().getUserId().equals(user.getUserId())) {
                 throw new OrderUserMismatchException("Order user id: %s does not match user id: %s", order.getUser().getUserId(), user.getUserId());
@@ -181,10 +183,11 @@ public class PaypalService {
         }
     }
 
-    public ResponseEntity<Object> createOrder(Jwt jwt, Long orderId) {
+    public ResponseEntity<Object> createOrder(Jwt jwt, PaymentRequestDTO dto) {
         try {
             ApplicationUser user = jwtService.getUserFromJwt(jwt);
-            Order order = orderRepository.findById(orderId).orElseThrow(() -> new OrderNotFoundException("Order not found with id: %s", orderId));
+            Order order = orderRepository.findById(dto.getOrderId())
+                    .orElseThrow(() -> new OrderNotFoundException("Order not found with id: %s", dto.getOrderId()));
 
             if (!order.getUser().getUserId().equals(user.getUserId())) {
                 throw new OrderUserMismatchException("Order user id: %s does not match user id: %s", order.getUser().getUserId(), user.getUserId());

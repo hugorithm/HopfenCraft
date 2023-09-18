@@ -81,7 +81,7 @@ public class UserControllerTests {
 
         // Mock the behavior of your userService to return a success response
         String resetToken = "resetToken"; // Replace with an actual reset token
-        when(userService.resetPassword(mockJwt, resetToken, passwordResetDTO.getOldPassword(), passwordResetDTO.getNewPassword(), passwordResetDTO.getNewPasswordConfirmation()))
+        when(userService.resetPassword(mockJwt, resetToken, passwordResetDTO))
                 .thenReturn(ResponseEntity.ok().build());
 
         // Convert the DTO to JSON
