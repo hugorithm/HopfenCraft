@@ -23,6 +23,7 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.annotation.DirtiesContext;
 
+import java.time.LocalDate;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -54,7 +55,7 @@ public class AuthenticationServiceTests {
     public void testRegisterUser_ValidInput_ReturnsOk() {
         dataInitialization.run();
         // Implement test logic for a successful user registration with valid input.
-        UserRegistrationDTO validInput = new UserRegistrationDTO("validusername", "ValidPass123!", "validemail@example.com");
+        UserRegistrationDTO validInput = new UserRegistrationDTO("validusername", "ValidPass123!", "validemail@example.com", "Test", "test", LocalDate.of(1990, 11, 11), "+351939302529");
         Role userRole = new Role("USER");
 
         // Mock dependencies
@@ -66,7 +67,7 @@ public class AuthenticationServiceTests {
 
         when(roleRepository.findByAuthority("USER")).thenReturn(Optional.of(userRole));
         // Call the service method
-        ResponseEntity<UserRegistrationResponseDTO> response = authenticationService.registerUser(validInput.getUsername(), validInput.getPassword(), validInput.getEmail());
+        ResponseEntity<UserRegistrationResponseDTO> response = authenticationService.registerUser(validInput);
 
         // Assert the expected behavior
         assertEquals(HttpStatus.CREATED, response.getStatusCode());
@@ -87,7 +88,7 @@ public class AuthenticationServiceTests {
         });
 
         // Call the service method
-        ResponseEntity<LoginResponseDTO> response = authenticationService.login(invalidInput.getUsername(), invalidInput.getPassword());
+        ResponseEntity<LoginResponseDTO> response = authenticationService.login(invalidInput);
 
         // Assert the expected behavior
         assertEquals(HttpStatus.UNAUTHORIZED, response.getStatusCode());
@@ -109,7 +110,7 @@ public class AuthenticationServiceTests {
         when(userRepository.findByUsername("validusername")).thenReturn(Optional.of(user));
 
         // Call the service method
-        ResponseEntity<LoginResponseDTO> response = authenticationService.login(validInput.getUsername(), validInput.getPassword());
+        ResponseEntity<LoginResponseDTO> response = authenticationService.login(validInput);
 
         // Assert the expected behavior
         assertEquals(HttpStatus.OK, response.getStatusCode());

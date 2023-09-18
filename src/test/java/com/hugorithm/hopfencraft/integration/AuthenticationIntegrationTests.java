@@ -13,6 +13,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.annotation.DirtiesContext;
 
+import java.time.LocalDate;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -25,7 +27,7 @@ public class AuthenticationIntegrationTests {
     private TestRestTemplate restTemplate;
     @Test
     public void RegisterUser_ValidInput_ReturnsOk() {
-        UserRegistrationDTO validInput = new UserRegistrationDTO("validusername", "ValidPass123!", "validemaildiff@example.com");
+        UserRegistrationDTO validInput = new UserRegistrationDTO("validusername", "ValidPass123!", "validemaildiff@example.com", "Test", "test", LocalDate.of(1990, 11, 11), "+351939302529");
 
         ResponseEntity<UserRegistrationResponseDTO> response = restTemplate.postForEntity(
                 "http://localhost:" + port + "/auth/register",
@@ -44,7 +46,7 @@ public class AuthenticationIntegrationTests {
 
     @Test
     public void RegisterUser_InvalidEmail_ReturnsBadRequest() {
-        UserRegistrationDTO validInput = new UserRegistrationDTO("validusername", "ValidPass123!", "invalidemail");
+        UserRegistrationDTO validInput = new UserRegistrationDTO("validusername", "ValidPass123!", "invalidemail", "Test", "test", LocalDate.of(1990, 11, 11), "+351939302529");
 
         ResponseEntity<UserRegistrationResponseDTO> response = restTemplate.postForEntity(
                 "http://localhost:" + port + "/auth/register",
@@ -59,8 +61,8 @@ public class AuthenticationIntegrationTests {
 
     @Test
     public void RegisterUser_InvalidSameEmail_ReturnsBadRequest() {
-        UserRegistrationDTO validInput = new UserRegistrationDTO("test", "ValidPass123!", "test@example.com");
-        UserRegistrationDTO validInput2 = new UserRegistrationDTO("test2", "ValidPass123!", "test@example.com");
+        UserRegistrationDTO validInput = new UserRegistrationDTO("test", "ValidPass123!", "test@example.com", "Test", "test", LocalDate.of(1990, 11, 11), "+351939302529");
+        UserRegistrationDTO validInput2 = new UserRegistrationDTO("test2", "ValidPass123!", "test@example.com", "Test", "test", LocalDate.of(1990, 11, 11), "+351939302529");
 
         ResponseEntity<UserRegistrationResponseDTO> response = restTemplate.postForEntity(
                 "http://localhost:" + port + "/auth/register",
@@ -87,8 +89,8 @@ public class AuthenticationIntegrationTests {
 
     @Test
     public void RegisterUser_InvalidSameUsername_ReturnsBadRequest() {
-        UserRegistrationDTO validInput = new UserRegistrationDTO("test", "ValidPass123!", "test@example.com");
-        UserRegistrationDTO validInput2 = new UserRegistrationDTO("test", "ValidPass123!", "test2@example.com");
+        UserRegistrationDTO validInput = new UserRegistrationDTO("test", "ValidPass123!", "test@example.com" ,"Test", "test", LocalDate.of(1990, 11, 11), "+351939302529");
+        UserRegistrationDTO validInput2 = new UserRegistrationDTO("test", "ValidPass123!", "test2@example.com", "Test", "test", LocalDate.of(1990, 11, 11), "+351939302529");
 
         ResponseEntity<UserRegistrationResponseDTO> response = restTemplate.postForEntity(
                 "http://localhost:" + port + "/auth/register",
@@ -115,7 +117,7 @@ public class AuthenticationIntegrationTests {
 
     @Test
     public void RegisterUser_InvalidUsername_ReturnsBadRequest() {
-        UserRegistrationDTO validInput = new UserRegistrationDTO("in", "ValidPass123!", "validemail@example.com");
+        UserRegistrationDTO validInput = new UserRegistrationDTO("in", "ValidPass123!", "validemail@example.com", "Test", "test", LocalDate.of(1990, 11, 11), "+351939302529");
 
         ResponseEntity<UserRegistrationResponseDTO> response = restTemplate.postForEntity(
                 "http://localhost:" + port + "/auth/register",
@@ -130,7 +132,7 @@ public class AuthenticationIntegrationTests {
 
     @Test
     public void RegisterUser_InvalidPassword_ReturnsBadRequest() {
-        UserRegistrationDTO validInput = new UserRegistrationDTO("validusername", "invalidpassword", "validemail@example.com");
+        UserRegistrationDTO validInput = new UserRegistrationDTO("validusername", "invalidpassword", "validemail@example.com", "Test", "test", LocalDate.of(1990, 11, 11), "+351939302529");
 
         ResponseEntity<UserRegistrationResponseDTO> response = restTemplate.postForEntity(
                 "http://localhost:" + port + "/auth/register",
@@ -161,7 +163,7 @@ public class AuthenticationIntegrationTests {
     @Test
     public void Login_ValidCredentials_ReturnsOk() {
         //Register User
-        UserRegistrationDTO validInput = new UserRegistrationDTO("validusername", "ValidPass123!", "validemaildiff@example.com");
+        UserRegistrationDTO validInput = new UserRegistrationDTO("validusername", "ValidPass123!", "validemaildiff@example.com", "Test", "test", LocalDate.of(1990, 11, 11), "+351939302529");
 
         ResponseEntity<UserRegistrationResponseDTO> response = restTemplate.postForEntity(
                 "http://localhost:" + port + "/auth/register",

@@ -10,6 +10,7 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -43,6 +44,8 @@ public class ProductRepositoryTests {
         ApplicationUser user = new ApplicationUser();
         user.setUsername("testuser");
         user.setEmail("testuser@example.com");
+        user.setPhoneNumber("+351939302588");
+        user.setDateOfBirth(LocalDate.of(1990, 11,11));
         //Arrange
         Product product = new Product("Paulaner", "Paulaner Weissbier", "Weiss", 10, new BigDecimal("2.39"), user);
         Product product2 = new Product("Franziskaner", "Franziskaner Hefeweizen", "Weiss", 11, new BigDecimal("2.99"), user);
@@ -79,6 +82,8 @@ public class ProductRepositoryTests {
         ApplicationUser user = new ApplicationUser();
         user.setUsername("testuser");
         user.setEmail("testuser@example.com");
+        user.setPhoneNumber("+351939302588");
+        user.setDateOfBirth(LocalDate.of(1990, 11,11));
         //Arrange
         Product product = new Product("Paulaner", "Paulaner Weissbier", "Weiss", 10, new BigDecimal("2.39"), user);
 

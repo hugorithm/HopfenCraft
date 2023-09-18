@@ -9,6 +9,7 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.List;
@@ -33,7 +34,7 @@ public class CartItemRepositoryTests {
         Role role = new Role("ADMIN");
         Set<Role> roles = new HashSet<>();
         roles.add(role);
-        ApplicationUser user = new ApplicationUser("user1", "Password123!", "email@example.com", roles);
+        ApplicationUser user = new ApplicationUser("user1", "Password123!", "email@example.com", roles, "Test", "test", LocalDate.of(1990, 11, 11), "+351939302529");
         Product product = new Product("Paulaner", "Paulaner Weissbier", "Weiss", 10, new BigDecimal("2.39"), user);
         CartItem cartItem = new CartItem(product, user, 2);
 
@@ -51,7 +52,7 @@ public class CartItemRepositoryTests {
         Role role = new Role("ADMIN");
         Set<Role> roles = new HashSet<>();
         roles.add(role);
-        ApplicationUser user = new ApplicationUser("user1", "Password123!", "email@example.com", roles);
+        ApplicationUser user = new ApplicationUser("user1", "Password123!", "email@example.com", roles, "Test", "test", LocalDate.of(1990, 11, 11), "+351939302529");
         Product product = new Product("Paulaner", "Paulaner Weissbier", "Weiss", 10, new BigDecimal("2.39"), user);
         CartItem cartItem = new CartItem(product, user, 2);
         CartItem cartItem2 = new CartItem(product, user, 3);
@@ -80,7 +81,7 @@ public class CartItemRepositoryTests {
         Role role = new Role("ADMIN");
         Set<Role> roles = new HashSet<>();
         roles.add(role);
-        ApplicationUser user = new ApplicationUser("user1", "Password123!", "email@example.com", roles);
+        ApplicationUser user = new ApplicationUser("user1", "Password123!", "email@example.com", roles, "Test", "test", LocalDate.of(1990, 11, 11), "+351939302529");
         Product product = new Product("Paulaner", "Paulaner Weissbier", "Weiss", 10, new BigDecimal("2.39"), user);
         CartItem cartItem = new CartItem(product, user, 2);
 
@@ -98,8 +99,8 @@ public class CartItemRepositoryTests {
         Role role = new Role("ADMIN");
         Set<Role> roles = new HashSet<>();
         roles.add(role);
-        ApplicationUser user = new ApplicationUser("user1", "Password123!", "email@example.com", roles);
-        ApplicationUser user2 = new ApplicationUser("user2", "Password123!", "email@example.com", roles);
+        ApplicationUser user = new ApplicationUser("user1", "Password123!", "email@example.com", roles, "Test", "test", LocalDate.of(1990, 11, 11), "+351939302529");
+        ApplicationUser user2 = new ApplicationUser("user2", "Password123!", "email@example.com", roles, "Test", "test", LocalDate.of(1990, 11, 11), "+351939302529");
         Product product = new Product("Paulaner", "Paulaner Weissbier", "Weiss", 10, new BigDecimal("2.39"), user);
         Product product2 = new Product("Paulaner", "Paulaner Helles", "Lager", 10, new BigDecimal("2.59"), user);
         CartItem cartItem = new CartItem(product, user, 2);
@@ -136,7 +137,7 @@ public class CartItemRepositoryTests {
         Role role = new Role("ADMIN");
         Set<Role> roles = new HashSet<>();
         roles.add(role);
-        ApplicationUser user = new ApplicationUser("user1", "Password123!", "email@example.com", roles);
+        ApplicationUser user = new ApplicationUser("user1", "Password123!", "email@example.com", roles, "Test", "test", LocalDate.of(1990, 11, 11), "+351939302529");
         Product product = new Product("Paulaner", "Paulaner Weissbier", "Weiss", 10, new BigDecimal("2.39"), user);
         CartItem cartItem = new CartItem(product, user, 2);
 

@@ -21,6 +21,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
+import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -75,7 +76,7 @@ public class UserControllerTests {
         Role role = new Role("USER");
         Set<Role> roles = new HashSet<>();
         roles.add(role);
-        ApplicationUser user = new ApplicationUser("user1", "Password123!", "email@example.com", roles);
+        ApplicationUser user = new ApplicationUser("user1", "Password123!", "email@example.com", roles, "Test", "test", LocalDate.of(1990, 11, 11), "+351939302529");
         PasswordResetDTO passwordResetDTO = new PasswordResetDTO("Password123!", "newPassword123!", "newPassword123!");
 
         // Mock the behavior of your userService to return a success response

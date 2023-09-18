@@ -11,6 +11,7 @@ import org.springframework.boot.jdbc.EmbeddedDatabaseConnection;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.List;
@@ -33,7 +34,7 @@ public class EmailRepositoryTests {
         Role role = new Role("USER");
         Set<Role> roles = new HashSet<>();
         roles.add(role);
-        ApplicationUser user = new ApplicationUser("user1", "Password123!", "email@example.com", roles);
+        ApplicationUser user = new ApplicationUser("user1", "Password123!", "email@example.com", roles, "Test", "test", LocalDate.of(1990, 11, 11), "+351939302529");
         Email email = new Email(EmailType.REGISTRATION, LocalDateTime.now(), user);
 
         //Act
@@ -51,7 +52,7 @@ public class EmailRepositoryTests {
         Role role = new Role("USER");
         Set<Role> roles = new HashSet<>();
         roles.add(role);
-        ApplicationUser user = new ApplicationUser("user1", "Password123!", "email@example.com", roles);
+        ApplicationUser user = new ApplicationUser("user1", "Password123!", "email@example.com", roles, "Test", "test", LocalDate.of(1990, 11, 11), "+351939302529");
         Email email = new Email(EmailType.REGISTRATION, LocalDateTime.now(), user);
         Email email2 = new Email(EmailType.ORDER, LocalDateTime.now(), user);
 
@@ -73,7 +74,7 @@ public class EmailRepositoryTests {
         Role role = new Role("USER");
         Set<Role> roles = new HashSet<>();
         roles.add(role);
-        ApplicationUser user = new ApplicationUser("user1", "Password123!", "email@example.com", roles);
+        ApplicationUser user = new ApplicationUser("user1", "Password123!", "email@example.com", roles, "Test", "test", LocalDate.of(1990, 11, 11), "+351939302529");
         Email email = new Email(EmailType.REGISTRATION, LocalDateTime.now(), user);
 
         //Act
@@ -90,8 +91,8 @@ public class EmailRepositoryTests {
         Role role = new Role("USER");
         Set<Role> roles = new HashSet<>();
         roles.add(role);
-        ApplicationUser user = new ApplicationUser("user1", "Password123!", "email@example.com", roles);
-        ApplicationUser user2 = new ApplicationUser("user2", "Password123!", "email2@example.com", roles);
+        ApplicationUser user = new ApplicationUser("user1", "Password123!", "email@example.com", roles, "Test", "test", LocalDate.of(1990, 11, 11), "+351939302529");
+        ApplicationUser user2 = new ApplicationUser("user2", "Password123!", "email2@example.com", roles, "Test", "test", LocalDate.of(1990, 11, 11), "+3519932476755");
 
         Email email = new Email(EmailType.REGISTRATION, LocalDateTime.now(), user);
         LocalDateTime mailDate = email.getEmailSendDate();
@@ -121,7 +122,7 @@ public class EmailRepositoryTests {
         Role role = new Role("USER");
         Set<Role> roles = new HashSet<>();
         roles.add(role);
-        ApplicationUser user = new ApplicationUser("user1", "Password123!", "email@example.com", roles);
+        ApplicationUser user = new ApplicationUser("user1", "Password123!", "email@example.com", roles, "Test", "test", LocalDate.of(1990, 11, 11), "+351939302529");
         Email email = new Email(EmailType.REGISTRATION, LocalDateTime.now(), user);
 
         //Act

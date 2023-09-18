@@ -9,6 +9,7 @@ import org.springframework.boot.jdbc.EmbeddedDatabaseConnection;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
+import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -27,7 +28,7 @@ public class UserRepositoryTests {
         Role role = new Role("USER");
         Set<Role> roles = new HashSet<>();
         roles.add(role);
-        ApplicationUser user = new ApplicationUser("user1", "Password123!", "email@example.com", roles);
+        ApplicationUser user = new ApplicationUser("user1", "Password123!", "email@example.com", roles, "Test", "test", LocalDate.of(1990, 11, 11), "+351939302529");
 
         //Act
         ApplicationUser savedUser = userRepository.save(user);
@@ -43,8 +44,8 @@ public class UserRepositoryTests {
         Role role = new Role("USER");
         Set<Role> roles = new HashSet<>();
         roles.add(role);
-        ApplicationUser user = new ApplicationUser("user1", "Password123!", "email@example.com", roles);
-        ApplicationUser user2 = new ApplicationUser("user2", "Password123!", "email2@example.com", roles);
+        ApplicationUser user = new ApplicationUser("user1", "Password123!", "email@example.com", roles, "Test", "test", LocalDate.of(1990, 11, 11), "+351939302529");
+        ApplicationUser user2 = new ApplicationUser("user2", "Password123!", "email2@example.com", roles, "Test", "test", LocalDate.of(1990, 11, 11), "+351939302555");
 
         //Act
         userRepository.save(user);
@@ -62,7 +63,7 @@ public class UserRepositoryTests {
         Role role = new Role("USER");
         Set<Role> roles = new HashSet<>();
         roles.add(role);
-        ApplicationUser user = new ApplicationUser("user1", "Password123!", "email@example.com", roles);
+        ApplicationUser user = new ApplicationUser("user1", "Password123!", "email@example.com", roles, "Test", "test", LocalDate.of(1990, 11, 11), "+351939302529");
 
         userRepository.save(user);
 
@@ -77,7 +78,7 @@ public class UserRepositoryTests {
         Role role = new Role("USER");
         Set<Role> roles = new HashSet<>();
         roles.add(role);
-        ApplicationUser user = new ApplicationUser("user1", "Password123!", "email@example.com", roles);
+        ApplicationUser user = new ApplicationUser("user1", "Password123!", "email@example.com", roles, "Test", "test", LocalDate.of(1990, 11, 11), "+351939302529");
 
         userRepository.save(user);
 
@@ -92,7 +93,7 @@ public class UserRepositoryTests {
         Role role = new Role("USER");
         Set<Role> roles = new HashSet<>();
         roles.add(role);
-        ApplicationUser user = new ApplicationUser("user1", "Password123!", "email@example.com", roles);
+        ApplicationUser user = new ApplicationUser("user1", "Password123!", "email@example.com", roles, "Test", "test", LocalDate.of(1990, 11, 11), "+351939302529");
         String username = user.getUsername();
         String password = user.getPassword();
         String email = user.getEmail();
@@ -121,7 +122,7 @@ public class UserRepositoryTests {
         Role role = new Role("USER");
         Set<Role> roles = new HashSet<>();
         roles.add(role);
-        ApplicationUser user = new ApplicationUser("user1", "Password123!", "email@example.com", roles);
+        ApplicationUser user = new ApplicationUser("user1", "Password123!", "email@example.com", roles, "Test", "test", LocalDate.of(1990, 11, 11), "+351939302529");
 
         userRepository.save(user);
 
