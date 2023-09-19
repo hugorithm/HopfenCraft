@@ -48,13 +48,7 @@ public class OAuth2LoginSuccessHandler extends SavedRequestAwareAuthenticationSu
                         Authentication securityAuth = new OAuth2AuthenticationToken(newUser, user.getAuthorities(), oAuth2AuthenticationToken.getAuthorizedClientRegistrationId());
                         SecurityContextHolder.getContext().setAuthentication(securityAuth);
                     }, () -> {
-                        Set<Role> roles = new HashSet<>();
-                        Optional<Role> role = roleRepository.findByAuthority("USER");
-                        role.ifPresent(roles::add);
-                        ApplicationUser userEntity = new ApplicationUser();
-                        userEntity.setAuthorities(roles);
-                        userEntity.setEmail(email);
-                        userEntity.setFirstName(firstName);
+                        ApplicationUser userEntity = createUser(email, firstName);
                         userEntity.setLastName(lastName);
                         userEntity.setUsername(UUID.randomUUID().toString());
                         userEntity.setAuthProvider(AuthProvider.GOOGLE);
@@ -78,13 +72,7 @@ public class OAuth2LoginSuccessHandler extends SavedRequestAwareAuthenticationSu
                         Authentication securityAuth = new OAuth2AuthenticationToken(newUser, user.getAuthorities(), oAuth2AuthenticationToken.getAuthorizedClientRegistrationId());
                         SecurityContextHolder.getContext().setAuthentication(securityAuth);
                     }, () -> {
-                        Set<Role> roles = new HashSet<>();
-                        Optional<Role> role = roleRepository.findByAuthority("USER");
-                        role.ifPresent(roles::add);
-                        ApplicationUser userEntity = new ApplicationUser();
-                        userEntity.setAuthorities(roles);
-                        userEntity.setEmail(email);
-                        userEntity.setFirstName(name);
+                        ApplicationUser userEntity = createUser(email, name);
                         userEntity.setUsername(username);
                         userEntity.setAuthProvider(AuthProvider.GITHUB);
 
@@ -100,5 +88,16 @@ public class OAuth2LoginSuccessHandler extends SavedRequestAwareAuthenticationSu
         this.setDefaultTargetUrl(frontendUrl + "/oauth2/redirect");
         super.onAuthenticationSuccess(request, response, authentication);
 
+    }
+
+    private ApplicationUser createUser(String email, String firstName) {
+        Set<Role> roles = new HashSet<>();
+        Optional<Role> role = roleRepository.findByAuthority("USER");
+        role.ifPresent(roles::add);
+        ApplicationUser userEntity = new ApplicationUser();
+        userEntity.setAuthorities(roles);
+        userEntity.setEmail(email);
+        userEntity.setFirstName(firstName);
+        return userEntity;
     }
 }
