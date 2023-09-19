@@ -159,4 +159,17 @@ public class UserService implements UserDetailsService {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
     }
+
+    //TODO : Review this method | I'm tired ;(
+    public ApplicationUser findById(Long userId) {
+        try {
+            ApplicationUser user = userRepository.findById(userId)
+                    .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+            return user;
+        } catch (UsernameNotFoundException ex) {
+            LOGGER.error(ex.getMessage(), ex);
+            return null;
+        }
+    }
+
 }

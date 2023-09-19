@@ -1,6 +1,7 @@
 package com.hugorithm.hopfencraft.controller;
 
 import com.hugorithm.hopfencraft.dto.authentication.PasswordResetDTO;
+import com.hugorithm.hopfencraft.model.ApplicationUser;
 import com.hugorithm.hopfencraft.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -29,5 +30,11 @@ public class UserController {
     @PostMapping("/reset-password")
     public ResponseEntity<?> resetPassword(@AuthenticationPrincipal Jwt jwt, @Valid @RequestBody PasswordResetDTO body, @RequestParam String token) {
         return userService.resetPassword(jwt, token, body);
+    }
+
+    //TODO: Review this method | I'm tired ;(
+    @GetMapping("/me")
+    public ApplicationUser getCurrentUser(@AuthenticationPrincipal ApplicationUser userPrincipal) {
+        return userService.findById(userPrincipal.getUserId());
     }
 }
