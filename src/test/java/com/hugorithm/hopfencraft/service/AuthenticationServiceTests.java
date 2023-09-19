@@ -23,7 +23,6 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.annotation.DirtiesContext;
 
-import java.time.LocalDate;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -55,7 +54,13 @@ public class AuthenticationServiceTests {
     public void testRegisterUser_ValidInput_ReturnsOk() {
         dataInitialization.run();
         // Implement test logic for a successful user registration with valid input.
-        UserRegistrationDTO validInput = new UserRegistrationDTO("validusername", "ValidPass123!", "validemail@example.com", "Test", "test", LocalDate.of(1990, 11, 11), "+351939302529");
+        UserRegistrationDTO validInput = new UserRegistrationDTO(
+                "validusername",
+                "ValidPass123!",
+                "validemail@example.com",
+                "Test",
+                "test"
+        );
         Role userRole = new Role("USER");
 
         // Mock dependencies

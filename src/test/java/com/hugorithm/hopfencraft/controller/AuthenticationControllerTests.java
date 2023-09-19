@@ -15,13 +15,13 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.time.LocalDate;
 
 import static org.hamcrest.Matchers.equalTo;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 @WebMvcTest(controllers = AuthenticationController.class)
 @AutoConfigureMockMvc(addFilters = false)
 @ExtendWith(MockitoExtension.class)
@@ -35,10 +35,21 @@ public class AuthenticationControllerTests {
     @Test
     public void RegisterUser_ValidInput_ReturnsOk() throws Exception {
         // Define valid input data
-        UserRegistrationDTO validInput = new UserRegistrationDTO("validusername", "ValidPass123!", "validemail@example.com", "Test", "test", LocalDate.of(1990, 11, 11), "+351939302529");
+        UserRegistrationDTO validInput = new UserRegistrationDTO(
+                "validusername",
+                "ValidPass123!",
+                "validemail@example.com",
+                "Test",
+                "test"
+        );
 
         // Define the expected response from the service
-        UserRegistrationResponseDTO expectedResponse = new UserRegistrationResponseDTO("validusername", "validemail@example.com", "Test", "test", LocalDate.of(1990, 11, 11), "+351939302529");
+        UserRegistrationResponseDTO expectedResponse = new UserRegistrationResponseDTO(
+                "validusername",
+                "validemail@example.com",
+                "Test",
+                "test"
+        );
 
         given(authenticationService.registerUser(validInput))
                 .willReturn(ResponseEntity.ok(expectedResponse));
@@ -55,7 +66,13 @@ public class AuthenticationControllerTests {
     @Test
     public void RegisterUser_InvalidUsername_ReturnsBadRequest() throws Exception {
         // Define invalid input with a username that doesn't meet validation rules
-        UserRegistrationDTO invalidInput = new UserRegistrationDTO("nn", "ValidPass123!", "validemail@example.com", "Test", "test", LocalDate.of(1990, 11, 11), "+351939302529");
+        UserRegistrationDTO invalidInput = new UserRegistrationDTO(
+                "nn",
+                "ValidPass123!",
+                "validemail@example.com",
+                "Test",
+                "test"
+        );
 
         given(authenticationService.registerUser(invalidInput))
                 .willReturn(ResponseEntity.badRequest().build());
@@ -70,7 +87,13 @@ public class AuthenticationControllerTests {
     @Test
     public void RegisterUser_InvalidEmail_ReturnsBadRequest() throws Exception {
         // Define invalid input with a email that doesn't meet validation rules
-        UserRegistrationDTO invalidInput = new UserRegistrationDTO("validusername", "ValidPass123!", "invalidemail", "Test", "test", LocalDate.of(1990, 11, 11), "+351939302529");
+        UserRegistrationDTO invalidInput = new UserRegistrationDTO(
+                "validusername",
+                "ValidPass123!",
+                "invalidemail",
+                "Test",
+                "test"
+        );
 
         given(authenticationService.registerUser(invalidInput))
                 .willReturn(ResponseEntity.badRequest().build());
@@ -85,7 +108,13 @@ public class AuthenticationControllerTests {
     @Test
     public void RegisterUser_InvalidPassword_ReturnsBadRequest() throws Exception {
         // Define invalid input with a password that doesn't meet validation rules
-        UserRegistrationDTO invalidInput = new UserRegistrationDTO("validusername", "invalidpassword", "validemail@example.com", "Test", "test", LocalDate.of(1990, 11, 11), "+351939302529");
+        UserRegistrationDTO invalidInput = new UserRegistrationDTO(
+                "validusername",
+                "invalidpassword",
+                "validemail@example.com",
+                "Test",
+                "test"
+        );
         given(authenticationService.registerUser(invalidInput)).willReturn(ResponseEntity.badRequest().build());
         // Perform the POST request
         mockMvc.perform(post("/auth/register")
