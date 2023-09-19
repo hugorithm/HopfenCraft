@@ -7,7 +7,6 @@ import jakarta.validation.constraints.Email;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.oauth2.core.user.OAuth2User;
 
 import java.time.LocalDateTime;
 import java.util.*;
@@ -15,7 +14,7 @@ import java.util.*;
 @Entity
 @Table(name = "users")
 @Data
-public class ApplicationUser implements UserDetails, OAuth2User {
+public class ApplicationUser implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")
@@ -67,10 +66,6 @@ public class ApplicationUser implements UserDetails, OAuth2User {
         this.orders = new ArrayList<>();
     }
 
-    @Override
-    public Map<String, Object> getAttributes() {
-        return null;
-    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -107,8 +102,4 @@ public class ApplicationUser implements UserDetails, OAuth2User {
         return true;
     }
 
-    @Override
-    public String getName() {
-        return null;
-    }
 }
