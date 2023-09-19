@@ -20,8 +20,8 @@ import java.security.spec.RSAPublicKeySpec;
 @Component
 public class RSAKeyProperties {
 
-    private RSAPublicKey publicKey;
-    private RSAPrivateKey privateKey;
+    private final RSAPublicKey publicKey;
+    private final RSAPrivateKey privateKey;
 
     @Autowired
     public RSAKeyProperties(@Value("${jwt.rsa.public.modulus}") String publicModulus,
