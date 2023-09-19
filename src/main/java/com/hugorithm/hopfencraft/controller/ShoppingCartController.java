@@ -5,7 +5,7 @@ import com.hugorithm.hopfencraft.dto.cart.CartResponseDTO;
 import com.hugorithm.hopfencraft.service.ShoppingCartService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Positive;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
@@ -14,12 +14,10 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/cart")
+@CrossOrigin("*")
+@RequiredArgsConstructor
 public class ShoppingCartController {
     private final ShoppingCartService shoppingCartService;
-    @Autowired
-    public ShoppingCartController( ShoppingCartService shoppingCartService) {
-        this.shoppingCartService = shoppingCartService;
-    }
 
     @GetMapping("/items")
     public ResponseEntity<CartResponseDTO> getCartItems(@AuthenticationPrincipal Jwt jwt) {

@@ -5,9 +5,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.scheduling.annotation.EnableAsync;
 
 @EnableAsync
-@SpringBootApplication()
+@SpringBootApplication
 public class HopfencraftApplication {
-
 	public static void main(String[] args) {
 		SpringApplication.run(HopfencraftApplication.class, args);
 	}

@@ -3,7 +3,7 @@ package com.hugorithm.hopfencraft.controller;
 import com.hugorithm.hopfencraft.dto.authentication.PasswordResetDTO;
 import com.hugorithm.hopfencraft.service.UserService;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
@@ -12,12 +12,9 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/user")
 @CrossOrigin("*")
+@RequiredArgsConstructor
 public class UserController {
     private final UserService userService;
-    @Autowired
-    public UserController(UserService userService) {
-        this.userService = userService;
-    }
 
     @PostMapping("/reset-password-request")
     public ResponseEntity<String> sendPasswordResetRequest(@AuthenticationPrincipal Jwt jwt) {

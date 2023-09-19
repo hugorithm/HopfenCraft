@@ -7,7 +7,7 @@ import com.hugorithm.hopfencraft.model.Product;
 import com.hugorithm.hopfencraft.service.ProductService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Positive;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -21,12 +21,9 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/product")
 @CrossOrigin("*")
+@RequiredArgsConstructor
 public class ProductController {
     private final ProductService productService;
-    @Autowired
-    public ProductController(ProductService productService) {
-        this.productService = productService;
-    }
 
     @GetMapping("/products")
     public Page<ProductDTO> getProducts(@RequestParam(defaultValue = "0") int page,
