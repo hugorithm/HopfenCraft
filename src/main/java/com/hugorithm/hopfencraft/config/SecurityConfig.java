@@ -11,12 +11,15 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -31,14 +34,26 @@ import org.springframework.security.oauth2.server.resource.authentication.JwtGra
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.csrf.*;
 import org.springframework.util.StringUtils;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+
 import java.io.IOException;
+import java.util.List;
 import java.util.function.Supplier;
 
 @Configuration
+@EnableWebSecurity
 public class SecurityConfig {
     private final RSAKeyProperties keys;
+
+    @Autowired
+    private OAuth2LoginSuccessHandler oAuth2LoginSuccessHandler;
+
+    @Value("${frontend.url}")
+    private String frontendUrl;
 
     public SecurityConfig(RSAKeyProperties keys) {
         this.keys = keys;
@@ -56,6 +71,7 @@ public class SecurityConfig {
         daoProvider.setPasswordEncoder(passwordEncoder());
         return new ProviderManager(daoProvider);
     }
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
        /*
@@ -68,58 +84,62 @@ public class SecurityConfig {
                 .addFilterAfter(new CsrfCookieFilter(), BasicAuthenticationFilter.class)
 
         */
-
         http.csrf(AbstractHttpConfigurer::disable) //TODO: Remove this when front-end is made. X-XSRF-TOKEN header
-              .authorizeHttpRequests(auth -> {
-                  auth.requestMatchers("/auth/**").permitAll();
-                  auth.requestMatchers("/admin/**").hasRole("ADMIN");
-                  auth.requestMatchers("/user/**").hasAnyRole("ADMIN", "USER");
-                  auth.requestMatchers("/order/**").hasAnyRole("ADMIN", "USER");
-                  auth.requestMatchers("/paypal/**").hasAnyRole("ADMIN", "USER");
-                  auth.requestMatchers("/product/").permitAll();
-                  auth.requestMatchers("/product/register").hasRole("ADMIN");
-                  auth.requestMatchers("/product/update").hasRole("ADMIN");
-                  auth.requestMatchers("/product/remove").hasRole("ADMIN");
-                  auth.requestMatchers("/product/**").permitAll();
-                  auth.requestMatchers("/cart/**").hasAnyRole("ADMIN", "USER");
-                  //TODO: ONLY FOR TESTING PURPOSES. DELETE LATER
-                  auth.requestMatchers("/index.html").permitAll();
-                  auth.anyRequest().authenticated();
-              })
-                //TODO: Both of these are just for testing, might delete later
-                .oauth2Login(oauth2 ->  {
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+                .authorizeHttpRequests(auth -> {
+                    auth.requestMatchers("/auth/**", "/oauth2/**").permitAll();
+                    auth.requestMatchers("/admin/**").hasRole("ADMIN");
+                    auth.requestMatchers("/user/**").hasAnyRole("ADMIN", "USER");
+                    auth.requestMatchers("/order/**").hasAnyRole("ADMIN", "USER");
+                    auth.requestMatchers("/paypal/**").hasAnyRole("ADMIN", "USER");
+                    auth.requestMatchers("/product/").permitAll();
+                    auth.requestMatchers("/product/register").hasRole("ADMIN");
+                    auth.requestMatchers("/product/update").hasRole("ADMIN");
+                    auth.requestMatchers("/product/remove").hasRole("ADMIN");
+                    auth.requestMatchers("/product/**").permitAll();
+                    auth.requestMatchers("/cart/**").hasAnyRole("ADMIN", "USER");
+                    //TODO: ONLY FOR TESTING PURPOSES. DELETE LATER
+                    auth.requestMatchers("/index.html").permitAll();
+                    auth.anyRequest().authenticated();
+                })
+
+                .formLogin(AbstractHttpConfigurer::disable)
+                .httpBasic(AbstractHttpConfigurer::disable)
+                .oauth2Login(oauth2 -> {
+                    oauth2.loginPage(frontendUrl).permitAll();
+                    // Define custom authorization endpoints and redirect callbacks
                     oauth2.authorizationEndpoint(authorizationEndpointConfig ->
                             authorizationEndpointConfig.baseUri("/oauth2/authorize"));
 
                     oauth2.redirectionEndpoint(redirectionEndpointConfig ->
                             redirectionEndpointConfig.baseUri("/oauth2/callback/*"));
-                })
-                .formLogin(AbstractHttpConfigurer::disable);
 
+                    oauth2.successHandler(oAuth2LoginSuccessHandler);
+                });
 
-          http.oauth2ResourceServer((oauth2) -> oauth2
-                  .jwt(jwtConfigurer -> jwtConfigurer.jwtAuthenticationConverter(jwtAuthenticationConverter()))
-          );
+        http.oauth2ResourceServer((oauth2) -> oauth2
+                .jwt(jwtConfigurer -> jwtConfigurer.jwtAuthenticationConverter(jwtAuthenticationConverter()))
+        );
 
-          http.sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+        http.sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
-          return http.build();
+        return http.build();
     }
 
     @Bean
-    public JwtDecoder jwtDecoder(){
+    public JwtDecoder jwtDecoder() {
         return NimbusJwtDecoder.withPublicKey(keys.getPublicKey()).build();
     }
 
     @Bean
-    public JwtEncoder jwtEncoder(){
+    public JwtEncoder jwtEncoder() {
         JWK jwk = new RSAKey.Builder(keys.getPublicKey()).privateKey(keys.getPrivateKey()).build();
         JWKSource<SecurityContext> jks = new ImmutableJWKSet<>(new JWKSet(jwk));
         return new NimbusJwtEncoder(jks);
     }
 
     @Bean
-    public JwtAuthenticationConverter jwtAuthenticationConverter(){
+    public JwtAuthenticationConverter jwtAuthenticationConverter() {
         JwtGrantedAuthoritiesConverter jwtGrantedAuthoritiesConverter = new JwtGrantedAuthoritiesConverter();
         jwtGrantedAuthoritiesConverter.setAuthoritiesClaimName("roles");
         jwtGrantedAuthoritiesConverter.setAuthorityPrefix("ROLE_");
@@ -173,5 +193,17 @@ public class SecurityConfig {
 
             filterChain.doFilter(request, response);
         }
+    }
+
+    @Bean
+    CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowedOrigins(List.of(frontendUrl));
+        configuration.addAllowedHeader("*");
+        configuration.addAllowedMethod("*");
+        configuration.setAllowCredentials(true);
+        UrlBasedCorsConfigurationSource urlBasedCorsConfigurationSource = new UrlBasedCorsConfigurationSource();
+        urlBasedCorsConfigurationSource.registerCorsConfiguration("/**", configuration);
+        return urlBasedCorsConfigurationSource;
     }
 }
