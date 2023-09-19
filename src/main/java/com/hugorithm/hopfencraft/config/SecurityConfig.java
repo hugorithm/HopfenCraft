@@ -76,8 +76,7 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
-
-        http.csrf(AbstractHttpConfigurer::disable) //TODO: Remove this when front-end is made. X-XSRF-TOKEN header
+        http.csrf(AbstractHttpConfigurer::disable)
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .authorizeHttpRequests(auth -> {
                     auth.requestMatchers("/auth/**", "/oauth2/**").permitAll();
