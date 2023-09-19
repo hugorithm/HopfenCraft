@@ -16,7 +16,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -30,7 +29,6 @@ import org.springframework.security.oauth2.jwt.NimbusJwtEncoder;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 import org.springframework.security.web.csrf.*;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -88,9 +86,15 @@ public class SecurityConfig {
                   auth.requestMatchers("/index.html").permitAll();
                   auth.anyRequest().authenticated();
               })
-                .formLogin(Customizer.withDefaults()) //TODO: Both of these are just for testing, might delete later
-                .oauth2Login(Customizer.withDefaults());
+                //TODO: Both of these are just for testing, might delete later
+                .oauth2Login(oauth2 ->  {
+                    oauth2.authorizationEndpoint(authorizationEndpointConfig ->
+                            authorizationEndpointConfig.baseUri("/oauth2/authorize"));
 
+                    oauth2.redirectionEndpoint(redirectionEndpointConfig ->
+                            redirectionEndpointConfig.baseUri("/oauth2/callback/*"));
+                })
+                .formLogin(AbstractHttpConfigurer::disable);
 
 
           http.oauth2ResourceServer((oauth2) -> oauth2
