@@ -1,5 +1,6 @@
 package com.hugorithm.hopfencraft.init;
 
+import com.hugorithm.hopfencraft.enums.RegistrationSource;
 import com.hugorithm.hopfencraft.model.ApplicationUser;
 import com.hugorithm.hopfencraft.model.Product;
 import com.hugorithm.hopfencraft.model.Role;
@@ -12,7 +13,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
@@ -51,8 +51,8 @@ public class DataInitialization implements CommandLineRunner {
         userRoles.add(userRole);
         // Add Admin and Test User
         // Ugly way of adding an admin and roles.
-        ApplicationUser admin = new ApplicationUser("admin", passwordEncoder.encode("Password123!"), "admin@admin.com", roles, "Hugo", "Silva", LocalDate.of(1997, 11, 25), "+351932476744");
-        ApplicationUser user = new ApplicationUser("testuser", passwordEncoder.encode("Password123!"), "user@test.com", userRoles, "Test", "tester", LocalDate.of(1990, 12,12), "+44246573899");
+        ApplicationUser admin = new ApplicationUser("admin", passwordEncoder.encode("Password123!"), "admin@admin.com", roles, "Hugo", "Silva", RegistrationSource.JWT);
+        ApplicationUser user = new ApplicationUser("testuser", passwordEncoder.encode("Password123!"), "user@test.com", userRoles, "Test", "tester", RegistrationSource.JWT);
 
         userRepository.save(admin);
         userRepository.save(user);

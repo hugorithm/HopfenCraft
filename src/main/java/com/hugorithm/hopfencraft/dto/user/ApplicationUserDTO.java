@@ -6,7 +6,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
 import java.util.List;
 
 @AllArgsConstructor
@@ -18,8 +17,6 @@ public class ApplicationUserDTO {
     private String email;
     private String firstName;
     private String lastName;
-    private LocalDate dateOfBirth;
-    private String phoneNumber;
     private List<CartItem> cartItems;
     private List<Order> orders;
 }

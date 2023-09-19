@@ -7,6 +7,7 @@ import com.hugorithm.hopfencraft.dto.authentication.LoginDTO;
 import com.hugorithm.hopfencraft.dto.authentication.UserRegistrationDTO;
 import com.hugorithm.hopfencraft.dto.authentication.UserRegistrationResponseDTO;
 import com.hugorithm.hopfencraft.enums.EmailType;
+import com.hugorithm.hopfencraft.enums.RegistrationSource;
 import com.hugorithm.hopfencraft.exception.email.EmailAlreadyTakenException;
 import com.hugorithm.hopfencraft.exception.auth.UsernameAlreadyExistsException;
 import lombok.AllArgsConstructor;
@@ -74,8 +75,7 @@ public class AuthenticationService {
                     authorities,
                     dto.getFirstName(),
                     dto.getLastName(),
-                    dto.getDateOfBirth(),
-                    dto.getPhoneNumber()
+                    RegistrationSource.JWT
             );
             userRepository.save(user);
 

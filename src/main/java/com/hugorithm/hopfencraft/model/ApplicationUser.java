@@ -1,16 +1,13 @@
 package com.hugorithm.hopfencraft.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.hugorithm.hopfencraft.validators.AgeConstraint;
-import com.hugorithm.hopfencraft.validators.Phone;
+import com.hugorithm.hopfencraft.enums.RegistrationSource;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.Past;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -31,12 +28,6 @@ public class ApplicationUser implements UserDetails {
     private String email;
     private String firstName;
     private String lastName;
-    @Past
-    @AgeConstraint
-    private LocalDate dateOfBirth;
-    @Column(unique = true)
-    @Phone
-    private String phoneNumber;
     @Column(name = "password_reset_token")
     private String passwordResetToken;
     @Column(name = "password_reset_token_expiration")
@@ -45,6 +36,9 @@ public class ApplicationUser implements UserDetails {
     private List<CartItem> cartItems;
     @OneToMany(mappedBy = "user")
     private List<Order> orders;
+    @Column(name = "registration_source")
+    @Enumerated(EnumType.STRING)
+    private RegistrationSource registrationSource;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
@@ -60,15 +54,14 @@ public class ApplicationUser implements UserDetails {
         this.authorities = new HashSet<>();
     }
 
-    public ApplicationUser(String username, String password, String email, Set<Role> authorities, String firstName, String lastName, LocalDate dateOfBirth, String phoneNumber) {
+    public ApplicationUser(String username, String password, String email, Set<Role> authorities, String firstName, String lastName, RegistrationSource registrationSource) {
         this.username = username;
         this.password = password;
         this.email = email;
         this.authorities = authorities;
         this.firstName = firstName;
         this.lastName = lastName;
-        this.dateOfBirth = dateOfBirth;
-        this.phoneNumber = phoneNumber;
+        this.registrationSource = registrationSource;
         this.cartItems = new ArrayList<>();
         this.orders = new ArrayList<>();
     }

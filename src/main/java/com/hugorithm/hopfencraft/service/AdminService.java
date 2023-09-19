@@ -31,8 +31,6 @@ public class AdminService {
                         applicationUser.getEmail(),
                         applicationUser.getFirstName(),
                         applicationUser.getLastName(),
-                        applicationUser.getDateOfBirth(),
-                        applicationUser.getPhoneNumber(),
                         applicationUser.getCartItems(),
                         applicationUser.getOrders()
                     ))
@@ -55,8 +53,6 @@ public class AdminService {
                         user.getEmail(),
                         user.getFirstName(),
                         user.getLastName(),
-                        user.getDateOfBirth(),
-                        user.getPhoneNumber(),
                         user.getCartItems(),
                         user.getOrders()
                 ));
@@ -76,8 +72,6 @@ public class AdminService {
                     user.getEmail(),
                     user.getFirstName(),
                     user.getLastName(),
-                    user.getDateOfBirth(),
-                    user.getPhoneNumber(),
                     user.getCartItems(),
                     user.getOrders()
             ));
