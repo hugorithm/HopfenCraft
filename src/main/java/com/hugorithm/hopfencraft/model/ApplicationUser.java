@@ -1,12 +1,13 @@
 package com.hugorithm.hopfencraft.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.hugorithm.hopfencraft.enums.RegistrationSource;
+import com.hugorithm.hopfencraft.enums.AuthProvider;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 
 import java.time.LocalDateTime;
 import java.util.*;
@@ -14,7 +15,7 @@ import java.util.*;
 @Entity
 @Table(name = "users")
 @Data
-public class ApplicationUser implements UserDetails {
+public class ApplicationUser implements UserDetails, OAuth2User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")
@@ -38,7 +39,7 @@ public class ApplicationUser implements UserDetails {
     private List<Order> orders;
     @Column(name = "registration_source")
     @Enumerated(EnumType.STRING)
-    private RegistrationSource registrationSource;
+    private AuthProvider authProvider;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
@@ -48,22 +49,27 @@ public class ApplicationUser implements UserDetails {
     )
 
     private Set<Role> authorities;
-    
+
     public ApplicationUser() {
         super();
         this.authorities = new HashSet<>();
     }
 
-    public ApplicationUser(String username, String password, String email, Set<Role> authorities, String firstName, String lastName, RegistrationSource registrationSource) {
+    public ApplicationUser(String username, String password, String email, Set<Role> authorities, String firstName, String lastName, AuthProvider authProvider) {
         this.username = username;
         this.password = password;
         this.email = email;
         this.authorities = authorities;
         this.firstName = firstName;
         this.lastName = lastName;
-        this.registrationSource = registrationSource;
+        this.authProvider = authProvider;
         this.cartItems = new ArrayList<>();
         this.orders = new ArrayList<>();
+    }
+
+    @Override
+    public Map<String, Object> getAttributes() {
+        return null;
     }
 
     @Override
@@ -99,5 +105,10 @@ public class ApplicationUser implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    @Override
+    public String getName() {
+        return null;
     }
 }

@@ -1,6 +1,6 @@
 package com.hugorithm.hopfencraft.init;
 
-import com.hugorithm.hopfencraft.enums.RegistrationSource;
+import com.hugorithm.hopfencraft.enums.AuthProvider;
 import com.hugorithm.hopfencraft.model.ApplicationUser;
 import com.hugorithm.hopfencraft.model.Product;
 import com.hugorithm.hopfencraft.model.Role;
@@ -51,8 +51,8 @@ public class DataInitialization implements CommandLineRunner {
         userRoles.add(userRole);
         // Add Admin and Test User
         // Ugly way of adding an admin and roles.
-        ApplicationUser admin = new ApplicationUser("admin", passwordEncoder.encode("Password123!"), "admin@admin.com", roles, "Hugo", "Silva", RegistrationSource.JWT);
-        ApplicationUser user = new ApplicationUser("testuser", passwordEncoder.encode("Password123!"), "user@test.com", userRoles, "Test", "tester", RegistrationSource.JWT);
+        ApplicationUser admin = new ApplicationUser("admin", passwordEncoder.encode("Password123!"), "admin@admin.com", roles, "Hugo", "Silva", AuthProvider.LOCAL);
+        ApplicationUser user = new ApplicationUser("testuser", passwordEncoder.encode("Password123!"), "user@test.com", userRoles, "Test", "tester", AuthProvider.LOCAL);
 
         userRepository.save(admin);
         userRepository.save(user);

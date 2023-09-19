@@ -1,7 +1,7 @@
 package com.hugorithm.hopfencraft.controller;
 
 import com.hugorithm.hopfencraft.dto.authentication.PasswordResetDTO;
-import com.hugorithm.hopfencraft.enums.RegistrationSource;
+import com.hugorithm.hopfencraft.enums.AuthProvider;
 import com.hugorithm.hopfencraft.model.ApplicationUser;
 import com.hugorithm.hopfencraft.model.Role;
 import com.hugorithm.hopfencraft.service.UserService;
@@ -83,7 +83,7 @@ public class UserControllerTests {
                 roles,
                 "Test",
                 "test",
-                RegistrationSource.JWT);
+                AuthProvider.LOCAL);
         PasswordResetDTO passwordResetDTO = new PasswordResetDTO("Password123!", "newPassword123!", "newPassword123!");
 
         // Mock the behavior of your userService to return a success response

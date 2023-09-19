@@ -1,7 +1,7 @@
 package com.hugorithm.hopfencraft.repository;
 
 import com.hugorithm.hopfencraft.enums.EmailType;
-import com.hugorithm.hopfencraft.enums.RegistrationSource;
+import com.hugorithm.hopfencraft.enums.AuthProvider;
 import com.hugorithm.hopfencraft.model.ApplicationUser;
 import com.hugorithm.hopfencraft.model.Email;
 import com.hugorithm.hopfencraft.model.Role;
@@ -34,7 +34,7 @@ public class EmailRepositoryTests {
         Role role = new Role("USER");
         Set<Role> roles = new HashSet<>();
         roles.add(role);
-        ApplicationUser user = new ApplicationUser("user1", "Password123!", "email@example.com", roles, "Test", "test", RegistrationSource.JWT);
+        ApplicationUser user = new ApplicationUser("user1", "Password123!", "email@example.com", roles, "Test", "test", AuthProvider.LOCAL);
         Email email = new Email(EmailType.REGISTRATION, LocalDateTime.now(), user);
 
         //Act
@@ -52,7 +52,7 @@ public class EmailRepositoryTests {
         Role role = new Role("USER");
         Set<Role> roles = new HashSet<>();
         roles.add(role);
-        ApplicationUser user = new ApplicationUser("user1", "Password123!", "email@example.com", roles, "Test", "test", RegistrationSource.JWT);
+        ApplicationUser user = new ApplicationUser("user1", "Password123!", "email@example.com", roles, "Test", "test", AuthProvider.LOCAL);
         Email email = new Email(EmailType.REGISTRATION, LocalDateTime.now(), user);
         Email email2 = new Email(EmailType.ORDER, LocalDateTime.now(), user);
 
@@ -74,7 +74,7 @@ public class EmailRepositoryTests {
         Role role = new Role("USER");
         Set<Role> roles = new HashSet<>();
         roles.add(role);
-        ApplicationUser user = new ApplicationUser("user1", "Password123!", "email@example.com", roles, "Test", "test", RegistrationSource.JWT);
+        ApplicationUser user = new ApplicationUser("user1", "Password123!", "email@example.com", roles, "Test", "test", AuthProvider.LOCAL);
         Email email = new Email(EmailType.REGISTRATION, LocalDateTime.now(), user);
 
         //Act
@@ -91,8 +91,8 @@ public class EmailRepositoryTests {
         Role role = new Role("USER");
         Set<Role> roles = new HashSet<>();
         roles.add(role);
-        ApplicationUser user = new ApplicationUser("user1", "Password123!", "email@example.com", roles, "Test", "test", RegistrationSource.JWT);
-        ApplicationUser user2 = new ApplicationUser("user2", "Password123!", "email2@example.com", roles, "Test", "test", RegistrationSource.JWT);
+        ApplicationUser user = new ApplicationUser("user1", "Password123!", "email@example.com", roles, "Test", "test", AuthProvider.LOCAL);
+        ApplicationUser user2 = new ApplicationUser("user2", "Password123!", "email2@example.com", roles, "Test", "test", AuthProvider.LOCAL);
 
         Email email = new Email(EmailType.REGISTRATION, LocalDateTime.now(), user);
         LocalDateTime mailDate = email.getEmailSendDate();
@@ -122,7 +122,7 @@ public class EmailRepositoryTests {
         Role role = new Role("USER");
         Set<Role> roles = new HashSet<>();
         roles.add(role);
-        ApplicationUser user = new ApplicationUser("user1", "Password123!", "email@example.com", roles, "Test", "test", RegistrationSource.JWT);
+        ApplicationUser user = new ApplicationUser("user1", "Password123!", "email@example.com", roles, "Test", "test", AuthProvider.LOCAL);
         Email email = new Email(EmailType.REGISTRATION, LocalDateTime.now(), user);
 
         //Act

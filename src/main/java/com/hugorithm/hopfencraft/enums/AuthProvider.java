@@ -1,7 +1,7 @@
 package com.hugorithm.hopfencraft.enums;
 
-public enum RegistrationSource {
+public enum AuthProvider {
     GITHUB,
     GOOGLE,
-    JWT
+    LOCAL
 }

@@ -1,6 +1,6 @@
 package com.hugorithm.hopfencraft.repository;
 
-import com.hugorithm.hopfencraft.enums.RegistrationSource;
+import com.hugorithm.hopfencraft.enums.AuthProvider;
 import com.hugorithm.hopfencraft.model.ApplicationUser;
 import com.hugorithm.hopfencraft.model.Role;
 import org.assertj.core.api.Assertions;
@@ -28,7 +28,7 @@ public class UserRepositoryTests {
         Role role = new Role("USER");
         Set<Role> roles = new HashSet<>();
         roles.add(role);
-        ApplicationUser user = new ApplicationUser("user1", "Password123!", "email@example.com", roles, "Test", "test", RegistrationSource.JWT);
+        ApplicationUser user = new ApplicationUser("user1", "Password123!", "email@example.com", roles, "Test", "test", AuthProvider.LOCAL);
 
         //Act
         ApplicationUser savedUser = userRepository.save(user);
@@ -44,8 +44,8 @@ public class UserRepositoryTests {
         Role role = new Role("USER");
         Set<Role> roles = new HashSet<>();
         roles.add(role);
-        ApplicationUser user = new ApplicationUser("user1", "Password123!", "email@example.com", roles, "Test", "test", RegistrationSource.JWT);
-        ApplicationUser user2 = new ApplicationUser("user2", "Password123!", "email2@example.com", roles, "Test", "test", RegistrationSource.JWT);
+        ApplicationUser user = new ApplicationUser("user1", "Password123!", "email@example.com", roles, "Test", "test", AuthProvider.LOCAL);
+        ApplicationUser user2 = new ApplicationUser("user2", "Password123!", "email2@example.com", roles, "Test", "test", AuthProvider.LOCAL);
 
         //Act
         userRepository.save(user);
@@ -63,7 +63,7 @@ public class UserRepositoryTests {
         Role role = new Role("USER");
         Set<Role> roles = new HashSet<>();
         roles.add(role);
-        ApplicationUser user = new ApplicationUser("user1", "Password123!", "email@example.com", roles, "Test", "test", RegistrationSource.JWT);
+        ApplicationUser user = new ApplicationUser("user1", "Password123!", "email@example.com", roles, "Test", "test", AuthProvider.LOCAL);
 
         userRepository.save(user);
 
@@ -78,7 +78,7 @@ public class UserRepositoryTests {
         Role role = new Role("USER");
         Set<Role> roles = new HashSet<>();
         roles.add(role);
-        ApplicationUser user = new ApplicationUser("user1", "Password123!", "email@example.com", roles, "Test", "test", RegistrationSource.JWT);
+        ApplicationUser user = new ApplicationUser("user1", "Password123!", "email@example.com", roles, "Test", "test", AuthProvider.LOCAL);
 
         userRepository.save(user);
 
@@ -93,7 +93,7 @@ public class UserRepositoryTests {
         Role role = new Role("USER");
         Set<Role> roles = new HashSet<>();
         roles.add(role);
-        ApplicationUser user = new ApplicationUser("user1", "Password123!", "email@example.com", roles, "Test", "test", RegistrationSource.JWT);
+        ApplicationUser user = new ApplicationUser("user1", "Password123!", "email@example.com", roles, "Test", "test", AuthProvider.LOCAL);
         String username = user.getUsername();
         String password = user.getPassword();
         String email = user.getEmail();
@@ -122,7 +122,7 @@ public class UserRepositoryTests {
         Role role = new Role("USER");
         Set<Role> roles = new HashSet<>();
         roles.add(role);
-        ApplicationUser user = new ApplicationUser("user1", "Password123!", "email@example.com", roles, "Test", "test", RegistrationSource.JWT);
+        ApplicationUser user = new ApplicationUser("user1", "Password123!", "email@example.com", roles, "Test", "test", AuthProvider.LOCAL);
 
         userRepository.save(user);
 
