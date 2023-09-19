@@ -106,7 +106,7 @@ public class SecurityConfig {
                 .formLogin(AbstractHttpConfigurer::disable)
                 .httpBasic(AbstractHttpConfigurer::disable)
                 .oauth2Login(oauth2 -> {
-                    oauth2.loginPage(frontendUrl).permitAll();
+                    oauth2.loginPage(frontendUrl + "/login").permitAll();
                     // Define custom authorization endpoints and redirect callbacks
                     oauth2.authorizationEndpoint(authorizationEndpointConfig ->
                             authorizationEndpointConfig.baseUri("/oauth2/authorize"));

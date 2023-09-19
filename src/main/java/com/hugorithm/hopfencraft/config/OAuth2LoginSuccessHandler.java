@@ -97,7 +97,7 @@ public class OAuth2LoginSuccessHandler extends SavedRequestAwareAuthenticationSu
         }
 
         this.setAlwaysUseDefaultTargetUrl(true);
-        this.setDefaultTargetUrl(frontendUrl + "/login");
+        this.setDefaultTargetUrl(frontendUrl + "/oauth2/redirect");
         super.onAuthenticationSuccess(request, response, authentication);
 
     }
