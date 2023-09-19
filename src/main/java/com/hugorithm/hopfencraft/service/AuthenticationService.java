@@ -88,9 +88,7 @@ public class AuthenticationService {
                     username,
                     dto.getEmail(),
                     dto.getFirstName(),
-                    dto.getLastName(),
-                    dto.getDateOfBirth(),
-                    dto.getPhoneNumber()
+                    dto.getLastName()
             );
 
             return ResponseEntity.status(HttpStatus.CREATED).body(userDto);
