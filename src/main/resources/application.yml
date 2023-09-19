@@ -56,3 +56,5 @@ jwt:
     private:
       modulus: ${RSA_PRIVATE_MODULUS}
       exponent: ${RSA_PRIVATE_EXPONENT}
+frontend:
+  url: http://localhost:3000
