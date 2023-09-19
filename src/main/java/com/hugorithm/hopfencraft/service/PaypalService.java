@@ -56,7 +56,9 @@ public class PaypalService {
     @Autowired
     public PaypalService(JwtService jwtService,
                          OrderRepository orderRepository,
-                         OrderService orderService, ShoppingCartService shoppingCartService, @Value("${paypal.client.id}") String clientId,
+                         OrderService orderService,
+                         ShoppingCartService shoppingCartService,
+                         @Value("${paypal.client.id}") String clientId,
                          @Value("${paypal.client.secret}") String clientSecret) {
         this.jwtService = jwtService;
         this.orderRepository = orderRepository;
