@@ -29,7 +29,7 @@ public class OAuth2LoginSuccessHandler extends SavedRequestAwareAuthenticationSu
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
     private final TokenService tokenService;
-
+    private final HttpCookieOAuth2AuthorizationRequestRepository httpCookieOAuth2AuthorizationRequestRepository;
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication)
             throws ServletException, IOException {
@@ -92,8 +92,14 @@ public class OAuth2LoginSuccessHandler extends SavedRequestAwareAuthenticationSu
         this.setAlwaysUseDefaultTargetUrl(true);
         this.setDefaultTargetUrl(targetUrl);
 
-        super.onAuthenticationSuccess(request, response, authentication);
+        clearAuthenticationAttributes(request, response);
+        getRedirectStrategy().sendRedirect(request, response, targetUrl);
 
+    }
+
+    private void clearAuthenticationAttributes(HttpServletRequest request, HttpServletResponse response) {
+        super.clearAuthenticationAttributes(request);
+        httpCookieOAuth2AuthorizationRequestRepository.removeAuthorizationRequestCookies(request, response);
     }
 
     private ApplicationUser createUser(String email, String firstName) {
@@ -122,7 +128,7 @@ public class OAuth2LoginSuccessHandler extends SavedRequestAwareAuthenticationSu
                 .build().toUriString();
     }
 
-    public static Map<String, String> convertMapToStringValues(Map<String, Object> originalMap) {
+    private static Map<String, String> convertMapToStringValues(Map<String, Object> originalMap) {
         Map<String, String> convertedMap = new HashMap<>();
 
         for (Map.Entry<String, Object> entry : originalMap.entrySet()) {
