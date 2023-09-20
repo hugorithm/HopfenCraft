@@ -23,7 +23,6 @@ public class ApplicationUser implements UserDetails {
     private String username;
     @JsonIgnore
     private String password;
-    @Column(unique = true)
     @Email
     private String email;
     private String firstName;
@@ -46,8 +45,14 @@ public class ApplicationUser implements UserDetails {
             joinColumns = {@JoinColumn(name = "user_id")},
             inverseJoinColumns = {@JoinColumn(name = "role_id")}
     )
-
     private Set<Role> authorities;
+
+    @ElementCollection
+    @CollectionTable(name = "user_attributes", joinColumns = @JoinColumn(name = "user_id"))
+    @MapKeyColumn(name = "attribute_key")
+    @Column(name = "attribute_value", columnDefinition = "TEXT")
+    private Map<String, String> attributes;
+
 
     public ApplicationUser() {
         super();
@@ -66,6 +71,13 @@ public class ApplicationUser implements UserDetails {
         this.orders = new ArrayList<>();
     }
 
+    public Map<String, String> getAttributes() {
+        return attributes;
+    }
+
+    public void setAttributes(Map<String, String> attributes) {
+        this.attributes = attributes;
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -100,6 +112,11 @@ public class ApplicationUser implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+
+    public String getName() {
+        return String.valueOf(String.format("%s %s", firstName, lastName));
     }
 
 }
