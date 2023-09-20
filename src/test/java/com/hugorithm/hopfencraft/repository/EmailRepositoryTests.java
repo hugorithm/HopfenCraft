@@ -27,6 +27,7 @@ public class EmailRepositoryTests {
 
     @Autowired
     private UserRepository userRepository;
+
     @Test
     public void EmailRepository_SaveAll_ReturnSavedEmail() {
 

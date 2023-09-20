@@ -43,6 +43,7 @@ public class UserControllerTests {
         // Create a mock Jwt for testing
         mockJwt = Mockito.mock(Jwt.class);
     }
+
     //TODO: Properly mock this, Instantiate UserService and mock functions accordingly
     @Test
     public void SendPasswordResetRequest_ValidInput_ReturnsOk() throws Exception {

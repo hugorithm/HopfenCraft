@@ -23,10 +23,12 @@ public class ShoppingCartController {
     public ResponseEntity<CartResponseDTO> getCartItems(@AuthenticationPrincipal Jwt jwt) {
         return shoppingCartService.getCartItems(jwt);
     }
+
     @PostMapping("/add")
     public ResponseEntity<CartResponseDTO> addToCart(@AuthenticationPrincipal Jwt jwt, @Valid @RequestBody CartRegistrationDTO body) {
         return shoppingCartService.addToCart(jwt, body);
     }
+
     @DeleteMapping("/remove/{cartItemId}")
     public ResponseEntity<CartResponseDTO> removeCartItem(@AuthenticationPrincipal Jwt jwt, @PathVariable @Positive Long cartItemId) {
         return shoppingCartService.removeCartItem(jwt, cartItemId);

@@ -26,7 +26,7 @@ public class TokenService {
     private final JwtEncoder jwtEncoder;
     private final JwtDecoder jwtDecoder;
 
-    public String generateJwt(Authentication auth){
+    public String generateJwt(Authentication auth) {
         Instant now = Instant.now();
         String scope = auth.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
@@ -55,7 +55,7 @@ public class TokenService {
          */
         Instant expires = now.plus(Duration.ofHours(2));
 
-       String scope = "USER";
+        String scope = "USER";
 
         JwtClaimsSet claims = JwtClaimsSet.builder()
                 .issuer("self")
@@ -76,6 +76,7 @@ public class TokenService {
         }
         return hex.toString();
     }
+
     public String generatePasswordResetToken() {
         SecureRandom random = new SecureRandom();
         byte[] bytes = new byte[32];

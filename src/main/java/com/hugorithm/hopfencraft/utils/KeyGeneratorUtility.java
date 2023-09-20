@@ -10,7 +10,8 @@ import java.security.NoSuchAlgorithmException;
 
 public class KeyGeneratorUtility {
     private final static Logger LOGGER = LoggerFactory.getLogger(KeyGeneratorUtility.class);
-    public static KeyPair generateRsaKey(){
+
+    public static KeyPair generateRsaKey() {
         KeyPair kp;
 
         try {
@@ -18,7 +19,7 @@ public class KeyGeneratorUtility {
             kpGen.initialize(2048);
             kp = kpGen.generateKeyPair();
 
-        } catch (NoSuchAlgorithmException ex){
+        } catch (NoSuchAlgorithmException ex) {
             LOGGER.error(ex.getMessage(), ex);
             throw new RsaKeyGenerationException("Failed to generate RSA key pair due to NoSuchAlgorithmException");
         }

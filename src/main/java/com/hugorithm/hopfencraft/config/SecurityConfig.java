@@ -81,7 +81,6 @@ public class SecurityConfig {
 
                 .formLogin(AbstractHttpConfigurer::disable)
                 .httpBasic(AbstractHttpConfigurer::disable)
-                       // .oauth2Login(Customizer.withDefaults());
 
                 .oauth2Login(oauth2 -> {
                     oauth2.loginPage(frontendUrl + "/login").permitAll();

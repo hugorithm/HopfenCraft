@@ -120,6 +120,7 @@ public class UserService implements UserDetailsService {
 
         return user;
     }
+
     public ResponseEntity<?> showPasswordResetForm(Jwt jwt, String token) {
         try {
             verifyPasswordResetToken(jwt, token);
@@ -155,7 +156,8 @@ public class UserService implements UserDetailsService {
                 throw new PasswordMismatchException("Passwords don't match");
             }
 
-        } catch (SamePasswordException | PasswordMismatchException | UsernameNotFoundException | InvalidTokenException | WrongCredentialsException ex) {
+        } catch (SamePasswordException | PasswordMismatchException | UsernameNotFoundException | InvalidTokenException |
+                 WrongCredentialsException ex) {
             LOGGER.error(ex.getMessage(), ex);
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }

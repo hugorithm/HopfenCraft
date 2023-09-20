@@ -164,8 +164,7 @@ public class UserIntegrationTests {
 
         ApplicationUser user = userRepository.findByUsername("testuser").get();
 
-        String token =  tokenService.URLEncodeToken(user.getPasswordResetToken());
-
+        String token = tokenService.URLEncodeToken(user.getPasswordResetToken());
 
 
         ResponseEntity<?> response2 = restTemplate.exchange(

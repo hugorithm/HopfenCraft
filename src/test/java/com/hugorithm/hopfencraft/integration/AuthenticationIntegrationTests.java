@@ -24,6 +24,7 @@ public class AuthenticationIntegrationTests {
 
     @Autowired
     private TestRestTemplate restTemplate;
+
     @Test
     public void RegisterUser_ValidInput_ReturnsOk() {
         UserRegistrationDTO validInput = new UserRegistrationDTO(
@@ -241,7 +242,6 @@ public class AuthenticationIntegrationTests {
         assertEquals(responseBody.getUsername(), validInput.getUsername());
         assertEquals(responseBody.getEmail(), validInput.getEmail());
     }
-
 
 
 }

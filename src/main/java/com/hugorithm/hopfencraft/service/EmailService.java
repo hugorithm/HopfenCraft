@@ -48,6 +48,7 @@ public class EmailService {
             throw new EmailSendingFailedException("Email sending failed");
         }
     }
+
     public String buildWelcomeEmail(String username) {
         return "<!DOCTYPE html>\n" +
                 "<html lang=\"en\">\n" +

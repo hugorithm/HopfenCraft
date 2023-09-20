@@ -12,6 +12,7 @@ public class PhoneValidator implements ConstraintValidator<Phone, String> {
 
     private static final String PHONE_REGEX = "^\\+?[0-9]{10,15}$";
     private static final Pattern pattern = Pattern.compile(PHONE_REGEX);
+
     @Override
     public void initialize(Phone constraintAnnotation) {
     }

@@ -37,10 +37,11 @@ public class ShoppingCartService {
     private final JwtService jwtService;
     private final static Logger LOGGER = LoggerFactory.getLogger(ShoppingCartService.class);
 
-    private  Product getProductFromRepoById(Long productId) {
+    private Product getProductFromRepoById(Long productId) {
         return productRepository.findById(productId)
                 .orElseThrow(() -> new ProductNotFoundException("Product not found with ID: " + productId));
     }
+
     private ResponseEntity<CartResponseDTO> getCartResponseDTOResponseEntity(List<CartItem> cartItems) {
         List<CartItemDTO> cartItemDTOs = cartItems.stream()
                 .map(ci -> new CartItemDTO(
@@ -62,6 +63,7 @@ public class ShoppingCartService {
 
         return ResponseEntity.ok(new CartResponseDTO(cartItemDTOs));
     }
+
     public ResponseEntity<CartResponseDTO> addToCart(Jwt jwt, CartRegistrationDTO dto) {
         try {
             ApplicationUser user = jwtService.getUserFromJwt(jwt);
@@ -95,7 +97,6 @@ public class ShoppingCartService {
     }
 
 
-
     public ResponseEntity<CartResponseDTO> removeCartItem(Jwt jwt, Long cartItemId) {
         try {
             ApplicationUser user = jwtService.getUserFromJwt(jwt);
@@ -118,10 +119,11 @@ public class ShoppingCartService {
 
     private CartItem findCartItemById(ApplicationUser user, Long cartItemId) {
         return user.getCartItems().stream()
-                .filter(ci-> ci.getCartItemId().equals(cartItemId))
+                .filter(ci -> ci.getCartItemId().equals(cartItemId))
                 .findFirst()
                 .orElse(null);
     }
+
     public ResponseEntity<CartResponseDTO> getCartItems(Jwt jwt) {
         try {
             ApplicationUser user = jwtService.getUserFromJwt(jwt);
@@ -134,8 +136,8 @@ public class ShoppingCartService {
         }
     }
 
-    public void clearShoppingCart(ApplicationUser user){
-        List<CartItem> cartItems =  cartItemRepository.findAllByUser(user);
+    public void clearShoppingCart(ApplicationUser user) {
+        List<CartItem> cartItems = cartItemRepository.findAllByUser(user);
         user.getCartItems().clear();
         cartItemRepository.deleteAll(cartItems);
         userRepository.save(user);

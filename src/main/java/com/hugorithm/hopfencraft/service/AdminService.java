@@ -20,19 +20,20 @@ import java.util.List;
 public class AdminService {
     private final UserRepository userRepository;
     private final static Logger LOGGER = LoggerFactory.getLogger(AdminService.class);
+
     public ResponseEntity<List<ApplicationUserDTO>> getUsers() {
         try {
             List<ApplicationUser> users = userRepository.findAll();
 
             List<ApplicationUserDTO> applicationUserDTOS = users.stream()
                     .map(applicationUser -> new ApplicationUserDTO(
-                        applicationUser.getUserId(),
-                        applicationUser.getUsername(),
-                        applicationUser.getEmail(),
-                        applicationUser.getFirstName(),
-                        applicationUser.getLastName(),
-                        applicationUser.getCartItems(),
-                        applicationUser.getOrders()
+                            applicationUser.getUserId(),
+                            applicationUser.getUsername(),
+                            applicationUser.getEmail(),
+                            applicationUser.getFirstName(),
+                            applicationUser.getLastName(),
+                            applicationUser.getCartItems(),
+                            applicationUser.getOrders()
                     ))
                     .toList();
 
@@ -44,22 +45,22 @@ public class AdminService {
     }
 
     public ResponseEntity<ApplicationUserDTO> getUserById(Long userId) {
-            try {
-                ApplicationUser user = userRepository.findById(userId).orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        try {
+            ApplicationUser user = userRepository.findById(userId).orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
-                return ResponseEntity.ok(new ApplicationUserDTO(
-                        user.getUserId(),
-                        user.getUsername(),
-                        user.getEmail(),
-                        user.getFirstName(),
-                        user.getLastName(),
-                        user.getCartItems(),
-                        user.getOrders()
-                ));
-            } catch (UsernameNotFoundException ex) {
-                LOGGER.error(ex.getMessage(), ex);
-                return ResponseEntity.badRequest().build();
-            }
+            return ResponseEntity.ok(new ApplicationUserDTO(
+                    user.getUserId(),
+                    user.getUsername(),
+                    user.getEmail(),
+                    user.getFirstName(),
+                    user.getLastName(),
+                    user.getCartItems(),
+                    user.getOrders()
+            ));
+        } catch (UsernameNotFoundException ex) {
+            LOGGER.error(ex.getMessage(), ex);
+            return ResponseEntity.badRequest().build();
+        }
     }
 
     public ResponseEntity<ApplicationUserDTO> getUserByUsername(String username) {

@@ -30,6 +30,7 @@ public class OAuth2LoginSuccessHandler extends SavedRequestAwareAuthenticationSu
     private final RoleRepository roleRepository;
     private final TokenService tokenService;
     private final HttpCookieOAuth2AuthorizationRequestRepository httpCookieOAuth2AuthorizationRequestRepository;
+
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication)
             throws ServletException, IOException {

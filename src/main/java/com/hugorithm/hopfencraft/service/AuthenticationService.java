@@ -1,4 +1,5 @@
 package com.hugorithm.hopfencraft.service;
+
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
@@ -46,7 +47,7 @@ public class AuthenticationService {
     private final EmailService emailService;
     private final static Logger LOGGER = LoggerFactory.getLogger(AuthenticationService.class);
 
-    public ResponseEntity<UserRegistrationResponseDTO> registerUser(UserRegistrationDTO dto){
+    public ResponseEntity<UserRegistrationResponseDTO> registerUser(UserRegistrationDTO dto) {
         try {
             String username = dto.getUsername().toLowerCase();
 
@@ -98,7 +99,7 @@ public class AuthenticationService {
         }
     }
 
-    public ResponseEntity<LoginResponseDTO> login(LoginDTO dto){
+    public ResponseEntity<LoginResponseDTO> login(LoginDTO dto) {
         try {
             Authentication auth = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(dto.getUsername(), dto.getPassword()));
             String token = tokenService.generateJwt(auth);
@@ -106,7 +107,7 @@ public class AuthenticationService {
             LoginResponseDTO response = new LoginResponseDTO(user.getUsername(), user.getEmail(), token);
 
             return ResponseEntity.ok(response);
-        } catch (AuthenticationException ex){
+        } catch (AuthenticationException ex) {
             LOGGER.error("Failed to authenticate", ex);
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }

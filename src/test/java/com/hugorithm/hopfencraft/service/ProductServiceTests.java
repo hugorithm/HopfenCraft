@@ -48,7 +48,7 @@ public class ProductServiceTests {
         user.setUsername("testuser");
         user.setEmail("testuser@example.com");
         // Create a valid product DTO
-        ProductRegistrationDTO validProductDTO = new ProductRegistrationDTO("TestBrand", "TestName", "TestDescription", 10, new BigDecimal("19.99"), Currency.EUR );
+        ProductRegistrationDTO validProductDTO = new ProductRegistrationDTO("TestBrand", "TestName", "TestDescription", 10, new BigDecimal("19.99"), Currency.EUR);
 
         // Mock the product repository to return an empty Optional, indicating the product does not exist
         when(productRepository.findProductByName("TestName")).thenReturn(Optional.empty());
@@ -114,16 +114,15 @@ public class ProductServiceTests {
         when(productRepository.save(existingProduct)).thenReturn(existingProduct);
 
 
-
         // Call the service method to update the product
         ResponseEntity<ProductDTO> response = productService.updateProduct(
                 new ProductUpdateDTO(
-                    productId,
-                    "UpdatedBrand",
-                    "UpdatedName",
-                    "UpdatedDescription",
-                    10,
-                    new BigDecimal("29.99")
+                        productId,
+                        "UpdatedBrand",
+                        "UpdatedName",
+                        "UpdatedDescription",
+                        10,
+                        new BigDecimal("29.99")
                 )
         );
 
@@ -149,12 +148,12 @@ public class ProductServiceTests {
         // Call the service method to update the product
         ResponseEntity<ProductDTO> response = productService.updateProduct(
                 new ProductUpdateDTO(
-                    productId,
-                    "UpdatedBrand",
-                    "UpdatedName",
-                    "UpdatedDescription",
-                    10,
-                    new BigDecimal("29.99")
+                        productId,
+                        "UpdatedBrand",
+                        "UpdatedName",
+                        "UpdatedDescription",
+                        10,
+                        new BigDecimal("29.99")
                 )
         );
 
@@ -178,12 +177,12 @@ public class ProductServiceTests {
         // Call the service method to update the product with a negative quantity
         ResponseEntity<ProductDTO> response = productService.updateProduct(
                 new ProductUpdateDTO(
-                    productId,
-                    "UpdatedBrand",
-                    "UpdatedName",
-                    "UpdatedDescription",
-                    -5,
-                    new BigDecimal("29.99")
+                        productId,
+                        "UpdatedBrand",
+                        "UpdatedName",
+                        "UpdatedDescription",
+                        -5,
+                        new BigDecimal("29.99")
                 )
         );
 
@@ -207,12 +206,12 @@ public class ProductServiceTests {
         // Call the service method to update the product with a negative price
         ResponseEntity<ProductDTO> response = productService.updateProduct(
                 new ProductUpdateDTO(
-                    productId,
-                    "UpdatedBrand",
-                    "UpdatedName",
-                    "UpdatedDescription",
-                    10,
-                    new BigDecimal("-5.00")
+                        productId,
+                        "UpdatedBrand",
+                        "UpdatedName",
+                        "UpdatedDescription",
+                        10,
+                        new BigDecimal("-5.00")
                 )
         );
 

@@ -25,5 +25,4 @@ public enum Currency {
     CHF,
     THB,
     USD
-
 }

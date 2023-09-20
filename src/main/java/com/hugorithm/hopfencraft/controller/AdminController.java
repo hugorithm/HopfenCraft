@@ -16,12 +16,12 @@ public class AdminController {
     private final AdminService adminService;
 
     @GetMapping("/users")
-    public ResponseEntity<List<ApplicationUserDTO>> getUsers(){
+    public ResponseEntity<List<ApplicationUserDTO>> getUsers() {
         return adminService.getUsers();
     }
 
     @GetMapping("/user/{userId}")
-    public  ResponseEntity<ApplicationUserDTO> getUserById(@PathVariable Long userId) {
+    public ResponseEntity<ApplicationUserDTO> getUserById(@PathVariable Long userId) {
         return adminService.getUserById(userId);
     }
 

@@ -35,7 +35,7 @@ public class OrderService {
     private final ProductRepository productRepository;
     private final static Logger LOGGER = LoggerFactory.getLogger(OrderService.class);
 
-    private List<CartItemDTO> convertCartItemIntoDTO(List<CartItem> cartItems){
+    private List<CartItemDTO> convertCartItemIntoDTO(List<CartItem> cartItems) {
         return cartItems.stream()
                 .map(ci -> new CartItemDTO(
                         ci.getCartItemId(),

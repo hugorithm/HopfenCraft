@@ -85,7 +85,7 @@ public class ShoppingCartControllerTests {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(requestBody))
                 .andExpect(MockMvcResultMatchers.status().isOk());
-                //.andExpect(jsonPath("$.brand", equalTo( expectedResponse.getBrand())))
+        //.andExpect(jsonPath("$.brand", equalTo( expectedResponse.getBrand())))
 
     }
 

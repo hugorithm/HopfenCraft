@@ -70,7 +70,7 @@ public class DataInitialization implements CommandLineRunner {
         Product p8 = new Product("Warsteiner", "Warsteiner Premium Beer", "German Pilsner made from the highest quality ingredients, 4.8%, 33 cl", 31, new BigDecimal("2.01"), admin);
         Product p9 = new Product("Spaten", "Spaten Münchner Hell", "German wheat beer brewed with German hops, 5.2%. 50 cl.", 14, new BigDecimal("2.06"), admin);
         Product p10 = new Product("Ayinger", "Ayinger Urweisse", "Wheat beer with an amber colour and an intense and complex character, 5.8%. 50 cl.", 10, new BigDecimal("2.53"), admin);
-        Product p11 = new Product("Chouffe", "La Chouffe", "Belgian Strong Pale Ale, 8%. 33 cl.", 31, new BigDecimal("3.79"),admin);
+        Product p11 = new Product("Chouffe", "La Chouffe", "Belgian Strong Pale Ale, 8%. 33 cl.", 31, new BigDecimal("3.79"), admin);
         Product p12 = new Product("Erdinger", "Erdinger Weissbier", "Classic Bavarian Weissbier, fermented in the bottle 5.3%, 50 cl", 14, new BigDecimal("2.11"), admin);
 
         List<Product> ps = Arrays.asList(p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12);

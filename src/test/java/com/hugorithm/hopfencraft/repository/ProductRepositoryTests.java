@@ -21,6 +21,7 @@ public class ProductRepositoryTests {
     private ProductRepository productRepository;
     @Autowired
     private UserRepository userRepository;
+
     @Test
     public void ProductRepository_SaveAll_ReturnSavedProduct() {
         ApplicationUser user = new ApplicationUser();

@@ -16,7 +16,7 @@ public class OrderController {
     private final OrderService orderService;
 
     @PostMapping("/create")
-    public ResponseEntity<OrderResponseDTO> createOrder(@AuthenticationPrincipal Jwt jwt){
+    public ResponseEntity<OrderResponseDTO> createOrder(@AuthenticationPrincipal Jwt jwt) {
         return orderService.createOrder(jwt);
     }
 }

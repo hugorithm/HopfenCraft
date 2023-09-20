@@ -99,6 +99,7 @@ public class AuthenticationServiceTests {
         assertEquals(HttpStatus.UNAUTHORIZED, response.getStatusCode());
         assertNull(response.getBody());
     }
+
     @Test
     public void testLogin_Successful_ReturnsOk() {
         dataInitialization.run();

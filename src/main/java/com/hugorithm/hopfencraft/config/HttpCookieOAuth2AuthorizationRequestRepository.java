@@ -77,7 +77,7 @@ public class HttpCookieOAuth2AuthorizationRequestRepository implements Authoriza
         public static void deleteCookie(HttpServletRequest request, HttpServletResponse response, String name) {
             Cookie[] cookies = request.getCookies();
             if (cookies != null && cookies.length > 0) {
-                for (Cookie cookie: cookies) {
+                for (Cookie cookie : cookies) {
                     if (cookie.getName().equals(name)) {
                         cookie.setValue("");
                         cookie.setPath("/");

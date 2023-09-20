@@ -244,7 +244,8 @@ public class ProductIntegrationTests {
                 "http://localhost:" + port + "/product/products",
                 HttpMethod.GET,
                 new HttpEntity<>(headers),
-                new ParameterizedTypeReference<Page<ProductDTO>>() {}
+                new ParameterizedTypeReference<Page<ProductDTO>>() {
+                }
         );
 
         assertEquals(HttpStatus.OK, response.getStatusCode());

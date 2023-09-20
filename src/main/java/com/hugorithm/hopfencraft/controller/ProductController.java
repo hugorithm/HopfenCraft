@@ -27,7 +27,7 @@ public class ProductController {
 
     @GetMapping("/products")
     public Page<ProductDTO> getProducts(@RequestParam(defaultValue = "0") int page,
-                                     @RequestParam(defaultValue = "10") int size) {
+                                        @RequestParam(defaultValue = "10") int size) {
         Pageable pageable = PageRequest.of(page, size);
         Page<Product> productPage = productService.findAll(pageable);
 
@@ -50,19 +50,20 @@ public class ProductController {
         Optional<Product> product = productService.findById(productId);
 
         return product.map(p -> ResponseEntity.ok(
-            new ProductDTO(
-                    p.getProductId(),
-                    p.getBrand(),
-                    p.getName(),
-                    p.getDescription(),
-                    p.getStockQuantity(),
-                    p.getPrice(),
-                    Product.getCurrency(),
-                    p.getRegisterDateTime()
-                    )
+                        new ProductDTO(
+                                p.getProductId(),
+                                p.getBrand(),
+                                p.getName(),
+                                p.getDescription(),
+                                p.getStockQuantity(),
+                                p.getPrice(),
+                                Product.getCurrency(),
+                                p.getRegisterDateTime()
+                        )
                 )
         ).orElseGet(() -> ResponseEntity.notFound().build());
     }
+
     @PostMapping("/register")
     public ResponseEntity<ProductDTO> registerProduct(@AuthenticationPrincipal Jwt jwt, @Valid @RequestBody ProductRegistrationDTO body) {
         return productService.registerProduct(jwt, body);

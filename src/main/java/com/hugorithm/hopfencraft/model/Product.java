@@ -60,7 +60,7 @@ public class Product {
         this.sku = generateProductCode(brand, name);
     }
 
-    private String generateProductCode(String brand, String name){
+    private String generateProductCode(String brand, String name) {
         String replacedName = name.replaceAll("\\s", "");
         String replacedBrand = brand.replaceAll("\\s", "");
         return replacedBrand.substring(0, 2).toUpperCase() +

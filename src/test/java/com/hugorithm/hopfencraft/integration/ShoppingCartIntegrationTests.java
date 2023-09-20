@@ -90,7 +90,6 @@ public class ShoppingCartIntegrationTests {
         headers.set("Authorization", "Bearer " + jwt);
 
 
-
         ResponseEntity<CartResponseDTO> response = restTemplate.exchange(
                 "http://localhost:" + port + "/cart/items",
                 HttpMethod.GET,

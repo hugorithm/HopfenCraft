@@ -11,7 +11,6 @@ import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 
 
-
 @RestController
 @RequestMapping("/user")
 @CrossOrigin("*")
@@ -37,6 +36,6 @@ public class UserController {
     //TODO: Review this method | I'm tired ;(
     @GetMapping("/me")
     public OAuth2ApplicationUserDTO getOAuth2User(@AuthenticationPrincipal Jwt jwt) {
-       return userService.getOAuth2User(jwt);
+        return userService.getOAuth2User(jwt);
     }
 }

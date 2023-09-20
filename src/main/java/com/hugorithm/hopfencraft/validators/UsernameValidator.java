@@ -10,6 +10,7 @@ import java.util.regex.Pattern;
 public class UsernameValidator implements ConstraintValidator<Username, String> {
     private static final String USERNAME_REGEX = "^(?!.*[-_.]{2})[a-zA-Z0-9-_.]{3,20}$";
     private static final Pattern pattern = Pattern.compile(USERNAME_REGEX);
+
     @Override
     public void initialize(Username constraintAnnotation) {
     }
