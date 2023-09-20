@@ -1,6 +1,7 @@
 package com.hugorithm.hopfencraft.service;
 
 import com.hugorithm.hopfencraft.dto.authentication.PasswordResetDTO;
+import com.hugorithm.hopfencraft.dto.user.OAuth2ApplicationUserDTO;
 import com.hugorithm.hopfencraft.enums.EmailType;
 import com.hugorithm.hopfencraft.exception.auth.InvalidTokenException;
 import com.hugorithm.hopfencraft.exception.auth.PasswordMismatchException;
@@ -160,16 +161,19 @@ public class UserService implements UserDetailsService {
         }
     }
 
-    //TODO : Review this method | I'm tired ;(
-    public ApplicationUser findById(Long userId) {
-        try {
-            ApplicationUser user = userRepository.findById(userId)
-                    .orElseThrow(() -> new UsernameNotFoundException("User not found"));
-            return user;
-        } catch (UsernameNotFoundException ex) {
-            LOGGER.error(ex.getMessage(), ex);
-            return null;
-        }
-    }
+    public OAuth2ApplicationUserDTO getOAuth2User(Jwt jwt) {
+        ApplicationUser user = jwtService.getUserFromJwt(jwt);
 
+        return new OAuth2ApplicationUserDTO(
+                user.getUserId(),
+                user.getName(),
+                user.getUsername(),
+                user.getEmail(),
+                user.getFirstName(),
+                user.getLastName(),
+                user.getCartItems(),
+                user.getOrders(),
+                user.getAttributes()
+        );
+    }
 }
