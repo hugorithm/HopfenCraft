@@ -1,7 +1,7 @@
 package com.hugorithm.hopfencraft.controller;
 
 import com.hugorithm.hopfencraft.dto.authentication.PasswordResetDTO;
-import com.hugorithm.hopfencraft.model.ApplicationUser;
+import com.hugorithm.hopfencraft.dto.user.OAuth2ApplicationUserDTO;
 import com.hugorithm.hopfencraft.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -9,6 +9,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
+
+
 
 @RestController
 @RequestMapping("/user")
@@ -34,7 +36,7 @@ public class UserController {
 
     //TODO: Review this method | I'm tired ;(
     @GetMapping("/me")
-    public ApplicationUser getCurrentUser(@AuthenticationPrincipal ApplicationUser userPrincipal) {
-        return userService.findById(userPrincipal.getUserId());
+    public OAuth2ApplicationUserDTO getOAuth2User(@AuthenticationPrincipal Jwt jwt) {
+       return userService.getOAuth2User(jwt);
     }
 }
