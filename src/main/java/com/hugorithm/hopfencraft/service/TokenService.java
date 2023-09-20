@@ -31,7 +31,6 @@ public class TokenService {
         String scope = auth.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.joining(" "));
-
         Instant expires = now.plus(Duration.ofHours(2));
 
         JwtClaimsSet claims = JwtClaimsSet.builder()
@@ -43,6 +42,31 @@ public class TokenService {
                 .build();
 
         return jwtEncoder.encode(JwtEncoderParameters.from(claims)).getTokenValue();
+    }
+
+    public String generateOAuth2Jwt(Authentication auth) {
+        Instant now = Instant.now();
+        /*
+        TODO: Revise this later
+        String scope = auth.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .collect(Collectors.joining(" "));
+
+         */
+        Instant expires = now.plus(Duration.ofHours(2));
+
+       String scope = "USER";
+
+        JwtClaimsSet claims = JwtClaimsSet.builder()
+                .issuer("self")
+                .issuedAt(now)
+                .expiresAt(expires)
+                .subject(auth.getName())
+                .claim("roles", scope)
+                .build();
+
+        return jwtEncoder.encode(JwtEncoderParameters.from(claims)).getTokenValue();
+
     }
 
     private static String bytesToHex(byte[] bytes) {
