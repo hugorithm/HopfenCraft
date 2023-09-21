@@ -1,7 +1,7 @@
 # HopfenCraft
 
 <p align="center">
-    <img alt="Light" src="src/main/resources/images/hopfencraft.jpg">
+    <img alt="Light" src="backend/src/main/resources/images/hopfencraft.jpg">
 </p>
 
 <p align="center">
