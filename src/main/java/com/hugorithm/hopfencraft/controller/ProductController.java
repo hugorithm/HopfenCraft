@@ -5,6 +5,7 @@ import com.hugorithm.hopfencraft.dto.product.ProductRegistrationDTO;
 import com.hugorithm.hopfencraft.dto.product.ProductUpdateDTO;
 import com.hugorithm.hopfencraft.model.Product;
 import com.hugorithm.hopfencraft.service.ProductService;
+import jakarta.annotation.security.RolesAllowed;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
@@ -26,6 +27,7 @@ public class ProductController {
     private final ProductService productService;
 
     @GetMapping("/products")
+    @RolesAllowed("USER")
     public Page<ProductDTO> getProducts(@RequestParam(defaultValue = "0") int page,
                                         @RequestParam(defaultValue = "10") int size) {
         Pageable pageable = PageRequest.of(page, size);
@@ -46,6 +48,7 @@ public class ProductController {
     }
 
     @GetMapping("/{productId}")
+    @RolesAllowed("USER")
     public ResponseEntity<ProductDTO> getProductById(@PathVariable @Positive Long productId) {
         Optional<Product> product = productService.findById(productId);
 
@@ -65,16 +68,19 @@ public class ProductController {
     }
 
     @PostMapping("/register")
+    @RolesAllowed("ADMIN")
     public ResponseEntity<ProductDTO> registerProduct(@AuthenticationPrincipal Jwt jwt, @Valid @RequestBody ProductRegistrationDTO body) {
         return productService.registerProduct(jwt, body);
     }
 
     @PutMapping("/update")
+    @RolesAllowed("ADMIN")
     public ResponseEntity<ProductDTO> updateProduct(@Valid @RequestBody ProductUpdateDTO body) {
         return productService.updateProduct(body);
     }
 
     @DeleteMapping("/remove/{productId}")
+    @RolesAllowed("ADMIN")
     public ResponseEntity<String> removeProduct(@PathVariable Long productId) {
         return productService.removeProduct(productId);
     }

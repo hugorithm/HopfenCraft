@@ -2,6 +2,7 @@ package com.hugorithm.hopfencraft.controller;
 
 import com.hugorithm.hopfencraft.dto.order.OrderResponseDTO;
 import com.hugorithm.hopfencraft.service.OrderService;
+import jakarta.annotation.security.RolesAllowed;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -16,6 +17,7 @@ public class OrderController {
     private final OrderService orderService;
 
     @PostMapping("/create")
+    @RolesAllowed("USER")
     public ResponseEntity<OrderResponseDTO> createOrder(@AuthenticationPrincipal Jwt jwt) {
         return orderService.createOrder(jwt);
     }

@@ -2,6 +2,7 @@ package com.hugorithm.hopfencraft.controller;
 
 import com.hugorithm.hopfencraft.dto.paypal.PaymentRequestDTO;
 import com.hugorithm.hopfencraft.service.PaypalService;
+import jakarta.annotation.security.RolesAllowed;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -16,11 +17,13 @@ public class PaypalController {
     private final PaypalService paypalService;
 
     @PostMapping("/api/orders/{orderId}/capture")
+    @RolesAllowed("USER")
     public ResponseEntity<Object> capturePayment(@AuthenticationPrincipal Jwt jwt, @RequestBody PaymentRequestDTO body, @PathVariable("orderId") String paypalOrderId) {
         return paypalService.capturePayment(jwt, body, paypalOrderId);
     }
 
     @PostMapping("/api/orders/create-order")
+    @RolesAllowed("USER")
     public ResponseEntity<Object> createOrder(@AuthenticationPrincipal Jwt jwt, @RequestBody PaymentRequestDTO body) {
         return paypalService.createOrder(jwt, body);
     }
