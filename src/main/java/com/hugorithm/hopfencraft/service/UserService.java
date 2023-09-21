@@ -1,7 +1,6 @@
 package com.hugorithm.hopfencraft.service;
 
 import com.hugorithm.hopfencraft.dto.authentication.PasswordResetDTO;
-import com.hugorithm.hopfencraft.dto.user.OAuth2ApplicationUserDTO;
 import com.hugorithm.hopfencraft.enums.EmailType;
 import com.hugorithm.hopfencraft.exception.auth.InvalidTokenException;
 import com.hugorithm.hopfencraft.exception.auth.PasswordMismatchException;
@@ -161,21 +160,5 @@ public class UserService implements UserDetailsService {
             LOGGER.error(ex.getMessage(), ex);
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
-    }
-
-    public OAuth2ApplicationUserDTO getOAuth2User(Jwt jwt) {
-        ApplicationUser user = jwtService.getUserFromJwt(jwt);
-
-        return new OAuth2ApplicationUserDTO(
-                user.getUserId(),
-                user.getName(),
-                user.getUsername(),
-                user.getEmail(),
-                user.getFirstName(),
-                user.getLastName(),
-                user.getCartItems(),
-                user.getOrders(),
-                user.getAttributes()
-        );
     }
 }
