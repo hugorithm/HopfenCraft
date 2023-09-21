@@ -27,7 +27,6 @@ public class ProductController {
     private final ProductService productService;
 
     @GetMapping("/products")
-    @RolesAllowed("USER")
     public Page<ProductDTO> getProducts(@RequestParam(defaultValue = "0") int page,
                                         @RequestParam(defaultValue = "10") int size) {
         Pageable pageable = PageRequest.of(page, size);
@@ -48,7 +47,6 @@ public class ProductController {
     }
 
     @GetMapping("/{productId}")
-    @RolesAllowed("USER")
     public ResponseEntity<ProductDTO> getProductById(@PathVariable @Positive Long productId) {
         Optional<Product> product = productService.findById(productId);
 
