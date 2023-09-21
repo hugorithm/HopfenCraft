@@ -5,7 +5,6 @@ import com.hugorithm.hopfencraft.service.AdminService;
 import jakarta.annotation.security.RolesAllowed;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -30,7 +29,7 @@ public class AdminController {
     }
 
     @GetMapping("/user/username/{username}")
-    @PreAuthorize("hasRole('ADMIN')")
+    @RolesAllowed("ADMIN")
     public ResponseEntity<ApplicationUserDTO> getUserByUsername(@PathVariable String username) {
         return adminService.getUserByUsername(username);
     }
