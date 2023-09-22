@@ -20,7 +20,7 @@ function Copyright() {
     <Typography variant="body2" color="text.secondary" align="center">
       {'Copyright © '}
       <Link color="inherit" href="https://mui.com/">
-        Your Website
+        HopfenCraft
       </Link>{' '}
       {new Date().getFullYear()}
       {'.'}
@@ -30,21 +30,10 @@ function Copyright() {
 
 const cards = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
-// TODO remove, this demo shouldn't need to reset the theme.
-const defaultTheme = createTheme();
-
-export default function Album() {
+export default function Products() {
   return (
-    <ThemeProvider theme={defaultTheme}>
+    <>
       <CssBaseline />
-      <AppBar position="relative">
-        <Toolbar>
-          <CameraIcon sx={{ mr: 2 }} />
-          <Typography variant="h6" color="inherit" noWrap>
-            Album layout
-          </Typography>
-        </Toolbar>
-      </AppBar>
       <main>
         {/* Hero unit */}
         <Box
@@ -131,6 +120,6 @@ export default function Album() {
         <Copyright />
       </Box>
       {/* End footer */}
-    </ThemeProvider>
+    </>
   );
 }
