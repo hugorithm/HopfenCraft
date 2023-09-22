@@ -109,7 +109,6 @@ public class UserIntegrationTests {
         // Add more assertions as needed
 
         PasswordResetDTO passwordResetDTO = new PasswordResetDTO(
-                "Password123!",
                 "NewPassword123!",
                 "NewPassword123!"
         );
@@ -157,8 +156,7 @@ public class UserIntegrationTests {
 
         // Assume you have an invalid PasswordResetDTO
         PasswordResetDTO passwordResetDTO = new PasswordResetDTO(
-                "InvalidOldPassword123!",
-                "NewPassword123!",
+                "wrongPassword123!",
                 "NewPassword123!"
         );
 

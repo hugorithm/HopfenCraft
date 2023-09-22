@@ -85,7 +85,7 @@ public class UserControllerTests {
                 "Test",
                 "test",
                 AuthProvider.LOCAL);
-        PasswordResetDTO passwordResetDTO = new PasswordResetDTO("Password123!", "newPassword123!", "newPassword123!");
+        PasswordResetDTO passwordResetDTO = new PasswordResetDTO("newPassword123!", "newPassword123!");
 
         // Mock the behavior of your userService to return a success response
         String resetToken = "resetToken"; // Replace with an actual reset token
