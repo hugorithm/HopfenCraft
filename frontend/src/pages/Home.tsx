@@ -48,6 +48,7 @@ export default function Home() {
           src="/src/assets/video/beer_pour.webm"
           muted
           autoPlay
+          loop
           style={{
             ...cardMediaStyle,
             transform: cardMediaTransform,

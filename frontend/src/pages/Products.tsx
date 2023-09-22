@@ -11,6 +11,7 @@ import Container from '@mui/material/Container';
 import Link from '@mui/material/Link';
 import { Link as RouterLink, useLoaderData } from 'react-router-dom';
 import { Content, Product } from '../types/Product';
+import { BASE_URL } from '../config/constants';
 
 function Copyright() {
   return (
@@ -27,7 +28,7 @@ function Copyright() {
 
 export const productDataLoader = async () => {
   try {
-    const apiUrl = 'http://localhost:8080/product/products?page=0&size=15';
+    const apiUrl = BASE_URL + '/product/products?page=0&size=15';
     const response = await fetch(apiUrl);
 
     if (!response.ok) {
@@ -99,7 +100,7 @@ export default function Products() {
                     height: '100%',
                     display: 'flex',
                     flexDirection: 'column'
-                    
+
                   }}
                 >
                   <CardMedia
@@ -108,7 +109,7 @@ export default function Products() {
                       // 16:9
                       pt: '135.25%',
                     }}
-                    image={`https://source.unsplash.com/random?beer`} 
+                    image={`https://source.unsplash.com/random?beer`}
                   />
                   <CardContent sx={{ flexGrow: 1 }}>
                     <Typography>
@@ -136,7 +137,7 @@ export default function Products() {
       {/* Footer */}
       <Box sx={{ bgcolor: 'background.paper', p: 6 }} component="footer">
         <Typography variant="h6" align="center" gutterBottom>
-          Footer
+          Connect with Us
         </Typography>
         <Typography
           variant="subtitle1"
@@ -144,9 +145,44 @@ export default function Products() {
           color="text.secondary"
           component="p"
         >
-          Something here to give the footer a purpose!
+          Explore our world of craft beers and join the conversation.
         </Typography>
-        <Copyright />
+        <Typography
+          variant="body2"
+          align="center"
+          color="text.secondary"
+          component="p"
+        >
+          Follow us on{' '}
+          <Link
+            color="inherit"
+            href="https://twitter.com/"
+            target="_blank"
+          >
+            Twitter
+          </Link>{' '}
+          and{' '}
+          <Link
+            color="inherit"
+            href="https://www.instagram.com/"
+            target="_blank"
+          >
+            Instagram
+          </Link>{' '}
+          for updates and beer-related content.
+        </Typography>
+        <Typography
+          variant="body2"
+          align="center"
+          color="text.secondary"
+          component="p"
+        >
+          Copyright © {new Date().getFullYear()}{' '}
+          <Link color="inherit" component={RouterLink} to="/home">
+            HopfenCraft
+          </Link>
+          . All rights reserved.
+        </Typography>
       </Box>
       {/* End footer */}
     </>
