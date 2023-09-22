@@ -1,12 +1,10 @@
 import {
   AppBar,
   Button,
-  Stack,
   Toolbar,
   Typography,
   Tabs,
-  Tab,
-  IconButton
+  Tab
 } from "@mui/material";
 import SportsBarIcon from '@mui/icons-material/SportsBar';
 import { Link, useLocation, matchPath } from 'react-router-dom';

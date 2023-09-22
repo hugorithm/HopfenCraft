@@ -1,93 +1,63 @@
-import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
-import Stack from '@mui/material/Stack';
-import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
-import Link from '@mui/material/Link';
-import {Link as RouterLink} from 'react-router-dom';
+import Typography from '@mui/material/Typography';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import Stack from '@mui/material/Stack';
+import { Link as RouterLink } from 'react-router-dom';
 
-function Copyright() {
-  return (
-    <Typography variant="body2" color="text.secondary" align="center">
-      {'Copyright © '}
-      <Link color="inherit" component={RouterLink} to="/home">
-        HopfenCraft
-      </Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
-    </Typography>
-  );
-}
+function About() {
+  const handleLearnMoreClick = () => {
+    // Add your custom action when the "Learn More" button is clicked
+    console.log("Learn More clicked!");
+  };
 
-export default function About() {
   return (
     <>
       <CssBaseline />
-      <main>
-        {/* Hero unit */}
+      <Container maxWidth="sm">
         <Box
           sx={{
-            bgcolor: 'background.paper',
-            pt: 8,
-            pb: 6,
+            mt: 8,
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
           }}
         >
-          <Container maxWidth="sm">
-            <Typography
-              component="h1"
-              variant="h2"
-              align="center"
-              color="text.primary"
-              gutterBottom
+          <Typography component="h1" variant="h2" align="center" color="text.primary" gutterBottom>
+            Discover the World of HopfenCraft
+          </Typography>
+          <Typography variant="h5" align="center" color="text.secondary" paragraph>
+            Welcome to HopfenCraft, where the art of brewing meets the thrill of discovery. We're not just a beer shop; we're a passionate community of beer enthusiasts on a mission to share the world's finest brews with you.
+          </Typography>
+          <Typography variant="h5" align="center" color="text.secondary" paragraph>
+            Our shelves are a treasure trove of flavors, each bottle a testament to the craft and dedication of master brewers worldwide. From the hoppy delights of the Pacific Northwest to the velvety stouts of Ireland, every sip is a journey.
+          </Typography>
+          <Stack
+            sx={{ pt: 4 }}
+            direction="row"
+            spacing={2}
+            justifyContent="center"
+          >
+            <Button
+              variant="contained"
+              color="primary"
+              component={RouterLink}
+              to="/products"
             >
-              About 
-              <Typography
-               component="h1"
-               variant="h2"
-               align="center"
-               color="text.primary"
-               fontWeight={600}
-               gutterBottom>
-                  HopfenCraft
-              </Typography>
-            </Typography>
-            <Typography variant="h5" align="center" color="text.secondary" paragraph>
-            Here, you'll discover an exquisite collection of handpicked brews that span the globe, each bottle telling a tale of the brewmaster's dedication and expertise. From the hoppy IPAs of the Pacific Northwest to the rich stouts of Ireland, our shelves house the world's finest.
-            </Typography>
-            <Typography variant="h5" align="center" color="text.secondary" paragraph>
-            Whether you're a seasoned beer enthusiast or a curious newcomer, our goal is simple: to elevate your beer experience. We invite you to explore our treasure trove of flavors, embark on a journey of taste, and raise a glass to the finest brews the world has to offer.
-            </Typography>
-            
-            <Stack
-              sx={{ pt: 4 }}
-              direction="row"
-              spacing={2}
-              justifyContent="center"
+              Explore Our Products
+            </Button>
+            <Button
+              variant="outlined"
+              onClick={handleLearnMoreClick}
             >
-              <Button variant="contained">Main call to action</Button>
-              <Button variant="outlined">Secondary action</Button>
-            </Stack>
-          </Container>
+              Learn More
+            </Button>
+          </Stack>
         </Box>
-      
-      </main>
-      {/* Footer */}
-      <Box sx={{ bgcolor: 'background.paper', p: 6 }} component="footer">
-        <Typography variant="h6" align="center" gutterBottom>
-          Footer
-        </Typography>
-        <Typography
-          variant="subtitle1"
-          align="center"
-          color="text.secondary"
-          component="p"
-        >
-          Something here to give the footer a purpose!
-        </Typography>
-        <Copyright />
-      </Box>
-      {/* End footer */}
+      </Container>
     </>
   );
 }
+
+export default About;
