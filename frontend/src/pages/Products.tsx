@@ -67,7 +67,7 @@ export default function Products() {
               color="text.primary"
               gutterBottom
             >
-              Our Products
+              Our Beers
             </Typography>
             <Typography variant="h5" align="center" color="text.secondary" paragraph>
               Explore the world of beer,
