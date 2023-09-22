@@ -35,7 +35,7 @@ export const productDataLoader = async () => {
     }
 
     const data = await response.json();
-    
+
     return data;
   } catch (error) {
     console.error('Error fetching data:', error);
@@ -89,38 +89,46 @@ export default function Products() {
           </Container>
         </Box>
         <Container sx={{ py: 8 }} maxWidth="md">
-          
+
           <Grid container spacing={4}>
             {data.content.map((product: Content) => (
-              
-                <Grid item key={product.productId} xs={12} sm={6} md={4}>
-                  <Card
-                    sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}
-                  >
-                    <CardMedia
-                      component="div"
-                      sx={{
-                        // 16:9
-                        pt: '56.25%',
-                      }}
-                      image={`https://source.unsplash.com/random?beer`} // Use content data
-                    />
-                    <CardContent sx={{ flexGrow: 1 }}>
-                      <Typography gutterBottom variant="h5" component="h2">
-                        {product.name} 
-                      </Typography>
-                      <Typography>
-                        {product.description}
-                      </Typography>
-                      <Typography>
-                        {product.price}€
-                      </Typography>
-                    </CardContent>
-                    <CardActions>
-                      <Button size="small">Buy</Button>
-                    </CardActions>
-                  </Card>
-                </Grid>
+
+              <Grid item key={product.productId} xs={12} sm={6} md={4}>
+                <Card
+                  sx={{
+                    height: '100%',
+                    display: 'flex',
+                    flexDirection: 'column'
+                    
+                  }}
+                >
+                  <CardMedia
+                    component="div"
+                    sx={{
+                      // 16:9
+                      pt: '135.25%',
+                    }}
+                    image={`https://source.unsplash.com/random?beer`} 
+                  />
+                  <CardContent sx={{ flexGrow: 1 }}>
+                    <Typography>
+                      {product.brand}
+                    </Typography>
+                    <Typography gutterBottom variant="h6" component="h2">
+                      {product.name}
+                    </Typography>
+                    <Typography gutterBottom>
+                      {product.description}
+                    </Typography>
+                    <Typography>
+                      €{product.price}
+                    </Typography>
+                  </CardContent>
+                  <CardActions>
+                    <Button size="small" variant='contained'>Add to Cart</Button>
+                  </CardActions>
+                </Card>
+              </Grid>
             ))}
           </Grid>
         </Container>
