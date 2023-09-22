@@ -16,11 +16,19 @@ function Navbar() {
       <Toolbar>
         <SportsBarIcon />
         <Button color='inherit' href="/home">
-          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>HopfenCraft</Typography>
+          <Typography
+            variant="h6"
+            component="div"
+            
+            sx={{ flexGrow: 1 }}>
+            HopfenCraft
+          </Typography>
         </Button>
         <Stack direction='row' spacing={2} sx={{ marginLeft: 'auto' }}>
           <Button color="inherit" component={Link} to="/products">
-            Products
+            <Typography variant="button">
+              Products
+            </Typography>
           </Button>
           <Button color="inherit" component={Link} to="/contacts">
             Contacts
