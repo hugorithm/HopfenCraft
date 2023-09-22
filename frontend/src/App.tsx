@@ -1,6 +1,5 @@
 import { Route, createBrowserRouter, createRoutesFromElements, RouterProvider, Link, Outlet } from 'react-router-dom';
 import './App.css'
-import Album from './pages/Marketplace';
 import Login from './pages/Login';
 import Home from './pages/Home';
 import Navbar from './components/common/Navbar';
