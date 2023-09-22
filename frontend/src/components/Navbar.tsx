@@ -5,7 +5,8 @@ import {
   Toolbar,
   Typography,
   Tabs,
-  Tab
+  Tab,
+  IconButton
 } from "@mui/material";
 import SportsBarIcon from '@mui/icons-material/SportsBar';
 import { Link, useLocation, matchPath } from 'react-router-dom';
@@ -26,14 +27,16 @@ function useRouteMatch(patterns: readonly string[]) {
 }
 
 function Navbar() {
-  const routeMatch = useRouteMatch(['/products', '/contacts', '/about', '/login', '/signup']);
-  const currentTab = routeMatch?.pattern?.path;
+  const routeMatch = useRouteMatch(['/home', '/products', '/contacts', '/about']);
+  const currentTab = routeMatch?.pattern?.path || false;
+  const routeLoginMatch = useRouteMatch(['/login', '/signup']);
+  const currentLoginTab = routeLoginMatch?.pattern?.path || false;
 
   return (
     <AppBar position="static">
       <Toolbar>
-        <SportsBarIcon />
-        <Button color='inherit' href="/home">
+        <Button color='inherit' component={Link} to="/home">
+          <SportsBarIcon sx={{ marginRight: "10px" }} />
           <Typography
             variant="h6"
             component="div"
@@ -49,13 +52,14 @@ function Navbar() {
             }
           }}
           sx={{ marginLeft: 'auto' }}>
+          <Tab label="Home" value="/home" to="/home" component={Link} />
           <Tab label="Products" value="/products" to="/products" component={Link} />
           <Tab label="Contacts" value="/contacts" to="/contacts" component={Link} />
           <Tab label="About" value="/about" to="/about" component={Link} />
         </Tabs>
         <NightModeToggle />
         <Tabs
-          value={currentTab}
+          value={currentLoginTab}
           sx={{ marginLeft: '10px' }}
           TabIndicatorProps={{
             style: {
@@ -63,8 +67,20 @@ function Navbar() {
             }
           }}>
           <Tab label="Login" value="/login" to="/login" component={Link} />
-          <Tab label="SignUp" value="/signup" to="/signup" component={Link} />
+          <Tab label="Sign Up" value="/signup" to="/signup" component={Link} />
         </Tabs>
+        {/* <Button
+          sx={{ marginLeft: '10px' }}
+          color="inherit"
+          component={Link} to="/login">
+          Login
+        </Button>
+        <Button
+          sx={{ marginLeft: '10px' }}
+          color="inherit"
+          component={Link} to="/signup">
+          Sign Up
+        </Button> */}
       </Toolbar>
     </AppBar>
   );
