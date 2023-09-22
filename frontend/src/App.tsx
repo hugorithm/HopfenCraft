@@ -16,6 +16,7 @@ import SignUp from './pages/Signup';
 import { ThemeProvider } from "@mui/material";
 import { useThemeContext } from "./theme/ThemeContextProvider";
 
+
 const Root = () => {
   return (
     <>

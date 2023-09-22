@@ -14,12 +14,13 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import Link from '@mui/material/Link';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import {Link as RouterLink} from 'react-router-dom';
 
 function Copyright() {
   return (
     <Typography variant="body2" color="text.secondary" align="center">
       {'Copyright © '}
-      <Link color="inherit" href="https://mui.com/">
+      <Link color="inherit" component={RouterLink} to="/home">
         HopfenCraft
       </Link>{' '}
       {new Date().getFullYear()}
@@ -51,7 +52,7 @@ export default function Products() {
               color="text.primary"
               gutterBottom
             >
-              Album layout
+              Welcome to HopfenCraft
             </Typography>
             <Typography variant="h5" align="center" color="text.secondary" paragraph>
               Something short and leading about the collection below—its contents,

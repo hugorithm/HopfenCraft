@@ -12,6 +12,7 @@ import SportsBarIcon from '@mui/icons-material/SportsBar';
 import { Link, useLocation, matchPath } from 'react-router-dom';
 import NightModeToggle from "./NightModeToggle";
 
+
 function useRouteMatch(patterns: readonly string[]) {
   const { pathname } = useLocation();
 
@@ -40,6 +41,8 @@ function Navbar() {
           <Typography
             variant="h6"
             component="div"
+            fontWeight={600}
+            textTransform={"capitalize"}
             sx={{ flexGrow: 1 }}>
             HopfenCraft
           </Typography>

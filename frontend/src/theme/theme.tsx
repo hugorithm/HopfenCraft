@@ -1,5 +1,9 @@
 import { PaletteMode } from "@mui/material";
 import { amber, grey } from "@mui/material/colors";
+import '@fontsource/roboto/300.css';
+import '@fontsource/roboto/400.css';
+import '@fontsource/roboto/500.css';
+import '@fontsource/roboto/700.css';
 
 const theme = {
   palette: {
@@ -32,11 +36,17 @@ export const getDesignTokens = (mode: PaletteMode) => ({
         },
         text: {
           primary: "#fff",
-          secondary: grey[500],
+          secondary: grey[200],
         },
       }),
   },
   components: {
+    typography: {
+      fontFamily: [
+        'Roboto',
+        'sans-serif'
+      ]
+    },
     MuiTab: {
       mode,
       ...(mode === "light")
