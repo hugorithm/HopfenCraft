@@ -1,4 +1,10 @@
-import { Route, createBrowserRouter, createRoutesFromElements, RouterProvider, Link, Outlet } from 'react-router-dom';
+import {
+  Route,
+  createBrowserRouter,
+  createRoutesFromElements,
+  RouterProvider,
+  Outlet
+} from 'react-router-dom';
 import './App.css'
 import Login from './pages/Login';
 import Home from './pages/Home';
@@ -9,7 +15,6 @@ import Products from './pages/Products';
 import SignUp from './pages/Signup';
 import { ThemeProvider } from "@mui/material";
 import { useThemeContext } from "./theme/ThemeContextProvider";
-import NightModeToggle from './components/NightModeToggle';
 
 const Root = () => {
   return (
