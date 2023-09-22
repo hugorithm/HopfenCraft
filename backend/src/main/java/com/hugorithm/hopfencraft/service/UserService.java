@@ -130,18 +130,10 @@ public class UserService implements UserDetailsService {
         }
     }
 
-    //TODO: Implement google reCaptcha
     public ResponseEntity<?> resetPassword(Jwt jwt, String token, PasswordResetDTO dto) {
         try {
             ApplicationUser user = verifyPasswordResetToken(jwt, token);
 
-            if (!passwordEncoder.matches(dto.getOldPassword(), user.getPassword())) {
-                throw new WrongCredentialsException("Wrong credentials");
-            }
-
-            if (dto.getOldPassword().equals(dto.getNewPassword())) {
-                throw new SamePasswordException("New password must be different from the old password");
-            }
 
             if (dto.getNewPassword().equals(dto.getNewPasswordConfirmation())) {
                 String encodedPassword = passwordEncoder.encode(dto.getNewPassword());
