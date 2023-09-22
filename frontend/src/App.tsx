@@ -5,14 +5,14 @@ import './App.css'
 import Album from './pages/Marketplace';
 import Login from './pages/Login';
 import Home from './pages/Home';
-import TopBar from './components/common/Topbar';
+import Navbar from './components/common/Navbar';
 
 
 const Root = () => {
   return (
     <>
       <div>
-        <TopBar/>
+        <Navbar/>
       </div>
       <div>
         <Outlet />
@@ -39,8 +39,6 @@ function App() {
     </>
   )
 }
-
-
 
 
 export default App
