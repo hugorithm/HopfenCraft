@@ -3,13 +3,31 @@ import {
   Button,
   Stack,
   Toolbar,
-  Typography
+  Typography,
+  Tabs,
+  Tab
 } from "@mui/material";
 import SportsBarIcon from '@mui/icons-material/SportsBar';
-import { Link } from 'react-router-dom';
+import { Link, useLocation, matchPath } from 'react-router-dom';
 import NightModeToggle from "./NightModeToggle";
 
+function useRouteMatch(patterns: readonly string[]) {
+  const { pathname } = useLocation();
+
+  for (let i = 0; i < patterns.length; i += 1) {
+    const pattern = patterns[i];
+    const possibleMatch = matchPath(pattern, pathname);
+    if (possibleMatch !== null) {
+      return possibleMatch;
+    }
+  }
+
+  return null;
+}
+
 function Navbar() {
+  const routeMatch = useRouteMatch(['/products', '/contacts', '/about', '/login', '/signup']);
+  const currentTab = routeMatch?.pattern?.path;
 
   return (
     <AppBar position="static">
@@ -19,31 +37,34 @@ function Navbar() {
           <Typography
             variant="h6"
             component="div"
-            
             sx={{ flexGrow: 1 }}>
             HopfenCraft
           </Typography>
         </Button>
-        <Stack direction='row' spacing={2} sx={{ marginLeft: 'auto' }}>
-          <Button color="inherit" component={Link} to="/products">
-            <Typography variant="button">
-              Products
-            </Typography>
-          </Button>
-          <Button color="inherit" component={Link} to="/contacts">
-            Contacts
-          </Button>
-          <Button color="inherit" component={Link} to="/about">
-            About
-          </Button>
-        </Stack>
+        <Tabs
+          value={currentTab}
+          TabIndicatorProps={{
+            style: {
+              background: "#fff"
+            }
+          }}
+          sx={{ marginLeft: 'auto' }}>
+          <Tab label="Products" value="/products" to="/products" component={Link} />
+          <Tab label="Contacts" value="/contacts" to="/contacts" component={Link} />
+          <Tab label="About" value="/about" to="/about" component={Link} />
+        </Tabs>
         <NightModeToggle />
-        <Button sx={{ marginLeft: '10px' }} color="inherit" component={Link} to="/login">
-          Login
-        </Button>
-        <Button sx={{ marginLeft: "10px" }} color="inherit" component={Link} to="/signup">
-          Sign Up
-        </Button>
+        <Tabs
+          value={currentTab}
+          sx={{ marginLeft: '10px' }}
+          TabIndicatorProps={{
+            style: {
+              background: "#fff"
+            }
+          }}>
+          <Tab label="Login" value="/login" to="/login" component={Link} />
+          <Tab label="SignUp" value="/signup" to="/signup" component={Link} />
+        </Tabs>
       </Toolbar>
     </AppBar>
   );
