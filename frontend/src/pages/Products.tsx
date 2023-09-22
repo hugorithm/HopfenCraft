@@ -121,7 +121,7 @@ export default function Products() {
                     <Typography gutterBottom>
                       {product.description}
                     </Typography>
-                    <Typography>
+                    <Typography sx={{fontWeight: 500}}>
                       €{product.price}
                     </Typography>
                   </CardContent>
