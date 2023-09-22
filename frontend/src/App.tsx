@@ -3,7 +3,8 @@ import {
   createBrowserRouter,
   createRoutesFromElements,
   RouterProvider,
-  Outlet
+  Outlet,
+  useNavigate
 } from 'react-router-dom';
 import './App.css'
 import Login from './pages/Login';
@@ -11,7 +12,7 @@ import Home from './pages/Home';
 import Navbar from './components/Navbar';
 import About from './pages/About';
 import Contacts from './pages/Contacts';
-import Products from './pages/Products';
+import Products, { productDataLoader } from './pages/Products';
 import SignUp from './pages/Signup';
 import { ThemeProvider } from "@mui/material";
 import { useThemeContext } from "./theme/ThemeContextProvider";
@@ -33,11 +34,12 @@ const Root = () => {
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<Root />}>
+      <Route path="/" element={<Home />} />
       <Route index path="home" element={<Home />} />
       <Route path="login" element={<Login />} />
       <Route path="about" element={<About />} />
       <Route path="contacts" element={<Contacts />} />
-      <Route path='products' element={<Products />} />
+      <Route path='products' element={<Products />} loader={productDataLoader} />
       <Route path='signup' element={<SignUp />} />
     </Route>
   )

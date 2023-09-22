@@ -22,7 +22,7 @@ export default function Home() {
 
   const handleResize = () => {
     const windowWidth = window.innerWidth;
-    
+
     if (windowWidth < 768) {
       setCardMediaTransform('scale(1.2)');
     } else {
