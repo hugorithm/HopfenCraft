@@ -3,8 +3,7 @@ import {
   createBrowserRouter,
   createRoutesFromElements,
   RouterProvider,
-  Outlet,
-  useNavigate
+  Outlet
 } from 'react-router-dom';
 import './App.css'
 import Login from './pages/Login';
@@ -16,6 +15,7 @@ import Products, { productDataLoader } from './pages/Products';
 import SignUp from './pages/Signup';
 import { ThemeProvider } from "@mui/material";
 import { useThemeContext } from "./theme/ThemeContextProvider";
+import CustomError from './errors/CustomError';
 
 
 const Root = () => {
@@ -34,13 +34,13 @@ const Root = () => {
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<Root />}>
-      <Route path="/" element={<Home />} />
-      <Route index path="home" element={<Home />} />
-      <Route path="login" element={<Login />} />
-      <Route path="about" element={<About />} />
-      <Route path="contacts" element={<Contacts />} />
-      <Route path='products' element={<Products />} loader={productDataLoader} />
-      <Route path='signup' element={<SignUp />} />
+      <Route path="/" element={<Home />} errorElement={<CustomError />} />
+      <Route index path="home" element={<Home />} errorElement={<CustomError />} />
+      <Route path="login" element={<Login />} errorElement={<CustomError />} />
+      <Route path="about" element={<About />} errorElement={<CustomError />} />
+      <Route path="contacts" element={<Contacts />} errorElement={<CustomError />} />
+      <Route path='products' element={<Products />} loader={productDataLoader} errorElement={<CustomError/>} />
+      <Route path='signup' element={<SignUp />} errorElement={<CustomError />} />
     </Route>
   )
 )

@@ -13,18 +13,6 @@ import { Link as RouterLink, useLoaderData } from 'react-router-dom';
 import { Content, Product } from '../types/Product';
 import { BASE_URL } from '../config/constants';
 
-function Copyright() {
-  return (
-    <Typography variant="body2" color="text.secondary" align="center">
-      {'Copyright © '}
-      <Link color="inherit" component={RouterLink} to="/home">
-        HopfenCraft
-      </Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
-    </Typography>
-  );
-}
 
 export const productDataLoader = async () => {
   try {
@@ -36,16 +24,18 @@ export const productDataLoader = async () => {
     }
 
     const data = await response.json();
-
     return data;
   } catch (error) {
     console.error('Error fetching data:', error);
+    return null;
   }
 };
 
 
+
 export default function Products() {
   const data = useLoaderData() as Product;
+
 
   return (
     <>
@@ -121,7 +111,7 @@ export default function Products() {
                     <Typography gutterBottom>
                       {product.description}
                     </Typography>
-                    <Typography sx={{fontWeight: 500}}>
+                    <Typography sx={{ fontWeight: 500 }}>
                       €{product.price}
                     </Typography>
                   </CardContent>
