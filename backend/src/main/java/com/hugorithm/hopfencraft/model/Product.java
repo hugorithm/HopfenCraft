@@ -26,7 +26,6 @@ public class Product {
     private String sku;
     @NotBlank
     private String brand;
-    @Column(unique = true)
     private String name;
     private String description;
     private int stockQuantity;
@@ -39,6 +38,20 @@ public class Product {
     private LocalDateTime updatedDate;
     @ManyToOne
     private ApplicationUser user;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "product_image_id", referencedColumnName = "id")
+    private ProductImage image;
+
+    public Product(String brand, String name, String description, int quantity, BigDecimal price, ApplicationUser user, ProductImage image) {
+        this.brand = brand;
+        this.name = name;
+        this.description = description;
+        this.stockQuantity = quantity;
+        this.price = price;
+        this.user = user;
+        this.image = image;
+        this.sku = generateProductCode(brand, name);
+    }
 
     public Product(String brand, String name, String description, int quantity, BigDecimal price, ApplicationUser user) {
         this.brand = brand;
