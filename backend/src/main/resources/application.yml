@@ -58,3 +58,6 @@ jwt:
       exponent: ${RSA_PRIVATE_EXPONENT}
 frontend:
   url: http://localhost:3000
+upload:
+  directory: C:/Users/Hugo/Documents/repos/hopfencraft/backend/uploads/
+  #TODO: Remove this ugly mess and find a way to use relative paths
