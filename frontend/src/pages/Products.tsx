@@ -36,7 +36,7 @@ export const productDataLoader = async () => {
 
 export default function Products() {
   const initialData = useLoaderData() as Product;
-  const [data, setData] = useState<Product | null>(initialData);
+  const [data, setData] = useState<Product>(initialData);
   const [openModal, setOpenModal] = useState<boolean>(false);
   const [selectedProduct, setSelectedProduct] = useState<Content | null>(null);
   const [page, setPage] = useState<number>(0);
@@ -53,12 +53,12 @@ export default function Products() {
 
       const newData = await response.json();
       // Update the data state with the new items
-      setData((prevData: Product | null) => ({
-        ...prevData!,
-        content: [...prevData!.content, ...newData.content],
+      setData((prevData: Product) => ({
+        ...prevData,
+        content: [...prevData.content, ...newData.content],
         last: newData.last,
       }));
-      setPage(nextPage); // Update the current page
+      setPage(nextPage); 
     } catch (error) {
       console.error('Error fetching data:', error);
     }
@@ -185,7 +185,7 @@ export default function Products() {
           <Container style={{ display: 'flex', justifyContent: 'center' }}>
             <Button
               onClick={loadMore}
-              disabled={data?.last}
+              disabled={data.last}
               variant="contained"
               sx={{ mt: 2 }}
             >
