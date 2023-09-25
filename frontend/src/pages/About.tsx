@@ -8,7 +8,6 @@ import { Link as RouterLink } from 'react-router-dom';
 
 function About() {
   const handleLearnMoreClick = () => {
-    // Add your custom action when the "Learn More" button is clicked
     console.log("Learn More clicked!");
   };
 

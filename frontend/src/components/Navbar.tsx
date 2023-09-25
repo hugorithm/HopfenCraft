@@ -70,18 +70,6 @@ function Navbar() {
           <Tab label="Login" value="/login" to="/login" component={Link} />
           <Tab label="Sign Up" value="/signup" to="/signup" component={Link} />
         </Tabs>
-        {/* <Button
-          sx={{ marginLeft: '10px' }}
-          color="inherit"
-          component={Link} to="/login">
-          Login
-        </Button>
-        <Button
-          sx={{ marginLeft: '10px' }}
-          color="inherit"
-          component={Link} to="/signup">
-          Sign Up
-        </Button> */}
       </Toolbar>
     </AppBar>
   );
