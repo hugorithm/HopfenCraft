@@ -12,7 +12,7 @@ import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
-import { Link as RouterLink, Navigate } from 'react-router-dom';
+import { Link as RouterLink, Navigate, useNavigate } from 'react-router-dom';
 import googleLogo from './../assets/oauth2/google-logo.png';
 import githubLogo from './../assets/oauth2/github-logo.png';
 import { GOOGLE_AUTH_URL, GITHUB_AUTH_URL, ACCESS_TOKEN, BASE_URL } from './../config/constants';
@@ -27,6 +27,7 @@ export default function Login() {
   const [error, setError] = useState<string | null>(null);
   const [rememberMe, setRememberMe] = useState(false);
   const [username, setUsername] = useState('');
+  const navigate = useNavigate();
 
   useEffect(() => {
     const rememberMeValue = localStorage.getItem('rememberMe');
@@ -48,7 +49,6 @@ export default function Login() {
       username: data.get('username') as string,
       password: data.get('password') as string,
     };
-    console.log(rememberMe)
 
     if (rememberMe) {
       localStorage.setItem('rememberMe', 'true');
@@ -63,7 +63,7 @@ export default function Login() {
 
       if (response && response.jwt) {
         localStorage.setItem(ACCESS_TOKEN, response.jwt);
-        return <Navigate to="/profile" />;
+        return navigate("/products");
       } else {
         setError('Failed to login. Please check your credentials.');
       }

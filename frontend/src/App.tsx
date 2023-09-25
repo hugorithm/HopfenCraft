@@ -16,6 +16,7 @@ import SignUp from './pages/Signup';
 import { ThemeProvider } from "@mui/material";
 import { useThemeContext } from "./theme/ThemeContextProvider";
 import CustomError from './errors/CustomError';
+import NotFound from './errors/404LandingPage';
 
 
 const Root = () => {
@@ -41,6 +42,7 @@ const router = createBrowserRouter(
       <Route path="contacts" element={<Contacts />} errorElement={<CustomError />} />
       <Route path='products' element={<Products />} loader={productDataLoader} errorElement={<CustomError/>} />
       <Route path='signup' element={<SignUp />} errorElement={<CustomError />} />
+      <Route path="*" element={<NotFound />} />
     </Route>
   )
 )

@@ -4,11 +4,14 @@ import {
   Toolbar,
   Typography,
   Tabs,
-  Tab
+  Tab,
+  IconButton
 } from "@mui/material";
 import SportsBarIcon from '@mui/icons-material/SportsBar';
 import { Link, useLocation, matchPath } from 'react-router-dom';
 import NightModeToggle from "./NightModeToggle";
+import { ACCESS_TOKEN } from "../config/constants";
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 
 
 function useRouteMatch(patterns: readonly string[]) {
@@ -30,6 +33,14 @@ function Navbar() {
   const currentTab = routeMatch?.pattern?.path || false;
   const routeLoginMatch = useRouteMatch(['/login', '/signup']);
   const currentLoginTab = routeLoginMatch?.pattern?.path || false;
+
+  const jwt = localStorage.getItem(ACCESS_TOKEN); 
+  const showProfileLink = !!jwt; 
+
+  const handleLogout = () => {
+    localStorage.removeItem(ACCESS_TOKEN);
+    window.location.reload();
+  }
 
   return (
     <AppBar position="static">
@@ -59,6 +70,15 @@ function Navbar() {
           <Tab label="About" value="/about" to="/about" component={Link} />
         </Tabs>
         <NightModeToggle />
+        {showProfileLink && (
+          <>
+          <IconButton to="/profile" component={Link} color="inherit">
+            <AccountCircleIcon/>
+          </IconButton>
+          <Button color="inherit" onClick={handleLogout}>Logout</Button>
+          </>
+        )}
+        {!showProfileLink && (
         <Tabs
           value={currentLoginTab}
           sx={{ marginLeft: '10px' }}
@@ -70,6 +90,7 @@ function Navbar() {
           <Tab label="Login" value="/login" to="/login" component={Link} />
           <Tab label="Sign Up" value="/signup" to="/signup" component={Link} />
         </Tabs>
+        )}
       </Toolbar>
     </AppBar>
   );
