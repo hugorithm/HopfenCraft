@@ -12,6 +12,7 @@ import Link from '@mui/material/Link';
 import { Link as RouterLink, useLoaderData } from 'react-router-dom';
 import { Content, Product } from '../types/Product';
 import { BASE_URL } from '../config/constants';
+import { ButtonBase } from '@mui/material';
 
 
 export const productDataLoader = async () => {
@@ -93,14 +94,24 @@ export default function Products() {
 
                   }}
                 >
+                  <ButtonBase sx={{
+                     display: 'block',
+                     textAlign: 'initial'
+                  }}
+                  onClick={e => console.log(e)}
+                  >
+
                   <CardMedia
                     component="div"
                     sx={{
                       // 16:9
                       pt: '135.25%',
+                      backgroundSize: 'contain'
                     }}
-                    image={`https://source.unsplash.com/random?beer`}
+                    
+                    image={`${BASE_URL}/product/${product.productId}/image`}
                   />
+                  </ButtonBase>
                   <CardContent sx={{ flexGrow: 1 }}>
                     <Typography>
                       {product.brand}
