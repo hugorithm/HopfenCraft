@@ -12,7 +12,8 @@ import { Link, useLocation, matchPath } from 'react-router-dom';
 import NightModeToggle from "./NightModeToggle";
 import { ACCESS_TOKEN } from "../config/constants";
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+import { useNavigate } from "react-router-dom";
 
 function useRouteMatch(patterns: readonly string[]) {
   const { pathname } = useLocation();
@@ -33,13 +34,14 @@ function Navbar() {
   const currentTab = routeMatch?.pattern?.path || false;
   const routeLoginMatch = useRouteMatch(['/login', '/signup']);
   const currentLoginTab = routeLoginMatch?.pattern?.path || false;
+  const navigate = useNavigate();
 
   const jwt = localStorage.getItem(ACCESS_TOKEN); 
   const showProfileLink = !!jwt; 
 
   const handleLogout = () => {
     localStorage.removeItem(ACCESS_TOKEN);
-    window.location.reload();
+    navigate("/home");
   }
 
   return (
@@ -74,6 +76,9 @@ function Navbar() {
           <>
           <IconButton to="/profile" component={Link} color="inherit">
             <AccountCircleIcon/>
+          </IconButton>
+          <IconButton to="/cart" component={Link} color="inherit">
+            <ShoppingCartIcon/>
           </IconButton>
           <Button color="inherit" onClick={handleLogout}>Logout</Button>
           </>
