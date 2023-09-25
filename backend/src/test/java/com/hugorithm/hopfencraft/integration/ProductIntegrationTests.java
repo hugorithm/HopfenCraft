@@ -17,8 +17,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.*;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
 
 import java.math.BigDecimal;
 
@@ -59,16 +57,8 @@ public class ProductIntegrationTests {
 
         HttpHeaders headers = new HttpHeaders();
         headers.set("Authorization", "Bearer " + jwt);
-        headers.setContentType(MediaType.MULTIPART_FORM_DATA);
 
-        MultiValueMap<String, Object> parts = new LinkedMultiValueMap<>();
-        parts.add("brand", validInput3.getBrand());
-        parts.add("name", validInput3.getName());
-        parts.add("description", validInput3.getDescription());
-        parts.add("quantity", String.valueOf(validInput3.getQuantity()));
-        parts.add("price", validInput3.getPrice().toString());
-
-        HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<>(parts, headers);
+        HttpEntity<ProductRegistrationDTO> requestEntity = new HttpEntity<>(validInput3, headers);
 
         ResponseEntity<ProductDTO> response2 = restTemplate.postForEntity(
                 "http://localhost:" + port + "/product/register",
@@ -152,16 +142,8 @@ public class ProductIntegrationTests {
 
         HttpHeaders headers = new HttpHeaders();
         headers.set("Authorization", "Bearer " + jwt);
-        headers.setContentType(MediaType.MULTIPART_FORM_DATA);
 
-        MultiValueMap<String, Object> parts = new LinkedMultiValueMap<>();
-        parts.add("brand", validInput.getBrand());
-        parts.add("name", validInput.getName());
-        parts.add("description", validInput.getDescription());
-        parts.add("quantity", String.valueOf(validInput.getQuantity()));
-        parts.add("price", validInput.getPrice().toString());
-
-        HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<>(parts, headers);
+        HttpEntity<ProductRegistrationDTO> requestEntity = new HttpEntity<>(validInput, headers);
 
 
         ResponseEntity<ProductDTO> createResponse = restTemplate.postForEntity(
@@ -244,34 +226,11 @@ public class ProductIntegrationTests {
 
         HttpHeaders headers = new HttpHeaders();
         headers.set("Authorization", "Bearer " + jwt);
-        headers.setContentType(MediaType.MULTIPART_FORM_DATA);
 
-        MultiValueMap<String, Object> parts1 = new LinkedMultiValueMap<>();
-        parts1.add("brand", product1.getBrand());
-        parts1.add("name", product1.getName());
-        parts1.add("description", product1.getDescription());
-        parts1.add("quantity", String.valueOf(product1.getQuantity()));
-        parts1.add("price", product1.getPrice().toString());
 
-        HttpEntity<MultiValueMap<String, Object>> requestEntity1 = new HttpEntity<>(parts1, headers);
-
-        MultiValueMap<String, Object> parts2 = new LinkedMultiValueMap<>();
-        parts2.add("brand", product2.getBrand());
-        parts2.add("name", product2.getName());
-        parts2.add("description", product2.getDescription());
-        parts2.add("quantity", String.valueOf(product2.getQuantity()));
-        parts2.add("price", product2.getPrice().toString());
-
-        HttpEntity<MultiValueMap<String, Object>> requestEntity2 = new HttpEntity<>(parts2, headers);
-
-        MultiValueMap<String, Object> parts3 = new LinkedMultiValueMap<>();
-        parts3.add("brand", product3.getBrand());
-        parts3.add("name", product3.getName());
-        parts3.add("description", product3.getDescription());
-        parts3.add("quantity", String.valueOf(product3.getQuantity()));
-        parts3.add("price", product3.getPrice().toString());
-
-        HttpEntity<MultiValueMap<String, Object>> requestEntity3 = new HttpEntity<>(parts3, headers);
+        HttpEntity<ProductRegistrationDTO> requestEntity1 = new HttpEntity<>(product1, headers);
+        HttpEntity<ProductRegistrationDTO> requestEntity2 = new HttpEntity<>(product2, headers);
+        HttpEntity<ProductRegistrationDTO> requestEntity3 = new HttpEntity<>(product3, headers);
 
         restTemplate.postForEntity("http://localhost:" + port + "/product/register", requestEntity1, ProductRegistrationDTO.class);
         restTemplate.postForEntity("http://localhost:" + port + "/product/register", requestEntity2, ProductRegistrationDTO.class);
@@ -324,16 +283,8 @@ public class ProductIntegrationTests {
 
         HttpHeaders headers = new HttpHeaders();
         headers.set("Authorization", "Bearer " + jwt);
-        headers.setContentType(MediaType.MULTIPART_FORM_DATA);
 
-        MultiValueMap<String, Object> parts = new LinkedMultiValueMap<>();
-        parts.add("brand", validInput.getBrand());
-        parts.add("name", validInput.getName());
-        parts.add("description", validInput.getDescription());
-        parts.add("quantity", String.valueOf(validInput.getQuantity()));
-        parts.add("price", validInput.getPrice().toString());
-
-        HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<>(parts, headers);
+        HttpEntity<ProductRegistrationDTO> requestEntity = new HttpEntity<>(validInput, headers);
 
 
         ResponseEntity<ProductDTO> createResponse = restTemplate.postForEntity(
@@ -413,16 +364,8 @@ public class ProductIntegrationTests {
 
         HttpHeaders headers = new HttpHeaders();
         headers.set("Authorization", "Bearer " + jwt);
-        headers.setContentType(MediaType.MULTIPART_FORM_DATA);
 
-        MultiValueMap<String, Object> parts = new LinkedMultiValueMap<>();
-        parts.add("brand", validInput.getBrand());
-        parts.add("name", validInput.getName());
-        parts.add("description", validInput.getDescription());
-        parts.add("quantity", String.valueOf(validInput.getQuantity()));
-        parts.add("price", validInput.getPrice().toString());
-
-        HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<>(parts, headers);
+        HttpEntity<ProductRegistrationDTO> requestEntity = new HttpEntity<>(validInput, headers);
 
 
         ResponseEntity<ProductDTO> createResponse = restTemplate.postForEntity(

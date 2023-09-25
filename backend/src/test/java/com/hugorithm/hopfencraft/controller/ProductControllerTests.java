@@ -6,6 +6,7 @@ import com.hugorithm.hopfencraft.dto.product.ProductUpdateDTO;
 import com.hugorithm.hopfencraft.enums.Currency;
 import com.hugorithm.hopfencraft.model.ApplicationUser;
 import com.hugorithm.hopfencraft.model.Product;
+import com.hugorithm.hopfencraft.model.ProductImage;
 import com.hugorithm.hopfencraft.service.ProductService;
 import com.hugorithm.hopfencraft.utils.JsonToStringConverter;
 import org.junit.jupiter.api.Test;
@@ -21,10 +22,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -60,14 +58,13 @@ public class ProductControllerTests {
         // Define valid input data
 
         BigDecimal price = new BigDecimal("2.39");
-        ProductRegistrationDTO validInput = new ProductRegistrationDTO(
-                "Paulaner",
-                "Paulaner Weizen",
-                "Weiss",
-                10,
-                price,
-                Currency.EUR
-        );
+        ProductRegistrationDTO validInput = new ProductRegistrationDTO();
+        validInput.setBrand("Paulaner");
+        validInput.setName("Paulaner Weizen");
+        validInput.setDescription("Weiss");
+        validInput.setQuantity(10);
+        validInput.setPrice(price);
+        validInput.setCurrency(Currency.EUR);
 
         // Define the expected response from the service
         ProductDTO expectedResponse = new ProductDTO(
@@ -117,15 +114,16 @@ public class ProductControllerTests {
                         .content(JsonToStringConverter.asJsonString(invalidInput)))
                 .andExpect(status().isBadRequest());
 
+
         // Define invalid input data (missing required fields)
-        ProductRegistrationDTO invalidInput2 = new ProductRegistrationDTO(
-                "aa",
-                "bb",
-                "cc",
-                10,
-                new BigDecimal("-2.6"),
-                Currency.EUR
-        );
+        ProductRegistrationDTO invalidInput2 = new ProductRegistrationDTO();
+        invalidInput2.setBrand("aa");
+        invalidInput2.setName("bb");
+        invalidInput2.setDescription("cc");
+        invalidInput2.setQuantity(10);
+        invalidInput2.setPrice(new BigDecimal("-2.6"));
+        invalidInput2.setCurrency(Currency.EUR);
+
 
         mockMvc.perform(post("/product/register")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -133,14 +131,15 @@ public class ProductControllerTests {
                 .andExpect(status().isBadRequest());
 
         // Define invalid input data (missing required fields)
-        ProductRegistrationDTO invalidInput3 = new ProductRegistrationDTO(
-                "aa",
-                "bb",
-                "cc",
-                -10,
-                new BigDecimal("2.6"),
-                Currency.EUR
-        );
+        ProductRegistrationDTO invalidInput3 = new ProductRegistrationDTO();
+        invalidInput3.setBrand("aa");
+        invalidInput3.setName("bb");
+        invalidInput3.setDescription("cc");
+        invalidInput3.setQuantity(-10);
+        invalidInput3.setPrice(new BigDecimal("2.6"));
+        invalidInput3.setCurrency(Currency.EUR);
+
+
 
         mockMvc.perform(post("/product/register")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -151,14 +150,15 @@ public class ProductControllerTests {
     @Test
     public void RegisterProduct_DuplicateProduct_ReturnsConflict() throws Exception {
         // Define input data for a product that already exists
-        ProductRegistrationDTO existingProduct = new ProductRegistrationDTO(
-                "Paulaner",
-                "Paulaner Weizen",
-                "Weiss",
-                10,
-                new BigDecimal("2.39"),
-                Currency.EUR
-        );
+
+        ProductRegistrationDTO existingProduct = new ProductRegistrationDTO();
+        existingProduct.setBrand("Paulaner");
+        existingProduct.setName("Paulaner Weizen");
+        existingProduct.setDescription("Weiss");
+        existingProduct.setQuantity(10);
+        existingProduct.setPrice(new BigDecimal("2.39"));
+        existingProduct.setCurrency(Currency.EUR);
+
 
         // Simulate the ProductService returning a conflict response
         when(productService.registerProduct(
@@ -176,14 +176,14 @@ public class ProductControllerTests {
     @Test
     public void RegisterProduct_InvalidPrice_ReturnsBadRequest() throws Exception {
         // Define invalid input data with a negative price
-        ProductRegistrationDTO invalidInput = new ProductRegistrationDTO(
-                "Invalid Product",
-                "Invalid Description",
-                "Category",
-                10,
-                new BigDecimal("-1.0"),
-                Currency.EUR
-        );
+
+        ProductRegistrationDTO invalidInput = new ProductRegistrationDTO();
+        invalidInput.setBrand("Invalid Product");
+        invalidInput.setName("Invalid Description");
+        invalidInput.setDescription("Category");
+        invalidInput.setQuantity(10);
+        invalidInput.setPrice(new BigDecimal("-1.0"));
+        invalidInput.setCurrency(Currency.EUR);
 
         mockMvc.perform(post("/product/register")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -191,14 +191,13 @@ public class ProductControllerTests {
                 .andExpect(status().isBadRequest());
 
         // Define invalid input data with a zero price
-        ProductRegistrationDTO invalidInput2 = new ProductRegistrationDTO(
-                "Invalid Product",
-                "Invalid Description",
-                "Category",
-                10,
-                BigDecimal.ZERO,
-                Currency.EUR
-        );
+        ProductRegistrationDTO invalidInput2 = new ProductRegistrationDTO();
+        invalidInput.setBrand("Invalid Product");
+        invalidInput.setName("Invalid Description");
+        invalidInput.setDescription("Category");
+        invalidInput.setQuantity(10);
+        invalidInput.setPrice(BigDecimal.ZERO);
+        invalidInput.setCurrency(Currency.EUR);
 
         mockMvc.perform(post("/product/register")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -246,6 +245,7 @@ public class ProductControllerTests {
     @Test
     public void GetProductById_ExistingProduct_ReturnsProduct() throws Exception {
         // Define an existing product
+
         ApplicationUser user = new ApplicationUser();
         user.setUsername("testuser");
         user.setEmail("testuser@example.com");
@@ -261,7 +261,9 @@ public class ProductControllerTests {
                 new BigDecimal("4.99"),
                 LocalDateTime.now(),
                 LocalDateTime.now(),
-                user
+                user,
+                new ProductImage()
+
         );
 
         when(productService.findById(productId)).thenReturn(Optional.of(existingProduct));
