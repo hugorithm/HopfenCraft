@@ -34,13 +34,35 @@ export const productDataLoader = async () => {
   }
 };
 
-
-
-
 export default function Products() {
-  const data = useLoaderData() as Product;
-  const [openModal, setOpenModal] = useState(false); // Add this line
+  const initialData = useLoaderData() as Product;
+  const [data, setData] = useState<Product | null>(initialData);
+  const [openModal, setOpenModal] = useState<boolean>(false);
   const [selectedProduct, setSelectedProduct] = useState<Content | null>(null);
+  const [page, setPage] = useState<number>(0);
+
+  const loadMore = async () => {
+    try {
+      const nextPage = page + 1;
+      const apiUrl = BASE_URL + `/product/products?page=${nextPage}&size=15`;
+      const response = await fetch(apiUrl);
+
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+
+      const newData = await response.json();
+      // Update the data state with the new items
+      setData((prevData: Product | null) => ({
+        ...prevData!,
+        content: [...prevData!.content, ...newData.content],
+        last: newData.last,
+      }));
+      setPage(nextPage); // Update the current page
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  };
 
   const handleImageClick = (product: Content) => {
     setSelectedProduct(product);
@@ -63,7 +85,7 @@ export default function Products() {
         <Box sx={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', bgcolor: 'background.paper', boxShadow: 24, p: 4, maxWidth: '80vw' }}>
           {/* Image content goes here */}
           <img src={`${BASE_URL}/product/${selectedProduct ? selectedProduct.productId : null}/image`} alt={selectedProduct ? selectedProduct.name : ''}
-          style={{ maxWidth: '100%', maxHeight: '800px' }}
+            style={{ maxWidth: '100%', maxHeight: '800px' }}
           />
         </Box>
       </Modal>
@@ -154,12 +176,22 @@ export default function Products() {
                     </Typography>
                   </CardContent>
                   <CardActions>
-                    <Button size="small" variant='contained'>Add to Cart</Button>
+                    <Button component={RouterLink} to="/login" size="small" variant='contained'>Add to Cart</Button>
                   </CardActions>
                 </Card>
               </Grid>
             ))}
           </Grid>
+          <Container style={{ display: 'flex', justifyContent: 'center' }}>
+            <Button
+              onClick={loadMore}
+              disabled={data?.last}
+              variant="contained"
+              sx={{ mt: 2 }}
+            >
+              Load More
+            </Button>
+          </Container>
         </Container>
       </main>
       {/* Footer */}
