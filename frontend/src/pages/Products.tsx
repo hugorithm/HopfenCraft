@@ -15,6 +15,7 @@ import { Content, Product } from '../types/Product';
 import { BASE_URL } from '../config/constants';
 import { ButtonBase } from '@mui/material';
 import { useState } from 'react';
+import { isAuthenticated } from '../auth/auth';
 
 
 export const productDataLoader = async () : Promise<Product | null> => {
@@ -63,6 +64,10 @@ export default function Products() {
       console.error('Error fetching data:', error);
     }
   };
+
+  const addToCart = () => {
+    console.log("test");
+  }
 
   const handleImageClick = (product: Content) => {
     setSelectedProduct(product);
@@ -174,7 +179,11 @@ export default function Products() {
                     </Typography>
                   </CardContent>
                   <CardActions>
-                    <Button component={RouterLink} to="/login" size="small" variant='contained'>Add to Cart</Button>
+                    {isAuthenticated() ? 
+                     <Button onClick={addToCart} size="small" variant='contained'>Add to Cart</Button>
+                     :
+                     <Button component={RouterLink} to="/login" size="small" variant='contained'>Add to Cart</Button>
+                    }
                   </CardActions>
                 </Card>
               </Grid>
