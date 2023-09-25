@@ -44,6 +44,10 @@ spring:
             client-id: ${GOOGLE_CLIENT}
             client-secret: ${GOOGLE_SECRET}
             redirectUri: "{baseUrl}/oauth2/callback/{registrationId}"
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
 paypal:
   client:
     id: ${PAYPAL_CLIENT_ID}
