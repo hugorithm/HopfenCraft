@@ -15,7 +15,7 @@ import { Link as RouterLink } from 'react-router-dom';
 import googleLogo from './../assets/oauth2/google-logo.png';
 import githubLogo from './../assets/oauth2/github-logo.png';
 import { GOOGLE_AUTH_URL, GITHUB_AUTH_URL, ACCESS_TOKEN } from './../config/constants';
-import { Container } from '@mui/material';
+import { Container, Divider } from '@mui/material';
 
 export default function Login() {
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
@@ -94,30 +94,27 @@ export default function Login() {
               >
                 Sign In
               </Button>
-              <Box style={{ marginBottom: '10px' }}>
-                <Button
-                  href={GOOGLE_AUTH_URL}
-                  fullWidth
-                  variant="outlined"
-                  color="primary"
-                  sx={{ maxWidth: '400px', width: '100%' }}
-                  startIcon={<img src={googleLogo} alt="Google" height={32} />}
-                >
-                  Sign in with Google
-                </Button>
-              </Box>
-              <Box mb={5}>
-                <Button
-                  href={GITHUB_AUTH_URL}
-                  fullWidth
-                  variant="outlined"
-                  color="primary"
-                  sx={{ maxWidth: '400px', width: '100%' }}
-                  startIcon={<img src={githubLogo} alt="GitHub" height={32} />}
-                >
-                  Sign in with GitHub
-                </Button>
-              </Box>
+              <Divider sx={{ width: '100%' }}>OR</Divider>
+              <Button
+                href={GOOGLE_AUTH_URL}
+                fullWidth
+                variant="outlined"
+                color="primary"
+                sx={{ mt: 2}}
+                startIcon={<img src={googleLogo} alt="Google" height={32} />}
+              >
+                Sign in with Google
+              </Button>
+              <Button
+                href={GITHUB_AUTH_URL}
+                fullWidth
+                variant="outlined"
+                color="primary"
+                sx={{ mt: 2, mb: 5 }}
+                startIcon={<img src={githubLogo} alt="GitHub" height={32} />}
+              >
+                Sign in with GitHub
+              </Button>
             <Grid container>
               <Grid item xs>
                 <Link href="#" variant="body2">
