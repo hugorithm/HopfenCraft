@@ -9,10 +9,12 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import Link from '@mui/material/Link';
+import Modal from '@mui/material/Modal';
 import { Link as RouterLink, useLoaderData } from 'react-router-dom';
 import { Content, Product } from '../types/Product';
 import { BASE_URL } from '../config/constants';
 import { ButtonBase } from '@mui/material';
+import { useState } from 'react';
 
 
 export const productDataLoader = async () => {
@@ -34,12 +36,35 @@ export const productDataLoader = async () => {
 
 
 
+
 export default function Products() {
   const data = useLoaderData() as Product;
+  const [openModal, setOpenModal] = useState(false); // Add this line
+  const [selectedProduct, setSelectedProduct] = useState<Content | null>(null);
 
+  const handleImageClick = (product: Content) => {
+    setSelectedProduct(product);
+    setOpenModal(true);
+  };
+
+  const handleCloseModal = () => {
+    setOpenModal(false);
+    setSelectedProduct(null);
+  };
 
   return (
     <>
+      <Modal
+        open={openModal}
+        onClose={handleCloseModal}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', bgcolor: 'background.paper', boxShadow: 24, p: 4, maxWidth: '80vw' }}>
+          {/* Image content goes here */}
+          <img src={`${BASE_URL}/product/${selectedProduct ? selectedProduct.productId : null }/image`} alt={selectedProduct ? selectedProduct.name : ''} style={{ maxWidth: '100%' }} />
+        </Box>
+      </Modal>
       <CssBaseline />
       <main>
         {/* Hero unit */}
@@ -95,22 +120,22 @@ export default function Products() {
                   }}
                 >
                   <ButtonBase sx={{
-                     display: 'block',
-                     textAlign: 'initial'
+                    display: 'block',
+                    textAlign: 'initial'
                   }}
-                  onClick={e => console.log(e)}
+                    onClick={() => handleImageClick(product)}
                   >
 
-                  <CardMedia
-                    component="div"
-                    sx={{
-                      // 16:9
-                      pt: '135.25%',
-                      backgroundSize: 'contain'
-                    }}
-                    
-                    image={`${BASE_URL}/product/${product.productId}/image`}
-                  />
+                    <CardMedia
+                      component="div"
+                      sx={{
+                        // 16:9
+                        pt: '135.25%',
+                        backgroundSize: 'contain'
+                      }}
+
+                      image={`${BASE_URL}/product/${product.productId}/image`}
+                    />
                   </ButtonBase>
                   <CardContent sx={{ flexGrow: 1 }}>
                     <Typography>
