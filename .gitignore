@@ -58,4 +58,4 @@ dist-ssr
 *.sln
 *.sw?
 
-/uploads/*
+/backend/uploads/*
