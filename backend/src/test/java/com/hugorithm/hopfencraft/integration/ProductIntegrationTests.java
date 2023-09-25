@@ -17,6 +17,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.*;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 
 import java.math.BigDecimal;
 
@@ -47,19 +49,26 @@ public class ProductIntegrationTests {
         String jwt = loginResponse.getBody().getJwt();
 
         // Create a ProductDTO for testing
-        ProductRegistrationDTO validInput3 = new ProductRegistrationDTO(
-                "Test Brand",
-                "Test Name",
-                "Test Description",
-                10,
-                new BigDecimal("19.99"),
-                Currency.EUR
-        );
+        ProductRegistrationDTO validInput3 = new ProductRegistrationDTO();
+        validInput3.setBrand("Test Brand");
+        validInput3.setName("Test Name");
+        validInput3.setDescription("Test Description");
+        validInput3.setQuantity(10);
+        validInput3.setPrice(new BigDecimal("19.99"));
+        validInput3.setCurrency(Currency.EUR);
 
         HttpHeaders headers = new HttpHeaders();
         headers.set("Authorization", "Bearer " + jwt);
+        headers.setContentType(MediaType.MULTIPART_FORM_DATA);
 
-        HttpEntity<ProductRegistrationDTO> requestEntity = new HttpEntity<>(validInput3, headers);
+        MultiValueMap<String, Object> parts = new LinkedMultiValueMap<>();
+        parts.add("brand", validInput3.getBrand());
+        parts.add("name", validInput3.getName());
+        parts.add("description", validInput3.getDescription());
+        parts.add("quantity", String.valueOf(validInput3.getQuantity()));
+        parts.add("price", validInput3.getPrice().toString());
+
+        HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<>(parts, headers);
 
         ResponseEntity<ProductDTO> response2 = restTemplate.postForEntity(
                 "http://localhost:" + port + "/product/register",
@@ -94,14 +103,13 @@ public class ProductIntegrationTests {
         String jwt = loginResponse.getBody().getJwt();
 
         // Create a ProductDTO with invalid input
-        ProductRegistrationDTO invalidInput = new ProductRegistrationDTO(
-                "Test Brand",
-                "Test Name",
-                "Test Description",
-                -5,
-                new BigDecimal("19.99"),
-                Currency.EUR
-        );
+        ProductRegistrationDTO invalidInput = new ProductRegistrationDTO();
+        invalidInput.setBrand("Test Brand");
+        invalidInput.setName("Test Name");
+        invalidInput.setDescription("Test Description");
+        invalidInput.setQuantity(-5);
+        invalidInput.setPrice(new BigDecimal("19.99"));
+        invalidInput.setCurrency(Currency.EUR);
 
         HttpHeaders headers = new HttpHeaders();
         headers.set("Authorization", "Bearer " + jwt);
@@ -134,19 +142,26 @@ public class ProductIntegrationTests {
         String jwt = loginResponse.getBody().getJwt();
 
         // Create a ProductDTO for testing
-        ProductRegistrationDTO validInput = new ProductRegistrationDTO(
-                "Test Brand",
-                "Test Name",
-                "Test Description",
-                10,
-                new BigDecimal("19.99"),
-                Currency.EUR
-        );
+        ProductRegistrationDTO validInput = new ProductRegistrationDTO();
+        validInput.setBrand("Test Brand");
+        validInput.setName("Test Name");
+        validInput.setDescription("Test Description");
+        validInput.setQuantity(10);
+        validInput.setPrice(new BigDecimal("19.99"));
+        validInput.setCurrency(Currency.EUR);
 
         HttpHeaders headers = new HttpHeaders();
         headers.set("Authorization", "Bearer " + jwt);
+        headers.setContentType(MediaType.MULTIPART_FORM_DATA);
 
-        HttpEntity<ProductRegistrationDTO> requestEntity = new HttpEntity<>(validInput, headers);
+        MultiValueMap<String, Object> parts = new LinkedMultiValueMap<>();
+        parts.add("brand", validInput.getBrand());
+        parts.add("name", validInput.getName());
+        parts.add("description", validInput.getDescription());
+        parts.add("quantity", String.valueOf(validInput.getQuantity()));
+        parts.add("price", validInput.getPrice().toString());
+
+        HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<>(parts, headers);
 
 
         ResponseEntity<ProductDTO> createResponse = restTemplate.postForEntity(
@@ -160,6 +175,7 @@ public class ProductIntegrationTests {
         assertNotNull(createdProduct);
 
         Long productId = createdProduct.getProductId();
+
 
         ResponseEntity<ProductDTO> response = restTemplate.getForEntity(
                 "http://localhost:" + port + "/product/" + productId,
@@ -200,50 +216,75 @@ public class ProductIntegrationTests {
         assertNotNull(loginResponse.getBody());
         String jwt = loginResponse.getBody().getJwt();
 
-        // Create some ProductDTOs for testing
-        ProductRegistrationDTO product1 = new ProductRegistrationDTO(
-                "Brand 1",
-                "Name 1",
-                "Description 1",
-                5,
-                new BigDecimal("10.99"),
-                Currency.EUR
-        );
-        ProductRegistrationDTO product2 = new ProductRegistrationDTO(
-                "Brand 2",
-                "Name 2",
-                "Description 2",
-                8,
-                new BigDecimal("15.99"),
-                Currency.EUR
 
-        );
-        ProductRegistrationDTO product3 = new ProductRegistrationDTO(
-                "Brand 3",
-                "Name 3",
-                "Description 3",
-                3,
-                new BigDecimal("7.99"),
-                Currency.EUR
-        );
+        // Create some ProductDTOs for testing
+        ProductRegistrationDTO product1 = new ProductRegistrationDTO();
+        product1.setBrand("Brand 1");
+        product1.setName("Name 1");
+        product1.setDescription("Description 1");
+        product1.setQuantity(5);
+        product1.setPrice(new BigDecimal("10.99"));
+        product1.setCurrency(Currency.EUR);
+
+        ProductRegistrationDTO product2 = new ProductRegistrationDTO();
+        product2.setBrand("Brand 2");
+        product2.setName("Name 2");
+        product2.setDescription("Description 2");
+        product2.setQuantity(8);
+        product2.setPrice(new BigDecimal("15.99"));
+        product2.setCurrency(Currency.EUR);
+
+        ProductRegistrationDTO product3 = new ProductRegistrationDTO();
+        product3.setBrand("Brand 3");
+        product3.setName("Name 3");
+        product3.setDescription("Description 3");
+        product3.setQuantity(3);
+        product3.setPrice(new BigDecimal("7.99"));
+        product3.setCurrency(Currency.EUR);
 
         HttpHeaders headers = new HttpHeaders();
         headers.set("Authorization", "Bearer " + jwt);
+        headers.setContentType(MediaType.MULTIPART_FORM_DATA);
 
-        HttpEntity<ProductRegistrationDTO> requestEntity1 = new HttpEntity<>(product1, headers);
-        HttpEntity<ProductRegistrationDTO> requestEntity2 = new HttpEntity<>(product2, headers);
-        HttpEntity<ProductRegistrationDTO> requestEntity3 = new HttpEntity<>(product3, headers);
+        MultiValueMap<String, Object> parts1 = new LinkedMultiValueMap<>();
+        parts1.add("brand", product1.getBrand());
+        parts1.add("name", product1.getName());
+        parts1.add("description", product1.getDescription());
+        parts1.add("quantity", String.valueOf(product1.getQuantity()));
+        parts1.add("price", product1.getPrice().toString());
 
+        HttpEntity<MultiValueMap<String, Object>> requestEntity1 = new HttpEntity<>(parts1, headers);
+
+        MultiValueMap<String, Object> parts2 = new LinkedMultiValueMap<>();
+        parts2.add("brand", product2.getBrand());
+        parts2.add("name", product2.getName());
+        parts2.add("description", product2.getDescription());
+        parts2.add("quantity", String.valueOf(product2.getQuantity()));
+        parts2.add("price", product2.getPrice().toString());
+
+        HttpEntity<MultiValueMap<String, Object>> requestEntity2 = new HttpEntity<>(parts2, headers);
+
+        MultiValueMap<String, Object> parts3 = new LinkedMultiValueMap<>();
+        parts3.add("brand", product3.getBrand());
+        parts3.add("name", product3.getName());
+        parts3.add("description", product3.getDescription());
+        parts3.add("quantity", String.valueOf(product3.getQuantity()));
+        parts3.add("price", product3.getPrice().toString());
+
+        HttpEntity<MultiValueMap<String, Object>> requestEntity3 = new HttpEntity<>(parts3, headers);
 
         restTemplate.postForEntity("http://localhost:" + port + "/product/register", requestEntity1, ProductRegistrationDTO.class);
         restTemplate.postForEntity("http://localhost:" + port + "/product/register", requestEntity2, ProductRegistrationDTO.class);
         restTemplate.postForEntity("http://localhost:" + port + "/product/register", requestEntity3, ProductRegistrationDTO.class);
 
 
+        HttpHeaders headersGet = new HttpHeaders();
+        headersGet.set("Authorization", "Bearer " + jwt);
+
         ResponseEntity<Page<ProductDTO>> response = restTemplate.exchange(
                 "http://localhost:" + port + "/product/products",
                 HttpMethod.GET,
-                new HttpEntity<>(headers),
+                new HttpEntity<>(headersGet),
                 new ParameterizedTypeReference<Page<ProductDTO>>() {
                 }
         );
@@ -271,20 +312,29 @@ public class ProductIntegrationTests {
         assertNotNull(loginResponse.getBody());
         String jwt = loginResponse.getBody().getJwt();
 
+
         // Create a ProductDTO for testing
-        ProductRegistrationDTO validInput = new ProductRegistrationDTO(
-                "Test Brand",
-                "Test Name",
-                "Test Description",
-                10,
-                new BigDecimal("19.99"),
-                Currency.EUR
-        );
+        ProductRegistrationDTO validInput = new ProductRegistrationDTO();
+        validInput.setBrand("Test Brand");
+        validInput.setName("Test Name");
+        validInput.setDescription("Test Description");
+        validInput.setQuantity(10);
+        validInput.setPrice(new BigDecimal("19.99"));
+        validInput.setCurrency(Currency.EUR);
 
         HttpHeaders headers = new HttpHeaders();
         headers.set("Authorization", "Bearer " + jwt);
+        headers.setContentType(MediaType.MULTIPART_FORM_DATA);
 
-        HttpEntity<ProductRegistrationDTO> requestEntity = new HttpEntity<>(validInput, headers);
+        MultiValueMap<String, Object> parts = new LinkedMultiValueMap<>();
+        parts.add("brand", validInput.getBrand());
+        parts.add("name", validInput.getName());
+        parts.add("description", validInput.getDescription());
+        parts.add("quantity", String.valueOf(validInput.getQuantity()));
+        parts.add("price", validInput.getPrice().toString());
+
+        HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<>(parts, headers);
+
 
         ResponseEntity<ProductDTO> createResponse = restTemplate.postForEntity(
                 "http://localhost:" + port + "/product/register",
@@ -308,14 +358,19 @@ public class ProductIntegrationTests {
                 new BigDecimal("29.99")
         );
 
-        HttpEntity<ProductUpdateDTO> requestEntityUpdate = new HttpEntity<>(updatedProduct, headers);
+        HttpHeaders updateHeaders = new HttpHeaders();
+        updateHeaders.set("Authorization", "Bearer " + jwt);
 
-        restTemplate.exchange(
+        HttpEntity<ProductUpdateDTO> requestEntityUpdate = new HttpEntity<>(updatedProduct, updateHeaders);
+
+        ResponseEntity<ProductDTO> updateResponse = restTemplate.exchange(
                 "http://localhost:" + port + "/product/update",
                 HttpMethod.PUT,
                 requestEntityUpdate,
                 ProductDTO.class
         );
+
+        assertEquals(HttpStatus.OK, updateResponse.getStatusCode());
 
         // Verify that the product was updated
         ResponseEntity<ProductDTO> response = restTemplate.getForEntity(
@@ -346,20 +401,29 @@ public class ProductIntegrationTests {
         assertNotNull(loginResponse.getBody());
         String jwt = loginResponse.getBody().getJwt();
 
+
         // Create a ProductDTO for testing
-        ProductRegistrationDTO validInput = new ProductRegistrationDTO(
-                "Test Brand",
-                "Test Name",
-                "Test Description",
-                10,
-                new BigDecimal("19.99"),
-                Currency.EUR
-        );
+        ProductRegistrationDTO validInput = new ProductRegistrationDTO();
+        validInput.setBrand("Test Brand");
+        validInput.setName("Test Name");
+        validInput.setDescription("Test Description");
+        validInput.setQuantity(10);
+        validInput.setPrice(new BigDecimal("19.99"));
+        validInput.setCurrency(Currency.EUR);
 
         HttpHeaders headers = new HttpHeaders();
         headers.set("Authorization", "Bearer " + jwt);
+        headers.setContentType(MediaType.MULTIPART_FORM_DATA);
 
-        HttpEntity<ProductRegistrationDTO> requestEntity = new HttpEntity<>(validInput, headers);
+        MultiValueMap<String, Object> parts = new LinkedMultiValueMap<>();
+        parts.add("brand", validInput.getBrand());
+        parts.add("name", validInput.getName());
+        parts.add("description", validInput.getDescription());
+        parts.add("quantity", String.valueOf(validInput.getQuantity()));
+        parts.add("price", validInput.getPrice().toString());
+
+        HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<>(parts, headers);
+
 
         ResponseEntity<ProductDTO> createResponse = restTemplate.postForEntity(
                 "http://localhost:" + port + "/product/register",
@@ -383,7 +447,10 @@ public class ProductIntegrationTests {
                 new BigDecimal("-39.99")
         );
 
-        HttpEntity<ProductUpdateDTO> requestEntityUpdate = new HttpEntity<>(invalidInput, headers);
+        HttpHeaders updateHeaders = new HttpHeaders();
+        updateHeaders.set("Authorization", "Bearer " + jwt);
+
+        HttpEntity<ProductUpdateDTO> requestEntityUpdate = new HttpEntity<>(invalidInput, updateHeaders);
 
         restTemplate.exchange(
                 "http://localhost:" + port + "/product/update",

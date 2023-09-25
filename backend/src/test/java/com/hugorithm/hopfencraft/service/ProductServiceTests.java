@@ -48,8 +48,14 @@ public class ProductServiceTests {
         user.setUsername("testuser");
         user.setEmail("testuser@example.com");
         // Create a valid product DTO
-        ProductRegistrationDTO validProductDTO = new ProductRegistrationDTO("TestBrand", "TestName", "TestDescription", 10, new BigDecimal("19.99"), Currency.EUR);
 
+        ProductRegistrationDTO validProductDTO = new ProductRegistrationDTO();
+        validProductDTO.setBrand("TestBrand");
+        validProductDTO.setName("TestName");
+        validProductDTO.setDescription("TestDescription");
+        validProductDTO.setQuantity(10);
+        validProductDTO.setPrice(new BigDecimal("19.99"));
+        validProductDTO.setCurrency(Currency.EUR);
         // Mock the product repository to return an empty Optional, indicating the product does not exist
         when(productRepository.findProductByName("TestName")).thenReturn(Optional.empty());
 
@@ -83,12 +89,20 @@ public class ProductServiceTests {
         ApplicationUser user = new ApplicationUser();
         user.setUsername("testuser");
         user.setEmail("testuser@example.com");
+
         // Create a valid product DTO
-        ProductRegistrationDTO validProductDTO = new ProductRegistrationDTO("TestBrand", "TestName", "TestDescription", 10, new BigDecimal("19.99"), Currency.EUR);
+        ProductRegistrationDTO validProductDTO = new ProductRegistrationDTO();
+        validProductDTO.setBrand("brand");
+        validProductDTO.setName("name");
+        validProductDTO.setDescription("desc");
+        validProductDTO.setQuantity(10);
+        validProductDTO.setPrice(new BigDecimal("2.15"));
+        validProductDTO.setCurrency(Currency.EUR);
 
         // Mock the product repository to return a non-empty Optional, indicating the product already exists
-        when(productRepository.findProductByName("TestName")).thenReturn(Optional.of(new Product()));
+        when(productRepository.findProductByName("name")).thenReturn(Optional.of(new Product("brand", "name", "desc", 10, new BigDecimal("2.15"), user)));
         when(jwtService.getUserFromJwt(any())).thenReturn(user);
+        when(productRepository.save(any(Product.class))).thenReturn(new Product("brand", "name", "desc", 10, new BigDecimal("2.15"), user));
         // Call the service method
         ResponseEntity<ProductDTO> response = productService.registerProduct(
                 mock(Jwt.class),
