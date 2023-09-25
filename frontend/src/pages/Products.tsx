@@ -62,7 +62,9 @@ export default function Products() {
       >
         <Box sx={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', bgcolor: 'background.paper', boxShadow: 24, p: 4, maxWidth: '80vw' }}>
           {/* Image content goes here */}
-          <img src={`${BASE_URL}/product/${selectedProduct ? selectedProduct.productId : null }/image`} alt={selectedProduct ? selectedProduct.name : ''} style={{ maxWidth: '100%' }} />
+          <img src={`${BASE_URL}/product/${selectedProduct ? selectedProduct.productId : null}/image`} alt={selectedProduct ? selectedProduct.name : ''}
+          style={{ maxWidth: '100%', maxHeight: '800px' }}
+          />
         </Box>
       </Modal>
       <CssBaseline />
