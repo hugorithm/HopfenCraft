@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useEffect, useState } from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -20,41 +21,78 @@ import { LoginRequestBody } from '../types/LoginRequestBody';
 import { LoginResponse } from './../types/LoginResponse'
 
 
+
+
 export default function Login() {
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const [error, setError] = useState<string | null>(null);
+  const [rememberMe, setRememberMe] = useState(false);
+  const [username, setUsername] = useState('');
+
+  useEffect(() => {
+    const rememberMeValue = localStorage.getItem('rememberMe');
+    const savedUsername = localStorage.getItem('savedUsername');
+  
+    if (rememberMeValue === 'true' && savedUsername) {
+      setRememberMe(true);
+      setUsername(savedUsername);
+    } else {
+      setRememberMe(false);
+      setUsername('');
+    }
+  }, []);
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    const body = {
+    const body: LoginRequestBody = {
       username: data.get('username') as string,
-      password: data.get('password') as string
+      password: data.get('password') as string,
+    };
+    console.log(rememberMe)
+
+    if (rememberMe) {
+      localStorage.setItem('rememberMe', 'true');
+      localStorage.setItem('savedUsername', username);
+    } else {
+      localStorage.removeItem('rememberMe');
+      localStorage.removeItem('savedUsername');
     }
-    login(body);
+
+    try {
+      const response = await login(body);
+
+      if (response && response.jwt) {
+        localStorage.setItem(ACCESS_TOKEN, response.jwt);
+        return <Navigate to="/profile" />;
+      } else {
+        setError('Failed to login. Please check your credentials.');
+      }
+    } catch (error) {
+      setError('An error occurred while logging in.');
+    }
   };
 
-  const login = async (body: LoginRequestBody) => {
+  const login = async (body: LoginRequestBody): Promise<LoginResponse | null> => {
     try {
       const apiUrl = BASE_URL + '/auth/login';
 
       const response = await fetch(apiUrl, {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
         },
-        body: JSON.stringify(body)
+        body: JSON.stringify(body),
       });
 
       if (!response.ok) {
         throw new Error('Failed to login');
       }
 
-      const data : LoginResponse = await response.json();
-      if (data) {
-        localStorage.setItem(ACCESS_TOKEN, data.jwt);   
-      } else {
-        throw new Error('Failed to login');
-      }
+      const data: LoginResponse = await response.json();
+      return data;
     } catch (error) {
       console.error('Error fetching data:', error);
+      return null;
     }
   };
 
@@ -101,6 +139,8 @@ export default function Login() {
               name="username"
               autoComplete="username"
               autoFocus
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
             />
             <TextField
               margin="normal"
@@ -113,7 +153,11 @@ export default function Login() {
               autoComplete="current-password"
             />
             <FormControlLabel
-              control={<Checkbox value="remember" color="primary" />}
+              control={<Checkbox
+                value="remember"
+                checked={rememberMe}
+                onChange={(e) => setRememberMe(e.target.checked)}
+                color="primary" />}
               label="Remember me"
             />
 
@@ -125,6 +169,11 @@ export default function Login() {
             >
               Sign In
             </Button>
+            {error && (
+              <Typography color="error" variant="body2" mb={2} textAlign="center">
+                {error}
+              </Typography>
+            )}
             <Divider sx={{ width: '100%' }}>OR</Divider>
             <Button
               href={GOOGLE_AUTH_URL}
