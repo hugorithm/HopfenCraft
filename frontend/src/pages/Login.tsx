@@ -11,34 +11,23 @@ import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
-import {Link as RouterLink} from 'react-router-dom';
-
-function Copyright(props: any) {
-  return (
-    <Typography variant="body2" color="text.secondary" align="center" {...props}>
-      {'Copyright © '}
-      <Link color="inherit" component={RouterLink} to="/home">
-        HopfenCraft
-      </Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
-    </Typography>
-  );
-}
-
+import { Link as RouterLink } from 'react-router-dom';
+import googleLogo from './../assets/oauth2/google-logo.png';
+import githubLogo from './../assets/oauth2/github-logo.png';
+import { GOOGLE_AUTH_URL, GITHUB_AUTH_URL, ACCESS_TOKEN } from './../config/constants';
+import { Container } from '@mui/material';
 
 export default function Login() {
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     console.log({
-      email: data.get('email'),
+      username: data.get('username'),
       password: data.get('password'),
     });
   };
 
   return (
-
     <Grid container component="main" sx={{ height: '93.35vh' }}>
       <CssBaseline />
       <Grid
@@ -71,15 +60,15 @@ export default function Login() {
           <Typography component="h1" variant="h5">
             Sign in
           </Typography>
-          <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 1 }}>
+          <Box component="form" onSubmit={handleSubmit} sx={{ mt: 1, maxWidth: '400px', width: '100%', margin: '0 auto' }}>
             <TextField
               margin="normal"
               required
               fullWidth
-              id="email"
-              label="Email Address"
-              name="email"
-              autoComplete="email"
+              id="username"
+              label="Username"
+              name="username"
+              autoComplete="username"
               autoFocus
             />
             <TextField
@@ -96,14 +85,39 @@ export default function Login() {
               control={<Checkbox value="remember" color="primary" />}
               label="Remember me"
             />
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              sx={{ mt: 3, mb: 2 }}
-            >
-              Sign In
-            </Button>
+           
+              <Button
+                type="submit"
+                fullWidth
+                variant="contained"
+                sx={{ mt: 3, mb: 2 }}
+              >
+                Sign In
+              </Button>
+              <Box style={{ marginBottom: '10px' }}>
+                <Button
+                  href={GOOGLE_AUTH_URL}
+                  fullWidth
+                  variant="outlined"
+                  color="primary"
+                  sx={{ maxWidth: '400px', width: '100%' }}
+                  startIcon={<img src={googleLogo} alt="Google" height={32} />}
+                >
+                  Sign in with Google
+                </Button>
+              </Box>
+              <Box mb={5}>
+                <Button
+                  href={GITHUB_AUTH_URL}
+                  fullWidth
+                  variant="outlined"
+                  color="primary"
+                  sx={{ maxWidth: '400px', width: '100%' }}
+                  startIcon={<img src={githubLogo} alt="GitHub" height={32} />}
+                >
+                  Sign in with GitHub
+                </Button>
+              </Box>
             <Grid container>
               <Grid item xs>
                 <Link href="#" variant="body2">
@@ -116,11 +130,9 @@ export default function Login() {
                 </Link>
               </Grid>
             </Grid>
-            <Copyright sx={{ mt: 5 }} />
           </Box>
         </Box>
       </Grid>
     </Grid>
-
   );
 }
