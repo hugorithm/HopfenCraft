@@ -58,7 +58,7 @@ export default function Products() {
         content: [...prevData.content, ...newData.content],
         last: newData.last,
       }));
-      setPage(nextPage); 
+      setPage(nextPage);
     } catch (error) {
       console.error('Error fetching data:', error);
     }
@@ -182,7 +182,9 @@ export default function Products() {
               </Grid>
             ))}
           </Grid>
-          <Container style={{ display: 'flex', justifyContent: 'center' }}>
+          <Container
+            sx={{ my: 5 }}
+            style={{ display: 'flex', justifyContent: 'center' }}>
             <Button
               onClick={loadMore}
               disabled={data.last}
