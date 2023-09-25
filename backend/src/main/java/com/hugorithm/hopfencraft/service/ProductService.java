@@ -10,7 +10,6 @@ import com.hugorithm.hopfencraft.exception.product.ProductUpdateException;
 import com.hugorithm.hopfencraft.model.ApplicationUser;
 import com.hugorithm.hopfencraft.model.Product;
 import com.hugorithm.hopfencraft.model.ProductImage;
-import com.hugorithm.hopfencraft.repository.ProductImageRepository;
 import com.hugorithm.hopfencraft.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -25,6 +24,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
@@ -58,39 +58,6 @@ public class ProductService {
 
             ApplicationUser user = jwtService.getUserFromJwt(jwt);
 
-            if (dto.getImage() != null) {
-                UUID uuid = UUID.randomUUID();
-                String filePath = FOLDER_PATH + uuid + "_" + dto.getImage().getOriginalFilename();
-
-                ProductImage image = new ProductImage(
-                        uuid + "_" + dto.getImage().getOriginalFilename(),
-                        dto.getImage().getContentType(),
-                        filePath
-                );
-
-                dto.getImage().transferTo(new File(filePath));
-                Product p = productRepository.save(new Product(
-                        dto.getBrand(),
-                        dto.getName(),
-                        dto.getDescription(),
-                        dto.getQuantity(),
-                        dto.getPrice(),
-                        user,
-                        image
-                ));
-
-                return ResponseEntity.status(HttpStatus.CREATED).body(new ProductDTO(
-                        p.getProductId(),
-                        p.getBrand(),
-                        p.getName(),
-                        p.getDescription(),
-                        p.getStockQuantity(),
-                        p.getPrice(),
-                        Product.getCurrency(),
-                        p.getRegisterDateTime()
-                ));
-            }
-
             Product p = productRepository.save(new Product(
                     dto.getBrand(),
                     dto.getName(),
@@ -99,6 +66,7 @@ public class ProductService {
                     dto.getPrice(),
                     user
             ));
+
             return ResponseEntity.status(HttpStatus.CREATED).body(new ProductDTO(
                     p.getProductId(),
                     p.getBrand(),
@@ -109,16 +77,12 @@ public class ProductService {
                     Product.getCurrency(),
                     p.getRegisterDateTime()
             ));
-
         } catch (NoSuchElementException | UsernameNotFoundException ex) {
             LOGGER.error(ex.getMessage(), ex);
             return ResponseEntity.notFound().build();
         } catch (ProductAlreadyExistsException ex) {
             LOGGER.error(ex.getMessage(), ex);
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
-        } catch (IOException ex) {
-            LOGGER.error(ex.getMessage(), ex);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 
@@ -226,6 +190,41 @@ public class ProductService {
         } catch (ProductNotFoundException ex) {
             LOGGER.error(ex.getMessage(), ex);
             return ResponseEntity.notFound().build();
+        }
+    }
+
+    public ResponseEntity<ProductDTO> registerProductImage(Long productId, MultipartFile file) {
+        try {
+            Product product = productRepository.findById(productId)
+                    .orElseThrow(() -> new ProductNotFoundException("Product not found with id: %s", productId));
+
+            UUID uuid = UUID.randomUUID();
+            String filePath = FOLDER_PATH + uuid + "_" + file.getOriginalFilename();
+
+            ProductImage image = new ProductImage(
+                    uuid + "_" + file.getOriginalFilename(),
+                    file.getContentType(),
+                    filePath
+            );
+
+            file.transferTo(new File(filePath));
+
+            product.setImage(image);
+            Product p = productRepository.save(product);
+
+            return ResponseEntity.status(HttpStatus.CREATED).body(new ProductDTO(
+                    p.getProductId(),
+                    p.getBrand(),
+                    p.getName(),
+                    p.getDescription(),
+                    p.getStockQuantity(),
+                    p.getPrice(),
+                    Product.getCurrency(),
+                    p.getRegisterDateTime()
+            ));
+        } catch (IOException ex) {
+            LOGGER.error(ex.getMessage(), ex);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 }

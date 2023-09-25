@@ -18,6 +18,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Optional;
 
@@ -69,8 +70,14 @@ public class ProductController {
 
     @PostMapping("/register")
     @RolesAllowed("ADMIN")
-    public ResponseEntity<ProductDTO> registerProduct(@AuthenticationPrincipal Jwt jwt, @Valid ProductRegistrationDTO body) {
+    public ResponseEntity<ProductDTO> registerProduct(@AuthenticationPrincipal Jwt jwt, @Valid @RequestBody ProductRegistrationDTO body) {
         return productService.registerProduct(jwt, body);
+    }
+
+    @PostMapping("{productId}/image/register")
+    @RolesAllowed("ADMIN")
+    public ResponseEntity<ProductDTO> registerProductImage(@PathVariable Long productId, MultipartFile file) {
+        return productService.registerProductImage(productId, file);
     }
 
     @PutMapping("/update")
