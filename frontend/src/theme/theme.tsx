@@ -32,7 +32,7 @@ export const getDesignTokens = (mode: PaletteMode) => ({
         divider: amber[700],
         background: {
           default: grey[900],
-          paper: grey[800],
+          paper: grey[900],
         },
         text: {
           primary: "#fff",
