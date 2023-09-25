@@ -17,6 +17,8 @@ import { ThemeProvider } from "@mui/material";
 import { useThemeContext } from "./theme/ThemeContextProvider";
 import CustomError from './errors/CustomError';
 import NotFound from './errors/404LandingPage';
+import Profile from './pages/Profile';
+import PrivateRoutes from './route/PrivateRoutes';
 
 
 const Root = () => {
@@ -40,8 +42,11 @@ const router = createBrowserRouter(
       <Route path="login" element={<Login />} errorElement={<CustomError />} />
       <Route path="about" element={<About />} errorElement={<CustomError />} />
       <Route path="contacts" element={<Contacts />} errorElement={<CustomError />} />
-      <Route path='products' element={<Products />} loader={productDataLoader} errorElement={<CustomError/>} />
+      <Route path='products' element={<Products />} loader={productDataLoader} errorElement={<CustomError />} />
       <Route path='signup' element={<SignUp />} errorElement={<CustomError />} />
+      <Route element={<PrivateRoutes/>}>
+        <Route path='profile' element={<Profile />} errorElement={<CustomError/>}/>
+      </Route>
       <Route path="*" element={<NotFound />} />
     </Route>
   )

@@ -14,6 +14,7 @@ import { ACCESS_TOKEN } from "../config/constants";
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import { useNavigate } from "react-router-dom";
+import { isAuthenticated } from "../auth/auth";
 
 function useRouteMatch(patterns: readonly string[]) {
   const { pathname } = useLocation();
@@ -35,9 +36,6 @@ function Navbar() {
   const routeLoginMatch = useRouteMatch(['/login', '/signup']);
   const currentLoginTab = routeLoginMatch?.pattern?.path || false;
   const navigate = useNavigate();
-
-  const jwt = localStorage.getItem(ACCESS_TOKEN); 
-  const showProfileLink = !!jwt; 
 
   const handleLogout = () => {
     localStorage.removeItem(ACCESS_TOKEN);
@@ -72,7 +70,7 @@ function Navbar() {
           <Tab label="About" value="/about" to="/about" component={Link} />
         </Tabs>
         <NightModeToggle />
-        {showProfileLink && (
+        {isAuthenticated() && (
           <>
           <IconButton to="/profile" component={Link} color="inherit">
             <AccountCircleIcon/>
@@ -83,7 +81,7 @@ function Navbar() {
           <Button color="inherit" onClick={handleLogout}>Logout</Button>
           </>
         )}
-        {!showProfileLink && (
+        {!isAuthenticated() && (
         <Tabs
           value={currentLoginTab}
           sx={{ marginLeft: '10px' }}
