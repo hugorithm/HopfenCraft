@@ -1,6 +1,7 @@
 package com.hugorithm.hopfencraft.config;
 
 import com.hugorithm.hopfencraft.init.DataInitialization;
+import com.hugorithm.hopfencraft.repository.ProductImageRepository;
 import com.hugorithm.hopfencraft.repository.ProductRepository;
 import com.hugorithm.hopfencraft.repository.RoleRepository;
 import com.hugorithm.hopfencraft.repository.UserRepository;
@@ -16,17 +17,20 @@ public class TestConfig {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final ProductRepository productRepository;
+    private final ProductImageRepository productImageRepository;
 
     public TestConfig(
             RoleRepository roleRepository,
             UserRepository userRepository,
             PasswordEncoder passwordEncoder,
-            ProductRepository productRepository
+            ProductRepository productRepository,
+            ProductImageRepository productImageRepository
     ) {
         this.roleRepository = roleRepository;
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.productRepository = productRepository;
+        this.productImageRepository = productImageRepository;
     }
 
     @Bean
@@ -36,7 +40,8 @@ public class TestConfig {
                 roleRepository,
                 userRepository,
                 passwordEncoder,
-                productRepository
+                productRepository,
+                productImageRepository
         );
     }
 }
