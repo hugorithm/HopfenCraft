@@ -50,7 +50,7 @@ public class ProductService {
 
     public ResponseEntity<ProductDTO> registerProduct(Jwt jwt, ProductRegistrationDTO dto) {
         try {
-            Optional<Product> product = productRepository.findProductByName(dto.getName());
+            Optional<Product> product = productRepository.findProductByBrandName(dto.getBrand() + dto.getName());
 
             if (product.isPresent() && product.get().getName().equals(dto.getName()) && product.get().getBrand().equals(dto.getBrand())) {
                 throw new ProductAlreadyExistsException("Product already exists");

@@ -27,6 +27,8 @@ public class Product {
     @NotBlank
     private String brand;
     private String name;
+    @Column(unique = true)
+    private String brandName;
     private String description;
     private int stockQuantity;
     private BigDecimal price;
@@ -51,6 +53,7 @@ public class Product {
         this.user = user;
         this.image = image;
         this.sku = generateProductCode(brand, name);
+        this.brandName = this.brand + this.name;
     }
 
     public Product(String brand, String name, String description, int quantity, BigDecimal price, ApplicationUser user) {
@@ -61,6 +64,7 @@ public class Product {
         this.price = price;
         this.user = user;
         this.sku = generateProductCode(brand, name);
+        this.brandName = this.brand + this.name;
     }
 
     public Product(Long productId, String brand, String name, String description, int quantity, BigDecimal price) {
@@ -71,6 +75,7 @@ public class Product {
         this.stockQuantity = quantity;
         this.price = price;
         this.sku = generateProductCode(brand, name);
+        this.brandName = this.brand + this.name;
     }
 
     private String generateProductCode(String brand, String name) {
