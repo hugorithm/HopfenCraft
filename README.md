@@ -1,8 +1,10 @@
 # HopfenCraft
 
-<p align="center">
-    <img alt="Light" src="backend/src/main/resources/images/hopfencraft.jpg">
-</p>
+<img align="center" alt="Logo" src="backend/src/main/resources/images/hopfencraft.jpg" width=200>    
+
+## Website    
+
+<img alt="Website" src="frontend/public/homepage.gif">
 
 <p align="center">
     <img alt="Java" src="https://img.shields.io/badge/-Java-007396?style=flat&logo=java&logoColor=white"/>
@@ -18,8 +20,31 @@
 </p>
 
 
-A Beer shopping store backend made in Java Spring Boot
+## Features
 
+### User Management
+- **User Accounts**: Register and log in to your personal HopfenCraft account.
+- **User Profiles**: Update your user profile, change your password, and keep your information up to date.
+
+### Admin Privileges
+- **Admin Dashboard**: Admins have access to a powerful dashboard.
+- **Product Management**: Add, update, or remove new beer products.
+- **Stock Management**: Manage product stock levels with ease.
+
+### Shopping Cart
+- **Add to Cart**: Users can add their favorite beer products to the shopping cart.
+- **Update Cart**: Modify quantities and remove items from your cart effortlessly.
+- **Checkout**: Complete your beer order with our seamless checkout process.
+
+### Orders
+- **Create Orders**: Place orders for your favorite beers.
+- **Order History**: View your order history and keep track of your purchases.
+
+### Secure Payments
+- **PayPal Integration**: Pay for your beer orders using PayPal or credit card.
+- **Secure Transactions**: Rest assured that your payment information is handled securely.
+
+ 
 ## License
 
 This repository is released under the [MIT license](https://opensource.org/licenses/MIT).
