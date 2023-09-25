@@ -17,7 +17,7 @@ import { ButtonBase } from '@mui/material';
 import { useState } from 'react';
 
 
-export const productDataLoader = async () => {
+export const productDataLoader = async () : Promise<Product | null> => {
   try {
     const apiUrl = BASE_URL + '/product/products?page=0&size=15';
     const response = await fetch(apiUrl);
@@ -26,7 +26,7 @@ export const productDataLoader = async () => {
       throw new Error('Network response was not ok');
     }
 
-    const data = await response.json();
+    const data: Product = await response.json();
     return data;
   } catch (error) {
     console.error('Error fetching data:', error);
@@ -41,7 +41,7 @@ export default function Products() {
   const [selectedProduct, setSelectedProduct] = useState<Content | null>(null);
   const [page, setPage] = useState<number>(0);
 
-  const loadMore = async () => {
+  const loadMore = async () : Promise<void> => {
     try {
       const nextPage = page + 1;
       const apiUrl = BASE_URL + `/product/products?page=${nextPage}&size=15`;
@@ -51,7 +51,7 @@ export default function Products() {
         throw new Error('Network response was not ok');
       }
 
-      const newData = await response.json();
+      const newData: Product = await response.json();
       // Update the data state with the new items
       setData((prevData: Product) => ({
         ...prevData,
