@@ -94,7 +94,11 @@ public class ProductService {
             ProductImage productImage = product.getImage();
 
             if (productImage == null) {
-                throw new ProductImageNotFoundException("Product doesn't have an image");
+                String path = FOLDER_PATH + "/default/beer.png";
+
+                return ResponseEntity.status(HttpStatus.OK)
+                        .contentType(MediaType.IMAGE_PNG)
+                        .body(Files.readAllBytes(new File(path).toPath()));
             }
 
             String path = productImage.getPath();
@@ -106,7 +110,7 @@ public class ProductService {
             LOGGER.error(ex.getMessage(), ex);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         } catch (ProductImageNotFoundException ex) {
-            LOGGER.error(ex.getMessage(), ex);
+            LOGGER.info(ex.getMessage(), ex);
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
     }
