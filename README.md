@@ -12,6 +12,8 @@
     <img alt="PostgreSQL" src="https://img.shields.io/badge/-PostgreSQL-336791?style=flat&logo=postgresql&logoColor=white"/>
     <img alt="REST API" src="https://img.shields.io/badge/-REST%20API-FF5733?style=flat"/>
     <img alt="React" src="https://img.shields.io/badge/-React-61DAFB?style=flat&logo=react&logoColor=white"/>
+    <img alt="Redux" src="https://img.shields.io/badge/-Redux-764ABC?style=flat&logo=redux&logoColor=white"/>
+    <img alt="Material-UI" src="https://img.shields.io/badge/-Material%20UI-0081CB?style=flat&logo=material-ui&logoColor=white"/>
     <img alt="TypeScript" src="https://img.shields.io/badge/-TypeScript-3178C6?style=flat&logo=typescript&logoColor=white"/>
     <img alt="PayPal Integration Status" src="https://img.shields.io/badge/PayPal%20Integration-Success-brightgreen"/>
     <img alt="PayPal API Version" src="https://img.shields.io/badge/PayPal%20API%20Version-v2.0-blue"/>
