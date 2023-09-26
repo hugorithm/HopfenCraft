@@ -46,13 +46,14 @@ function Navbar() {
 
   const handleLogout = () => {
     dispatch(logout());
+    
     toast.success('Logout Successful', {
       position: "top-right",
       autoClose: 2000,
       hideProgressBar: false,
       closeOnClick: true,
       pauseOnHover: false,
-      draggable: false,
+      draggable: true,
       pauseOnFocusLoss: false,
       progress: undefined,
       theme: mode === 'light' ? 'light' : 'dark',
