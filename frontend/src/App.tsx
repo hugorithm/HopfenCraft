@@ -19,7 +19,11 @@ import CustomError from './errors/CustomError';
 import NotFound from './errors/404LandingPage';
 import Profile from './pages/Profile';
 import RequireAuth from './route/RequireAuth';
-
+import { useAppDispatch } from './app/hooks';
+import { useEffect } from 'react';
+import { setUser } from './features/authSlice';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.min.css';
 
 const Root = () => {
   return (
@@ -44,8 +48,8 @@ const router = createBrowserRouter(
       <Route path="contacts" element={<Contacts />} errorElement={<CustomError />} />
       <Route path='products' element={<Products />} loader={productDataLoader} errorElement={<CustomError />} />
       <Route path='signup' element={<SignUp />} errorElement={<CustomError />} />
-      <Route element={<RequireAuth/>}>
-        <Route path='profile' element={<Profile />} errorElement={<CustomError/>}/>
+      <Route element={<RequireAuth />}>
+        <Route path='profile' element={<Profile />} errorElement={<CustomError />} />
       </Route>
       <Route path="*" element={<NotFound />} />
     </Route>
@@ -54,12 +58,19 @@ const router = createBrowserRouter(
 
 function App() {
   const { theme } = useThemeContext();
+  const dispatch = useAppDispatch();
+  const user = JSON.parse(localStorage.getItem("user") || "{}");
 
+  useEffect(() => {
+    dispatch(setUser(user));
+  }, [])
   return (
     <>
       <ThemeProvider theme={theme}>
         <RouterProvider router={router} />
+        <ToastContainer />
       </ThemeProvider>
+      
     </>
   )
 }

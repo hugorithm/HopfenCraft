@@ -6,8 +6,12 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 import { Link as RouterLink } from 'react-router-dom';
+import { useAppSelector } from '../app/hooks';
+import { selectAuth } from '../features/authSlice';
 
-function Profile() {
+const Profile = () => {
+  const { username, email } = useAppSelector(selectAuth);
+
   const handleEditProfileClick = () => {
     console.log("Edit Profile clicked!");
   };
@@ -25,7 +29,7 @@ function Profile() {
           }}
         >
           <Typography component="h1" variant="h2" align="center" color="text.primary" gutterBottom>
-            My Profile
+           Welcome {username}!
           </Typography>
           <Typography variant="h5" align="center" color="text.secondary" paragraph>
             Welcome to your HopfenCraft profile. Here, you can manage your account and preferences.

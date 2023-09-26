@@ -15,7 +15,8 @@ import { Content, Product } from '../types/Product';
 import { BASE_URL } from '../config/constants';
 import { ButtonBase } from '@mui/material';
 import { useState } from 'react';
-import { isAuthenticated } from '../auth/auth';
+import { useSelector } from 'react-redux';
+import { selectAuth } from '../features/authSlice';
 
 
 export const productDataLoader = async () : Promise<Product | null> => {
@@ -41,6 +42,7 @@ export default function Products() {
   const [openModal, setOpenModal] = useState<boolean>(false);
   const [selectedProduct, setSelectedProduct] = useState<Content | null>(null);
   const [page, setPage] = useState<number>(0);
+  const { token } = useSelector(selectAuth);
 
   const loadMore = async () : Promise<void> => {
     try {
@@ -179,7 +181,7 @@ export default function Products() {
                     </Typography>
                   </CardContent>
                   <CardActions>
-                    {isAuthenticated() ? 
+                    {token ? 
                      <Button onClick={addToCart} size="small" variant='contained'>Add to Cart</Button>
                      :
                      <Button component={RouterLink} to="/login" size="small" variant='contained'>Add to Cart</Button>

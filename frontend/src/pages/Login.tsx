@@ -13,27 +13,66 @@ import Grid from '@mui/material/Grid';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import { Link as RouterLink, Navigate, useNavigate } from 'react-router-dom';
-import googleLogo from './../assets/oauth2/google-logo.png';
-import githubLogo from './../assets/oauth2/github-logo.png';
-import { GOOGLE_AUTH_URL, GITHUB_AUTH_URL, ACCESS_TOKEN, BASE_URL } from './../config/constants';
-import { Alert, Divider, AlertTitle } from '@mui/material';
+import googleLogo from '../assets/oauth2/google-logo.png';
+import githubLogo from '../assets/oauth2/github-logo.png';
+import { GOOGLE_AUTH_URL, GITHUB_AUTH_URL } from '../config/constants';
+import { Alert, Divider } from '@mui/material';
 import { LoginRequestBody } from '../types/LoginRequestBody';
-import { LoginResponse } from './../types/LoginResponse';
-
-
+import { useLoginUserMutation } from '../auth/authApi';
+import { useAppDispatch } from '../app/hooks';
+import { setUser } from '../features/authSlice';
+import { toast } from 'react-toastify';
+import { useThemeContext } from '../theme/ThemeContextProvider';
 
 
 export default function Login() {
   const [error, setError] = useState<string | null>(null);
   const [rememberMe, setRememberMe] = useState(false);
   const [username, setUsername] = useState('');
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const { mode } = useThemeContext();
+
+  const [loginUser,
+    { data: loginData,
+      isSuccess: isLoginSuccess,
+      isError: isLoginError,
+      error: loginError
+    },
+  ] = useLoginUserMutation();
+
+
+  useEffect(() => {
+    if (isLoginSuccess) {
+      dispatch(setUser({ username: loginData!.username, email: loginData!.email, jwt: loginData!.jwt }));
+
+      toast.success('Login Successful', {
+        position: "top-right",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: false,
+        pauseOnFocusLoss: false,
+        progress: undefined,
+        theme: mode === 'light' ? 'light' : 'dark',
+      });
+
+      navigate("/profile");
+    } 
+  }, [isLoginSuccess]);
+
+  useEffect(() => {
+    if (isLoginError) {
+      setError("Failed to Login. Please check your credentials")
+    }
+  }, [isLoginError])
 
   useEffect(() => {
     const rememberMeValue = localStorage.getItem('rememberMe');
     const savedUsername = localStorage.getItem('savedUsername');
 
-    if (rememberMeValue === 'true' && savedUsername) {
+    if (rememberMeValue === "true" && savedUsername) {
       setRememberMe(true);
       setUsername(savedUsername);
     } else {
@@ -58,42 +97,7 @@ export default function Login() {
       localStorage.removeItem('savedUsername');
     }
 
-    try {
-      const response = await login(body);
-
-      if (response && response.jwt) {
-        localStorage.setItem(ACCESS_TOKEN, response.jwt);
-        return navigate("/products");
-      } else {
-        setError('Failed to login. Please check your credentials.');
-      }
-    } catch (error) {
-      setError('An error occurred while logging in.');
-    }
-  };
-
-  const login = async (body: LoginRequestBody): Promise<LoginResponse | null> => {
-    try {
-      const apiUrl = BASE_URL + '/auth/login';
-
-      const response = await fetch(apiUrl, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(body),
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to login');
-      }
-
-      const data: LoginResponse = await response.json();
-      return data;
-    } catch (error) {
-      console.error('Error fetching data:', error);
-      return null;
-    }
+    loginUser(body);
   };
 
   return (

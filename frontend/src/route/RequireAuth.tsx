@@ -1,11 +1,12 @@
 import React from 'react';
 import { Outlet, Navigate } from 'react-router-dom';
-import { isAuthenticated } from '../auth/auth';
-
+import { selectAuth } from '../features/authSlice';
+import { useSelector } from 'react-redux';
 
 const RequireAuth = () => {
+  const { token } = useSelector(selectAuth);
   return (
-    isAuthenticated() ? <Outlet/> : <Navigate to="/login"/>
+    token ? <Outlet /> : <Navigate to="/login" />
   )
 
 };

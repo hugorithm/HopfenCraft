@@ -14,7 +14,11 @@ import { ACCESS_TOKEN } from "../config/constants";
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import { useNavigate } from "react-router-dom";
-import { isAuthenticated } from "../auth/auth";
+import { logout, selectAuth } from "../features/authSlice";
+import { useSelector } from "react-redux";
+import { useAppDispatch } from "../app/hooks";
+import { toast } from "react-toastify";
+import { useThemeContext } from "../theme/ThemeContextProvider";
 
 function useRouteMatch(patterns: readonly string[]) {
   const { pathname } = useLocation();
@@ -35,10 +39,25 @@ function Navbar() {
   const currentTab = routeMatch?.pattern?.path || false;
   const routeLoginMatch = useRouteMatch(['/login', '/signup']);
   const currentLoginTab = routeLoginMatch?.pattern?.path || false;
+  const { token } = useSelector(selectAuth);
+  const { mode } = useThemeContext();
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
 
   const handleLogout = () => {
-    localStorage.removeItem(ACCESS_TOKEN);
+    dispatch(logout());
+    toast.success('Logout Successful', {
+      position: "top-right",
+      autoClose: 2000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: false,
+      draggable: false,
+      pauseOnFocusLoss: false,
+      progress: undefined,
+      theme: mode === 'light' ? 'light' : 'dark',
+    });
+
     navigate("/home");
   }
 
@@ -70,29 +89,29 @@ function Navbar() {
           <Tab label="About" value="/about" to="/about" component={Link} />
         </Tabs>
         <NightModeToggle />
-        {isAuthenticated() && (
+        {token && (
           <>
-          <IconButton to="/profile" component={Link} color="inherit">
-            <AccountCircleIcon/>
-          </IconButton>
-          <IconButton to="/cart" component={Link} color="inherit">
-            <ShoppingCartIcon/>
-          </IconButton>
-          <Button color="inherit" onClick={handleLogout}>Logout</Button>
+            <IconButton to="/profile" component={Link} color="inherit">
+              <AccountCircleIcon />
+            </IconButton>
+            <IconButton to="/cart" component={Link} color="inherit">
+              <ShoppingCartIcon />
+            </IconButton>
+            <Button color="inherit" onClick={handleLogout}>Logout</Button>
           </>
         )}
-        {!isAuthenticated() && (
-        <Tabs
-          value={currentLoginTab}
-          sx={{ marginLeft: '10px' }}
-          TabIndicatorProps={{
-            style: {
-              background: "#fff"
-            }
-          }}>
-          <Tab label="Login" value="/login" to="/login" component={Link} />
-          <Tab label="Sign Up" value="/signup" to="/signup" component={Link} />
-        </Tabs>
+        {!token && (
+          <Tabs
+            value={currentLoginTab}
+            sx={{ marginLeft: '10px' }}
+            TabIndicatorProps={{
+              style: {
+                background: "#fff"
+              }
+            }}>
+            <Tab label="Login" value="/login" to="/login" component={Link} />
+            <Tab label="Sign Up" value="/signup" to="/signup" component={Link} />
+          </Tabs>
         )}
       </Toolbar>
     </AppBar>
