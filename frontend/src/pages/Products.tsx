@@ -17,6 +17,7 @@ import { ButtonBase } from '@mui/material';
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { selectAuth } from '../features/authSlice';
+import CustomNumberInput from '../components/CustomNumberInput';
 
 
 export const productDataLoader = async () : Promise<Product | null> => {
@@ -182,7 +183,10 @@ export default function Products() {
                   </CardContent>
                   <CardActions>
                     {token ? 
-                     <Button onClick={addToCart} size="small" variant='contained'>Add to Cart</Button>
+                      <>
+                      <CustomNumberInput />
+                      <Button sx={{ml: 1}} onClick={addToCart} size="small" variant='contained'>Add to Cart</Button>
+                      </>
                      :
                      <Button component={RouterLink} to="/login" size="small" variant='contained'>Add to Cart</Button>
                     }

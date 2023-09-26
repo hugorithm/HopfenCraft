@@ -5,7 +5,8 @@ import {
   Typography,
   Tabs,
   Tab,
-  IconButton
+  IconButton,
+  Badge
 } from "@mui/material";
 import SportsBarIcon from '@mui/icons-material/SportsBar';
 import { Link, useLocation, matchPath } from 'react-router-dom';
@@ -19,6 +20,7 @@ import { useSelector } from "react-redux";
 import { useAppDispatch } from "../app/hooks";
 import { toast } from "react-toastify";
 import { useThemeContext } from "../theme/ThemeContextProvider";
+import { useState } from "react";
 
 function useRouteMatch(patterns: readonly string[]) {
   const { pathname } = useLocation();
@@ -43,10 +45,11 @@ function Navbar() {
   const { mode } = useThemeContext();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+  const [shoppingCartCounter, setShoppingCartCounter] = useState(0);
 
   const handleLogout = () => {
     dispatch(logout());
-    
+
     toast.success('Logout Successful', {
       position: "top-right",
       autoClose: 2000,
@@ -96,7 +99,9 @@ function Navbar() {
               <AccountCircleIcon />
             </IconButton>
             <IconButton to="/cart" component={Link} color="inherit">
-              <ShoppingCartIcon />
+              <Badge color="error" badgeContent={shoppingCartCounter}>
+                <ShoppingCartIcon />
+              </Badge>
             </IconButton>
             <Button color="inherit" onClick={handleLogout}>Logout</Button>
           </>

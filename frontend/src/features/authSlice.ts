@@ -25,7 +25,7 @@ export const authSlice = createSlice({
           username: action.payload.username,
           email: action.payload.email,
           token: action.payload.jwt
-        })
+        }),
       );
       state.username = action.payload.username;
       state.email = action.payload.email;

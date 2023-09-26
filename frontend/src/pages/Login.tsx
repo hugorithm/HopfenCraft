@@ -16,9 +16,9 @@ import { Link as RouterLink, Navigate, useNavigate } from 'react-router-dom';
 import googleLogo from '../assets/oauth2/google-logo.png';
 import githubLogo from '../assets/oauth2/github-logo.png';
 import { GOOGLE_AUTH_URL, GITHUB_AUTH_URL } from '../config/constants';
-import { Alert, Divider } from '@mui/material';
+import { Alert, Divider, Zoom } from '@mui/material';
 import { LoginRequestBody } from '../types/LoginRequestBody';
-import { useLoginUserMutation } from '../auth/authApi';
+import { useLoginUserMutation } from '../app/api/auth/authApi';
 import { useAppDispatch } from '../app/hooks';
 import { setUser } from '../features/authSlice';
 import { toast } from 'react-toastify';
@@ -185,9 +185,11 @@ export default function Login() {
               Sign In
             </Button>
             {error && (
-              <Alert severity="error" >
-                {error}
-              </Alert>
+              <Zoom in={!!error}>  
+                <Alert severity="error" >
+                  {error}
+                </Alert>
+              </Zoom>
 
             )}
             <Divider sx={{ width: '100%', mt: 2 }}>OR</Divider>

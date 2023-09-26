@@ -8,7 +8,7 @@ const NightModeToggle = () => {
 
   return (
     <>
-      <IconButton sx={{ ml: 1, marginLeft: 'auto'  }} onClick={toggleColorMode} color="inherit">
+      <IconButton sx={{ ml: 1, marginLeft: 'auto' }} onClick={toggleColorMode} color="inherit">
         {mode === "dark" ? <Brightness7Icon /> : <Brightness4Icon />}
       </IconButton>
     </>
