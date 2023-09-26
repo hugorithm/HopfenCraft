@@ -16,9 +16,9 @@ import { Link as RouterLink, Navigate, useNavigate } from 'react-router-dom';
 import googleLogo from './../assets/oauth2/google-logo.png';
 import githubLogo from './../assets/oauth2/github-logo.png';
 import { GOOGLE_AUTH_URL, GITHUB_AUTH_URL, ACCESS_TOKEN, BASE_URL } from './../config/constants';
-import { Divider } from '@mui/material';
+import { Alert, Divider, AlertTitle } from '@mui/material';
 import { LoginRequestBody } from '../types/LoginRequestBody';
-import { LoginResponse } from './../types/LoginResponse'
+import { LoginResponse } from './../types/LoginResponse';
 
 
 
@@ -32,7 +32,7 @@ export default function Login() {
   useEffect(() => {
     const rememberMeValue = localStorage.getItem('rememberMe');
     const savedUsername = localStorage.getItem('savedUsername');
-  
+
     if (rememberMeValue === 'true' && savedUsername) {
       setRememberMe(true);
       setUsername(savedUsername);
@@ -170,11 +170,12 @@ export default function Login() {
               Sign In
             </Button>
             {error && (
-              <Typography color="error" variant="body2" mb={2} textAlign="center">
+              <Alert severity="error" >
                 {error}
-              </Typography>
+              </Alert>
+
             )}
-            <Divider sx={{ width: '100%' }}>OR</Divider>
+            <Divider sx={{ width: '100%', mt: 2 }}>OR</Divider>
             <Button
               href={GOOGLE_AUTH_URL}
               fullWidth

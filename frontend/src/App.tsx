@@ -18,7 +18,7 @@ import { useThemeContext } from "./theme/ThemeContextProvider";
 import CustomError from './errors/CustomError';
 import NotFound from './errors/404LandingPage';
 import Profile from './pages/Profile';
-import PrivateRoutes from './route/PrivateRoutes';
+import RequireAuth from './route/RequireAuth';
 
 
 const Root = () => {
@@ -44,7 +44,7 @@ const router = createBrowserRouter(
       <Route path="contacts" element={<Contacts />} errorElement={<CustomError />} />
       <Route path='products' element={<Products />} loader={productDataLoader} errorElement={<CustomError />} />
       <Route path='signup' element={<SignUp />} errorElement={<CustomError />} />
-      <Route element={<PrivateRoutes/>}>
+      <Route element={<RequireAuth/>}>
         <Route path='profile' element={<Profile />} errorElement={<CustomError/>}/>
       </Route>
       <Route path="*" element={<NotFound />} />
