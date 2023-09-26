@@ -63,5 +63,4 @@ jwt:
 frontend:
   url: http://localhost:3000
 upload:
-  directory: C:/Users/Hugo/Documents/repos/hopfencraft/backend/uploads/
-  #TODO: Change this to relative url or env variable
+  directory: ${UPLOAD_FOLDER_PATH}
