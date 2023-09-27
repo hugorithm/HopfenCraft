@@ -24,6 +24,7 @@ import { useEffect } from 'react';
 import { setUser } from './features/authSlice';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.min.css';
+import { LoginResponse } from './types/LoginResponse';
 
 const Root = () => {
   return (
@@ -59,7 +60,7 @@ const router = createBrowserRouter(
 function App() {
   const { theme } = useThemeContext();
   const dispatch = useAppDispatch();
-  const user = JSON.parse(localStorage.getItem("user") || "{}");
+  const user: LoginResponse = JSON.parse(localStorage.getItem("user") || "{}");
 
   useEffect(() => {
     dispatch(setUser(user));

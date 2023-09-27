@@ -43,7 +43,7 @@ export default function Products() {
   const [openModal, setOpenModal] = useState<boolean>(false);
   const [selectedProduct, setSelectedProduct] = useState<Content | null>(null);
   const [page, setPage] = useState<number>(0);
-  const { token } = useSelector(selectAuth);
+  const { jwt } = useSelector(selectAuth);
 
   const loadMore = async () : Promise<void> => {
     try {
@@ -182,7 +182,7 @@ export default function Products() {
                     </Typography>
                   </CardContent>
                   <CardActions>
-                    {token ? 
+                    {jwt ? 
                       <>
                       <CustomNumberInput />
                       <Button sx={{ml: 1}} onClick={addToCart} size="small" variant='contained'>Add to Cart</Button>

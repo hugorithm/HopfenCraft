@@ -4,9 +4,11 @@ import { selectAuth } from '../features/authSlice';
 import { useSelector } from 'react-redux';
 
 const RequireAuth = () => {
-  const { token } = useSelector(selectAuth);
+  const { jwt } = useSelector(selectAuth);
+  const localJwt = JSON.parse(localStorage.getItem("user") || "{}").jwt;
+  
   return (
-    token ? <Outlet /> : <Navigate to="/login" />
+    !jwt && !localJwt ? <Navigate to="/login" /> : <Outlet />
   )
 
 };

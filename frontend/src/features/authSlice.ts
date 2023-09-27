@@ -5,13 +5,13 @@ import { LoginResponse } from '../types/LoginResponse';
 export interface AuthState {
   username:  string | null;
   email:     string | null;
-  token:     string | null;
+  jwt:       string | null;
 }
 
 const initialState: AuthState = {
   username: null,
   email:    null,
-  token:    null
+  jwt:      null
 }
 
 export const authSlice = createSlice({
@@ -24,18 +24,18 @@ export const authSlice = createSlice({
         JSON.stringify({
           username: action.payload.username,
           email: action.payload.email,
-          token: action.payload.jwt
+          jwt: action.payload.jwt
         }),
       );
       state.username = action.payload.username;
       state.email = action.payload.email;
-      state.token = action.payload.jwt;
+      state.jwt = action.payload.jwt;
     },
     logout: (state) => {
       localStorage.removeItem("user");
       state.username = null;
       state.email = null;
-      state.token = null;
+      state.jwt = null;
     },
   },
 });

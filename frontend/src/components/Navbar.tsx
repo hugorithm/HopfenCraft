@@ -41,7 +41,7 @@ function Navbar() {
   const currentTab = routeMatch?.pattern?.path || false;
   const routeLoginMatch = useRouteMatch(['/login', '/signup']);
   const currentLoginTab = routeLoginMatch?.pattern?.path || false;
-  const { token } = useSelector(selectAuth);
+  const { jwt } = useSelector(selectAuth);
   const { mode } = useThemeContext();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
@@ -93,7 +93,7 @@ function Navbar() {
           <Tab label="About" value="/about" to="/about" component={Link} />
         </Tabs>
         <NightModeToggle />
-        {token && (
+        {jwt && (
           <>
             <IconButton to="/profile" component={Link} color="inherit">
               <AccountCircleIcon />
@@ -106,7 +106,7 @@ function Navbar() {
             <Button color="inherit" onClick={handleLogout}>Logout</Button>
           </>
         )}
-        {!token && (
+        {!jwt && (
           <Tabs
             value={currentLoginTab}
             sx={{ marginLeft: '10px' }}

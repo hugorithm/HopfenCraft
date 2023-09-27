@@ -43,8 +43,8 @@ export default function Login() {
 
 
   useEffect(() => {
-    if (isLoginSuccess) {
-      dispatch(setUser({ username: loginData!.username, email: loginData!.email, jwt: loginData!.jwt }));
+    if (isLoginSuccess && loginData) {
+      dispatch(setUser({ username: loginData.username, email: loginData.email, jwt: loginData.jwt }));
 
       toast.success('Login Successful', {
         position: "top-right",
