@@ -11,7 +11,7 @@ import Home from './pages/Home';
 import Navbar from './components/Navbar';
 import About from './pages/About';
 import Contacts from './pages/Contacts';
-import Products, { productDataLoader } from './pages/Products';
+import Products from './pages/Products';
 import SignUp from './pages/Signup';
 import { ThemeProvider } from "@mui/material";
 import { useThemeContext } from "./theme/ThemeContextProvider";
@@ -47,7 +47,7 @@ const router = createBrowserRouter(
       <Route path="login" element={<Login />} errorElement={<CustomError />} />
       <Route path="about" element={<About />} errorElement={<CustomError />} />
       <Route path="contacts" element={<Contacts />} errorElement={<CustomError />} />
-      <Route path='products' element={<Products />} loader={productDataLoader} errorElement={<CustomError />} />
+      <Route path='products' element={<Products />} errorElement={<CustomError />} />
       <Route path='signup' element={<SignUp />} errorElement={<CustomError />} />
       <Route element={<RequireAuth />}>
         <Route path='profile' element={<Profile />} errorElement={<CustomError />} />

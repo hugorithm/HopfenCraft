@@ -10,66 +10,88 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import Link from '@mui/material/Link';
 import Modal from '@mui/material/Modal';
-import { Link as RouterLink, useLoaderData } from 'react-router-dom';
-import { Content, Product } from '../types/Product';
+import { Link as RouterLink } from 'react-router-dom';
+import { Content, ProductData } from '../types/ProductData';
 import { BASE_URL } from '../config/constants';
 import { ButtonBase } from '@mui/material';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { selectAuth } from '../features/authSlice';
 import CustomNumberInput from '../components/CustomNumberInput';
+import { fetchProducts, selectProducts, setProducts } from '../features/productsSlice';
+import { useAppDispatch } from '../app/hooks';
 
-
-export const productDataLoader = async () : Promise<Product | null> => {
-  try {
-    const apiUrl = BASE_URL + '/product/products?page=0&size=15';
-    const response = await fetch(apiUrl);
-
-    if (!response.ok) {
-      throw new Error('Network response was not ok');
-    }
-
-    const data: Product = await response.json();
-    return data;
-  } catch (error) {
-    console.error('Error fetching data:', error);
-    return null;
-  }
-};
-
-export default function Products() {
-  const initialData = useLoaderData() as Product;
-  const [data, setData] = useState<Product>(initialData);
+const Products = () => {
   const [openModal, setOpenModal] = useState<boolean>(false);
   const [selectedProduct, setSelectedProduct] = useState<Content | null>(null);
-  const [page, setPage] = useState<number>(0);
+  const [productQuantities, setProductQuantities] = useState<{ [productId: string]: number }>({});
   const { jwt } = useSelector(selectAuth);
 
-  const loadMore = async () : Promise<void> => {
-    try {
-      const nextPage = page + 1;
-      const apiUrl = BASE_URL + `/product/products?page=${nextPage}&size=15`;
-      const response = await fetch(apiUrl);
+  const dispatch = useAppDispatch();
+  const { products, loading, error, page, last } = useSelector(selectProducts);
 
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
-      }
-
-      const newData: Product = await response.json();
-      // Update the data state with the new items
-      setData((prevData: Product) => ({
-        ...prevData,
-        content: [...prevData.content, ...newData.content],
-        last: newData.last,
-      }));
-      setPage(nextPage);
-    } catch (error) {
-      console.error('Error fetching data:', error);
+  // Function to load more products
+  const loadMore = () => {
+    if (!last && loading !== 'loading') {
+      dispatch(fetchProducts());
     }
   };
+  const renderAfterCalled = useRef(false);
+  useEffect(() => {
+    if (!renderAfterCalled.current) {
+      // Check if products are already cached in Redux
+      if (products.length === 0) {
+        // Fetch data here
+        dispatch(fetchProducts()).then((data) => {
 
-  const addToCart = () => {
-    console.log("test");
+          if (data.payload) {
+            const payload = data.payload as ProductData;
+            // Cache the fetched products in Redux
+            dispatch(setProducts(payload.content));
+          }
+        });
+      }
+    }
+    renderAfterCalled.current = true;
+  }, [dispatch, products]);
+
+
+  const handleChange = (productId: number, newValue: number | undefined) => {
+    if (newValue === undefined) return;
+
+    setProductQuantities((prevQuantities) => ({
+      ...prevQuantities,
+      [productId]: newValue,
+    }));
+  };
+
+  // const loadMore = async (): Promise<void> => {
+  //   try {
+  //     const nextPage = page + 1;
+  //     const apiUrl = BASE_URL + `/product/products?page=${nextPage}&size=15`;
+  //     const response = await fetch(apiUrl);
+
+  //     if (!response.ok) {
+  //       throw new Error('Network response was not ok');
+  //     }
+
+  //     const newData: ProductData = await response.json();
+  //     // Update the data state with the new items
+  //     setData((prevData: ProductData) => ({
+  //       ...prevData,
+  //       content: [...prevData.content, ...newData.content],
+  //       last: newData.last,
+  //     }));
+  //     setPage(nextPage);
+  //   } catch (error) {
+  //     console.error('Error fetching data:', error);
+  //   }
+  // };
+
+  const addToCart = (productId: number) => {
+    const quantity = productQuantities[productId];
+
+
   }
 
   const handleImageClick = (product: Content) => {
@@ -135,10 +157,10 @@ export default function Products() {
             </Typography>
           </Container>
         </Box>
-        <Container sx={{ py: 8 }} maxWidth="md">
 
+        <Container sx={{ py: 8 }} maxWidth="md">
           <Grid container spacing={4}>
-            {data.content.map((product: Content) => (
+            {products.map((product: Content) => (
 
               <Grid item key={product.productId} xs={12} sm={6} md={4}>
                 <Card
@@ -182,13 +204,17 @@ export default function Products() {
                     </Typography>
                   </CardContent>
                   <CardActions>
-                    {jwt ? 
+                    {jwt ?
                       <>
-                      <CustomNumberInput />
-                      <Button sx={{ml: 1}} onClick={addToCart} size="small" variant='contained'>Add to Cart</Button>
+                        <CustomNumberInput
+                          min={1}
+                          max={99}
+                          onChange={(_, val) => handleChange(product.productId, val)}
+                        />
+                        <Button sx={{ ml: 1 }} onClick={() => addToCart(product.productId)} size="small" variant='contained'>Add to Cart</Button>
                       </>
-                     :
-                     <Button component={RouterLink} to="/login" size="small" variant='contained'>Add to Cart</Button>
+                      :
+                      <Button component={RouterLink} to="/login" size="small" variant='contained'>Add to Cart</Button>
                     }
                   </CardActions>
                 </Card>
@@ -200,7 +226,7 @@ export default function Products() {
             style={{ display: 'flex', justifyContent: 'center' }}>
             <Button
               onClick={loadMore}
-              disabled={data.last}
+              disabled={last}
               variant="contained"
               sx={{ mt: 2 }}
             >
@@ -263,3 +289,5 @@ export default function Products() {
     </>
   );
 }
+
+export default Products;
