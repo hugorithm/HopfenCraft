@@ -13,13 +13,14 @@ import Modal from '@mui/material/Modal';
 import { Link as RouterLink } from 'react-router-dom';
 import { Product, ProductData } from '../types/ProductData';
 import { BASE_URL } from '../config/constants';
-import { ButtonBase } from '@mui/material';
+import { ButtonBase, Skeleton } from '@mui/material';
 import { useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { selectAuth } from '../features/authSlice';
 import CustomNumberInput from '../components/CustomNumberInput';
 import { fetchProducts, selectProducts, setProducts } from '../features/productsSlice';
 import { useAppDispatch } from '../app/hooks';
+import ProductsSkeleton from '../components/ProductsSkeleton';
 
 const Products = () => {
   const [openModal, setOpenModal] = useState<boolean>(false);
@@ -36,10 +37,11 @@ const Products = () => {
       dispatch(fetchProducts());
     }
   };
+
   const renderAfterCalled = useRef(false);
   useEffect(() => {
     if (!renderAfterCalled.current) { // This is so that React Strict Mode doesn't cause issues
-      
+
       if (products.length === 0) {
         dispatch(fetchProducts()).then((data) => {
 
@@ -136,66 +138,62 @@ const Products = () => {
 
         <Container sx={{ py: 8 }} maxWidth="md">
           <Grid container spacing={4}>
-            {products.map((product: Product) => (
-
-              <Grid item key={product.productId} xs={12} sm={6} md={4}>
-                <Card
-                  sx={{
-                    height: '100%',
-                    display: 'flex',
-                    flexDirection: 'column'
-
-                  }}
-                >
-                  <ButtonBase sx={{
-                    display: 'block',
-                    textAlign: 'initial'
-                  }}
-                    onClick={() => handleImageClick(product)}
-                  >
-
-                    <CardMedia
-                      component="div"
-                      sx={{
-                        // 16:9
-                        pt: '135.25%',
-                        backgroundSize: 'contain'
-                      }}
-
-                      image={`${BASE_URL}/product/${product.productId}/image`}
-                    />
-                  </ButtonBase>
-                  <CardContent sx={{ flexGrow: 1 }}>
-                    <Typography>
-                      {product.brand}
-                    </Typography>
-                    <Typography gutterBottom variant="h6" component="h2">
-                      {product.name}
-                    </Typography>
-                    <Typography gutterBottom>
-                      {product.description}
-                    </Typography>
-                    <Typography sx={{ fontWeight: 500 }}>
-                      €{product.price}
-                    </Typography>
-                  </CardContent>
-                  <CardActions>
-                    {jwt ?
-                      <>
-                        <CustomNumberInput
-                          min={1}
-                          max={99}
-                          onChange={(_, val) => handleChange(product.productId, val)}
-                        />
-                        <Button sx={{ ml: 1 }} onClick={() => addToCart(product.productId)} size="small" variant='contained'>Add to Cart</Button>
-                      </>
-                      :
-                      <Button component={RouterLink} to="/login" size="small" variant='contained'>Add to Cart</Button>
-                    }
-                  </CardActions>
-                </Card>
-              </Grid>
-            ))}
+            {products.length === 0 && loading === 'loading' ? (
+              // Render Skeletons when products are loading
+              <ProductsSkeleton />
+            ) : (
+              // Render actual products when data is loaded
+              products.map((product) => (
+                <Grid item key={product.productId} xs={12} sm={6} md={4}>
+                  <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
+                    <ButtonBase sx={{
+                      display: 'block',
+                      textAlign: 'initial'
+                    }}
+                      onClick={() => handleImageClick(product)}
+                    >
+                      <CardMedia
+                        component="div"
+                        sx={{
+                          // 16:9
+                          pt: '135.25%',
+                          backgroundSize: 'contain'
+                        }}
+                        image={`${BASE_URL}/product/${product.productId}/image`}
+                      />
+                    </ButtonBase>
+                    <CardContent sx={{ flexGrow: 1 }}>
+                      <Typography>
+                        {product.brand}
+                      </Typography>
+                      <Typography gutterBottom variant="h6" component="h2">
+                        {product.name}
+                      </Typography>
+                      <Typography gutterBottom>
+                        {product.description}
+                      </Typography>
+                      <Typography sx={{ fontWeight: 500 }}>
+                        €{product.price}
+                      </Typography>
+                    </CardContent>
+                    <CardActions>
+                      {jwt ? (
+                        <>
+                          <CustomNumberInput
+                            min={1}
+                            max={99}
+                            onChange={(_, val) => handleChange(product.productId, val)}
+                          />
+                          <Button sx={{ ml: 1 }} onClick={() => addToCart(product.productId)} size="small" variant='contained'>Add to Cart</Button>
+                        </>
+                      ) : (
+                        <Button component={RouterLink} to="/login" size="small" variant='contained'>Add to Cart</Button>
+                      )}
+                    </CardActions>
+                  </Card>
+                </Grid>
+              ))
+            )}
           </Grid>
           <Container
             sx={{ my: 5 }}
@@ -264,6 +262,7 @@ const Products = () => {
       {/* End footer */}
     </>
   );
+
 }
 
 export default Products;
