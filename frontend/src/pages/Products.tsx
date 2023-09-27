@@ -11,7 +11,7 @@ import Container from '@mui/material/Container';
 import Link from '@mui/material/Link';
 import Modal from '@mui/material/Modal';
 import { Link as RouterLink } from 'react-router-dom';
-import { Content, ProductData } from '../types/ProductData';
+import { Product, ProductData } from '../types/ProductData';
 import { BASE_URL } from '../config/constants';
 import { ButtonBase } from '@mui/material';
 import { useEffect, useRef, useState } from 'react';
@@ -23,7 +23,7 @@ import { useAppDispatch } from '../app/hooks';
 
 const Products = () => {
   const [openModal, setOpenModal] = useState<boolean>(false);
-  const [selectedProduct, setSelectedProduct] = useState<Content | null>(null);
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [productQuantities, setProductQuantities] = useState<{ [productId: string]: number }>({});
   const { jwt } = useSelector(selectAuth);
 
@@ -38,21 +38,19 @@ const Products = () => {
   };
   const renderAfterCalled = useRef(false);
   useEffect(() => {
-    if (!renderAfterCalled.current) {
-      // Check if products are already cached in Redux
+    if (!renderAfterCalled.current) { // This is so that React Strict Mode doesn't cause issues
+      
       if (products.length === 0) {
-        // Fetch data here
         dispatch(fetchProducts()).then((data) => {
 
           if (data.payload) {
             const payload = data.payload as ProductData;
-            // Cache the fetched products in Redux
             dispatch(setProducts(payload.content));
           }
         });
       }
     }
-    renderAfterCalled.current = true;
+    renderAfterCalled.current = true; // This is so that React Strict Mode doesn't cause issues
   }, [dispatch, products]);
 
 
@@ -65,28 +63,6 @@ const Products = () => {
     }));
   };
 
-  // const loadMore = async (): Promise<void> => {
-  //   try {
-  //     const nextPage = page + 1;
-  //     const apiUrl = BASE_URL + `/product/products?page=${nextPage}&size=15`;
-  //     const response = await fetch(apiUrl);
-
-  //     if (!response.ok) {
-  //       throw new Error('Network response was not ok');
-  //     }
-
-  //     const newData: ProductData = await response.json();
-  //     // Update the data state with the new items
-  //     setData((prevData: ProductData) => ({
-  //       ...prevData,
-  //       content: [...prevData.content, ...newData.content],
-  //       last: newData.last,
-  //     }));
-  //     setPage(nextPage);
-  //   } catch (error) {
-  //     console.error('Error fetching data:', error);
-  //   }
-  // };
 
   const addToCart = (productId: number) => {
     const quantity = productQuantities[productId];
@@ -94,7 +70,7 @@ const Products = () => {
 
   }
 
-  const handleImageClick = (product: Content) => {
+  const handleImageClick = (product: Product) => {
     setSelectedProduct(product);
     setOpenModal(true);
   };
@@ -160,7 +136,7 @@ const Products = () => {
 
         <Container sx={{ py: 8 }} maxWidth="md">
           <Grid container spacing={4}>
-            {products.map((product: Content) => (
+            {products.map((product: Product) => (
 
               <Grid item key={product.productId} xs={12} sm={6} md={4}>
                 <Card
