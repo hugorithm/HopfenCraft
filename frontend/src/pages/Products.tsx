@@ -48,6 +48,8 @@ const Products = () => {
           if (data.payload) {
             const payload = data.payload as ProductData;
             dispatch(setProducts(payload.content));
+          } else {
+            throw new Error("Failed to fetch data");
           }
         });
       }
@@ -137,8 +139,8 @@ const Products = () => {
         </Box>
 
         <Container sx={{ py: 8 }} maxWidth="md">
-          <Grid container spacing={4}>
-            {products.length === 0 && loading === 'loading' ? (
+          <Grid container spacing={5}>
+            {products.length === 0 && loading !== 'succeeded' ? (
               // Render Skeletons when products are loading
               <ProductsSkeleton />
             ) : (
@@ -156,7 +158,7 @@ const Products = () => {
                         component="div"
                         sx={{
                           // 16:9
-                          pt: '135.25%',
+                          pt: '100.25%',
                           backgroundSize: 'contain'
                         }}
                         image={`${BASE_URL}/product/${product.productId}/image`}
@@ -176,15 +178,28 @@ const Products = () => {
                         €{product.price}
                       </Typography>
                     </CardContent>
-                    <CardActions>
+                    <CardActions sx={{
+                      display: 'flex',
+                      flexDirection: 'column',
+                      alignItems: 'center', // Center items vertically
+                    }}>
                       {jwt ? (
                         <>
-                          <CustomNumberInput
-                            min={1}
-                            max={99}
-                            onChange={(_, val) => handleChange(product.productId, val)}
-                          />
-                          <Button sx={{ ml: 1 }} onClick={() => addToCart(product.productId)} size="small" variant='contained'>Add to Cart</Button>
+                          <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+                            <CustomNumberInput
+                              min={1}
+                              max={99}
+                              onChange={(_, val) => handleChange(product.productId, val)}
+                            />
+                            <Button
+                              sx={{ mt: 1 }} // Add margin-top to separate the input and button
+                              onClick={() => addToCart(product.productId)}
+                              size="small"
+                              variant="contained"
+                            >
+                              Add to Cart
+                            </Button>
+                          </Box>
                         </>
                       ) : (
                         <Button component={RouterLink} to="/login" size="small" variant='contained'>Add to Cart</Button>
