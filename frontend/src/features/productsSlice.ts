@@ -21,7 +21,6 @@ const initialState: ProductsState = {
   last: true,
 };
 
-
 // Define an async thunk for fetching products
 const fetchProducts = createAsyncThunk<ProductData, void, { state: RootState }>(
   'products/fetchProducts',
