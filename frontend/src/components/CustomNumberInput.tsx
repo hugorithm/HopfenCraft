@@ -8,7 +8,7 @@ import RemoveIcon from '@mui/icons-material/Remove';
 import AddIcon from '@mui/icons-material/Add';
 import { amber } from "@mui/material/colors";
 
-const CustomNumberInput = React.forwardRef(function CustomNumberInput(
+export const CustomNumberInput = React.forwardRef(function CustomNumberInput(
   props: NumberInputProps,
   ref: React.ForwardedRef<HTMLDivElement>,
 ) {
@@ -35,9 +35,7 @@ const CustomNumberInput = React.forwardRef(function CustomNumberInput(
   );
 });
 
-export default function QuantityInput() {
-  return <CustomNumberInput aria-label="Quantity Input" min={1} max={99} />;
-}
+
 
 const grey = {
   50: '#f6f8fa',
@@ -130,3 +128,5 @@ const StyledButton = styled('button')(
   }
 `,
 );
+
+export default CustomNumberInput;
