@@ -23,7 +23,7 @@ function ccyFormat(num: number) {
 }
 
 const ShoppingCartTable = () => {
-  const { cartItems } = useSelector(selectShoppingCart);
+  const { cartItems, isLoading } = useSelector(selectShoppingCart);
   const dispatch = useAppDispatch();
 
   const [deleteShoppingCart,
@@ -65,11 +65,17 @@ const ShoppingCartTable = () => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {cartItems.length === 0 ? (
+          {isLoading ? (
             <>
               <ShoppingCartSkeleton />
             </>
-          ) : (
+          ) : cartItems.length === 0 ? (
+            <TableRow>
+              <TableCell colSpan={5} align="center">
+                Shopping cart is empty
+              </TableCell>
+            </TableRow>
+          ): (
             cartItems.map((cartItem) => (
               <TableRow key={cartItem.cartItemId}>
                 <TableCell component="th" scope="row">
@@ -95,7 +101,7 @@ const ShoppingCartTable = () => {
               </TableRow>
             )
             ))}
-          {cartItems && (<TableRow>
+          {!isLoading && cartItems.length > 0 && (<TableRow>
             <TableCell colSpan={2} />
             <TableCell align="right">
               <Typography variant="h6">Total</Typography>

@@ -3,10 +3,12 @@ import { CartItem, ShoppingCartResponse } from '../types/ShoppingCartResponse';
 
 export interface ShoppingCartState {
   cartItems:  CartItem[];
+  isLoading:    boolean;
 }
 
 const initialState: ShoppingCartState = {
-    cartItems: []
+    cartItems: [],
+    isLoading:   true
 }
 
 export const shoppingCartSlice = createSlice({
@@ -15,6 +17,7 @@ export const shoppingCartSlice = createSlice({
   reducers: {
     setCartItems: (state, action: PayloadAction<ShoppingCartResponse>) => {
       state.cartItems = action.payload.cartItems;
+      state.isLoading = false;
     },
    
   },
