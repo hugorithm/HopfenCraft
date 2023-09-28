@@ -86,7 +86,7 @@ const ShoppingCartTable = () => {
                   {cartItem.product.name}
                 </TableCell>
                 <TableCell align="center">{cartItem.quantity}</TableCell>
-                <TableCell align="center">€ {ccyFormat(cartItem.quantity * parseFloat(cartItem.product.price))}</TableCell>
+                <TableCell align="center">€ {cartItem.total}</TableCell>
                 <TableCell align="center">
                   <IconButton onClick={() => handleDelete(cartItem)} color="secondary" aria-label="delete" size="small">
                     <DeleteIcon />

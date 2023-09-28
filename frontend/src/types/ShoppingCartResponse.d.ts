@@ -5,6 +5,7 @@ export interface ShoppingCartResponse {
 export interface CartItem {
     cartItemId:    number;
     product:       Product;
+    total:         string;
     quantity:      number;
     addedDateTime: string;
 }
