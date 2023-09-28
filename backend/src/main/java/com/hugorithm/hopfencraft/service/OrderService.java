@@ -50,6 +50,7 @@ public class OrderService {
                                 ci.getProduct().getRegisterDateTime()
                         ),
                         ci.getQuantity(),
+                        ci.getTotal(),
                         ci.getAddedDateTime()
                 ))
                 .toList();
