@@ -56,7 +56,7 @@ const router = createBrowserRouter(
       <Route path='signup' element={<SignUp />} errorElement={<CustomError />} />
       <Route element={<RequireAuth />}>
         <Route path='profile' element={<Profile />} errorElement={<CustomError />} />
-        <Route path='cart' element={<ShoppingCart />} errorElement={<CustomError />} />
+        <Route path='shopping-cart' element={<ShoppingCart />} errorElement={<CustomError />} />
       </Route>
       <Route path="*" element={<NotFound />} />
     </Route>

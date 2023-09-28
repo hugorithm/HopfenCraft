@@ -98,7 +98,7 @@ const Navbar = () => {
             <IconButton to="/profile" component={Link} color="inherit">
               <AccountCircleIcon />
             </IconButton>
-            <IconButton to="/cart" component={Link} color="inherit">
+            <IconButton to="/shopping-cart" component={Link} color="inherit">
               <Badge color="error" badgeContent={cartItems.length}>
                 <ShoppingCartIcon />
               </Badge>
