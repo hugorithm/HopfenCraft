@@ -2,10 +2,9 @@ import CssBaseline from '@mui/material/CssBaseline';
 import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
-import Stack from '@mui/material/Stack';
-import { Link as RouterLink } from 'react-router-dom';
 import ShoppingCartTable from '../components/ShoppingCartTable';
+import { Button } from '@mui/material';
+import { Link } from 'react-router-dom';
 
 const ShoppingCart = () => {
   return (
@@ -15,6 +14,7 @@ const ShoppingCart = () => {
         <Box
           sx={{
             mt: 8,
+            mb: 4, 
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
@@ -24,10 +24,22 @@ const ShoppingCart = () => {
             Shopping Cart
           </Typography>
           <ShoppingCartTable />
+          <Box mt={2}>
+            <Button
+              component={Link}
+              to="/checkout" 
+              variant="contained"
+              color="primary"
+              size="large"
+            >
+              Go to Checkout
+            </Button>
+          </Box>
         </Box>
       </Container>
     </>
   );
 }
+
 
 export default ShoppingCart;

@@ -15,6 +15,7 @@ import { useDeleteShoppingCartMutation } from '../app/api/shoppingCartApi';
 import { useEffect } from 'react';
 import { CartItem, Product } from '../types/ShoppingCartResponse';
 import { useAppDispatch } from '../app/hooks';
+import ShoppingCartSkeleton from './ShoppingCartSkeleton';
 
 
 function ccyFormat(num: number) {
@@ -24,7 +25,7 @@ function ccyFormat(num: number) {
 const ShoppingCartTable = () => {
   const { cartItems } = useSelector(selectShoppingCart);
   const dispatch = useAppDispatch();
-  
+
   const [deleteShoppingCart,
     { data: shoppingCartData,
       isSuccess: isShoppingCartSuccess,
@@ -64,31 +65,37 @@ const ShoppingCartTable = () => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {cartItems.map((cartItem) => (
-            <TableRow key={cartItem.cartItemId}>
-              <TableCell component="th" scope="row">
-                <CardMedia
-                  component="div"
-                  sx={{
-                    pt: '50.25%',
-                    backgroundSize: 'contain',
-                  }}
-                  image={`${BASE_URL}/product/${cartItem.product.productId}/image`}
-                />
-              </TableCell>
-              <TableCell>
-                {cartItem.product.name}
-              </TableCell>
-              <TableCell align="center">{cartItem.quantity}</TableCell>
-              <TableCell align="center">{ccyFormat(cartItem.quantity * parseFloat(cartItem.product.price))}</TableCell>
-              <TableCell align="center">
-                <IconButton onClick={() => handleDelete(cartItem)} color="secondary" aria-label="delete" size="small">
-                  <DeleteIcon />
-                </IconButton>
-              </TableCell>
-            </TableRow>
-          ))}
-          <TableRow>
+          {cartItems.length === 0 ? (
+            <>
+              <ShoppingCartSkeleton />
+            </>
+          ) : (
+            cartItems.map((cartItem) => (
+              <TableRow key={cartItem.cartItemId}>
+                <TableCell component="th" scope="row">
+                  <CardMedia
+                    component="div"
+                    sx={{
+                      pt: '50.25%',
+                      backgroundSize: 'contain',
+                    }}
+                    image={`${BASE_URL}/product/${cartItem.product.productId}/image`}
+                  />
+                </TableCell>
+                <TableCell>
+                  {cartItem.product.name}
+                </TableCell>
+                <TableCell align="center">{cartItem.quantity}</TableCell>
+                <TableCell align="center">€ {ccyFormat(cartItem.quantity * parseFloat(cartItem.product.price))}</TableCell>
+                <TableCell align="center">
+                  <IconButton onClick={() => handleDelete(cartItem)} color="secondary" aria-label="delete" size="small">
+                    <DeleteIcon />
+                  </IconButton>
+                </TableCell>
+              </TableRow>
+            )
+            ))}
+          {cartItems && (<TableRow>
             <TableCell colSpan={2} />
             <TableCell align="right">
               <Typography variant="h6">Total</Typography>
@@ -98,6 +105,7 @@ const ShoppingCartTable = () => {
             </TableCell>
             <TableCell />
           </TableRow>
+          )}
         </TableBody>
       </Table>
     </TableContainer>
