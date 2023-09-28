@@ -44,7 +44,7 @@ export default function Login() {
     if (isLoginSuccess && loginData) {
       dispatch(setUser({ username: loginData.username, email: loginData.email, jwt: loginData.jwt }));
 
-      toast.success('Login Successful', {
+      toast.success('Login Successful!', {
         position: "top-right",
         autoClose: 2000,
         hideProgressBar: false,

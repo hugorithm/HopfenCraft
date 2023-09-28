@@ -76,7 +76,7 @@ const Products = () => {
   useEffect(() => {
     if (isCartAddSuccess && cartData) {
       dispatch(setCartItems({ cartItems: cartData.cartItems }));
-      toast.success('Item successfully added to cart!', {
+      toast.success('Item added to cart!', {
         position: "top-right",
         autoClose: 2000,
         hideProgressBar: false,
