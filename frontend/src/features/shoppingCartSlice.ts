@@ -21,6 +21,6 @@ export const shoppingCartSlice = createSlice({
 });
 
 type ShoppingCartSelector = (state: { shoppingCart: ShoppingCartState }) => ShoppingCartState;
-export const selectAuth: ShoppingCartSelector = (state) => state.shoppingCart;
+export const selectShoppingCart: ShoppingCartSelector = (state) => state.shoppingCart;
 export const { setCartItems } = shoppingCartSlice.actions;
 export default shoppingCartSlice.reducer;

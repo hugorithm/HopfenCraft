@@ -18,15 +18,30 @@ import { fetchProducts, selectProducts, setProducts } from '../features/products
 import { useAppDispatch } from '../app/hooks';
 import ProductsSkeleton from '../components/ProductsSkeleton';
 import ProductCard from '../components/ProductCard';
+import { useShoppingCartAddMutation } from '../app/api/shoppingCartApi';
+import { toast } from 'react-toastify';
+import { useThemeContext } from '../theme/ThemeContextProvider';
+import { selectShoppingCart, setCartItems } from '../features/shoppingCartSlice';
 
 const Products = () => {
   const [openModal, setOpenModal] = useState<boolean>(false);
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [productQuantities, setProductQuantities] = useState<{ [productId: string]: number }>({});
   const { jwt } = useSelector(selectAuth);
+  const { mode } = useThemeContext();
 
   const dispatch = useAppDispatch();
   const { products, loading, error, page, last } = useSelector(selectProducts);
+  const { cartItems } = useSelector(selectShoppingCart);
+
+  const [shoppingCartAdd,
+    { data: cartData,
+      isSuccess: isCartAddSuccess,
+      isError: isCartAddError,
+      error: cartAddError
+    },
+  ] = useShoppingCartAddMutation();
+
 
   // Function to load more products
   const loadMore = () => {
@@ -55,6 +70,39 @@ const Products = () => {
   }, [dispatch, products]);
 
 
+  useEffect(() => {
+    if (isCartAddError) {
+      toast.error('Failed to add item to cart!', {
+        position: "top-right",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: true,
+        pauseOnFocusLoss: false,
+        progress: undefined,
+        theme: mode === 'light' ? 'light' : 'dark',
+      });
+    }
+  }, [isCartAddError]);
+
+  useEffect(() => {
+    if (isCartAddSuccess && cartData) {
+      dispatch(setCartItems({ cartItems: cartData.cartItems }));
+      toast.success('Item successfully added to cart!', {
+        position: "top-right",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: true,
+        pauseOnFocusLoss: false,
+        progress: undefined,
+        theme: mode === 'light' ? 'light' : 'dark',
+      });
+    }
+  }, [isCartAddSuccess]);
+
   const handleChange = (productId: number, newValue: number | undefined) => {
     if (newValue === undefined) return;
 
@@ -64,11 +112,16 @@ const Products = () => {
     }));
   };
 
-
   const addToCart = (productId: number) => {
     const quantity = productQuantities[productId];
 
+    shoppingCartAdd({ productId, quantity })
+      .unwrap()
+      .then(resp => {
 
+      }).catch(error => {
+
+      })
   }
 
   const handleImageClick = (product: Product) => {

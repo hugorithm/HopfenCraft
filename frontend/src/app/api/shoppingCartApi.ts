@@ -2,8 +2,8 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { BASE_URL } from '../../config/constants';
 import { ShoppingCartResponse } from '../../types/ShoppingCartResponse';
 import { ShoppingCartResquestBody } from '../../types/ShoppingCartRequestBody';
-import { selectAuth } from '../../features/authSlice';
-import { useSelector } from 'react-redux';
+
+const localJwt: string = JSON.parse(localStorage.getItem("user") || "{}").jwt;
 
 export const shoppingCartApi = createApi({
   reducerPath: "shoppingCartApi",
@@ -13,23 +13,37 @@ export const shoppingCartApi = createApi({
   endpoints: (builder) => ({
     shoppingCartAdd: builder.mutation<ShoppingCartResponse, ShoppingCartResquestBody>({
       query: (body) => {
-        const { jwt } = useSelector(selectAuth);
-      
+
         // Create headers with the JWT token
         const headers = new Headers({
-          'Authorization': `Bearer ${jwt}`,
-          'Content-Type': 'application/json', 
+          'Authorization': `Bearer ${localJwt}`,
+          'Content-Type': 'application/json',
         });
 
         return {
           url: "/cart/add",
-          method: "post",
+          method: "POST",
           headers,
           body
         };
       },
     }),
+    getShoppingCart: builder.mutation<ShoppingCartResponse, void>({
+      query: () => {
+        const headers = new Headers({
+          'Authorization': `Bearer ${localJwt}`,
+          'Content-Type': 'application/json',
+        });
+
+        return {
+          url: "/cart/add",
+          method: "GET",
+          headers
+        };
+      },
+    }),
   }),
+
 });
 
-export const { useShoppingCartAddMutation } = shoppingCartApi;
+export const { useShoppingCartAddMutation, useGetShoppingCartMutation } = shoppingCartApi;
