@@ -43,6 +43,7 @@ const Products = () => {
 
   // Function to load more products
   const loadMore = () => {
+    
     if (!last && loading !== 'loading') {
       dispatch(fetchProducts());
     }
@@ -51,10 +52,8 @@ const Products = () => {
   const renderAfterCalled = useRef(false);
   useEffect(() => {
     if (!renderAfterCalled.current) { // This is so that React Strict Mode doesn't cause issues
-
       if (products.length === 0) {
         dispatch(fetchProducts()).then((data) => {
-
           if (data.payload) {
             const payload = data.payload as ProductData;
             dispatch(setProducts(payload.content));

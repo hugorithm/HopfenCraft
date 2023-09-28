@@ -25,6 +25,7 @@ export const fetchProducts = createAsyncThunk<ProductData, void, { state: RootSt
   async (_, { getState }) => {
     const { page } = getState().products;
     const apiUrl = `${BASE_URL}/product/products?page=${page}&size=15`;
+
     const response = await fetch(apiUrl);
 
     if (!response.ok) {
