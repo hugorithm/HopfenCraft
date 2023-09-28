@@ -43,7 +43,7 @@ const Products = () => {
 
   // Function to load more products
   const loadMore = () => {
-    
+
     if (!last && loading !== 'loading') {
       dispatch(fetchProducts());
     }
@@ -69,17 +69,7 @@ const Products = () => {
 
   useEffect(() => {
     if (isCartAddError) {
-      toast.error('Failed to add item to cart!', {
-        position: "top-right",
-        autoClose: 2000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: false,
-        draggable: true,
-        pauseOnFocusLoss: false,
-        progress: undefined,
-        theme: mode === 'light' ? 'light' : 'dark',
-      });
+      console.error(cartAddError);
     }
   }, [isCartAddError]);
 
@@ -112,10 +102,34 @@ const Products = () => {
   const addToCart = (productId: number) => {
     const quantity = productQuantities[productId];
     shoppingCartAdd({ productId, quantity })
-    .unwrap()
-    .catch(err => {
-      console.log(cartAddError);
-    })
+      .unwrap()
+      .catch((error) => {
+        if (error.status === 400) {
+          toast.error('You cannot add that much quantity!', {
+            position: "top-right",
+            autoClose: 2000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: false,
+            draggable: true,
+            pauseOnFocusLoss: false,
+            progress: undefined,
+            theme: mode === 'light' ? 'light' : 'dark',
+          });
+        } else if (error.status === 404) {
+          toast.error('Failed to add item to cart!', {
+            position: "top-right",
+            autoClose: 2000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: false,
+            draggable: true,
+            pauseOnFocusLoss: false,
+            progress: undefined,
+            theme: mode === 'light' ? 'light' : 'dark',
+          });
+        }
+      })
   }
 
   const handleImageClick = (product: Product) => {
