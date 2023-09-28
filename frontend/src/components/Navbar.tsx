@@ -11,7 +11,6 @@ import {
 import SportsBarIcon from '@mui/icons-material/SportsBar';
 import { Link, useLocation, matchPath } from 'react-router-dom';
 import NightModeToggle from "./NightModeToggle";
-import { ACCESS_TOKEN } from "../config/constants";
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import { useNavigate } from "react-router-dom";
@@ -21,6 +20,7 @@ import { useAppDispatch } from "../app/hooks";
 import { toast } from "react-toastify";
 import { useThemeContext } from "../theme/ThemeContextProvider";
 import { useState } from "react";
+import { selectShoppingCart } from "../features/shoppingCartSlice";
 
 function useRouteMatch(patterns: readonly string[]) {
   const { pathname } = useLocation();
@@ -36,7 +36,7 @@ function useRouteMatch(patterns: readonly string[]) {
   return null;
 }
 
-function Navbar() {
+const Navbar = () => {
   const routeMatch = useRouteMatch(['/home', '/products', '/contacts', '/about']);
   const currentTab = routeMatch?.pattern?.path || false;
   const routeLoginMatch = useRouteMatch(['/login', '/signup']);
@@ -45,7 +45,7 @@ function Navbar() {
   const { mode } = useThemeContext();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const [shoppingCartCounter, setShoppingCartCounter] = useState(0);
+  const { cartItems } = useSelector(selectShoppingCart);
 
   const handleLogout = () => {
     dispatch(logout());
@@ -99,7 +99,7 @@ function Navbar() {
               <AccountCircleIcon />
             </IconButton>
             <IconButton to="/cart" component={Link} color="inherit">
-              <Badge color="error" badgeContent={shoppingCartCounter}>
+              <Badge color="error" badgeContent={cartItems.length}>
                 <ShoppingCartIcon />
               </Badge>
             </IconButton>
