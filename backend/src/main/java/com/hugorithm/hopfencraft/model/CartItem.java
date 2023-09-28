@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
@@ -23,10 +24,12 @@ public class CartItem {
     private int quantity;
     @CreationTimestamp
     private LocalDateTime addedDateTime;
+    private BigDecimal total;
 
-    public CartItem(Product product, ApplicationUser user, int quantity) {
+    public CartItem(Product product, ApplicationUser user, int quantity, BigDecimal total) {
         this.product = product;
         this.user = user;
         this.quantity = quantity;
+        this.total = total;
     }
 }
