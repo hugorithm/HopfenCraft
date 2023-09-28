@@ -11,6 +11,8 @@ import {
   from '@mui/material';
 import { Link as RouterLink } from 'react-router-dom';
 import React, { useState, useEffect } from 'react';
+import { useSelector } from 'react-redux';
+import { selectAuth } from '../features/authSlice';
 
 const cardMediaStyle = {
   height: '100vh',
@@ -19,7 +21,8 @@ const cardMediaStyle = {
 
 export default function Home() {
   const [cardMediaTransform, setCardMediaTransform] = useState('scale(1)');
-
+  const { jwt } = useSelector(selectAuth);
+  
   const handleResize = () => {
     const windowWidth = window.innerWidth;
 
@@ -130,9 +133,11 @@ export default function Home() {
               <Button component={RouterLink} to="/products" variant="contained">
                 Check our Products
               </Button>
+              {!jwt && (
               <Button component={RouterLink} to="/signup" variant="contained">
                 Sign Up
               </Button>
+              )}
             </Stack>
           </Container>
         </Box>

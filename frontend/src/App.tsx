@@ -26,7 +26,8 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.min.css';
 import { LoginResponse } from './types/LoginResponse';
 import { useGetShoppingCartMutation } from './app/api/shoppingCartApi';
-import { setCartItems } from './features/shoppingCartSlice';
+import { selectShoppingCart, setCartItems } from './features/shoppingCartSlice';
+import { useSelector } from 'react-redux';
 
 const Root = () => {
   return (
@@ -64,6 +65,7 @@ const App = () => {
   const dispatch = useAppDispatch();
   const user: LoginResponse = JSON.parse(localStorage.getItem("user") || "{}");
   const localJwt = JSON.parse(localStorage.getItem("user") || "{}").jwt;
+  const { cartItems } = useSelector(selectShoppingCart);
 
   const [getShoppingCart,
     { data: shoppingCartData,
@@ -82,7 +84,7 @@ const App = () => {
   useEffect(() => {
     dispatch(setUser(user));
 
-    if (localJwt) {
+    if (localJwt && cartItems.length === 0) {
       getShoppingCart();
     }
   }, [])

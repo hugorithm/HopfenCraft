@@ -9,11 +9,13 @@ import { Link as RouterLink } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../app/hooks';
 import { selectAuth } from '../features/authSlice';
 import { useGetShoppingCartMutation } from '../app/api/shoppingCartApi';
-import { setCartItems } from '../features/shoppingCartSlice';
+import { selectShoppingCart, setCartItems } from '../features/shoppingCartSlice';
+import { useSelector } from 'react-redux';
 
 const Profile = () => {
   const { username, email } = useAppSelector(selectAuth);
   const dispatch = useAppDispatch();
+  const { cartItems } = useSelector(selectShoppingCart);
 
   const [getShoppingCart,
     { data: shoppingCartData,
@@ -28,10 +30,12 @@ const Profile = () => {
       dispatch(setCartItems({ cartItems: shoppingCartData.cartItems }));
     }
   }, [isShoppingCartSuccess])
-  
-useEffect(() => {
-  getShoppingCart();
-}, []);
+
+  useEffect(() => {
+    if (cartItems.length === 0) {
+      getShoppingCart();
+    }
+  }, []);
 
   const handleEditProfileClick = () => {
     console.log("Edit Profile clicked!");
