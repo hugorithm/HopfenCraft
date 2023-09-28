@@ -3,8 +3,6 @@ import { Product, ProductData } from '../types/ProductData';
 import { BASE_URL } from '../config/constants';
 import { RootState } from '../app/store';
 
-
-
 interface ProductsState {
   products: Product[];
   loading: 'idle' | 'loading' | 'succeeded' | 'failed';
@@ -22,7 +20,7 @@ const initialState: ProductsState = {
 };
 
 // Define an async thunk for fetching products
-const fetchProducts = createAsyncThunk<ProductData, void, { state: RootState }>(
+export const fetchProducts = createAsyncThunk<ProductData, void, { state: RootState }>(
   'products/fetchProducts',
   async (_, { getState }) => {
     const { page } = getState().products;
@@ -68,4 +66,3 @@ const productsSlice = createSlice({
 export const selectProducts = (state: RootState) => state.products;
 export const { setProducts } = productsSlice.actions;
 export default productsSlice.reducer;
-export { fetchProducts };
