@@ -3,8 +3,6 @@ import { BASE_URL } from '../../config/constants';
 import { CartItem, ShoppingCartResponse } from '../../types/ShoppingCartResponse';
 import { ShoppingCartResquestBody } from '../../types/ShoppingCartRequestBody';
 
-
-
 export const shoppingCartApi = createApi({
   reducerPath: "shoppingCartApi",
   baseQuery: fetchBaseQuery({

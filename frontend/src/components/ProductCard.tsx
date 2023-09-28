@@ -39,7 +39,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, handleImageClick, ha
         sx={{
           display: 'flex',
           flexDirection: 'column',
-          alignItems: 'center', // Center items vertically
+          alignItems: 'center', 
         }}
       >
         {jwt ? (

@@ -66,7 +66,6 @@ const Products = () => {
     renderAfterCalled.current = true; // This is so that React Strict Mode doesn't cause issues
   }, [dispatch, products]);
 
-
   useEffect(() => {
     if (isCartAddError) {
       console.error(cartAddError);
