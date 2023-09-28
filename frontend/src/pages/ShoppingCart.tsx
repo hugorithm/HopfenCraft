@@ -8,10 +8,6 @@ import { Link as RouterLink } from 'react-router-dom';
 import ShoppingCartTable from '../components/ShoppingCartTable';
 
 const ShoppingCart = () => {
-  const handleLearnMoreClick = () => {
-    console.log("Learn More clicked!");
-  };
-
   return (
     <>
       <CssBaseline />

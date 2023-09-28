@@ -1,6 +1,6 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { BASE_URL } from '../../config/constants';
-import { ShoppingCartResponse } from '../../types/ShoppingCartResponse';
+import { CartItem, Product, ShoppingCartResponse } from '../../types/ShoppingCartResponse';
 import { ShoppingCartResquestBody } from '../../types/ShoppingCartRequestBody';
 
 
@@ -43,8 +43,23 @@ export const shoppingCartApi = createApi({
         };
       },
     }),
+    deleteShoppingCart: builder.mutation<ShoppingCartResponse, CartItem>({
+      query: (cartItem) => {
+        const localJwt: string = JSON.parse(localStorage.getItem("user") || "{}").jwt;
+        const headers = new Headers({
+          'Authorization': `Bearer ${localJwt}`,
+          'Content-Type': 'application/json',
+        });
+
+        return {
+          url: `/cart/remove/${cartItem.cartItemId}`,
+          method: "DELETE",
+          headers
+        };
+      },
+    }),
   }),
 
 });
 
-export const { useShoppingCartAddMutation, useGetShoppingCartMutation } = shoppingCartApi;
+export const { useShoppingCartAddMutation, useGetShoppingCartMutation, useDeleteShoppingCartMutation } = shoppingCartApi;

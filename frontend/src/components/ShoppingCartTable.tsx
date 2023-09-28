@@ -7,11 +7,15 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { useSelector } from 'react-redux';
-import { selectShoppingCart } from '../features/shoppingCartSlice';
+import { selectShoppingCart, setCartItems } from '../features/shoppingCartSlice';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { CardMedia, IconButton, Typography } from '@mui/material';
 import { BASE_URL } from '../config/constants';
-import { Product } from '../types/ProductData';
+import { useDeleteShoppingCartMutation } from '../app/api/shoppingCartApi';
+import { useEffect } from 'react';
+import { CartItem, Product } from '../types/ShoppingCartResponse';
+import { useAppDispatch } from '../app/hooks';
+
 
 function ccyFormat(num: number) {
   return `${num.toFixed(2)}`;
@@ -19,6 +23,22 @@ function ccyFormat(num: number) {
 
 const ShoppingCartTable = () => {
   const { cartItems } = useSelector(selectShoppingCart);
+  const dispatch = useAppDispatch();
+  
+  const [deleteShoppingCart,
+    { data: shoppingCartData,
+      isSuccess: isShoppingCartSuccess,
+      isError: isShoppingCartError,
+      error: shoppingCartError
+    },
+  ] = useDeleteShoppingCartMutation();
+
+  useEffect(() => {
+    if (isShoppingCartSuccess && shoppingCartData) {
+      dispatch(setCartItems({ cartItems: shoppingCartData.cartItems }));
+    }
+  }, [isShoppingCartSuccess])
+
 
   const total = cartItems.reduce((accumulator, cartItem) => {
     const price = parseFloat(cartItem.product.price);
@@ -27,8 +47,8 @@ const ShoppingCartTable = () => {
     return accumulator + itemTotal;
   }, 0);
 
-  const handleDelete = (product: Product) => {
-    console.log(product)
+  const handleDelete = (cartItem: CartItem) => {
+    deleteShoppingCart(cartItem);
   }
 
   return (
@@ -62,7 +82,7 @@ const ShoppingCartTable = () => {
               <TableCell align="center">{cartItem.quantity}</TableCell>
               <TableCell align="center">{ccyFormat(cartItem.quantity * parseFloat(cartItem.product.price))}</TableCell>
               <TableCell align="center">
-                <IconButton onClick={() => handleDelete(cartItem.product)} color="secondary" aria-label="delete" size="small">
+                <IconButton onClick={() => handleDelete(cartItem)} color="secondary" aria-label="delete" size="small">
                   <DeleteIcon />
                 </IconButton>
               </TableCell>
@@ -70,10 +90,10 @@ const ShoppingCartTable = () => {
           ))}
           <TableRow>
             <TableCell colSpan={2} />
-            <TableCell align="center">
+            <TableCell align="right">
               <Typography variant="h6">Total</Typography>
             </TableCell>
-            <TableCell align="center">
+            <TableCell align="right">
               <Typography variant="h6">€ {ccyFormat(total)}</Typography>
             </TableCell>
             <TableCell />
