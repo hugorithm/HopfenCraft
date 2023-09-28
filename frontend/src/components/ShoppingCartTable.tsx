@@ -32,7 +32,7 @@ const ShoppingCartTable = () => {
   }
 
   return (
-    <TableContainer component={Paper} elevation={3} sx={{ maxWidth: 800, margin: '0 auto', borderRadius: 8 }}>
+    <TableContainer component={Paper} elevation={3} sx={{ maxWidth: 800, margin: '0 auto' }}>
       <Table aria-label="shopping-cart-table">
         <TableHead>
           <TableRow>
