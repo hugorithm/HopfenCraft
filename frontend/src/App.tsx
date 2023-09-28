@@ -25,6 +25,8 @@ import { setUser } from './features/authSlice';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.min.css';
 import { LoginResponse } from './types/LoginResponse';
+import { useGetShoppingCartMutation } from './app/api/shoppingCartApi';
+import { setCartItems } from './features/shoppingCartSlice';
 
 const Root = () => {
   return (
@@ -57,13 +59,32 @@ const router = createBrowserRouter(
   )
 )
 
-function App() {
+const App = () => {
   const { theme } = useThemeContext();
   const dispatch = useAppDispatch();
   const user: LoginResponse = JSON.parse(localStorage.getItem("user") || "{}");
+  const localJwt = JSON.parse(localStorage.getItem("user") || "{}").jwt;
+
+  const [getShoppingCart,
+    { data: shoppingCartData,
+      isSuccess: isShoppingCartSuccess,
+      isError: isShoppingCartError,
+      error: shoppingCartError
+    },
+  ] = useGetShoppingCartMutation();
+
+  useEffect(() => {
+    if (isShoppingCartSuccess && shoppingCartData) {
+      dispatch(setCartItems({ cartItems: shoppingCartData.cartItems }));
+    }
+  }, [isShoppingCartSuccess])
 
   useEffect(() => {
     dispatch(setUser(user));
+
+    if (localJwt) {
+      getShoppingCart();
+    }
   }, [])
   return (
     <>
@@ -71,7 +92,7 @@ function App() {
         <RouterProvider router={router} />
         <ToastContainer />
       </ThemeProvider>
-      
+
     </>
   )
 }

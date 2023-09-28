@@ -19,7 +19,7 @@ import { useSelector } from "react-redux";
 import { useAppDispatch } from "../app/hooks";
 import { toast } from "react-toastify";
 import { useThemeContext } from "../theme/ThemeContextProvider";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { selectShoppingCart } from "../features/shoppingCartSlice";
 
 function useRouteMatch(patterns: readonly string[]) {

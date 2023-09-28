@@ -3,7 +3,7 @@ import { BASE_URL } from '../../config/constants';
 import { ShoppingCartResponse } from '../../types/ShoppingCartResponse';
 import { ShoppingCartResquestBody } from '../../types/ShoppingCartRequestBody';
 
-const localJwt: string = JSON.parse(localStorage.getItem("user") || "{}").jwt;
+
 
 export const shoppingCartApi = createApi({
   reducerPath: "shoppingCartApi",
@@ -13,7 +13,7 @@ export const shoppingCartApi = createApi({
   endpoints: (builder) => ({
     shoppingCartAdd: builder.mutation<ShoppingCartResponse, ShoppingCartResquestBody>({
       query: (body) => {
-
+        const localJwt: string = JSON.parse(localStorage.getItem("user") || "{}").jwt;
         // Create headers with the JWT token
         const headers = new Headers({
           'Authorization': `Bearer ${localJwt}`,
@@ -30,13 +30,14 @@ export const shoppingCartApi = createApi({
     }),
     getShoppingCart: builder.mutation<ShoppingCartResponse, void>({
       query: () => {
+        const localJwt: string = JSON.parse(localStorage.getItem("user") || "{}").jwt;
         const headers = new Headers({
           'Authorization': `Bearer ${localJwt}`,
           'Content-Type': 'application/json',
         });
 
         return {
-          url: "/cart/add",
+          url: "/cart/items",
           method: "GET",
           headers
         };

@@ -29,10 +29,8 @@ const Products = () => {
   const [productQuantities, setProductQuantities] = useState<{ [productId: string]: number }>({});
   const { jwt } = useSelector(selectAuth);
   const { mode } = useThemeContext();
-
   const dispatch = useAppDispatch();
   const { products, loading, error, page, last } = useSelector(selectProducts);
-  const { cartItems } = useSelector(selectShoppingCart);
 
   const [shoppingCartAdd,
     { data: cartData,
@@ -114,14 +112,7 @@ const Products = () => {
 
   const addToCart = (productId: number) => {
     const quantity = productQuantities[productId];
-
-    shoppingCartAdd({ productId, quantity })
-      .unwrap()
-      .then(resp => {
-
-      }).catch(error => {
-
-      })
+    shoppingCartAdd({ productId, quantity });
   }
 
   const handleImageClick = (product: Product) => {

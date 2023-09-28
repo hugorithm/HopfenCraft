@@ -12,7 +12,7 @@ import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
-import { Link as RouterLink, Navigate, useNavigate } from 'react-router-dom';
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import googleLogo from '../assets/oauth2/google-logo.png';
 import githubLogo from '../assets/oauth2/github-logo.png';
 import { GOOGLE_AUTH_URL, GITHUB_AUTH_URL } from '../config/constants';
@@ -23,7 +23,6 @@ import { useAppDispatch } from '../app/hooks';
 import { setUser } from '../features/authSlice';
 import { toast } from 'react-toastify';
 import { useThemeContext } from '../theme/ThemeContextProvider';
-
 
 export default function Login() {
   const [error, setError] = useState<string | null>(null);
@@ -40,7 +39,6 @@ export default function Login() {
       error: loginError
     },
   ] = useLoginUserMutation();
-
 
   useEffect(() => {
     if (isLoginSuccess && loginData) {
@@ -59,7 +57,7 @@ export default function Login() {
       });
 
       navigate("/profile");
-    } 
+    }
   }, [isLoginSuccess]);
 
   useEffect(() => {
@@ -185,7 +183,7 @@ export default function Login() {
               Sign In
             </Button>
             {error && (
-              <Zoom in={!!error}>  
+              <Zoom in={!!error}>
                 <Alert severity="error" >
                   {error}
                 </Alert>

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import CssBaseline from '@mui/material/CssBaseline';
 import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
@@ -6,11 +6,32 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 import { Link as RouterLink } from 'react-router-dom';
-import { useAppSelector } from '../app/hooks';
+import { useAppDispatch, useAppSelector } from '../app/hooks';
 import { selectAuth } from '../features/authSlice';
+import { useGetShoppingCartMutation } from '../app/api/shoppingCartApi';
+import { setCartItems } from '../features/shoppingCartSlice';
 
 const Profile = () => {
   const { username, email } = useAppSelector(selectAuth);
+  const dispatch = useAppDispatch();
+
+  const [getShoppingCart,
+    { data: shoppingCartData,
+      isSuccess: isShoppingCartSuccess,
+      isError: isShoppingCartError,
+      error: shoppingCartError
+    },
+  ] = useGetShoppingCartMutation();
+
+  useEffect(() => {
+    if (isShoppingCartSuccess && shoppingCartData) {
+      dispatch(setCartItems({ cartItems: shoppingCartData.cartItems }));
+    }
+  }, [isShoppingCartSuccess])
+  
+useEffect(() => {
+  getShoppingCart();
+}, []);
 
   const handleEditProfileClick = () => {
     console.log("Edit Profile clicked!");
@@ -29,7 +50,7 @@ const Profile = () => {
           }}
         >
           <Typography component="h1" variant="h2" align="center" color="text.primary" gutterBottom>
-           Welcome {username}!
+            Welcome {username}!
           </Typography>
           <Typography variant="h5" align="center" color="text.secondary" paragraph>
             Welcome to your HopfenCraft profile. Here, you can manage your account and preferences.
