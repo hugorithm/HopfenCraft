@@ -1,8 +1,4 @@
-import Button from '@mui/material/Button';
-import Card from '@mui/material/Card';
-import CardActions from '@mui/material/CardActions';
-import CardContent from '@mui/material/CardContent';
-import CardMedia from '@mui/material/CardMedia';
+import Button from '@mui/material/Button';;
 import CssBaseline from '@mui/material/CssBaseline';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
@@ -13,14 +9,13 @@ import Modal from '@mui/material/Modal';
 import { Link as RouterLink } from 'react-router-dom';
 import { Product, ProductData } from '../types/ProductData';
 import { BASE_URL } from '../config/constants';
-import { ButtonBase, Skeleton } from '@mui/material';
 import { useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { selectAuth } from '../features/authSlice';
-import CustomNumberInput from '../components/CustomNumberInput';
 import { fetchProducts, selectProducts, setProducts } from '../features/productsSlice';
 import { useAppDispatch } from '../app/hooks';
 import ProductsSkeleton from '../components/ProductsSkeleton';
+import ProductCard from '../components/ProductCard';
 
 const Products = () => {
   const [openModal, setOpenModal] = useState<boolean>(false);
@@ -83,6 +78,7 @@ const Products = () => {
     setOpenModal(false);
     setSelectedProduct(null);
   };
+
 
   return (
     <>
@@ -147,65 +143,12 @@ const Products = () => {
               // Render actual products when data is loaded
               products.map((product) => (
                 <Grid item key={product.productId} xs={12} sm={6} md={4}>
-                  <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
-                    <ButtonBase sx={{
-                      display: 'block',
-                      textAlign: 'initial'
-                    }}
-                      onClick={() => handleImageClick(product)}
-                    >
-                      <CardMedia
-                        component="div"
-                        sx={{
-                          // 16:9
-                          pt: '100.25%',
-                          backgroundSize: 'contain'
-                        }}
-                        image={`${BASE_URL}/product/${product.productId}/image`}
-                      />
-                    </ButtonBase>
-                    <CardContent sx={{ flexGrow: 1 }}>
-                      <Typography>
-                        {product.brand}
-                      </Typography>
-                      <Typography gutterBottom variant="h6" component="h2">
-                        {product.name}
-                      </Typography>
-                      <Typography gutterBottom>
-                        {product.description}
-                      </Typography>
-                      <Typography sx={{ fontWeight: 500 }}>
-                        €{product.price}
-                      </Typography>
-                    </CardContent>
-                    <CardActions sx={{
-                      display: 'flex',
-                      flexDirection: 'column',
-                      alignItems: 'center', // Center items vertically
-                    }}>
-                      {jwt ? (
-                        <>
-                          <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-                            <CustomNumberInput
-                              min={1}
-                              max={99}
-                              onChange={(_, val) => handleChange(product.productId, val)}
-                            />
-                            <Button
-                              sx={{ mt: 1 }} // Add margin-top to separate the input and button
-                              onClick={() => addToCart(product.productId)}
-                              size="small"
-                              variant="contained"
-                            >
-                              Add to Cart
-                            </Button>
-                          </Box>
-                        </>
-                      ) : (
-                        <Button component={RouterLink} to="/login" size="small" variant='contained'>Add to Cart</Button>
-                      )}
-                    </CardActions>
-                  </Card>
+                  <ProductCard
+                    product={product}
+                    jwt={jwt}
+                    handleImageClick={handleImageClick}
+                    handleChange={handleChange}
+                    addToCart={addToCart} />
                 </Grid>
               ))
             )}
