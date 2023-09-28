@@ -25,7 +25,7 @@ import { setUser } from './features/authSlice';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.min.css';
 import { LoginResponse } from './types/LoginResponse';
-import { useGetShoppingCartMutation } from './app/api/shoppingCartApi';
+import { useGetShoppingCartQuery } from './app/api/shoppingCartApi';
 import { selectShoppingCart, setCartItems } from './features/shoppingCartSlice';
 import { useSelector } from 'react-redux';
 import ShoppingCart from './pages/ShoppingCart';
@@ -67,29 +67,10 @@ const App = () => {
   const { theme } = useThemeContext();
   const dispatch = useAppDispatch();
   const user: LoginResponse = JSON.parse(localStorage.getItem("user") || "{}");
-  const localJwt = JSON.parse(localStorage.getItem("user") || "{}").jwt;
-  const { cartItems } = useSelector(selectShoppingCart);
-
-  const [getShoppingCart,
-    { data: shoppingCartData,
-      isSuccess: isShoppingCartSuccess,
-      isError: isShoppingCartError,
-      error: shoppingCartError
-    },
-  ] = useGetShoppingCartMutation();
-
-  useEffect(() => {
-    if (isShoppingCartSuccess && shoppingCartData) {
-      dispatch(setCartItems({ cartItems: shoppingCartData.cartItems }));
-    }
-  }, [isShoppingCartSuccess])
 
   useEffect(() => {
     dispatch(setUser(user));
-
-    if (localJwt && cartItems.length === 0) {
-      getShoppingCart();
-    }
+   
   }, [])
   return (
     <>

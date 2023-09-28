@@ -8,7 +8,7 @@ import Stack from '@mui/material/Stack';
 import { Link as RouterLink } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../app/hooks';
 import { selectAuth } from '../features/authSlice';
-import { useGetShoppingCartMutation } from '../app/api/shoppingCartApi';
+import { useGetShoppingCartQuery } from '../app/api/shoppingCartApi';
 import { selectShoppingCart, setCartItems } from '../features/shoppingCartSlice';
 import { useSelector } from 'react-redux';
 
@@ -17,25 +17,17 @@ const Profile = () => {
   const dispatch = useAppDispatch();
   const { cartItems } = useSelector(selectShoppingCart);
 
-  const [getShoppingCart,
-    { data: shoppingCartData,
-      isSuccess: isShoppingCartSuccess,
-      isError: isShoppingCartError,
-      error: shoppingCartError
-    },
-  ] = useGetShoppingCartMutation();
-
-  useEffect(() => {
-    if (isShoppingCartSuccess && shoppingCartData) {
-      dispatch(setCartItems({ cartItems: shoppingCartData.cartItems }));
-    }
-  }, [isShoppingCartSuccess])
+  const { data: shoppingCartData, error } = useGetShoppingCartQuery();
 
   useEffect(() => {
     if (cartItems.length === 0) {
-      getShoppingCart();
+      if (shoppingCartData) {
+        dispatch(setCartItems({ cartItems: shoppingCartData.cartItems }));
+      } else if (error) {
+        console.log(error);
+      }
     }
-  }, []);
+  }, [shoppingCartData]);
 
   const handleEditProfileClick = () => {
     console.log("Edit Profile clicked!");

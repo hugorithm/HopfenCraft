@@ -11,7 +11,7 @@ import { selectShoppingCart, setCartItems } from '../features/shoppingCartSlice'
 import DeleteIcon from '@mui/icons-material/Delete';
 import { CardMedia, IconButton, Typography } from '@mui/material';
 import { BASE_URL } from '../config/constants';
-import { useDeleteShoppingCartMutation } from '../app/api/shoppingCartApi';
+import { useDeleteShoppingCartMutation, useGetShoppingCartQuery } from '../app/api/shoppingCartApi';
 import { useEffect } from 'react';
 import { CartItem, Product } from '../types/ShoppingCartResponse';
 import { useAppDispatch } from '../app/hooks';
@@ -23,8 +23,20 @@ function ccyFormat(num: number) {
 }
 
 const ShoppingCartTable = () => {
-  const { cartItems, isLoading } = useSelector(selectShoppingCart);
+  const { cartItems } = useSelector(selectShoppingCart);
   const dispatch = useAppDispatch();
+  const { data: getCartData, error, isLoading, isSuccess: getCartSuccess, } = useGetShoppingCartQuery();
+
+
+  useEffect(() => {
+    if (cartItems.length === 0) {
+      if (getCartData) {
+        dispatch(setCartItems({ cartItems: getCartData.cartItems }));
+      } else if (error) {
+        console.log(error);
+      }
+    }
+  }, [getCartData]);
 
   const [deleteShoppingCart,
     { data: shoppingCartData,
@@ -80,7 +92,7 @@ const ShoppingCartTable = () => {
                 Shopping cart is empty
               </TableCell>
             </TableRow>
-          ): (
+          ) : (
             cartItems.map((cartItem) => (
               <TableRow key={cartItem.cartItemId}>
                 <TableCell component="th" scope="row">

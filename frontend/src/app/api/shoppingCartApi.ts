@@ -28,7 +28,7 @@ export const shoppingCartApi = createApi({
         };
       },
     }),
-    getShoppingCart: builder.mutation<ShoppingCartResponse, void>({
+    getShoppingCart: builder.query<ShoppingCartResponse, void>({
       query: () => {
         const localJwt: string = JSON.parse(localStorage.getItem("user") || "{}").jwt;
         const headers = new Headers({
@@ -62,4 +62,4 @@ export const shoppingCartApi = createApi({
 
 });
 
-export const { useShoppingCartAddMutation, useGetShoppingCartMutation, useDeleteShoppingCartMutation } = shoppingCartApi;
+export const { useShoppingCartAddMutation, useGetShoppingCartQuery, useDeleteShoppingCartMutation } = shoppingCartApi;
