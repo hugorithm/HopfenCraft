@@ -24,6 +24,7 @@ import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -57,6 +58,7 @@ public class ShoppingCartService {
                                 ci.getProduct().getRegisterDateTime()
                         ),
                         ci.getQuantity(),
+                        ci.getTotal(),
                         ci.getAddedDateTime()
                 ))
                 .toList();
@@ -77,7 +79,10 @@ public class ShoppingCartService {
                     .sum();
 
             if (dto.getQuantity() + totalQuantity <= product.getStockQuantity()) {
-                CartItem cartItem = new CartItem(product, user, dto.getQuantity());
+
+                BigDecimal total =  product.getPrice().multiply(BigDecimal.valueOf(dto.getQuantity()));
+
+                CartItem cartItem = new CartItem(product, user, dto.getQuantity(), total);
 
                 cartItemRepository.save(cartItem);
                 cartItems.add(cartItem);
