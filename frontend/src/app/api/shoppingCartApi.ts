@@ -1,6 +1,6 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { BASE_URL } from '../../config/constants';
-import { CartItem, Product, ShoppingCartResponse } from '../../types/ShoppingCartResponse';
+import { CartItem, ShoppingCartResponse } from '../../types/ShoppingCartResponse';
 import { ShoppingCartResquestBody } from '../../types/ShoppingCartRequestBody';
 
 

@@ -40,6 +40,11 @@ const ShoppingCartTable = () => {
     }
   }, [isShoppingCartSuccess])
 
+  useEffect(() => {
+    if (isShoppingCartError) {
+      console.error(shoppingCartError)
+    }
+  }, [isShoppingCartError])
 
   const total = cartItems.reduce((accumulator, cartItem) => {
     const price = parseFloat(cartItem.product.price);
