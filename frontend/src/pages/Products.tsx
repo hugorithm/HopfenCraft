@@ -1,11 +1,13 @@
-import Button from '@mui/material/Button';;
-import CssBaseline from '@mui/material/CssBaseline';
-import Grid from '@mui/material/Grid';
-import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
-import Container from '@mui/material/Container';
-import Link from '@mui/material/Link';
-import Modal from '@mui/material/Modal';
+import {
+  Button,
+  CssBaseline,
+  Grid,
+  Box,
+  Typography,
+  Container,
+  Link,
+  Modal
+} from '@mui/material';
 import { Link as RouterLink } from 'react-router-dom';
 import { Product, ProductData } from '../types/ProductData';
 import { BASE_URL } from '../config/constants';
