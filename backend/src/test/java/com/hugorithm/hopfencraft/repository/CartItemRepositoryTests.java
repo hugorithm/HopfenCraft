@@ -36,7 +36,7 @@ public class CartItemRepositoryTests {
         roles.add(role);
         ApplicationUser user = new ApplicationUser("user1", "Password123!", "email@example.com", roles, "Test", "test", AuthProvider.LOCAL);
         Product product = new Product("Paulaner", "Paulaner Weissbier", "Weiss", 10, new BigDecimal("2.39"), user);
-        CartItem cartItem = new CartItem(product, user, 2);
+        CartItem cartItem = new CartItem(product, user, 2, new BigDecimal("4.78"));
 
         //Act
         CartItem savedCartItem = cartItemRepository.save(cartItem);
@@ -54,8 +54,8 @@ public class CartItemRepositoryTests {
         roles.add(role);
         ApplicationUser user = new ApplicationUser("user1", "Password123!", "email@example.com", roles, "Test", "test", AuthProvider.LOCAL);
         Product product = new Product("Paulaner", "Paulaner Weissbier", "Weiss", 10, new BigDecimal("2.39"), user);
-        CartItem cartItem = new CartItem(product, user, 2);
-        CartItem cartItem2 = new CartItem(product, user, 3);
+        CartItem cartItem = new CartItem(product, user, 2, new BigDecimal("4.78"));
+        CartItem cartItem2 = new CartItem(product, user, 3, new BigDecimal("7.17"));
 
         //Act
         productRepository.save(product);
@@ -83,7 +83,7 @@ public class CartItemRepositoryTests {
         roles.add(role);
         ApplicationUser user = new ApplicationUser("user1", "Password123!", "email@example.com", roles, "Test", "test", AuthProvider.LOCAL);
         Product product = new Product("Paulaner", "Paulaner Weissbier", "Weiss", 10, new BigDecimal("2.39"), user);
-        CartItem cartItem = new CartItem(product, user, 2);
+        CartItem cartItem = new CartItem(product, user, 2, new BigDecimal("4.78"));
 
         //Act
         cartItemRepository.save(cartItem);
@@ -103,7 +103,7 @@ public class CartItemRepositoryTests {
         ApplicationUser user2 = new ApplicationUser("user2", "Password123!", "email@example.com", roles, "Test", "test", AuthProvider.LOCAL);
         Product product = new Product("Paulaner", "Paulaner Weissbier", "Weiss", 10, new BigDecimal("2.39"), user);
         Product product2 = new Product("Paulaner", "Paulaner Helles", "Lager", 10, new BigDecimal("2.59"), user);
-        CartItem cartItem = new CartItem(product, user, 2);
+        CartItem cartItem = new CartItem(product, user, 2, new BigDecimal("4.78"));
         int q = cartItem.getQuantity();
         Product p = cartItem.getProduct();
         ApplicationUser u = cartItem.getUser();
@@ -139,7 +139,7 @@ public class CartItemRepositoryTests {
         roles.add(role);
         ApplicationUser user = new ApplicationUser("user1", "Password123!", "email@example.com", roles, "Test", "test", AuthProvider.LOCAL);
         Product product = new Product("Paulaner", "Paulaner Weissbier", "Weiss", 10, new BigDecimal("2.39"), user);
-        CartItem cartItem = new CartItem(product, user, 2);
+        CartItem cartItem = new CartItem(product, user, 2, new BigDecimal("4.78"));
 
         //Act
         cartItemRepository.save(cartItem);

@@ -256,6 +256,7 @@ public class ProductControllerTests {
                 "SKU01",
                 "Existing Brand",
                 "Existing Product",
+                "Existing BrandName",
                 "Existing Description",
                 5,
                 new BigDecimal("4.99"),
@@ -263,7 +264,6 @@ public class ProductControllerTests {
                 LocalDateTime.now(),
                 user,
                 new ProductImage()
-
         );
 
         when(productService.findById(productId)).thenReturn(Optional.of(existingProduct));

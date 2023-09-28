@@ -100,7 +100,7 @@ public class ProductServiceTests {
         validProductDTO.setCurrency(Currency.EUR);
 
         // Mock the product repository to return a non-empty Optional, indicating the product already exists
-        when(productRepository.findProductByName("name")).thenReturn(Optional.of(new Product("brand", "name", "desc", 10, new BigDecimal("2.15"), user)));
+        when(productRepository.findProductByBrandName("brandname")).thenReturn(Optional.of(new Product("brand", "name", "desc", 10, new BigDecimal("2.15"), user)));
         when(jwtService.getUserFromJwt(any())).thenReturn(user);
         when(productRepository.save(any(Product.class))).thenReturn(new Product("brand", "name", "desc", 10, new BigDecimal("2.15"), user));
         // Call the service method
