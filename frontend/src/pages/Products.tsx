@@ -6,7 +6,8 @@ import {
   Typography,
   Container,
   Link,
-  Modal
+  Modal,
+  Fade
 } from '@mui/material';
 import { Link as RouterLink } from 'react-router-dom';
 import { Product, ProductData } from '../types/ProductData';
@@ -21,7 +22,7 @@ import ProductCard from '../components/ProductCard';
 import { useShoppingCartAddMutation } from '../app/api/shoppingCartApi';
 import { toast } from 'react-toastify';
 import { useThemeContext } from '../theme/ThemeContextProvider';
-import { selectShoppingCart, setCartItems } from '../features/shoppingCartSlice';
+import { setCartItems } from '../features/shoppingCartSlice';
 
 const Products = () => {
   const [openModal, setOpenModal] = useState<boolean>(false);
@@ -31,6 +32,14 @@ const Products = () => {
   const { mode } = useThemeContext();
   const { products, loading, error, page, last } = useSelector(selectProducts);
   const dispatch = useAppDispatch();
+  const [fadeIn, setFadeIn] = useState(false); 
+
+  useEffect(() => {
+    if (!fadeIn) {
+      setFadeIn(true);
+    }
+  }, [fadeIn]);
+
 
   const [shoppingCartAdd,
     { data: cartData,
@@ -158,6 +167,7 @@ const Products = () => {
         </Box>
       </Modal>
       <main>
+      <Fade in={fadeIn} timeout={1000}>
         <Box
           sx={{
             bgcolor: 'background.paper',
@@ -195,7 +205,7 @@ const Products = () => {
             </Typography>
           </Container>
         </Box>
-
+      </Fade>
         <Container sx={{ py: 8 }} maxWidth="md">
           <Grid container spacing={5}>
             {products.length === 0 && loading !== 'succeeded' ? (

@@ -18,6 +18,15 @@ export const authApi = createApi({
         };
       },
     }),
+    signUp: builder.mutation<LoginResponse, LoginRequestBody>({
+      query: (body) => {
+        return {
+          url: "/auth/login",
+          method: "post",
+          body
+        };
+      },
+    }),
   }),
 });
 

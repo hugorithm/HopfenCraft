@@ -63,17 +63,6 @@ export default function Login() {
   useEffect(() => {
     if (isLoginError) {
       setError("Failed to Login. Please check your credentials");
-      toast.error('Failed to Login', {
-        position: "top-right",
-        autoClose: 2000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: false,
-        draggable: true,
-        pauseOnFocusLoss: false,
-        progress: undefined,
-        theme: mode === 'light' ? 'light' : 'dark',
-      });
     }
   }, [isLoginError]);
 

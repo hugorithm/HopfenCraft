@@ -11,6 +11,7 @@ import { selectAuth } from '../features/authSlice';
 import { useGetShoppingCartQuery } from '../app/api/shoppingCartApi';
 import { selectShoppingCart, setCartItems } from '../features/shoppingCartSlice';
 import { useSelector } from 'react-redux';
+import { Fade } from '@mui/material';
 
 const Profile = () => {
   const { username, email } = useAppSelector(selectAuth);
@@ -36,6 +37,7 @@ const Profile = () => {
   return (
     <>
       <CssBaseline />
+      <Fade in={true} timeout={1000}>
       <Container maxWidth="sm">
         <Box
           sx={{
@@ -69,6 +71,7 @@ const Profile = () => {
           </Stack>
         </Box>
       </Container>
+      </Fade>
     </>
   );
 }

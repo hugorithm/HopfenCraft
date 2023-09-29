@@ -50,7 +50,7 @@ const Navbar = () => {
   const handleLogout = () => {
     dispatch(logout());
 
-    toast.success('Logout Successful', {
+    toast.success('Logout Successful!', {
       position: "top-right",
       autoClose: 2000,
       hideProgressBar: false,
