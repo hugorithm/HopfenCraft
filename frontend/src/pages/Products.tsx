@@ -10,7 +10,7 @@ import {
   Fade
 } from '@mui/material';
 import { Link as RouterLink } from 'react-router-dom';
-import { Product, ProductData } from '../types/ProductData';
+import { Product, ProductData } from '../types/product/ProductData';
 import { BASE_URL } from '../config/constants';
 import { useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';

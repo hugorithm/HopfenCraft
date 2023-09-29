@@ -13,7 +13,7 @@ import { CardMedia, IconButton, Typography } from '@mui/material';
 import { BASE_URL } from '../config/constants';
 import { useDeleteShoppingCartMutation, useGetShoppingCartQuery } from '../app/api/shoppingCartApi';
 import { useEffect } from 'react';
-import { CartItem } from '../types/ShoppingCartResponse';
+import { CartItem } from '../types/shopping/ShoppingCartResponse';
 import { useAppDispatch } from '../app/hooks';
 import ShoppingCartSkeleton from './ShoppingCartSkeleton';
 import { toast } from 'react-toastify';

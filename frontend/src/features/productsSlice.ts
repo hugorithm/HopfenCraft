@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
-import { Product, ProductData } from '../types/ProductData';
+import { Product, ProductData } from '../types/product/ProductData';
 import { BASE_URL } from '../config/constants';
 import { RootState } from '../app/store';
 

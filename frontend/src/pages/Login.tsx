@@ -17,7 +17,7 @@ import googleLogo from '../assets/oauth2/google-logo.png';
 import githubLogo from '../assets/oauth2/github-logo.png';
 import { GOOGLE_AUTH_URL, GITHUB_AUTH_URL } from '../config/constants';
 import { Alert, Divider, Zoom } from '@mui/material';
-import { LoginRequestBody } from '../types/LoginRequestBody';
+import { LoginRequestBody } from '../types/auth/LoginRequestBody';
 import { useLoginUserMutation } from '../app/api/auth/authApi';
 import { useAppDispatch } from '../app/hooks';
 import { setUser } from '../features/authSlice';

@@ -1,7 +1,9 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { BASE_URL } from '../../../config/constants';
-import { LoginResponse } from '../../../types/LoginResponse';
-import { LoginRequestBody } from '../../../types/LoginRequestBody';
+import { LoginResponse } from '../../../types/auth/LoginResponse';
+import { LoginRequestBody } from '../../../types/auth/LoginRequestBody';
+import { SignUpResponse } from '../../../types/auth/SignUpResponse';
+import { SignUpRequestBody } from '../../../types/auth/SignUpRequestBody';
 
 export const authApi = createApi({
   reducerPath: "authApi",
@@ -13,16 +15,16 @@ export const authApi = createApi({
       query: (body) => {
         return {
           url: "/auth/login",
-          method: "post",
+          method: "POST",
           body
         };
       },
     }),
-    signUp: builder.mutation<LoginResponse, LoginRequestBody>({
+    signUp: builder.mutation<SignUpResponse, SignUpRequestBody>({
       query: (body) => {
         return {
-          url: "/auth/login",
-          method: "post",
+          url: "/auth/register",
+          method: "POST",
           body
         };
       },
@@ -30,4 +32,4 @@ export const authApi = createApi({
   }),
 });
 
-export const { useLoginUserMutation } = authApi;
+export const { useLoginUserMutation, useSignUpMutation } = authApi;

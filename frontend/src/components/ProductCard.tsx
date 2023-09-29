@@ -2,7 +2,7 @@
 import React from 'react';
 import { Card, CardMedia, CardContent, Typography, ButtonBase, CardActions, Box, Button, Fade } from '@mui/material';
 import { BASE_URL } from '../config/constants';
-import { Product } from '../types/ProductData';
+import { Product } from '../types/product/ProductData';
 import CustomNumberInput from '../components/CustomNumberInput';
 import { Link as RouterLink } from 'react-router-dom';
 
