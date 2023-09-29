@@ -13,9 +13,11 @@ import { CardMedia, IconButton, Typography } from '@mui/material';
 import { BASE_URL } from '../config/constants';
 import { useDeleteShoppingCartMutation, useGetShoppingCartQuery } from '../app/api/shoppingCartApi';
 import { useEffect } from 'react';
-import { CartItem, Product } from '../types/ShoppingCartResponse';
+import { CartItem } from '../types/ShoppingCartResponse';
 import { useAppDispatch } from '../app/hooks';
 import ShoppingCartSkeleton from './ShoppingCartSkeleton';
+import { toast } from 'react-toastify';
+import { useThemeContext } from '../theme/ThemeContextProvider';
 
 
 function ccyFormat(num: number) {
@@ -26,7 +28,7 @@ const ShoppingCartTable = () => {
   const { cartItems } = useSelector(selectShoppingCart);
   const dispatch = useAppDispatch();
   const { data: getCartData, error, isLoading, isSuccess: getCartSuccess, } = useGetShoppingCartQuery();
-
+  const { mode } = useThemeContext();
 
   useEffect(() => {
     if (cartItems.length === 0) {
@@ -66,7 +68,34 @@ const ShoppingCartTable = () => {
   }, 0);
 
   const handleDelete = (cartItem: CartItem) => {
-    deleteShoppingCart(cartItem);
+    deleteShoppingCart(cartItem)
+    .unwrap()
+    .then(() => {
+      toast.success('Deleted Item!', {
+        position: "top-right",
+        autoClose: 1000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: true,
+        pauseOnFocusLoss: false,
+        progress: undefined,
+        theme: mode === 'light' ? 'light' : 'dark',
+      });
+    })
+    .catch(() => {
+      toast.error('Failed to delete Item!', {
+        position: "top-right",
+        autoClose: 1000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: true,
+        pauseOnFocusLoss: false,
+        progress: undefined,
+        theme: mode === 'light' ? 'light' : 'dark',
+      });
+    });
   }
 
   return (
