@@ -23,6 +23,7 @@ import { useShoppingCartAddMutation } from '../app/api/shoppingCartApi';
 import { toast } from 'react-toastify';
 import { useThemeContext } from '../theme/ThemeContextProvider';
 import { setCartItems } from '../features/shoppingCartSlice';
+import ItemAddedToCart from '../components/ItemAddedToCart';
 
 const Products = () => {
   const [openModal, setOpenModal] = useState<boolean>(false);
@@ -84,9 +85,9 @@ const Products = () => {
   useEffect(() => {
     if (isCartAddSuccess && cartData) {
       dispatch(setCartItems({ cartItems: cartData.cartItems }));
-      toast.success('Item added to cart!', {
+      toast.success(<ItemAddedToCart/>, {
         position: "top-right",
-        autoClose: 2000,
+        autoClose: 5000,
         hideProgressBar: false,
         closeOnClick: true,
         pauseOnHover: false,
