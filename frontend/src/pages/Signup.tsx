@@ -18,6 +18,7 @@ import { useEffect, useState } from 'react';
 import { Alert, Zoom } from '@mui/material';
 import { toast } from 'react-toastify';
 import { useThemeContext } from '../theme/ThemeContextProvider';
+import ReCAPTCHA from "react-google-recaptcha";
 
 function Copyright(props: any) {
   return (
@@ -33,6 +34,7 @@ function Copyright(props: any) {
 }
 
 const SignUp = () => {
+  const GOOGLE_RECAPTCHA_KEY = import.meta.env.VITE_GOOGLE_RECAPTCHA_KEY;
   const [error, setError] = useState<string | null>(null);
   const { mode } = useThemeContext();
   const [signUp,
@@ -82,6 +84,16 @@ const SignUp = () => {
     signUp(body);
   };
 
+  const [captachaDone, setCaptchaDone] = useState<boolean>(false);
+
+  const onCaptchaChange = () => {
+    setCaptchaDone(true);
+  }
+
+  const onCaptchaError = () => {
+    setCaptchaDone(false);
+  }
+
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
@@ -100,83 +112,91 @@ const SignUp = () => {
           Sign up
         </Typography>
         {!isSuccess && (
-        <Box component="form" onSubmit={handleSubmit} sx={{ mt: 3 }}>
-          <Grid container spacing={2}>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                autoComplete="given-name"
-                name="firstName"
-                required
-                fullWidth
-                id="firstName"
-                label="First Name"
-                autoFocus
-              />
+          <Box component="form" onSubmit={handleSubmit} sx={{ mt: 3 }}>
+            <Grid container spacing={2}>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  autoComplete="given-name"
+                  name="firstName"
+                  required
+                  fullWidth
+                  id="firstName"
+                  label="First Name"
+                  autoFocus
+                />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  required
+                  fullWidth
+                  id="lastName"
+                  label="Last Name"
+                  name="lastName"
+                  autoComplete="family-name"
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  required
+                  fullWidth
+                  id="email"
+                  label="Email Address"
+                  name="email"
+                  autoComplete="email"
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  required
+                  fullWidth
+                  id="username"
+                  label="Username"
+                  name="username"
+                  autoComplete="username"
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  required
+                  fullWidth
+                  name="password"
+                  label="Password"
+                  type="password"
+                  id="password"
+                  autoComplete="new-password"
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <FormControlLabel
+                  control={<Checkbox value="allowExtraEmails" color="primary" />}
+                  label="I want to receive inspiration, marketing promotions and updates via email."
+                />
+              </Grid>
             </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                required
-                fullWidth
-                id="lastName"
-                label="Last Name"
-                name="lastName"
-                autoComplete="family-name"
+            <Box mt={2} display="flex" justifyContent="center">
+              <ReCAPTCHA
+                sitekey={GOOGLE_RECAPTCHA_KEY}
+                onChange={onCaptchaChange}
+                onError={onCaptchaError}
               />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                required
-                fullWidth
-                id="email"
-                label="Email Address"
-                name="email"
-                autoComplete="email"
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                required
-                fullWidth
-                id="username"
-                label="Username"
-                name="username"
-                autoComplete="username"
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                required
-                fullWidth
-                name="password"
-                label="Password"
-                type="password"
-                id="password"
-                autoComplete="new-password"
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <FormControlLabel
-                control={<Checkbox value="allowExtraEmails" color="primary" />}
-                label="I want to receive inspiration, marketing promotions and updates via email."
-              />
-            </Grid>
-          </Grid>
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            sx={{ mt: 3, mb: 2 }}
-          >
-            Sign Up
-          </Button>
-          {error && (
-            <Zoom in={!!error}>
-              <Alert severity="error">
-                {error}
-              </Alert>
-            </Zoom>
-          )}
-        </Box>
+            </Box>
+            <Button
+              disabled={!captachaDone}
+              type="submit"
+              fullWidth
+              variant="contained"
+              sx={{ mt: 3, mb: 2 }}
+            >
+              Sign Up
+            </Button>
+            {error && (
+              <Zoom in={!!error}>
+                <Alert severity="error">
+                  {error}
+                </Alert>
+              </Zoom>
+            )}
+          </Box>
         )}
         {isSuccess && (
           <>
