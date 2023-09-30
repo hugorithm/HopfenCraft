@@ -36,6 +36,8 @@ function Copyright(props: any) {
 const SignUp = () => {
   const [error, setError] = useState<string | null>(null);
   const { mode } = useThemeContext();
+  const [theme, setTheme] = useState<any>(mode);
+
   const [signUp,
     { data,
       isSuccess,
@@ -92,6 +94,10 @@ const SignUp = () => {
   const onCaptchaError = () => {
     setCaptchaDone(false);
   }
+
+  useEffect(() => {
+    setTheme(mode === 'light' ? 'light' : 'dark');
+  }, [mode]);
 
   return (
     <Container component="main" maxWidth="xs">
@@ -172,12 +178,12 @@ const SignUp = () => {
                 />
               </Grid>
             </Grid>
-            <Box mt={2} display="flex" justifyContent="center">
+            <Box mt={2} display="flex" justifyContent="center"  key={theme}>
               <ReCAPTCHA
                 sitekey={import.meta.env.VITE_GOOGLE_RECAPTCHA_KEY}
                 onChange={onCaptchaChange}
                 onError={onCaptchaError}
-                theme={mode === 'light' ? 'light' : 'dark'}
+                theme={theme}
               />
             </Box>
             <Button
