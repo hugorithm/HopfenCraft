@@ -16,7 +16,7 @@ import { SignUpRequestBody } from '../types/auth/SignUpRequestBody';
 import { useSignUpMutation } from '../app/api/auth/authApi';
 import { useEffect, useState } from 'react';
 import { Alert, Zoom } from '@mui/material';
-import { toast } from 'react-toastify';
+import { Theme as ToastifyTheme, toast } from 'react-toastify';
 import { useThemeContext } from '../theme/ThemeContextProvider';
 import ReCAPTCHA from "react-google-recaptcha";
 
@@ -34,7 +34,6 @@ function Copyright(props: any) {
 }
 
 const SignUp = () => {
-  const GOOGLE_RECAPTCHA_KEY = import.meta.env.VITE_GOOGLE_RECAPTCHA_KEY;
   const [error, setError] = useState<string | null>(null);
   const { mode } = useThemeContext();
   const [signUp,
@@ -57,7 +56,7 @@ const SignUp = () => {
         draggable: true,
         pauseOnFocusLoss: false,
         progress: undefined,
-        theme: mode === 'light' ? 'light' : 'dark',
+        theme: mode as ToastifyTheme,
       });
     }
   }, [isSuccess])
@@ -175,9 +174,10 @@ const SignUp = () => {
             </Grid>
             <Box mt={2} display="flex" justifyContent="center">
               <ReCAPTCHA
-                sitekey={GOOGLE_RECAPTCHA_KEY}
+                sitekey={import.meta.env.VITE_GOOGLE_RECAPTCHA_KEY}
                 onChange={onCaptchaChange}
                 onError={onCaptchaError}
+                theme={mode === 'light' ? 'light' : 'dark'}
               />
             </Box>
             <Button
