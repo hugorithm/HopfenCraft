@@ -52,7 +52,7 @@ const router = createBrowserRouter(
       <Route path="contacts" element={<Contacts />} errorElement={<CustomError />} />
       <Route path='products' element={<Products />} errorElement={<CustomError />} />
       <Route path='signup' element={<SignUp />} errorElement={<CustomError />} />
-      <Route path="oauth2/redirect" element={<OAuth2RedirectHandler/>} />
+      <Route path="oauth2/redirect" element={<OAuth2RedirectHandler/>} errorElement={<CustomError />} />
       <Route element={<RequireAuth />}>
         <Route path='profile' element={<Profile />} errorElement={<CustomError />} />
         <Route path='shopping-cart' element={<ShoppingCart />} errorElement={<CustomError />} />
