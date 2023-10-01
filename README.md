@@ -46,7 +46,69 @@
 - **PayPal Integration**: Pay for your beer orders using PayPal or credit card.
 - **Secure Transactions**: Rest assured that your payment information is handled securely.
 
- 
+## Installation
+
+To run the HopfenCraft application, you'll need to set up the following environment variables in both the frontend and backend components:
+
+### Frontend (React)
+
+In the `frontend` directory, create a `.env` file with the following variable:
+
+- `VITE_GOOGLE_RECAPTCHA_KEY`: Replace with your Google reCAPTCHA site key.
+
+Example `.env` file content:
+```env
+VITE_GOOGLE_RECAPTCHA_KEY=your-recaptcha-site-key
+```
+
+### Backend (Java Spring Boot)
+
+To configure the backend of the HopfenCraft application, you'll need to set the following environment variables:
+
+- `DATABASE_URL`: Replace with your PostgreSQL database URL.
+- `DB_PASSWORD`: Replace with your PostgreSQL database password.
+- `DB_USERNAME`: Replace with your PostgreSQL database username.
+- `EMAIL_HOST`: Replace with your email host configuration.
+- `EMAIL_PASSWORD`: Replace with your email password.
+- `EMAIL_PORT`: Replace with your email port number.
+- `EMAIL_USERNAME`: Replace with your email username.
+- `GITHUB_CLIENT`: Replace with your GitHub OAuth2 client ID.
+- `GITHUB_SECRET`: Replace with your GitHub OAuth2 client secret.
+- `GOOGLE_CLIENT`: Replace with your Google OAuth2 client ID.
+- `GOOGLE_SECRET`: Replace with your Google OAuth2 client secret.
+- `JWT_SIGNING_KEY`: Replace with your JWT signing key.
+- `PAYPAL_CLIENT_ID`: Replace with your PayPal client ID.
+- `PAYPAL_CLIENT_SECRET`: Replace with your PayPal client secret.
+- `RSA_PRIVATE_EXPONENT`: Replace with your RSA private exponent.
+- `RSA_PRIVATE_MODULUS`: Replace with your RSA private modulus.
+- `RSA_PUBLIC_EXPONENT`: Replace with your RSA public exponent.
+- `RSA_PUBLIC_MODULUS`: Replace with your RSA public modulus.
+- `UPLOAD_FOLDER_PATH`: Replace with the path for file uploads.
+
+Example `.env` file content for backend:
+```env
+DATABASE_URL=your-database-url
+DB_PASSWORD=your-database-password
+DB_USERNAME=your-database-username
+EMAIL_HOST=your-email-host
+EMAIL_PASSWORD=your-email-password
+EMAIL_PORT=your-email-port
+EMAIL_USERNAME=your-email-username
+GITHUB_CLIENT=your-github-client-id
+GITHUB_SECRET=your-github-client-secret
+GOOGLE_CLIENT=your-google-client-id
+GOOGLE_SECRET=your-google-client-secret
+JWT_SIGNING_KEY=your-jwt-signing-key
+PAYPAL_CLIENT_ID=your-paypal-client-id
+PAYPAL_CLIENT_SECRET=your-paypal-client-secret
+RSA_PRIVATE_EXPONENT=your-rsa-private-exponent
+RSA_PRIVATE_MODULUS=your-rsa-private-modulus
+RSA_PUBLIC_EXPONENT=your-rsa-public-exponent
+RSA_PUBLIC_MODULUS=your-rsa-public-modulus
+UPLOAD_FOLDER_PATH=your-upload-folder-path
+```
+
+
 ## License
 
 This repository is released under the [MIT license](https://opensource.org/licenses/MIT).
