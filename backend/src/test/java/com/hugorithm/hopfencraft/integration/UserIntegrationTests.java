@@ -6,7 +6,7 @@ import com.hugorithm.hopfencraft.dto.authentication.LoginResponseDTO;
 import com.hugorithm.hopfencraft.dto.authentication.PasswordResetDTO;
 import com.hugorithm.hopfencraft.model.ApplicationUser;
 import com.hugorithm.hopfencraft.repository.UserRepository;
-import com.hugorithm.hopfencraft.service.TokenService;
+import com.hugorithm.hopfencraft.service.JwtService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -30,7 +30,7 @@ public class UserIntegrationTests {
     @Autowired
     private UserRepository userRepository;
     @Autowired
-    private TokenService tokenService;
+    private JwtService jwtService;
 
     @Test
     public void sendPasswordResetRequest_ValidUser_ReturnsOk() {
@@ -162,7 +162,7 @@ public class UserIntegrationTests {
 
         ApplicationUser user = userRepository.findByUsername("testuser").get();
 
-        String token = tokenService.URLEncodeToken(user.getPasswordResetToken());
+        String token = jwtService.URLEncodeToken(user.getPasswordResetToken());
 
 
         ResponseEntity<?> response2 = restTemplate.exchange(

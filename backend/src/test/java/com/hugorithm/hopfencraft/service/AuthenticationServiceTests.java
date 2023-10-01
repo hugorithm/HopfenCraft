@@ -43,7 +43,7 @@ public class AuthenticationServiceTests {
     @Mock
     private AuthenticationManager authenticationManager;
     @Mock
-    private TokenService tokenService;
+    private JwtService jwtService;
     @Mock
     private EmailService emailService;
     @Mock
@@ -112,7 +112,7 @@ public class AuthenticationServiceTests {
 
         // Mock dependencies
         when(authenticationManager.authenticate(any())).thenReturn(auth);
-        when(tokenService.generateJwt(auth)).thenReturn("jwtToken");
+        when(jwtService.generateJwt(auth)).thenReturn("jwtToken");
         when(userRepository.findByUsername("validusername")).thenReturn(Optional.of(user));
 
         // Call the service method

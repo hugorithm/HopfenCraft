@@ -5,7 +5,7 @@ import com.hugorithm.hopfencraft.model.ApplicationUser;
 import com.hugorithm.hopfencraft.model.Role;
 import com.hugorithm.hopfencraft.repository.RoleRepository;
 import com.hugorithm.hopfencraft.repository.UserRepository;
-import com.hugorithm.hopfencraft.service.TokenService;
+import com.hugorithm.hopfencraft.service.JwtService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
@@ -28,7 +28,7 @@ public class OAuth2LoginSuccessHandler extends SavedRequestAwareAuthenticationSu
 
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
-    private final TokenService tokenService;
+    private final JwtService jwtService;
     private final HttpCookieOAuth2AuthorizationRequestRepository httpCookieOAuth2AuthorizationRequestRepository;
 
     @Override
@@ -128,7 +128,7 @@ public class OAuth2LoginSuccessHandler extends SavedRequestAwareAuthenticationSu
 
         String targetUrl = redirectUri.orElse(getDefaultTargetUrl());
 
-        String token = tokenService.generateOAuth2Jwt(authentication);
+        String token = jwtService.generateOAuth2Jwt(authentication);
 
         return UriComponentsBuilder.fromUriString(targetUrl)
                 .queryParam("token", token)

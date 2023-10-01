@@ -28,9 +28,6 @@ public class UserServiceTests {
     private JwtService jwtService;
 
     @Mock
-    private TokenService tokenService;
-
-    @Mock
     private EmailService emailService;
 
     @Mock
@@ -53,9 +50,9 @@ public class UserServiceTests {
         user.setPasswordResetTokenExpiration(LocalDateTime.now().plusDays(1));
 
         when(jwtService.getUserFromJwt(any())).thenReturn(user);
-        when(tokenService.generatePasswordResetToken())
+        when(jwtService.generatePasswordResetToken())
                 .thenReturn("2bcb63ba728ea29e9763612ae885659ec0e2c6dc9d0d54ee7b8fb1e620aeb3e4|2023-09-11T19:23:04.862591200");
-        when(tokenService.URLDecodeToken(any()))
+        when(jwtService.URLDecodeToken(any()))
                 .thenReturn("2bcb63ba728ea29e9763612ae885659ec0e2c6dc9d0d54ee7b8fb1e620aeb3e4|2023-09-11T19:23:04.862591200");
         when(userRepository.save(any())).thenReturn(user);
 

@@ -43,7 +43,7 @@ public class AuthenticationService {
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
-    private final TokenService tokenService;
+    private final JwtService jwtService;
     private final EmailService emailService;
     private final static Logger LOGGER = LoggerFactory.getLogger(AuthenticationService.class);
 
@@ -102,7 +102,7 @@ public class AuthenticationService {
     public ResponseEntity<LoginResponseDTO> login(LoginDTO dto) {
         try {
             Authentication auth = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(dto.getUsername(), dto.getPassword()));
-            String token = tokenService.generateJwt(auth);
+            String token = jwtService.generateJwt(auth);
             ApplicationUser user = userRepository.findByUsername(dto.getUsername()).orElseThrow(() -> new UsernameNotFoundException("User not found"));
             LoginResponseDTO response = new LoginResponseDTO(user.getUsername(), user.getEmail(), token);
 

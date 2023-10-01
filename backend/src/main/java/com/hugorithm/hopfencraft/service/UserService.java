@@ -32,7 +32,6 @@ import java.util.Optional;
 @AllArgsConstructor(onConstructor = @__(@Autowired))
 public class UserService implements UserDetailsService {
     private final JwtService jwtService;
-    private final TokenService tokenService;
     private final EmailService emailService;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
@@ -83,8 +82,8 @@ public class UserService implements UserDetailsService {
     public ResponseEntity<String> sendPasswordResetRequest(Jwt jwt) {
         try {
             ApplicationUser user = jwtService.getUserFromJwt(jwt);
-            String token = tokenService.generatePasswordResetToken();
-            String decodedToken = tokenService.URLDecodeToken(token);
+            String token = jwtService.generatePasswordResetToken();
+            String decodedToken = jwtService.URLDecodeToken(token);
             LocalDateTime expirationDate = extractDateTimeFromToken(decodedToken);
             user.setPasswordResetTokenExpiration(expirationDate);
             user.setPasswordResetToken(decodedToken);
@@ -106,7 +105,7 @@ public class UserService implements UserDetailsService {
 
     private ApplicationUser verifyPasswordResetToken(Jwt jwt, String token) throws InvalidTokenException {
         ApplicationUser user = jwtService.getUserFromJwt(jwt);
-        String decodedToken = tokenService.URLDecodeToken(token);
+        String decodedToken = jwtService.URLDecodeToken(token);
         LocalDateTime expirationDate = extractDateTimeFromToken(decodedToken);
 
         if (!decodedToken.equals(user.getPasswordResetToken())) {
