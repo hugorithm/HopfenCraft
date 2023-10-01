@@ -18,6 +18,8 @@ import org.springframework.transaction.annotation.Transactional;
 @AllArgsConstructor(onConstructor = @__(@Autowired))
 public class OAuth2Service {
     private final JwtService jwtService;
+    private final ShoppingCartService shoppingCartService;
+    private final OrderService orderService;
     private final static Logger LOGGER = LoggerFactory.getLogger(OAuth2Service.class);
 
     public ResponseEntity<OAuth2ApplicationUserDTO> getOAuth2User(Jwt jwt) {
@@ -32,8 +34,8 @@ public class OAuth2Service {
                             user.getEmail(),
                             user.getFirstName(),
                             user.getLastName(),
-                            user.getCartItems(),
-                            user.getOrders(),
+                            shoppingCartService.convertCartItemListToCartItemDTOList(user.getCartItems()),
+                            orderService.ConvertOrderListIntoOrderDTOList(user.getOrders()),
                             user.getAttributes()
                     ));
         } catch (UsernameNotFoundException ex) {
