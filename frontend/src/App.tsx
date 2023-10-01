@@ -24,11 +24,9 @@ import { useEffect } from 'react';
 import { setUser } from './features/authSlice';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.min.css';
-import { LoginResponse } from './types/LoginResponse';
-import { useGetShoppingCartQuery } from './app/api/shoppingCartApi';
-import { selectShoppingCart, setCartItems } from './features/shoppingCartSlice';
-import { useSelector } from 'react-redux';
+import { LoginResponse } from './types/auth/LoginResponse';
 import ShoppingCart from './pages/ShoppingCart';
+import OAuth2RedirectHandler from './components/auth/OAuth2RedirectHandler';
 
 
 const Root = () => {
@@ -54,6 +52,7 @@ const router = createBrowserRouter(
       <Route path="contacts" element={<Contacts />} errorElement={<CustomError />} />
       <Route path='products' element={<Products />} errorElement={<CustomError />} />
       <Route path='signup' element={<SignUp />} errorElement={<CustomError />} />
+      <Route path="oauth2/redirect" element={<OAuth2RedirectHandler/>} />
       <Route element={<RequireAuth />}>
         <Route path='profile' element={<Profile />} errorElement={<CustomError />} />
         <Route path='shopping-cart' element={<ShoppingCart />} errorElement={<CustomError />} />
