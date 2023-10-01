@@ -38,39 +38,39 @@ const Profile = () => {
     <>
       <CssBaseline />
       <Fade in={true} timeout={1000}>
-      <Container maxWidth="sm">
-        <Box
-          sx={{
-            mt: 8,
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-          }}
-        >
-          <Typography component="h1" variant="h2" align="center" color="text.primary" gutterBottom>
-            Welcome {username}!
-          </Typography>
-          <Typography variant="h5" align="center" color="text.secondary" paragraph>
-            Welcome to your HopfenCraft profile. Here, you can manage your account and preferences.
-          </Typography>
-          <Stack
-            sx={{ pt: 4 }}
-            direction="row"
-            spacing={2}
-            justifyContent="center"
+        <Container maxWidth="sm">
+          <Box
+            sx={{
+              mt: 8,
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+            }}
           >
-            <Button
-              variant="contained"
-              color="primary"
-              component={RouterLink}
-              to="/edit-profile"
-              onClick={handleEditProfileClick}
+            <Typography component="h1" variant="h2" align="center" color="text.primary" gutterBottom>
+              Welcome {username}!
+            </Typography>
+            <Typography variant="h5" align="center" color="text.secondary" paragraph>
+              Welcome to your HopfenCraft profile. Here, you can manage your account and preferences.
+            </Typography>
+            <Stack
+              sx={{ pt: 4 }}
+              direction="row"
+              spacing={2}
+              justifyContent="center"
             >
-              Edit Profile
-            </Button>
-          </Stack>
-        </Box>
-      </Container>
+              <Button
+                variant="contained"
+                color="primary"
+                component={RouterLink}
+                to="/edit-profile"
+                onClick={handleEditProfileClick}
+              >
+                Edit Profile
+              </Button>
+            </Stack>
+          </Box>
+        </Container>
       </Fade>
     </>
   );
