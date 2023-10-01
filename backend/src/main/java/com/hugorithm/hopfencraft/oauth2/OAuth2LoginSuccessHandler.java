@@ -1,4 +1,4 @@
-package com.hugorithm.hopfencraft.config;
+package com.hugorithm.hopfencraft.oauth2;
 
 import com.hugorithm.hopfencraft.enums.AuthProvider;
 import com.hugorithm.hopfencraft.model.ApplicationUser;
@@ -66,17 +66,17 @@ public class OAuth2LoginSuccessHandler extends SavedRequestAwareAuthenticationSu
             Map<String, Object> attributes = principal.getAttributes();
             String email = attributes.getOrDefault("email", "").toString();
             String name = attributes.getOrDefault("name", "").toString();
-            String username = attributes.getOrDefault("login", "").toString();
-            String id = attributes.getOrDefault("id", "").toString();
+            String login = attributes.getOrDefault("login", "").toString();
+            String username = attributes.getOrDefault("id", "").toString();
 
-            userRepository.findByUsername(id)
+            userRepository.findByUsername(username)
                     .ifPresentOrElse(user -> {
                         DefaultOAuth2User newUser = new DefaultOAuth2User(user.getAuthorities(), attributes, "id");
                         Authentication securityAuth = new OAuth2AuthenticationToken(newUser, user.getAuthorities(), oAuth2AuthenticationToken.getAuthorizedClientRegistrationId());
                         SecurityContextHolder.getContext().setAuthentication(securityAuth);
                     }, () -> {
                         ApplicationUser userEntity = createUser(email, name);
-                        userEntity.setUsername(id);
+                        userEntity.setUsername(username);
                         userEntity.setAttributes(convertMapToStringValues(attributes));
                         userEntity.setAuthProvider(AuthProvider.GITHUB);
 
@@ -109,7 +109,15 @@ public class OAuth2LoginSuccessHandler extends SavedRequestAwareAuthenticationSu
         ApplicationUser userEntity = new ApplicationUser();
         userEntity.setAuthorities(roles);
         userEntity.setEmail(email);
-        userEntity.setFirstName(firstName);
+
+        if (firstName.contains(" ")) {
+            String[] name = firstName.split("\\s+");
+            userEntity.setFirstName(name[0]);
+            userEntity.setLastName(name[1]);
+        } else {
+            userEntity.setFirstName(firstName);
+        }
+
         return userEntity;
     }
 

@@ -1,6 +1,8 @@
 package com.hugorithm.hopfencraft.config;
 
 
+import com.hugorithm.hopfencraft.oauth2.HttpCookieOAuth2AuthorizationRequestRepository;
+import com.hugorithm.hopfencraft.oauth2.OAuth2LoginSuccessHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;

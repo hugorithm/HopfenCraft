@@ -1,4 +1,4 @@
-package com.hugorithm.hopfencraft.config;
+package com.hugorithm.hopfencraft.oauth2;
 
 import com.nimbusds.oauth2.sdk.util.StringUtils;
 import jakarta.servlet.http.Cookie;
