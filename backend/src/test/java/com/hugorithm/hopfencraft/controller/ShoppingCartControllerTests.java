@@ -54,7 +54,7 @@ public class ShoppingCartControllerTests {
 
         CartItemDTO cartItemDTO = new CartItemDTO(1L, new ProductDTO(
                 "test", "test", "test", 2, new BigDecimal("2.5")
-        ), 1, LocalDateTime.now());
+        ), 1, new BigDecimal("2.5"), LocalDateTime.now());
 
         cil.add(cartItemDTO);
         CartResponseDTO resp = new CartResponseDTO(cil);
