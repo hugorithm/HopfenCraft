@@ -30,7 +30,7 @@ const Products = () => {
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [productQuantities, setProductQuantities] = useState<{ [productId: string]: number }>({});
   const { jwt } = useSelector(selectAuth);
-  const { mode } = useThemeContext();
+  const { mode }: any = useThemeContext();
   const { products, loading, error, page, last } = useSelector(selectProducts);
   const dispatch = useAppDispatch();
   const [fadeIn, setFadeIn] = useState(false); 
@@ -94,7 +94,7 @@ const Products = () => {
         draggable: true,
         pauseOnFocusLoss: false,
         progress: undefined,
-        theme: mode === 'light' ? 'light' : 'dark',
+        theme: mode,
       });
     }
   }, [isCartAddSuccess]);
@@ -123,7 +123,7 @@ const Products = () => {
             draggable: true,
             pauseOnFocusLoss: false,
             progress: undefined,
-            theme: mode === 'light' ? 'light' : 'dark',
+            theme: mode,
           });
         } else if (error.status === 404) {
           toast.error('Failed to add item to cart!', {
@@ -135,7 +135,7 @@ const Products = () => {
             draggable: true,
             pauseOnFocusLoss: false,
             progress: undefined,
-            theme: mode === 'light' ? 'light' : 'dark',
+            theme: mode,
           });
         }
       })

@@ -28,7 +28,7 @@ const ShoppingCartTable = () => {
   const { cartItems } = useSelector(selectShoppingCart);
   const dispatch = useAppDispatch();
   const { data: getCartData, error, isLoading, isSuccess: getCartSuccess, } = useGetShoppingCartQuery();
-  const { mode } = useThemeContext();
+  const { mode }: any = useThemeContext();
 
   useEffect(() => {
     if (cartItems.length === 0) {
@@ -80,7 +80,7 @@ const ShoppingCartTable = () => {
         draggable: true,
         pauseOnFocusLoss: false,
         progress: undefined,
-        theme: mode === 'light' ? 'light' : 'dark',
+        theme: mode,
       });
     })
     .catch(() => {
@@ -93,7 +93,7 @@ const ShoppingCartTable = () => {
         draggable: true,
         pauseOnFocusLoss: false,
         progress: undefined,
-        theme: mode === 'light' ? 'light' : 'dark',
+        theme: mode,
       });
     });
   }
