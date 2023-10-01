@@ -43,8 +43,8 @@ public class ShoppingCartService {
                 .orElseThrow(() -> new ProductNotFoundException("Product not found with ID: " + productId));
     }
 
-    private ResponseEntity<CartResponseDTO> getCartResponseDTOResponseEntity(List<CartItem> cartItems) {
-        List<CartItemDTO> cartItemDTOs = cartItems.stream()
+    public List<CartItemDTO> convertCartItemListToCartItemDTOList(List<CartItem> cartItems) {
+        return cartItems.stream()
                 .map(ci -> new CartItemDTO(
                         ci.getCartItemId(),
                         new ProductDTO(
@@ -62,8 +62,6 @@ public class ShoppingCartService {
                         ci.getAddedDateTime()
                 ))
                 .toList();
-
-        return ResponseEntity.ok(new CartResponseDTO(cartItemDTOs));
     }
 
     public ResponseEntity<CartResponseDTO> addToCart(Jwt jwt, CartRegistrationDTO dto) {
@@ -87,7 +85,7 @@ public class ShoppingCartService {
                 cartItemRepository.save(cartItem);
                 cartItems.add(cartItem);
 
-                return getCartResponseDTOResponseEntity(cartItems);
+                return ResponseEntity.ok(new CartResponseDTO(convertCartItemListToCartItemDTOList(cartItems)));
             } else {
                 throw new CartItemQuantityExceedsAvailableException("Requested quantity exceeds available quantity");
             }
@@ -112,7 +110,7 @@ public class ShoppingCartService {
                 cartItems.remove(cartItem);
                 cartItemRepository.delete(cartItem);
 
-                return getCartResponseDTOResponseEntity(cartItems);
+                return ResponseEntity.ok(new CartResponseDTO(convertCartItemListToCartItemDTOList(cartItems)));
             } else {
                 throw new CartItemNotFoundException("Cart item not found with Id: " + cartItemId);
             }
@@ -134,7 +132,7 @@ public class ShoppingCartService {
             ApplicationUser user = jwtService.getUserFromJwt(jwt);
             List<CartItem> cartItems = user.getCartItems();
 
-            return getCartResponseDTOResponseEntity(cartItems);
+            return ResponseEntity.ok(new CartResponseDTO(convertCartItemListToCartItemDTOList(cartItems)));
         } catch (UsernameNotFoundException | NoSuchElementException ex) {
             LOGGER.error(ex.getMessage(), ex);
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
