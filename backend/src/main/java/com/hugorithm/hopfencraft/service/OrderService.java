@@ -1,8 +1,8 @@
 package com.hugorithm.hopfencraft.service;
 
 import com.hugorithm.hopfencraft.dto.cart.CartItemDTO;
+import com.hugorithm.hopfencraft.dto.order.OrderDTO;
 import com.hugorithm.hopfencraft.dto.order.OrderResponseDTO;
-import com.hugorithm.hopfencraft.dto.product.ProductDTO;
 import com.hugorithm.hopfencraft.enums.OrderStatus;
 import com.hugorithm.hopfencraft.exception.order.InsufficientStockException;
 import com.hugorithm.hopfencraft.exception.order.OrderCartIsEmptyException;
@@ -33,25 +33,18 @@ public class OrderService {
     private final JwtService jwtService;
     private final OrderRepository orderRepository;
     private final ProductRepository productRepository;
+    private final ShoppingCartService shoppingCartService;
     private final static Logger LOGGER = LoggerFactory.getLogger(OrderService.class);
 
-    private List<CartItemDTO> convertCartItemIntoDTO(List<CartItem> cartItems) {
-        return cartItems.stream()
-                .map(ci -> new CartItemDTO(
-                        ci.getCartItemId(),
-                        new ProductDTO(
-                                ci.getProduct().getProductId(),
-                                ci.getProduct().getBrand(),
-                                ci.getProduct().getName(),
-                                ci.getProduct().getDescription(),
-                                ci.getProduct().getStockQuantity(),
-                                ci.getProduct().getPrice(),
-                                Product.getCurrency(),
-                                ci.getProduct().getRegisterDateTime()
-                        ),
-                        ci.getQuantity(),
-                        ci.getTotal(),
-                        ci.getAddedDateTime()
+    public List<OrderDTO> ConvertOrderListIntoOrderDTOList(List<Order> orderList) {
+
+        return orderList.stream()
+                .map(o -> new OrderDTO(
+                        o.getOrderId(),
+                        o.getTotal(),
+                        Product.getCurrency(),
+                        shoppingCartService.convertCartItemListToCartItemDTOList(o.getUser().getCartItems()),
+                        o.getOrderDate()
                 ))
                 .toList();
     }
@@ -76,7 +69,7 @@ public class OrderService {
 
             Order savedOrder = orderRepository.save(order);
 
-            List<CartItemDTO> cartItemsDTO = convertCartItemIntoDTO(cartItems);
+            List<CartItemDTO> cartItemsDTO = shoppingCartService.convertCartItemListToCartItemDTOList(cartItems);
 
             return ResponseEntity.status(HttpStatus.CREATED)
                     .body(new OrderResponseDTO(
