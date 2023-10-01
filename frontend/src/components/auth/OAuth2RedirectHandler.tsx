@@ -26,12 +26,14 @@ const OAuth2RedirectHandler = () => {
   useEffect(() => {
     if (error) {
       console.error(error);
+      navigate("/login");
     }
   }, [error]);
 
   useEffect(() => {
     if (isError) {
       console.error(oAuth2Error);
+      navigate("/login");
     }
   }, [isError]);
 
