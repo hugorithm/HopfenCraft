@@ -19,6 +19,9 @@
     <img alt="PayPal API Version" src="https://img.shields.io/badge/PayPal%20API%20Version-v2.0-blue"/>
     <img alt="PayPal Payment Methods" src="https://img.shields.io/badge/Payment%20Methods-PayPal%2C%20Credit%20Card-orange"/>
     <img alt="Docker" src="https://img.shields.io/badge/Docker-Container-blue?style=flat&logo=docker" />
+    <img alt="GitHub OAuth2" src="https://img.shields.io/badge/GitHub%20OAuth2-Success-181717?style=flat&logo=github"/>
+    <img alt="Google OAuth2" src="https://img.shields.io/badge/Google%20OAuth2-Success-4285F4?style=flat&logo=google"/>
+    <img alt="Google reCAPTCHA" src="https://img.shields.io/badge/Google%20reCAPTCHA-Success-43A047?style=flat&logo=google"/>
 </p>
 
 
