@@ -21,7 +21,7 @@ export const store = configureStore({
   middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(authApi.middleware, shoppingCartApi.middleware, productApi.middleware),
 });
 
-// ... (AppDispatch and RootState code as shown in the previous message)
+
 setupListeners(store.dispatch);
 
 export type RootState = ReturnType<typeof store.getState>;
