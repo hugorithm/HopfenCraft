@@ -9,7 +9,7 @@ import Paper from '@mui/material/Paper';
 import { useSelector } from 'react-redux';
 import { selectShoppingCart, setCartItems } from '../features/shoppingCartSlice';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { CardMedia, IconButton, Typography } from '@mui/material';
+import { Button, CardMedia, IconButton, Typography } from '@mui/material';
 import { BASE_URL } from '../config/constants';
 import { useDeleteShoppingCartMutation, useGetShoppingCartQuery } from '../app/api/shoppingCartApi';
 import { useEffect } from 'react';
@@ -18,6 +18,7 @@ import { useAppDispatch } from '../app/hooks';
 import ShoppingCartSkeleton from './ShoppingCartSkeleton';
 import { toast } from 'react-toastify';
 import { useThemeContext } from '../theme/ThemeContextProvider';
+import { Link as RouterLink } from 'react-router-dom';
 
 
 function ccyFormat(num: number) {
@@ -69,33 +70,33 @@ const ShoppingCartTable = () => {
 
   const handleDelete = (cartItem: CartItem) => {
     deleteShoppingCart(cartItem)
-    .unwrap()
-    .then(() => {
-      toast.success('Deleted Item!', {
-        position: "top-right",
-        autoClose: 1000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: false,
-        draggable: true,
-        pauseOnFocusLoss: false,
-        progress: undefined,
-        theme: mode,
+      .unwrap()
+      .then(() => {
+        toast.success('Deleted Item!', {
+          position: "top-right",
+          autoClose: 1000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: false,
+          draggable: true,
+          pauseOnFocusLoss: false,
+          progress: undefined,
+          theme: mode,
+        });
+      })
+      .catch(() => {
+        toast.error('Failed to delete Item!', {
+          position: "top-right",
+          autoClose: 1000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: false,
+          draggable: true,
+          pauseOnFocusLoss: false,
+          progress: undefined,
+          theme: mode,
+        });
       });
-    })
-    .catch(() => {
-      toast.error('Failed to delete Item!', {
-        position: "top-right",
-        autoClose: 1000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: false,
-        draggable: true,
-        pauseOnFocusLoss: false,
-        progress: undefined,
-        theme: mode,
-      });
-    });
   }
 
   return (
@@ -122,20 +123,20 @@ const ShoppingCartTable = () => {
               </TableCell>
             </TableRow>
           ) : (
-            cartItems.map((cartItem) => (
+            cartItems.map((cartItem : CartItem) => (
               <TableRow key={cartItem.cartItemId}>
                 <TableCell component="th" scope="row">
-                  <CardMedia
-                    component="div"
-                    sx={{
-                      pt: '50.25%',
-                      backgroundSize: 'contain',
-                    }}
-                    image={`${BASE_URL}/product/${cartItem.product.productId}/image`}
-                  />
+                  <ProductImageLink productId={cartItem.product.productId}/>
                 </TableCell>
                 <TableCell>
-                  {cartItem.product.name}
+                  <Button
+                    component={RouterLink}
+                    to={`/product/${cartItem.product.productId}`}
+                    color='inherit'
+                    sx={{ textTransform: 'none' }}
+                  >
+                    {cartItem.product.name}
+                  </Button>
                 </TableCell>
                 <TableCell align="center">{cartItem.quantity}</TableCell>
                 <TableCell align="center">€ {cartItem.total}</TableCell>
@@ -163,4 +164,25 @@ const ShoppingCartTable = () => {
     </TableContainer>
   );
 };
+
+interface ProductImageLinkProps {
+  productId: number; 
+}
+
+const ProductImageLink : React.FC<ProductImageLinkProps> = ({ productId }) => {
+  return (
+    <RouterLink to={`/product/${productId}`}>
+      <CardMedia
+        component="div"
+        sx={{
+          pt: '50.25%',
+          backgroundSize: 'contain',
+          cursor: 'pointer', // Add a pointer cursor for better UX
+        }}
+        image={`${BASE_URL}/product/${productId}/image`}
+      />
+    </RouterLink>
+  );
+};
+
 export default ShoppingCartTable;
