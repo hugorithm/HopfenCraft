@@ -67,7 +67,7 @@ const Review = () => {
         {cartItems.map((cartItem: CartItem) => (
           <ListItem key={cartItem.product.productId} sx={{ py: 1, px: 0 }}>
             <ListItemText primary={cartItem.product.name} secondary={cartItem.product.description} />
-            <Typography variant="body2">€{cartItem.total}</Typography>
+            <Typography variant="body2">{cartItem.quantity} x €{cartItem.product.price}</Typography>
           </ListItem>
         ))}
         <ListItem sx={{ py: 1, px: 0 }}>

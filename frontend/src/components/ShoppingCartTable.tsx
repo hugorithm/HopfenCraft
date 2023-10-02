@@ -139,7 +139,7 @@ const ShoppingCartTable = () => {
                   </Button>
                 </TableCell>
                 <TableCell align="center">{cartItem.quantity}</TableCell>
-                <TableCell align="center">€ {cartItem.total}</TableCell>
+                <TableCell align="center">€ {cartItem.product.price}</TableCell>
                 <TableCell align="center">
                   <IconButton onClick={() => handleDelete(cartItem)} color="secondary" aria-label="delete" size="small">
                     <DeleteIcon />
