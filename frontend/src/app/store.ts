@@ -5,18 +5,20 @@ import authReducer  from '../features/authSlice';
 import productsReducer from '../features/productsSlice'; 
 import shoppingCartReducer from '../features/shoppingCartSlice';
 import { shoppingCartApi } from "./api/shoppingCartApi";
+import { productApi } from "./api/productApi";
 
 const rootReducer = combineReducers({
   auth: authReducer,
   [authApi.reducerPath]: authApi.reducer,
   [shoppingCartApi.reducerPath]: shoppingCartApi.reducer,
+  [productApi.reducerPath] : productApi.reducer,
   shoppingCart: shoppingCartReducer,
   products: productsReducer, 
 });
 
 export const store = configureStore({
   reducer: rootReducer,
-  middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(authApi.middleware, shoppingCartApi.middleware),
+  middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(authApi.middleware, shoppingCartApi.middleware, productApi.middleware),
 });
 
 // ... (AppDispatch and RootState code as shown in the previous message)
