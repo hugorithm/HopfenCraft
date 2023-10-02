@@ -16,16 +16,29 @@ import { useState } from 'react';
 import PaypalPayment from '../components/PaypalPayment';
 
 
-const steps = ['Shipping address', 'Review your order', 'Payment details'];
+const steps = ['Shipping address', 'Review your order', 'Order Confirmation', 'Payment details'];
+const orderId = 12345;
 
-function getStepContent(step: number) {
+const getStepContent = (step: number) => {
   switch (step) {
     case 0:
       return <AddressForm />;
     case 1:
       return <Review />;
     case 2:
-      return <PaypalPayment/>;
+      return (
+        <React.Fragment>
+          <Typography variant="h5" gutterBottom>
+            Thank you for your order!
+          </Typography>
+          <Typography variant="subtitle1">
+            Your order number is #{orderId} We have emailed your order
+            confirmation. Please proceed to the payment.
+          </Typography>
+        </React.Fragment>
+      )
+    case 3:
+      return <PaypalPayment />;
     default:
       throw new Error('Unknown step');
   }
