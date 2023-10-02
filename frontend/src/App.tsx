@@ -28,6 +28,7 @@ import { LoginResponse } from './types/auth/LoginResponse';
 import ShoppingCart from './pages/ShoppingCart';
 import OAuth2RedirectHandler from './components/oauth2/OAuth2RedirectHandler';
 import ProductDetails from './pages/ProductDetails';
+import Checkout from './pages/Checkout';
 
 
 const Root = () => {
@@ -55,6 +56,7 @@ const router = createBrowserRouter(
       <Route path="product/:id" element={<ProductDetails />} errorElement={<CustomError />} />
       <Route path='signup' element={<SignUp />} errorElement={<CustomError />} />
       <Route path="oauth2/redirect" element={<OAuth2RedirectHandler />} errorElement={<CustomError />} />
+      <Route path="checkout" element={<Checkout />} errorElement={<CustomError />} />
       <Route element={<RequireAuth />}>
         <Route path='profile' element={<Profile />} errorElement={<CustomError />} />
         <Route path='shopping-cart' element={<ShoppingCart />} errorElement={<CustomError />} />

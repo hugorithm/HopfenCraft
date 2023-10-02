@@ -4,6 +4,13 @@ import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
 import Grid from '@mui/material/Grid';
+import { useGetShoppingCartQuery } from '../app/api/shoppingCartApi';
+import { useSelector } from 'react-redux';
+import { selectShoppingCart, setCartItems } from '../features/shoppingCartSlice';
+import { Product } from '../types/product/ProductData';
+import { CartItem } from '../types/shopping/ShoppingCartResponse';
+import { useEffect } from 'react';
+import { useAppDispatch } from '../app/hooks';
 
 const products = [
   {
@@ -36,23 +43,37 @@ const payments = [
   { name: 'Expiry date', detail: '04/2024' },
 ];
 
-export default function Review() {
+const Review = () => {
+  const { cartItems } = useSelector(selectShoppingCart);
+  const { data: getCartData, error, isLoading, isSuccess: getCartSuccess, } = useGetShoppingCartQuery();
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    if (cartItems.length === 0) {
+      if (getCartData) {
+        dispatch(setCartItems({ cartItems: getCartData.cartItems }));
+      } else if (error) {
+        console.log(error);
+      }
+    }
+  }, [getCartData]);
+
   return (
     <React.Fragment>
       <Typography variant="h6" gutterBottom>
         Order summary
       </Typography>
       <List disablePadding>
-        {products.map((product) => (
-          <ListItem key={product.name} sx={{ py: 1, px: 0 }}>
-            <ListItemText primary={product.name} secondary={product.desc} />
-            <Typography variant="body2">{product.price}</Typography>
+        {cartItems.map((cartItem: CartItem) => (
+          <ListItem key={cartItem.product.productId} sx={{ py: 1, px: 0 }}>
+            <ListItemText primary={cartItem.product.name} secondary={cartItem.product.description} />
+            <Typography variant="body2">€{cartItem.total}</Typography>
           </ListItem>
         ))}
         <ListItem sx={{ py: 1, px: 0 }}>
           <ListItemText primary="Total" />
           <Typography variant="subtitle1" sx={{ fontWeight: 700 }}>
-            $34.06
+            123
           </Typography>
         </ListItem>
       </List>
@@ -69,19 +90,17 @@ export default function Review() {
             Payment details
           </Typography>
           <Grid container>
-            {payments.map((payment) => (
-              <React.Fragment key={payment.name}>
-                <Grid item xs={6}>
-                  <Typography gutterBottom>{payment.name}</Typography>
-                </Grid>
-                <Grid item xs={6}>
-                  <Typography gutterBottom>{payment.detail}</Typography>
-                </Grid>
-              </React.Fragment>
-            ))}
+            <Grid item xs={6}>
+              <Typography gutterBottom>Payment type</Typography>
+            </Grid>
+            <Grid item xs={6}>
+              <Typography gutterBottom>Paypal</Typography>
+            </Grid>
           </Grid>
         </Grid>
       </Grid>
     </React.Fragment>
   );
 }
+
+export default Review;
