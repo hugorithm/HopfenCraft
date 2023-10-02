@@ -6,6 +6,7 @@ import productsReducer from '../features/productsSlice';
 import shoppingCartReducer from '../features/shoppingCartSlice';
 import { shoppingCartApi } from "./api/shoppingCartApi";
 import { productApi } from "./api/productApi";
+import { rtkQueryErrorLogger } from "./middleware/ErrorHandler";
 
 const rootReducer = combineReducers({
   auth: authReducer,
@@ -18,7 +19,7 @@ const rootReducer = combineReducers({
 
 export const store = configureStore({
   reducer: rootReducer,
-  middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(authApi.middleware, shoppingCartApi.middleware, productApi.middleware),
+  middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(authApi.middleware, shoppingCartApi.middleware, productApi.middleware, rtkQueryErrorLogger),
 });
 
 
