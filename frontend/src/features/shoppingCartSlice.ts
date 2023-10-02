@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { CartItem, ShoppingCartResponse } from '../types/ShoppingCartResponse';
+import { CartItem, ShoppingCartResponse } from '../types/shopping/ShoppingCartResponse';
 
 export interface ShoppingCartState {
   cartItems:  CartItem[];
