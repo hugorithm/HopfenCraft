@@ -1,9 +1,7 @@
 import * as React from 'react';
 import CssBaseline from '@mui/material/CssBaseline';
-import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
-import Toolbar from '@mui/material/Toolbar';
 import Paper from '@mui/material/Paper';
 import Stepper from '@mui/material/Stepper';
 import Step from '@mui/material/Step';
@@ -16,7 +14,7 @@ import { useState } from 'react';
 import PaypalPayment from '../components/PaypalPayment';
 
 
-const steps = ['Shipping address', 'Review your order', 'Order Confirmation', 'Payment details'];
+const steps = ['Shipping address', 'Review your order', 'Order confirmation', 'Payment details'];
 const orderId = 12345;
 
 const getStepContent = (step: number) => {
@@ -89,7 +87,7 @@ export default function Checkout() {
               {getStepContent(activeStep)}
               <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
                 {activeStep !== 0 && (
-                  <Button onClick={handleBack} sx={{ mt: 3, ml: 1 }}>
+                  <Button onClick={handleBack} sx={{ mt: 3, ml: 1 }} color='primary'>
                     Back
                   </Button>
                 )}
