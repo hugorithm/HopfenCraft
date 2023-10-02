@@ -48,6 +48,9 @@ export default function Checkout() {
   const [activeStep, setActiveStep] = useState(0);
 
   const handleNext = () => {
+    if (activeStep === 1) {
+      //TODO: create order POST
+    }
     setActiveStep(activeStep + 1);
   };
 
