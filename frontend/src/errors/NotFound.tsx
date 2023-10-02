@@ -6,7 +6,7 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import { Link as RouterLink } from 'react-router-dom';
 
-function NotFound() {
+const NotFound = () => {
   return (
     <>
       <CssBaseline />
