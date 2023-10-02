@@ -112,7 +112,7 @@ const Products = () => {
     const quantity = productQuantities[productId];
     shoppingCartAdd({ productId, quantity })
       .unwrap()
-      .catch((error) => {
+      .catch((error: {status: number, data: string}) => {
         if (error.status === 400) {
           toast.error('You cannot add that much quantity!', {
             position: "top-right",
