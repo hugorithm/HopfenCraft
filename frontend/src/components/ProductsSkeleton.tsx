@@ -1,4 +1,5 @@
 import { ButtonBase, Card, CardActions, CardContent, Grid, Skeleton, Typography } from "@mui/material";
+import { BASE_URL } from "../config/constants";
 
 const ProductsSkeleton = () => {
 
