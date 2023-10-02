@@ -15,6 +15,15 @@ interface ProductCardProps {
 }
 
 const ProductCard: React.FC<ProductCardProps> = ({ product, handleImageClick, handleChange, addToCart, jwt }) => {
+
+  const truncateDescription = (description: string, maxLength: number) => {
+    if (description.length <= maxLength) {
+      return description;
+    } else {
+      return description.slice(0, maxLength) + '...';
+    }
+  };
+
   return (
     <Fade in={true} timeout={1000}>
       <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
@@ -33,7 +42,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, handleImageClick, ha
           <Typography gutterBottom variant="h6" component="h2">
             {product.name}
           </Typography>
-          <Typography gutterBottom>{product.description}</Typography>
+          <Typography gutterBottom>{truncateDescription(product.description, 300)}</Typography>
           <Typography sx={{ fontWeight: 500 }}>€{product.price}</Typography>
         </CardContent>
         <CardActions
