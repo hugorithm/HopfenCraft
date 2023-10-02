@@ -33,7 +33,7 @@ const Products = () => {
   const { mode }: any = useThemeContext();
   const { products, loading, error, page, last } = useSelector(selectProducts);
   const dispatch = useAppDispatch();
-  const [fadeIn, setFadeIn] = useState(false); 
+  const [fadeIn, setFadeIn] = useState(false);
 
   useEffect(() => {
     if (!fadeIn) {
@@ -85,7 +85,7 @@ const Products = () => {
   useEffect(() => {
     if (isCartAddSuccess && cartData) {
       dispatch(setCartItems({ cartItems: cartData.cartItems }));
-      toast.success(<ItemAddedToCart/>, {
+      toast.success(<ItemAddedToCart />, {
         position: "top-right",
         autoClose: 5000,
         hideProgressBar: false,
@@ -112,9 +112,9 @@ const Products = () => {
     const quantity = productQuantities[productId];
     shoppingCartAdd({ productId, quantity })
       .unwrap()
-      .catch((error: {status: number, data: string}) => {
+      .catch((error: { status: number, data: string }) => {
         if (error.status === 400) {
-          toast.error('You cannot add that much quantity!', {
+          toast.error('Unable to add the selected quantity to your cart. The requested quantity exceeds the available stock.', {
             position: "top-right",
             autoClose: 2000,
             hideProgressBar: false,
@@ -168,45 +168,45 @@ const Products = () => {
         </Box>
       </Modal>
       <main>
-      <Fade in={fadeIn} timeout={1000}>
-        <Box
-          sx={{
-            bgcolor: 'background.paper',
-            mt: 8,
-            mb: 6,
-          }}
-        >
-          <Container maxWidth="sm">
-            <Typography
-              component="h1"
-              variant="h2"
-              align="center"
-              color="text.primary"
-              gutterBottom
-            >
-              Our Beers
-            </Typography>
-            <Typography variant="h5" align="center" color="text.secondary" paragraph>
-              Explore the world of beer,
-              where craftsmanship meets creativity,
-              and every bottle tells a unique story.
-            </Typography>
-            <Typography variant="h5" align="center" color="text.secondary" paragraph>
-              Our collection showcases a curated selection of brews
-              that celebrate the artistry and passion of brewers from
-              around the globe. From refreshing lagers to robust
-              stouts, each beer is a journey of flavor waiting to be
-              savored.
-            </Typography>
-            <Typography variant="h5" align="center" color="text.secondary" paragraph>
-              Join us in raising a glass to the diversity
-              and richness of the beer world—where there's a brew
-              for every palate and a story in every sip.
-              Cheers to the boundless possibilities of beer!
-            </Typography>
-          </Container>
-        </Box>
-      </Fade>
+        <Fade in={fadeIn} timeout={1000}>
+          <Box
+            sx={{
+              bgcolor: 'background.paper',
+              mt: 8,
+              mb: 6,
+            }}
+          >
+            <Container maxWidth="sm">
+              <Typography
+                component="h1"
+                variant="h2"
+                align="center"
+                color="text.primary"
+                gutterBottom
+              >
+                Our Beers
+              </Typography>
+              <Typography variant="h5" align="center" color="text.secondary" paragraph>
+                Explore the world of beer,
+                where craftsmanship meets creativity,
+                and every bottle tells a unique story.
+              </Typography>
+              <Typography variant="h5" align="center" color="text.secondary" paragraph>
+                Our collection showcases a curated selection of brews
+                that celebrate the artistry and passion of brewers from
+                around the globe. From refreshing lagers to robust
+                stouts, each beer is a journey of flavor waiting to be
+                savored.
+              </Typography>
+              <Typography variant="h5" align="center" color="text.secondary" paragraph>
+                Join us in raising a glass to the diversity
+                and richness of the beer world—where there's a brew
+                for every palate and a story in every sip.
+                Cheers to the boundless possibilities of beer!
+              </Typography>
+            </Container>
+          </Box>
+        </Fade>
         <Container sx={{ py: 8 }} maxWidth="md">
           <Grid container spacing={5}>
             {products.length === 0 && loading !== 'succeeded' ? (
