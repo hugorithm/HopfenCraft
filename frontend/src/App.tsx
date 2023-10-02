@@ -16,7 +16,7 @@ import SignUp from './pages/Signup';
 import { ThemeProvider } from "@mui/material";
 import { useThemeContext } from "./theme/ThemeContextProvider";
 import CustomError from './errors/CustomError';
-import NotFound from './errors/404LandingPage';
+import NotFound from './errors/NotFound';
 import Profile from './pages/Profile';
 import RequireAuth from './route/RequireAuth';
 import { useAppDispatch } from './app/hooks';
@@ -26,7 +26,8 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.min.css';
 import { LoginResponse } from './types/auth/LoginResponse';
 import ShoppingCart from './pages/ShoppingCart';
-import OAuth2RedirectHandler from './components/auth/OAuth2RedirectHandler';
+import OAuth2RedirectHandler from './components/oauth2/OAuth2RedirectHandler';
+import ProductDetails from './pages/ProductDetails';
 
 
 const Root = () => {
