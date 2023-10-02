@@ -65,7 +65,7 @@ const Review = () => {
       </Typography>
       <List disablePadding>
         {cartItems.map((cartItem: CartItem) => (
-          <ListItem key={cartItem.product.productId} sx={{ py: 1, px: 0 }}>
+          <ListItem key={cartItem.cartItemId} sx={{ py: 1, px: 0 }}>
             <ListItemText primary={cartItem.product.name} secondary={cartItem.product.description} />
             <Typography variant="body2">{cartItem.quantity} x €{cartItem.product.price}</Typography>
           </ListItem>
