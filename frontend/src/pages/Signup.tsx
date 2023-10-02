@@ -66,9 +66,14 @@ const SignUp = () => {
   useEffect(() => {
     if (isError) {
       console.error(signUpError);
-      setError("Sign up failed!");
+      setError("Signup failed. Please ensure your password meets the following criteria:\n\n" +
+        "- At least 8 characters in length.\n" +
+        "- Contains at least 1 digit (0-9).\n" +
+        "- Contains at least 1 uppercase letter (A-Z).\n" +
+        "- Contains at least 1 special character (e.g., !, @, #, $, %, etc.).");
     }
-  }, [isError])
+  }, [isError]);
+  
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -197,7 +202,9 @@ const SignUp = () => {
             </Button>
             {error && (
               <Zoom in={!!error}>
-                <Alert severity="error">
+                <Alert severity="error" sx={{
+                  whiteSpace: 'pre-line'
+                }}>
                   {error}
                 </Alert>
               </Zoom>
