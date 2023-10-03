@@ -1,9 +1,10 @@
 export interface Order {
-    orderId:   number;
-    total:     string;
-    currency:  string;
-    cartItems: CartItem[];
-    orderDate: string;
+    orderId:     number;
+    total:       string;
+    currency:    string;
+    cartItems:   CartItem[];
+    orderStatus: string;
+    orderDate:   string;
 }
 
 export interface CartItem {
