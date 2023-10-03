@@ -50,6 +50,9 @@ const Review = () => {
   const { data: getCartData, error, isLoading, isSuccess: getCartSuccess, } = useGetShoppingCartQuery();
   const dispatch = useAppDispatch();
 
+  function ccyFormat(num: number) {
+    return `${num.toFixed(2)}`;
+  }
 
   const total = cartItems.reduce((accumulator, cartItem) => {
     const price = parseFloat(cartItem.product.price);
@@ -83,7 +86,7 @@ const Review = () => {
         <ListItem sx={{ py: 1, px: 0 }}>
           <ListItemText primary="Total" />
           <Typography variant="subtitle1" sx={{ fontWeight: 700 }}>
-           € {total}
+           € {ccyFormat(total)}
           </Typography>
         </ListItem>
       </List>
