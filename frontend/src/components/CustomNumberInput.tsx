@@ -35,8 +35,6 @@ export const CustomNumberInput = React.forwardRef(function CustomNumberInput(
   );
 });
 
-
-
 const grey = {
   50: '#f6f8fa',
   100: '#eaeef2',
