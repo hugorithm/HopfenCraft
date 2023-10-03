@@ -5,8 +5,11 @@ import Box from '@mui/material/Box';
 import ShoppingCartTable from '../components/ShoppingCartTable';
 import { Button, Fade } from '@mui/material';
 import { Link } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { selectShoppingCart } from '../features/shoppingCartSlice';
 
 const ShoppingCart = () => {
+  const { cartItems } = useSelector(selectShoppingCart);
   return (
     <>
       <CssBaseline />
@@ -26,15 +29,17 @@ const ShoppingCart = () => {
             </Typography>
             <ShoppingCartTable />
             <Box mt={2}>
-              <Button
-                component={Link}
-                to="/checkout"
-                variant="contained"
-                color="primary"
-                size="large"
-              >
-                Go to Checkout
-              </Button>
+              {cartItems.length !== 0 && (
+                <Button
+                  component={Link}
+                  to="/checkout"
+                  variant="contained"
+                  color="primary"
+                  size="large"
+                >
+                  Go to Checkout
+                </Button>
+              )}
             </Box>
           </Box>
         </Container>

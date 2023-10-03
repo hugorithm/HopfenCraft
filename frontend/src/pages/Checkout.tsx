@@ -10,12 +10,15 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import AddressForm from '../components/AddressForm';
 import Review from '../components/OrderReview';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import PaypalPayment from '../components/PaypalPayment';
+import { useCreateOrderMutation } from '../app/api/orderApi';
+import { useAppDispatch } from '../app/hooks';
+import { setOrder } from '../features/orderSlice';
+import OrderConfirmation from '../components/OrderConfirmation';
 
 
 const steps = ['Shipping address', 'Review your order', 'Order confirmation', 'Payment details'];
-const orderId = 12345;
 
 const getStepContent = (step: number) => {
   switch (step) {
@@ -24,17 +27,7 @@ const getStepContent = (step: number) => {
     case 1:
       return <Review />;
     case 2:
-      return (
-        <React.Fragment>
-          <Typography variant="h5" gutterBottom>
-            Thank you for your order!
-          </Typography>
-          <Typography variant="subtitle1">
-            Your order number is #{orderId} We have emailed your order
-            confirmation. Please proceed to the payment.
-          </Typography>
-        </React.Fragment>
-      )
+      return <OrderConfirmation />
     case 3:
       return <PaypalPayment />;
     default:
@@ -42,12 +35,26 @@ const getStepContent = (step: number) => {
   }
 }
 
-export default function Checkout() {
+const Checkout = () => {
+  const [createOrder, { data: orderData, isError, isSuccess, isLoading, error }] = useCreateOrderMutation();
   const [activeStep, setActiveStep] = useState(0);
+  const dispatch = useAppDispatch();
 
-  const handleNext = () => {
+  useEffect(() => {
+    if (isSuccess && orderData) {
+      dispatch(setOrder(orderData));
+    }
+  }, [isSuccess]);
+
+
+  const handleNext = async () => {
     if (activeStep === 1) {
-      //TODO: create order POST
+      createOrder()
+        .unwrap()
+        .catch((error) => {
+          console.error(error);
+          return;
+        });
     }
     setActiveStep(activeStep + 1);
   };
@@ -86,18 +93,20 @@ export default function Checkout() {
             <React.Fragment>
               {getStepContent(activeStep)}
               <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-                {activeStep !== 0 && (
+                {activeStep !== 0 && activeStep !== 2 && (
                   <Button onClick={handleBack} sx={{ mt: 3, ml: 1 }} color='primary'>
                     Back
                   </Button>
                 )}
-                <Button
-                  variant="contained"
-                  onClick={handleNext}
-                  sx={{ mt: 3, ml: 1 }}
-                >
-                  {activeStep === 1 ? 'Place order' : 'Next'}
-                </Button>
+                {activeStep !== steps.length - 1 && (
+                  <Button
+                    variant="contained"
+                    onClick={handleNext}
+                    sx={{ mt: 3, ml: 1 }}
+                  >
+                    {activeStep === 1 ? 'Place order' : 'Next'}
+                  </Button>
+                )}
               </Box>
             </React.Fragment>
           )}
@@ -106,3 +115,5 @@ export default function Checkout() {
     </React.Fragment>
   );
 }
+
+export default Checkout;

@@ -4,6 +4,8 @@ import {
   PayPalButtons,
 } from "@paypal/react-paypal-js";
 import { PayPalScriptOptions } from "@paypal/paypal-js/types/script-options";
+import { useSelector } from "react-redux";
+import { selectOrder } from "../features/orderSlice";
 
 const paypalScriptOptions: PayPalScriptOptions = {
   clientId: import.meta.env.VITE_PAYPAL_CLIENT_ID,
@@ -11,6 +13,7 @@ const paypalScriptOptions: PayPalScriptOptions = {
 };
 
 const PaypalPayment = () => {
+  const { order } = useSelector(selectOrder);
 
   const createOrder = () => {
     const localJwt: string = JSON.parse(localStorage.getItem("user") || "{}").jwt;
@@ -23,7 +26,7 @@ const PaypalPayment = () => {
       method: "POST",
       headers,
       body: JSON.stringify({
-        orderId: "1",
+        orderId: order?.orderId,
       }),
     })
       .then((response) => response.json())
@@ -41,14 +44,12 @@ const PaypalPayment = () => {
       method: "POST",
       headers,
       body: JSON.stringify({
-        orderId: "1",
+        orderId: order?.orderId,
       })
     })
       .then((response) => response.json())
       .then((orderData) => {
-        console.log("Capture result", orderData, JSON.stringify(orderData, null, 2));
-        const transaction = orderData.purchase_units[0].payments.captures[0];
-        alert("Transaction " + transaction.status + ": " + transaction.id + "\n\nSee console for all available details");
+       
       });
   };
 
