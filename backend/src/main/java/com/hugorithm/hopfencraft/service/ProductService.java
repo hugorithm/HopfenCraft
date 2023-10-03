@@ -115,8 +115,24 @@ public class ProductService {
         }
     }
 
-    public Page<Product> findAll(Pageable pageable) {
-        return productRepository.findAll(pageable);
+    public ResponseEntity<Page<ProductDTO>> getProducts(Pageable pageable) {
+        try {
+            Page<Product> productPage = productRepository.findAll(pageable);
+
+            return ResponseEntity.ok(productPage.map(p -> new ProductDTO(
+                    p.getProductId(),
+                    p.getBrand(),
+                    p.getName(),
+                    p.getDescription(),
+                    p.getStockQuantity(),
+                    p.getPrice(),
+                    Product.getCurrency(),
+                    p.getRegisterDateTime()
+            )));
+        } catch (NoSuchElementException ex) {
+            LOGGER.error(ex.getMessage(), ex);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
     }
 
     public Optional<Product> findById(Long productId) {

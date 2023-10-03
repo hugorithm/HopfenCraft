@@ -30,23 +30,10 @@ public class ProductController {
     private final ProductService productService;
 
     @GetMapping("/products")
-    public Page<ProductDTO> getProducts(@RequestParam(defaultValue = "0") int page,
+    public ResponseEntity<Page<ProductDTO>> getProducts(@RequestParam(defaultValue = "0") int page,
                                         @RequestParam(defaultValue = "10") int size) {
         Pageable pageable = PageRequest.of(page, size);
-        Page<Product> productPage = productService.findAll(pageable);
-
-        return productPage.map(p ->
-                new ProductDTO(
-                        p.getProductId(),
-                        p.getBrand(),
-                        p.getName(),
-                        p.getDescription(),
-                        p.getStockQuantity(),
-                        p.getPrice(),
-                        Product.getCurrency(),
-                        p.getRegisterDateTime()
-                )
-        );
+        return productService.getProducts(pageable);
     }
 
     @GetMapping("/{productId}")
