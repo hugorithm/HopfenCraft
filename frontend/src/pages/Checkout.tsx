@@ -16,29 +16,59 @@ import { useCreateOrderMutation } from '../app/api/orderApi';
 import { useAppDispatch } from '../app/hooks';
 import { setOrder } from '../features/orderSlice';
 import OrderConfirmation from '../components/OrderConfirmation';
+import PaymentConfirmation from '../components/PaymentConfirmation';
+import { useGetShoppingCartQuery } from '../app/api/shoppingCartApi';
+import { setCartItems } from '../features/shoppingCartSlice';
 
 
 const steps = ['Shipping address', 'Review your order', 'Order confirmation', 'Payment details'];
-
-const getStepContent = (step: number) => {
-  switch (step) {
-    case 0:
-      return <AddressForm />;
-    case 1:
-      return <Review />;
-    case 2:
-      return <OrderConfirmation />
-    case 3:
-      return <PaypalPayment />;
-    default:
-      throw new Error('Unknown step');
-  }
-}
 
 const Checkout = () => {
   const [createOrder, { data: orderData, isError, isSuccess, isLoading, error }] = useCreateOrderMutation();
   const [activeStep, setActiveStep] = useState(0);
   const dispatch = useAppDispatch();
+  const [isPayed, setIsPayed] = useState(false);
+
+  const {
+    data: shoppingCartData,
+    error: shoppingCartError,
+    isSuccess: isShoppingCartSuccess,
+    isError: isShoppingCartError,
+    refetch
+  } = useGetShoppingCartQuery();
+
+  useEffect(() => {
+    if (isShoppingCartError) {
+      console.error(shoppingCartError);
+    }
+  }, [isShoppingCartError])
+
+  useEffect(() => {
+    if (shoppingCartData && isShoppingCartSuccess) {
+      dispatch(setCartItems({ cartItems: shoppingCartData.cartItems }));
+    }
+  }, [shoppingCartData, isShoppingCartSuccess])
+
+  const handleApprove = () => {
+    setIsPayed(true);
+    setActiveStep(4); //step after the last step so it shows as completed
+    refetch();
+  }
+
+  const getStepContent = (step: number) => {
+    switch (step) {
+      case 0:
+        return <AddressForm />;
+      case 1:
+        return <Review />;
+      case 2:
+        return <OrderConfirmation />
+      case 3:
+        return <PaypalPayment onApproveCallback={handleApprove} />;
+      default:
+        throw new Error('Unknown step');
+    }
+  }
 
   useEffect(() => {
     if (isSuccess && orderData) {
@@ -77,18 +107,7 @@ const Checkout = () => {
               </Step>
             ))}
           </Stepper>
-          {activeStep === steps.length ? (
-            <React.Fragment>
-              <Typography variant="h5" gutterBottom>
-                Thank you for your order.
-              </Typography>
-              <Typography variant="subtitle1">
-                Your order number is #2001539. We have emailed your order
-                confirmation, and will send you an update when your order has
-                shipped.
-              </Typography>
-            </React.Fragment>
-          ) : (
+          {!isPayed && activeStep !== 4 ? (
             <React.Fragment>
               {getStepContent(activeStep)}
               <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
@@ -108,6 +127,8 @@ const Checkout = () => {
                 )}
               </Box>
             </React.Fragment>
+          ) : (
+            <PaymentConfirmation />
           )}
         </Paper>
       </Container>

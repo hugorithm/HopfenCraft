@@ -12,7 +12,11 @@ const paypalScriptOptions: PayPalScriptOptions = {
   currency: "EUR"
 };
 
-const PaypalPayment = () => {
+interface PaypalPaymentProps {
+  onApproveCallback: () => void;
+}
+
+const PaypalPayment: React.FC<PaypalPaymentProps> = ({ onApproveCallback })  => {
   const { order } = useSelector(selectOrder);
 
   const createOrder = () => {
@@ -48,8 +52,8 @@ const PaypalPayment = () => {
       })
     })
       .then((response) => response.json())
-      .then((orderData) => {
-       
+      .then(() => {
+          onApproveCallback();
       });
   };
 
