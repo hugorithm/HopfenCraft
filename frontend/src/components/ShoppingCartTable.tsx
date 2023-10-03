@@ -177,7 +177,7 @@ const ProductImageLink : React.FC<ProductImageLinkProps> = ({ productId }) => {
         sx={{
           pt: '50.25%',
           backgroundSize: 'contain',
-          cursor: 'pointer', // Add a pointer cursor for better UX
+          cursor: 'pointer', 
         }}
         image={`${BASE_URL}/product/${productId}/image`}
       />

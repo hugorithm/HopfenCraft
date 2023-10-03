@@ -19,7 +19,6 @@ export const shoppingCartSlice = createSlice({
       state.cartItems = action.payload.cartItems;
       state.isLoading = false;
     },
-   
   },
 });
 

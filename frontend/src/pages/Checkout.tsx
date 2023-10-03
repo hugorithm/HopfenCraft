@@ -46,7 +46,6 @@ const Checkout = () => {
     }
   }, [isSuccess]);
 
-
   const handleNext = async () => {
     if (activeStep === 1) {
       createOrder()
