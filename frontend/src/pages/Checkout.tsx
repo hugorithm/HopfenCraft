@@ -20,14 +20,12 @@ import PaymentConfirmation from '../components/PaymentConfirmation';
 import { useGetShoppingCartQuery } from '../app/api/shoppingCartApi';
 import { setCartItems } from '../features/shoppingCartSlice';
 
-
-const steps = ['Shipping address', 'Review your order', 'Order confirmation', 'Payment details'];
-
 const Checkout = () => {
   const [createOrder, { data: orderData, isError, isSuccess, isLoading, error }] = useCreateOrderMutation();
   const [activeStep, setActiveStep] = useState(0);
   const dispatch = useAppDispatch();
   const [isPayed, setIsPayed] = useState(false);
+  const steps = ['Shipping address', 'Review your order', 'Order confirmation', 'Payment details'];
 
   const {
     data: shoppingCartData,
