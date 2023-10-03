@@ -225,8 +225,18 @@ public class ProductControllerTests {
 
         // Simulate the ProductService returning a page of products
         Page<Product> productPage = new PageImpl<>(products);
+        Page<ProductDTO> dtoPage = productPage.map(p -> new ProductDTO(
+                p.getProductId(),
+                p.getBrand(),
+                p.getName(),
+                p.getDescription(),
+                p.getStockQuantity(),
+                p.getPrice(),
+                Product.getCurrency(),
+                p.getRegisterDateTime()
+        ));
 
-        when(productService.findAll(Mockito.any(Pageable.class))).thenReturn(productPage);
+        when(productService.getProducts(Mockito.any(Pageable.class))).thenReturn(ResponseEntity.ok(dtoPage));
 
         mockMvc.perform(get("/product/products")
                         .param("page", "1")
