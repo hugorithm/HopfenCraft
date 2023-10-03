@@ -43,10 +43,20 @@ const payments = [
   { name: 'Expiry date', detail: '04/2024' },
 ];
 
+
+
 const Review = () => {
   const { cartItems } = useSelector(selectShoppingCart);
   const { data: getCartData, error, isLoading, isSuccess: getCartSuccess, } = useGetShoppingCartQuery();
   const dispatch = useAppDispatch();
+
+
+  const total = cartItems.reduce((accumulator, cartItem) => {
+    const price = parseFloat(cartItem.product.price);
+    const itemTotal = cartItem.quantity * price;
+
+    return accumulator + itemTotal;
+  }, 0);
 
   useEffect(() => {
     if (cartItems.length === 0) {
@@ -73,7 +83,7 @@ const Review = () => {
         <ListItem sx={{ py: 1, px: 0 }}>
           <ListItemText primary="Total" />
           <Typography variant="subtitle1" sx={{ fontWeight: 700 }}>
-            123
+           € {total}
           </Typography>
         </ListItem>
       </List>
