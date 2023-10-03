@@ -77,6 +77,7 @@ public class OrderService {
                             savedOrder.getTotal(),
                             Order.getCurrency().toString(),
                             cartItemsDTO,
+                            savedOrder.getOrderStatus(),
                             savedOrder.getOrderDate()
                     ));
         } catch (UsernameNotFoundException | OrderCartIsEmptyException ex) {
