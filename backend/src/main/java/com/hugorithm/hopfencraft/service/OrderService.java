@@ -16,6 +16,8 @@ import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -103,6 +105,28 @@ public class OrderService {
             }
         } catch (InsufficientStockException ex) {
             LOGGER.error(ex.getMessage(), ex);
+        }
+    }
+    public ResponseEntity<Page<OrderResponseDTO>> getOrders(Pageable pageable, Jwt jwt) {
+        try {
+            Page<Order> orderPage = orderRepository.findAll(pageable);
+            ApplicationUser user = jwtService.getUserFromJwt(jwt);
+            List<CartItem> cartItems = user.getCartItems();
+            List<CartItemDTO> cartItemsDTO = shoppingCartService.convertCartItemListToCartItemDTOList(cartItems);
+
+            Page<OrderResponseDTO> page = orderPage.map(order -> new OrderResponseDTO(
+                    order.getOrderId(),
+                    order.getTotal(),
+                    Order.getCurrency().toString(),
+                    cartItemsDTO,
+                    order.getOrderStatus(),
+                    order.getOrderDate()
+            ));
+
+            return ResponseEntity.ok(page);
+        } catch (UsernameNotFoundException ex) {
+            LOGGER.error(ex.getMessage(), ex);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
     }
 }
