@@ -58,10 +58,12 @@ To run the HopfenCraft application, you'll need to set up the following environm
 In the `frontend` directory, create a `.env` file with the following variable:
 
 - `VITE_GOOGLE_RECAPTCHA_KEY`: Replace with your Google reCAPTCHA site key.
+- `VITE_PAYPAL_CLIENT_ID`: Replace with your PayPal Client ID:
 
 Example `.env` file content:
 ```env
 VITE_GOOGLE_RECAPTCHA_KEY=your-recaptcha-site-key
+VITE_PAYPAL_CLIENT_ID=your-paypal-client-id
 ```
 
 ### Backend (Java Spring Boot)
