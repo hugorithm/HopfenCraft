@@ -19,6 +19,7 @@ public class OAuth2ApplicationUserDTO {
     private String email;
     private String firstName;
     private String lastName;
+    private List<String> roles;
     private List<CartItemDTO> cartItems;
     private List<OrderDTO> orders;
     private Map<String, String> attributes;
