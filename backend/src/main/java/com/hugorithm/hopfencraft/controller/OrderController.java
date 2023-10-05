@@ -26,7 +26,7 @@ public class OrderController {
         return orderService.createOrder(jwt, shippingDetailsDTO);
     }
 
-    @GetMapping("/orders/get")
+    @GetMapping("/orders")
     @RolesAllowed("USER")
     public ResponseEntity<Page<OrderResponseDTO>> getOrders(@AuthenticationPrincipal Jwt jwt,
                                                     @RequestParam(defaultValue = "0") int page,
