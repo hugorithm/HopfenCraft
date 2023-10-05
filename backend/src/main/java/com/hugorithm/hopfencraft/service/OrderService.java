@@ -10,6 +10,7 @@ import com.hugorithm.hopfencraft.exception.order.OrderCartIsEmptyException;
 import com.hugorithm.hopfencraft.model.*;
 import com.hugorithm.hopfencraft.repository.OrderRepository;
 import com.hugorithm.hopfencraft.repository.ProductRepository;
+import com.hugorithm.hopfencraft.repository.ShippingDetailsRepository;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,6 +35,7 @@ public class OrderService {
     private final OrderRepository orderRepository;
     private final ProductRepository productRepository;
     private final ShoppingCartService shoppingCartService;
+    private final ShippingDetailsRepository shippingDetailsRepository;
     private final static Logger LOGGER = LoggerFactory.getLogger(OrderService.class);
 
     public List<OrderDTO> ConvertOrderListIntoOrderDTOList(List<Order> orderList) {
@@ -81,6 +83,7 @@ public class OrderService {
                         shippingDetailsDTO.getBillingPostalCode(),
                         shippingDetailsDTO.getBillingCountry()
                 );
+                shippingDetailsRepository.save(shippingDetails);
 
                 order.setShippingDetails(shippingDetails);
             }
