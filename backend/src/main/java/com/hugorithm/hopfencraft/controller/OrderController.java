@@ -1,6 +1,7 @@
 package com.hugorithm.hopfencraft.controller;
 
 import com.hugorithm.hopfencraft.dto.order.OrderResponseDTO;
+import com.hugorithm.hopfencraft.dto.shippingDetails.ShippingDetailsDTO;
 import com.hugorithm.hopfencraft.service.OrderService;
 import jakarta.annotation.security.RolesAllowed;
 import lombok.RequiredArgsConstructor;
@@ -21,8 +22,8 @@ public class OrderController {
 
     @PostMapping("/order/create")
     @RolesAllowed("USER")
-    public ResponseEntity<OrderResponseDTO> createOrder(@AuthenticationPrincipal Jwt jwt) {
-        return orderService.createOrder(jwt);
+    public ResponseEntity<OrderResponseDTO> createOrder(@AuthenticationPrincipal Jwt jwt, @RequestBody(required = false) ShippingDetailsDTO shippingDetailsDTO) {
+        return orderService.createOrder(jwt, shippingDetailsDTO);
     }
 
     @GetMapping("/orders/get")
