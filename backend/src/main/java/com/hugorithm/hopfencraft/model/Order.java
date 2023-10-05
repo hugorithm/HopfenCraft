@@ -50,9 +50,10 @@ public class Order {
     @Getter
     private static final Currency currency = Currency.EUR;
 
-    public Order(ApplicationUser user, BigDecimal total) {
+    public Order(ApplicationUser user, BigDecimal total, OrderStatus orderStatus) {
         this.user = user;
         this.total = total;
+        this.orderStatus = orderStatus;
     }
 
 }
