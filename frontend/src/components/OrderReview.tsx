@@ -35,7 +35,6 @@ const products = [
   },
   { name: 'Shipping', desc: '', price: 'Free' },
 ];
-const addresses = ['1 MUI Drive', 'Reactville', 'Anytown', '99999', 'USA'];
 const payments = [
   { name: 'Card type', detail: 'Visa' },
   { name: 'Card holder', detail: 'Mr John Smith' },
@@ -43,9 +42,21 @@ const payments = [
   { name: 'Expiry date', detail: '04/2024' },
 ];
 
+interface AddressFormProps {
+  shippingDetails: {
+    firstName: string;
+    lastName: string;
+    address1: string;
+    address2: string;
+    city: string;
+    state: string;
+    zip: string;
+    country: string;
+    isBilling: boolean;
+  };
+}
 
-
-const Review = () => {
+const Review: React.FC<AddressFormProps> = ({ shippingDetails }) => {
   const { cartItems } = useSelector(selectShoppingCart);
   const { data: getCartData, error, isLoading, isSuccess: getCartSuccess, } = useGetShoppingCartQuery();
   const dispatch = useAppDispatch();
@@ -86,7 +97,7 @@ const Review = () => {
         <ListItem sx={{ py: 1, px: 0 }}>
           <ListItemText primary="Total" />
           <Typography variant="subtitle1" sx={{ fontWeight: 700 }}>
-           € {ccyFormat(total)}
+            € {ccyFormat(total)}
           </Typography>
         </ListItem>
       </List>
@@ -95,8 +106,21 @@ const Review = () => {
           <Typography variant="h6" gutterBottom sx={{ mt: 2 }}>
             Shipping
           </Typography>
-          <Typography gutterBottom>John Smith</Typography>
-          <Typography gutterBottom>{addresses.join(', ')}</Typography>
+          <Typography gutterBottom>{shippingDetails?.firstName.concat(" ", shippingDetails?.lastName)}</Typography>
+          <Typography gutterBottom>
+            {shippingDetails.address1.concat(
+              ', ',
+              shippingDetails.address2,
+              " ",
+              shippingDetails.city,
+              " ",
+              shippingDetails.state,
+              " ",
+              shippingDetails.zip,
+              " ",
+              shippingDetails.country
+            )}
+          </Typography>
         </Grid>
         <Grid item container direction="column" xs={12} sm={6}>
           <Typography variant="h6" gutterBottom sx={{ mt: 2 }}>
