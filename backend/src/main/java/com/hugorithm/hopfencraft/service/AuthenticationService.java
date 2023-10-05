@@ -109,7 +109,12 @@ public class AuthenticationService {
             Authentication auth = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(dto.getUsername(), dto.getPassword()));
             String token = jwtService.generateJwt(auth);
             ApplicationUser user = userRepository.findByUsername(dto.getUsername()).orElseThrow(() -> new UsernameNotFoundException("User not found"));
-            LoginResponseDTO response = new LoginResponseDTO(user.getUsername(), user.getEmail(), token);
+            LoginResponseDTO response = new LoginResponseDTO(
+                    user.getUsername(),
+                    user.getEmail(),
+                    token,
+                    user.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList()
+            );
 
             return ResponseEntity.ok(response);
         } catch (AuthenticationException ex) {
