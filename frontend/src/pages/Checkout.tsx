@@ -19,6 +19,7 @@ import OrderConfirmation from '../components/OrderConfirmation';
 import PaymentConfirmation from '../components/PaymentConfirmation';
 import { useGetShoppingCartQuery } from '../app/api/shoppingCartApi';
 import { setCartItems } from '../features/shoppingCartSlice';
+import { ShippingDetails } from '../types/order/ShippingDetails';
 
 const Checkout = () => {
   const [createOrder, { data: orderData, isError, isSuccess, isLoading, error }] = useCreateOrderMutation();
@@ -53,12 +54,31 @@ const Checkout = () => {
     refetch();
   }
 
+  const [shippingData, setShippingData] = useState({
+    firstName: '',
+    lastName: '',
+    address1: '',
+    address2: '',
+    city: '',
+    state: '',
+    zip: '',
+    country: '',
+    isBilling: false
+  });
+
+  const handleFormChange = (name: string, value: string | boolean) => {
+    setShippingData({
+      ...shippingData,
+      [name]: value,
+    });
+  };
+
   const getStepContent = (step: number) => {
     switch (step) {
       case 0:
-        return <AddressForm />;
+        return <AddressForm shippingDetails={shippingData} onFormChange={handleFormChange} />;
       case 1:
-        return <Review />;
+        return <Review shippingDetails={shippingData} />;
       case 2:
         return <OrderConfirmation />
       case 3:
@@ -75,8 +95,37 @@ const Checkout = () => {
   }, [isSuccess]);
 
   const handleNext = async () => {
+    let shippingDetails: ShippingDetails;
     if (activeStep === 1) {
-      createOrder()
+      console.log(shippingData)
+
+      if (!shippingData.isBilling) {
+        shippingDetails = {
+          shippingName: shippingData.firstName.concat(" ", shippingData.lastName),
+          shippingAddress: shippingData.address1.concat(", ", shippingData.address2),
+          shippingCity: shippingData.city,
+          shippingState: shippingData.state,
+          shippingPostalCode: shippingData.zip,
+          shippingCountry: shippingData.country
+        } as ShippingDetails
+      } else {
+        shippingDetails = {
+          shippingName: shippingData.firstName.concat(" ", shippingData.lastName),
+          shippingAddress: shippingData.address1.concat(", ", shippingData.address2),
+          shippingCity: shippingData.city,
+          shippingState: shippingData.state,
+          shippingPostalCode: shippingData.zip,
+          shippingCountry: shippingData.country,
+          billingName: shippingData.firstName.concat(" ", shippingData.lastName),
+          billingAddress: shippingData.address1.concat(", ", shippingData.address2),
+          billingCity: shippingData.city,
+          billingState: shippingData.state,
+          billingPostalCode: shippingData.zip,
+          billingCountry: shippingData.country
+        } as ShippingDetails
+      }
+
+      createOrder(shippingDetails)
         .unwrap()
         .catch((error) => {
           console.error(error);
