@@ -5,7 +5,34 @@ import TextField from '@mui/material/TextField';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 
-const AddressForm = () => {
+interface AddressFormProps {
+  shippingDetails: {
+    firstName: string;
+    lastName: string;
+    address1: string;
+    address2: string;
+    city: string;
+    state: string;
+    zip: string;
+    country: string;
+    isBilling: boolean;
+  };
+  onFormChange: (name: string, value: string | boolean) => void;
+}
+
+
+const AddressForm: React.FC<AddressFormProps> = ({ shippingDetails, onFormChange }) => {
+
+  const handleFieldChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = event.target;
+    onFormChange(name, value);
+  };
+
+  const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, checked } = event.target;
+    onFormChange(name, checked);
+  };
+
   return (
     <React.Fragment>
       <Typography variant="h6" gutterBottom>
@@ -21,6 +48,8 @@ const AddressForm = () => {
             fullWidth
             autoComplete="given-name"
             variant="standard"
+            value={shippingDetails.firstName}
+            onChange={handleFieldChange}
           />
         </Grid>
         <Grid item xs={12} sm={6}>
@@ -32,6 +61,8 @@ const AddressForm = () => {
             fullWidth
             autoComplete="family-name"
             variant="standard"
+            value={shippingDetails.lastName}
+            onChange={handleFieldChange}
           />
         </Grid>
         <Grid item xs={12}>
@@ -43,6 +74,8 @@ const AddressForm = () => {
             fullWidth
             autoComplete="shipping address-line1"
             variant="standard"
+            value={shippingDetails.address1}
+            onChange={handleFieldChange}
           />
         </Grid>
         <Grid item xs={12}>
@@ -53,6 +86,8 @@ const AddressForm = () => {
             fullWidth
             autoComplete="shipping address-line2"
             variant="standard"
+            value={shippingDetails.address2}
+            onChange={handleFieldChange}
           />
         </Grid>
         <Grid item xs={12} sm={6}>
@@ -64,6 +99,8 @@ const AddressForm = () => {
             fullWidth
             autoComplete="shipping address-level2"
             variant="standard"
+            value={shippingDetails.city}
+            onChange={handleFieldChange}
           />
         </Grid>
         <Grid item xs={12} sm={6}>
@@ -73,6 +110,8 @@ const AddressForm = () => {
             label="State/Province/Region"
             fullWidth
             variant="standard"
+            value={shippingDetails.state}
+            onChange={handleFieldChange}
           />
         </Grid>
         <Grid item xs={12} sm={6}>
@@ -84,6 +123,8 @@ const AddressForm = () => {
             fullWidth
             autoComplete="shipping postal-code"
             variant="standard"
+            value={shippingDetails.zip}
+            onChange={handleFieldChange}
           />
         </Grid>
         <Grid item xs={12} sm={6}>
@@ -95,11 +136,17 @@ const AddressForm = () => {
             fullWidth
             autoComplete="shipping country"
             variant="standard"
+            value={shippingDetails.country}
+            onChange={handleFieldChange}
           />
         </Grid>
         <Grid item xs={12}>
           <FormControlLabel
-            control={<Checkbox color="secondary" name="saveAddress" value="yes" />}
+            control={<Checkbox
+              color="primary"
+              name="isBilling"
+              checked={shippingDetails.isBilling}
+              onChange={handleCheckboxChange} />}
             label="Use this address for payment details"
           />
         </Grid>
