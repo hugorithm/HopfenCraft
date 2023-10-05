@@ -55,8 +55,6 @@ public class SecurityConfig {
                     auth.requestMatchers("/product/remove").hasRole("ADMIN");
                     auth.requestMatchers("/product/**").permitAll();
                     auth.requestMatchers("/cart/**").hasAnyRole("ADMIN", "USER");
-                    //TODO: ONLY FOR TESTING PURPOSES. DELETE LATER
-                    auth.requestMatchers("/index.html").permitAll();
                     auth.anyRequest().authenticated();
                 })
 
