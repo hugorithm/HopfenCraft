@@ -46,7 +46,7 @@ export default function Login() {
 
       toast.success('Login Successful!', {
         position: "top-right",
-        autoClose: 2000,
+        autoClose: 1000,
         hideProgressBar: false,
         closeOnClick: true,
         pauseOnHover: false,
