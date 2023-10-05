@@ -30,4 +30,30 @@ public class ShippingDetails {
     private String billingPostalCode;
     private String billingCountry;
 
+    public ShippingDetails(String shippingName,
+                           String shippingAddress,
+                           String shippingCity,
+                           String shippingState,
+                           String shippingPostalCode,
+                           String shippingCountry,
+                           String billingName,
+                           String billingAddress,
+                           String billingCity,
+                           String billingState,
+                           String billingPostalCode,
+                           String billingCountry
+    ) {
+        this.shippingName = shippingName;
+        this.shippingAddress = shippingAddress;
+        this.shippingCity = shippingCity;
+        this.shippingState = shippingState;
+        this.shippingPostalCode = shippingPostalCode;
+        this.shippingCountry = shippingCountry;
+        this.billingName = billingName;
+        this.billingAddress = billingAddress;
+        this.billingCity = billingCity;
+        this.billingState = billingState;
+        this.billingPostalCode = billingPostalCode;
+        this.billingCountry = billingCountry;
+    }
 }
