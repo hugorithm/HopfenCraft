@@ -3,13 +3,11 @@ package com.hugorithm.hopfencraft.service;
 import com.hugorithm.hopfencraft.dto.cart.CartItemDTO;
 import com.hugorithm.hopfencraft.dto.order.OrderDTO;
 import com.hugorithm.hopfencraft.dto.order.OrderResponseDTO;
+import com.hugorithm.hopfencraft.dto.shippingDetails.ShippingDetailsDTO;
 import com.hugorithm.hopfencraft.enums.OrderStatus;
 import com.hugorithm.hopfencraft.exception.order.InsufficientStockException;
 import com.hugorithm.hopfencraft.exception.order.OrderCartIsEmptyException;
-import com.hugorithm.hopfencraft.model.ApplicationUser;
-import com.hugorithm.hopfencraft.model.CartItem;
-import com.hugorithm.hopfencraft.model.Order;
-import com.hugorithm.hopfencraft.model.Product;
+import com.hugorithm.hopfencraft.model.*;
 import com.hugorithm.hopfencraft.repository.OrderRepository;
 import com.hugorithm.hopfencraft.repository.ProductRepository;
 import lombok.AllArgsConstructor;
@@ -51,7 +49,7 @@ public class OrderService {
                 .toList();
     }
 
-    public ResponseEntity<OrderResponseDTO> createOrder(Jwt jwt) {
+    public ResponseEntity<OrderResponseDTO> createOrder(Jwt jwt, ShippingDetailsDTO shippingDetailsDTO) {
         try {
             ApplicationUser user = jwtService.getUserFromJwt(jwt);
             List<CartItem> cartItems = user.getCartItems();
@@ -66,8 +64,26 @@ public class OrderService {
                 return cartItem.getProduct().getPrice().multiply(quantity);
             }).reduce(BigDecimal.ZERO, BigDecimal::add);
 
-            Order order = new Order(user, total);
-            order.setOrderStatus(OrderStatus.PENDING);
+            Order order = new Order(user, total, OrderStatus.PENDING);
+
+            if (shippingDetailsDTO != null) {
+                ShippingDetails shippingDetails = new ShippingDetails(
+                        shippingDetailsDTO.getShippingName(),
+                        shippingDetailsDTO.getShippingAddress(),
+                        shippingDetailsDTO.getShippingCity(),
+                        shippingDetailsDTO.getShippingState(),
+                        shippingDetailsDTO.getShippingPostalCode(),
+                        shippingDetailsDTO.getShippingCountry(),
+                        shippingDetailsDTO.getBillingName(),
+                        shippingDetailsDTO.getBillingAddress(),
+                        shippingDetailsDTO.getBillingCity(),
+                        shippingDetailsDTO.getBillingState(),
+                        shippingDetailsDTO.getBillingPostalCode(),
+                        shippingDetailsDTO.getBillingCountry()
+                );
+
+                order.setShippingDetails(shippingDetails);
+            }
 
             Order savedOrder = orderRepository.save(order);
 
