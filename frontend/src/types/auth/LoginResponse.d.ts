@@ -1,6 +1,6 @@
 export interface LoginResponse {
     username:  string;
     email:     string;
-    jwt:       string;
-
+    jwt:       string;   
+    roles:     string[];
 }
