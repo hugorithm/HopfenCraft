@@ -1,7 +1,7 @@
 package com.hugorithm.hopfencraft.dto.user;
 
-import com.hugorithm.hopfencraft.model.CartItem;
-import com.hugorithm.hopfencraft.model.Order;
+import com.hugorithm.hopfencraft.dto.cart.CartItemDTO;
+import com.hugorithm.hopfencraft.dto.order.OrderDTO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -17,6 +17,7 @@ public class ApplicationUserDTO {
     private String email;
     private String firstName;
     private String lastName;
-    private List<CartItem> cartItems;
-    private List<Order> orders;
+    private List<String> roles;
+    private List<CartItemDTO> cartItems;
+    private List<OrderDTO> orders;
 }
