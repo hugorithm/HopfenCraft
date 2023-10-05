@@ -7,6 +7,7 @@ import java.util.Set;
 import com.hugorithm.hopfencraft.dto.authentication.LoginDTO;
 import com.hugorithm.hopfencraft.dto.authentication.UserRegistrationDTO;
 import com.hugorithm.hopfencraft.dto.authentication.UserRegistrationResponseDTO;
+import com.hugorithm.hopfencraft.dto.user.ApplicationUserDTO;
 import com.hugorithm.hopfencraft.enums.EmailType;
 import com.hugorithm.hopfencraft.enums.AuthProvider;
 import com.hugorithm.hopfencraft.exception.email.EmailAlreadyTakenException;
@@ -21,8 +22,10 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -45,6 +48,8 @@ public class AuthenticationService {
     private final AuthenticationManager authenticationManager;
     private final JwtService jwtService;
     private final EmailService emailService;
+    private final ShoppingCartService shoppingCartService;
+    private final OrderService orderService;
     private final static Logger LOGGER = LoggerFactory.getLogger(AuthenticationService.class);
 
     public ResponseEntity<UserRegistrationResponseDTO> registerUser(UserRegistrationDTO dto) {
@@ -110,6 +115,27 @@ public class AuthenticationService {
         } catch (AuthenticationException ex) {
             LOGGER.error("Failed to authenticate", ex);
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+    }
+
+    public ResponseEntity<ApplicationUserDTO> getCurrentUser(Jwt jwt) {
+        try {
+            ApplicationUser user = jwtService.getUserFromJwt(jwt);
+
+            return ResponseEntity.ok(
+                    new ApplicationUserDTO(
+                            user.getUserId(),
+                            user.getUsername(),
+                            user.getEmail(),
+                            user.getFirstName(),
+                            user.getLastName(),
+                            user.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList(),
+                            shoppingCartService.convertCartItemListToCartItemDTOList(user.getCartItems()),
+                            orderService.ConvertOrderListIntoOrderDTOList(user.getOrders())
+                    ));
+        } catch (UsernameNotFoundException ex) {
+            LOGGER.error(ex.getMessage(), ex);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
     }
 }
