@@ -9,8 +9,8 @@ export const orderApi = createApi({
     baseUrl: BASE_URL,
   }),
   endpoints: (builder) => ({
-    createOrder: builder.mutation<Order, void>({
-      query: () => {
+    createOrder: builder.mutation<Order, ShippingDetails>({
+      query: (body) => {
         const localJwt: string = JSON.parse(localStorage.getItem("user") || "{}").jwt;
         const headers = new Headers({
           'Authorization': `Bearer ${localJwt}`,
@@ -20,7 +20,8 @@ export const orderApi = createApi({
         return {
           url: `order/create`,
           method: "POST",
-          headers
+          headers,
+          body
         };
       },
     }),
