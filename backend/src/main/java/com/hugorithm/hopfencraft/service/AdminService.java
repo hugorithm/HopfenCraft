@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,6 +21,8 @@ import java.util.List;
 public class AdminService {
     private final UserRepository userRepository;
     private final static Logger LOGGER = LoggerFactory.getLogger(AdminService.class);
+    private final ShoppingCartService shoppingCartService;
+    private final OrderService orderService;
 
     public ResponseEntity<List<ApplicationUserDTO>> getUsers() {
         try {
@@ -32,8 +35,9 @@ public class AdminService {
                             applicationUser.getEmail(),
                             applicationUser.getFirstName(),
                             applicationUser.getLastName(),
-                            applicationUser.getCartItems(),
-                            applicationUser.getOrders()
+                            applicationUser.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList(),
+                            shoppingCartService.convertCartItemListToCartItemDTOList(applicationUser.getCartItems()),
+                            orderService.ConvertOrderListIntoOrderDTOList(applicationUser.getOrders())
                     ))
                     .toList();
 
@@ -54,8 +58,9 @@ public class AdminService {
                     user.getEmail(),
                     user.getFirstName(),
                     user.getLastName(),
-                    user.getCartItems(),
-                    user.getOrders()
+                    user.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList(),
+                    shoppingCartService.convertCartItemListToCartItemDTOList(user.getCartItems()),
+                    orderService.ConvertOrderListIntoOrderDTOList(user.getOrders())
             ));
         } catch (UsernameNotFoundException ex) {
             LOGGER.error(ex.getMessage(), ex);
@@ -73,8 +78,9 @@ public class AdminService {
                     user.getEmail(),
                     user.getFirstName(),
                     user.getLastName(),
-                    user.getCartItems(),
-                    user.getOrders()
+                    user.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList(),
+                    shoppingCartService.convertCartItemListToCartItemDTOList(user.getCartItems()),
+                    orderService.ConvertOrderListIntoOrderDTOList(user.getOrders())
             ));
         } catch (UsernameNotFoundException ex) {
             LOGGER.error(ex.getMessage(), ex);
