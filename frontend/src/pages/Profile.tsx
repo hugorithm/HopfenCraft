@@ -25,7 +25,7 @@ const Profile = () => {
       if (shoppingCartData) {
         dispatch(setCartItems({ cartItems: shoppingCartData.cartItems }));
       } else if (error) {
-        console.log(error);
+        console.error(error);
       }
     }
   }, [shoppingCartData]);
