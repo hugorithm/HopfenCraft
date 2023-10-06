@@ -15,7 +15,7 @@ import { BASE_URL } from '../config/constants';
 import { useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { selectAuth } from '../features/authSlice';
-import { fetchProducts, selectProducts, setProducts } from '../features/productsSlice';
+import { fetchProducts, resetProducts, selectProducts, setProducts } from '../features/productsSlice';
 import { useAppDispatch } from '../app/hooks';
 import ProductsSkeleton from '../components/ProductsSkeleton';
 import ProductCard from '../components/ProductCard';
@@ -51,20 +51,12 @@ const Products = () => {
     },
   ] = useShoppingCartAddMutation();
 
-
-  // Function to load more products
-  const loadMore = () => {
-
-    if (!last && loading !== 'loading') {
-      dispatch(fetchProducts());
-    }
-  };
-
   const renderAfterCalled = useRef(false);
   useEffect(() => {
     if (!renderAfterCalled.current) { // This is so that React Strict Mode doesn't cause issues
       if (loading !== "loading") {
-        dispatch(resetPage())
+        dispatch(resetPage());
+        dispatch(resetProducts());
         dispatch(fetchProducts()).then((data) => {
           if (data.payload) {
             const payload = data.payload as ProductData;
@@ -83,6 +75,15 @@ const Products = () => {
       console.error(cartAddError);
     }
   }, [isCartAddError]);
+
+  // Function to load more products
+  const loadMore = () => {
+
+    if (!last && loading !== 'loading') {
+      dispatch(fetchProducts());
+    }
+  };
+
 
   useEffect(() => {
     if (isCartAddSuccess && cartData) {

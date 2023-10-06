@@ -47,6 +47,9 @@ const productsSlice = createSlice({
     },
     resetPage: (state) => {
       state.page = 0;
+    },
+    resetProducts: (state) => {
+      state.products = [];
     }
   },
   extraReducers: (builder) => {
@@ -68,5 +71,5 @@ const productsSlice = createSlice({
 });
 
 export const selectProducts = (state: RootState) => state.products;
-export const { setProducts, resetPage } = productsSlice.actions;
+export const { setProducts, resetPage, resetProducts } = productsSlice.actions;
 export default productsSlice.reducer;

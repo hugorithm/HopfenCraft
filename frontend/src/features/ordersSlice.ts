@@ -56,6 +56,9 @@ export const fetchOrders = createAsyncThunk<OrderList, void, { state: RootState 
       resetPage: (state) => {
         state.page = 0;
       },
+      resetOrders: (state) => {
+        state.orders = [];
+      }
     },
     extraReducers: (builder) => {
       builder
@@ -76,5 +79,5 @@ export const fetchOrders = createAsyncThunk<OrderList, void, { state: RootState 
   });
 
 export const selectOrders = (state: RootState) => state.orders;
-export const { setOrders, resetPage } = ordersSlice.actions;
+export const { setOrders, resetPage, resetOrders } = ordersSlice.actions;
 export default ordersSlice.reducer;
