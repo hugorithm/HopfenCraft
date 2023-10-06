@@ -99,8 +99,6 @@ const Checkout = () => {
   const handleNext = async () => {
     let shippingDetails: ShippingDetails;
     if (activeStep === 1) {
-      console.log(shippingData)
-
       if (!shippingData.isBilling) {
         shippingDetails = {
           shippingName: shippingData.firstName.concat(" ", shippingData.lastName),
