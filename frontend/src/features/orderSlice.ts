@@ -8,7 +8,7 @@ export interface OrderState {
 
 const initialState: OrderState = {
     order: null,
-    isLoading:   true
+    isLoading: true
 }
 
 export const OrderSlice = createSlice({

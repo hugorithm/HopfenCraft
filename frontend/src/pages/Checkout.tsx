@@ -18,11 +18,13 @@ import { setOrder } from '../features/orderSlice';
 import OrderConfirmation from '../components/OrderConfirmation';
 import PaymentConfirmation from '../components/PaymentConfirmation';
 import { useGetShoppingCartQuery } from '../app/api/shoppingCartApi';
-import { setCartItems } from '../features/shoppingCartSlice';
+import { selectShoppingCart, setCartItems } from '../features/shoppingCartSlice';
 import { ShippingDetails } from '../types/order/ShippingDetails';
+import { useSelector } from 'react-redux';
 
 const Checkout = () => {
   const [createOrder, { data: orderData, isError, isSuccess, isLoading, error }] = useCreateOrderMutation();
+  const { cartItems } = useSelector(selectShoppingCart);
   const [activeStep, setActiveStep] = useState(0);
   const dispatch = useAppDispatch();
   const [isPayed, setIsPayed] = useState(false);
@@ -42,11 +44,11 @@ const Checkout = () => {
     }
   }, [isShoppingCartError])
 
-  useEffect(() => {
-    if (shoppingCartData && isShoppingCartSuccess) {
-      dispatch(setCartItems({ cartItems: shoppingCartData.cartItems }));
-    }
-  }, [shoppingCartData, isShoppingCartSuccess])
+  // useEffect(() => {
+  //   if (cartItems.length === 0 && shoppingCartData && isShoppingCartSuccess) {
+  //     dispatch(setCartItems({ cartItems: shoppingCartData.cartItems }));
+  //   }
+  // }, [shoppingCartData, isShoppingCartSuccess])
 
   const handleApprove = () => {
     setIsPayed(true);
