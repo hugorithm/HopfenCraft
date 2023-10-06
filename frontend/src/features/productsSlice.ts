@@ -68,5 +68,5 @@ const productsSlice = createSlice({
 });
 
 export const selectProducts = (state: RootState) => state.products;
-export const { setProducts } = productsSlice.actions;
+export const { setProducts, resetPage } = productsSlice.actions;
 export default productsSlice.reducer;
