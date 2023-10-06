@@ -12,7 +12,8 @@ import {
   TableRow,
   Typography,
   IconButton,
-  Tooltip
+  Tooltip,
+  Button
 } from "@mui/material";
 import { useAppDispatch } from "../app/hooks";
 import { useEffect, useRef } from "react";
@@ -78,6 +79,7 @@ const Orders = () => {
                     <TableCell align="center">Total</TableCell>
                     <TableCell align="center">Status</TableCell>
                     <TableCell></TableCell>
+                    <TableCell></TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
@@ -101,23 +103,30 @@ const Orders = () => {
                         <TableCell align="center">€ {order.total}</TableCell>
                         <TableCell align="center">{order.orderStatus}</TableCell>
 
-                        {order.orderStatus !== 'PAID' ? (
-                          <TableCell align="center">
-                            <Tooltip title="Go to payment">
-                              <Link to={`/order/${order.orderId}`}>
-                                <IconButton color="secondary" aria-label="pay" size="small" >
-                                  <PaymentIcon />
-                                </IconButton>
-                              </Link>
 
-                            </Tooltip>
-                          </TableCell>
+                        {order.orderStatus !== 'PAID' ? (
+                          <>
+                            <TableCell align="center">
+                              <Tooltip title="Payement pending">
+                                <PaymentIcon />
+                              </Tooltip>
+                            </TableCell>
+                            <TableCell>
+                              <Button variant="outlined" component={Link} to={`/order/${order.orderId}`}>
+                                Go to payment
+                              </Button>
+                            </TableCell>
+                          </>
                         ) : (
-                          <TableCell align="center">
-                            <Tooltip title="Paid">
-                              <CheckCircleOutlineIcon />
-                            </Tooltip>
-                          </TableCell>
+                          <>
+                            <TableCell align="center">
+                              <Tooltip title="Paid">
+                                <CheckCircleOutlineIcon />
+                              </Tooltip>
+                            </TableCell>
+                            <TableCell>
+                            </TableCell>
+                          </>
                         )}
                       </TableRow>
                     )
