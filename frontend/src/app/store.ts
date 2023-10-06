@@ -5,6 +5,7 @@ import authReducer from '../features/authSlice';
 import productsReducer from '../features/productsSlice';
 import shoppingCartReducer from '../features/shoppingCartSlice';
 import orderReducer from '../features/orderSlice';
+import ordersReducer from '../features/ordersSlice';
 import { shoppingCartApi } from "./api/shoppingCartApi";
 import { productApi } from "./api/productApi";
 import { rtkQueryErrorLogger } from "./middleware/ErrorHandler";
@@ -19,6 +20,7 @@ const rootReducer = combineReducers({
   shoppingCart: shoppingCartReducer,
   order: orderReducer,
   products: productsReducer,
+  orders: ordersReducer
 });
 
 export const store = configureStore({
