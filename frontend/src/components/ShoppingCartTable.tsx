@@ -24,19 +24,8 @@ import formatPrice from '../utils/priceFormatter';
 const ShoppingCartTable = () => {
   const { cartItems } = useSelector(selectShoppingCart);
   const dispatch = useAppDispatch();
-  const { data: getCartData, error, isLoading, isSuccess: getCartSuccess, } = useGetShoppingCartQuery();
+  const { data: getCartData, error, isLoading, isSuccess: getCartSuccess, refetch} = useGetShoppingCartQuery();
   const { mode }: any = useThemeContext();
-
-  useEffect(() => {
-    if (cartItems.length === 0) {
-      if (getCartData) {
-        dispatch(setCartItems({ cartItems: getCartData.cartItems }));
-      } else if (error) {
-        console.error(error);
-      }
-    }
-  }, [getCartData]);
-
   const [deleteShoppingCart,
     { data: shoppingCartData,
       isSuccess: isShoppingCartSuccess,
@@ -44,6 +33,18 @@ const ShoppingCartTable = () => {
       error: shoppingCartError
     },
   ] = useDeleteShoppingCartMutation();
+  
+  useEffect(() => {
+    refetch();
+  }, []);
+
+  useEffect(() => {
+    if (getCartData && getCartSuccess) {
+      dispatch(setCartItems({ cartItems: getCartData.cartItems }));
+    } else if (error) {
+      console.error(error);
+    }
+  }, [getCartData, getCartSuccess]);
 
   useEffect(() => {
     if (isShoppingCartSuccess && shoppingCartData) {
