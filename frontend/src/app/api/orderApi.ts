@@ -18,14 +18,14 @@ export const orderApi = createApi({
         });
 
         return {
-          url: `order/create`,
+          url: "order/create",
           method: "POST",
           headers,
           body
         };
       },
     }),
-  })
+  }),
 });
 
 export const { useCreateOrderMutation } = orderApi;
