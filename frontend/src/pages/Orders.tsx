@@ -99,7 +99,7 @@ const Orders = () => {
                     orders.map((order: Order) => (
                       <TableRow key={order.orderId}>
                         <TableCell component="th" scope="row">
-                          {order.orderId}
+                          #{order.orderId}
                         </TableCell>
                         <TableCell align="center">{dateFormater(order.orderDate)}</TableCell>
                         <TableCell align="center">€ {order.total}</TableCell>
