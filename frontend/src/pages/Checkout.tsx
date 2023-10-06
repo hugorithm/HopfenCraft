@@ -69,7 +69,7 @@ const Checkout = () => {
     if (isSuccess && orderData) {
       dispatch(setOrder(orderData));
     }
-  }, [isSuccess]);
+  }, [isSuccess, orderData]);
 
   const handleNext = async () => {
     let shippingDetails: ShippingDetails;

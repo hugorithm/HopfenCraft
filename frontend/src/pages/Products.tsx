@@ -99,7 +99,7 @@ const Products = () => {
         theme: mode,
       });
     }
-  }, [isCartAddSuccess]);
+  }, [isCartAddSuccess, cartData]);
 
   const handleChange = (productId: number, newValue: number | undefined) => {
     if (newValue === undefined) return;
