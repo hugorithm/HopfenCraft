@@ -10,6 +10,7 @@ import { selectShoppingCart } from '../features/shoppingCartSlice';
 
 const ShoppingCart = () => {
   const { cartItems } = useSelector(selectShoppingCart);
+  
   return (
     <>
       <CssBaseline />

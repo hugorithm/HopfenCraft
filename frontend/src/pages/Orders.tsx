@@ -37,10 +37,11 @@ const Orders = () => {
     }
   };
 
+
   const renderAfterCalled = useRef(false);
   useEffect(() => {
     if (!renderAfterCalled.current) { // This is so that React Strict Mode doesn't cause issues
-      if (orders.length === 0) {
+      if (loading !== "loading") {
         dispatch(resetPage());
         dispatch(fetchOrders()).then((data) => {
           if (data.payload) {
