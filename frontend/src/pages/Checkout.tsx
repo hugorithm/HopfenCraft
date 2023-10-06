@@ -17,43 +17,18 @@ import { useAppDispatch } from '../app/hooks';
 import { setOrder } from '../features/orderSlice';
 import OrderConfirmation from '../components/OrderConfirmation';
 import PaymentConfirmation from '../components/PaymentConfirmation';
-import { useGetShoppingCartQuery } from '../app/api/shoppingCartApi';
-import { selectShoppingCart, setCartItems } from '../features/shoppingCartSlice';
 import { ShippingDetails } from '../types/order/ShippingDetails';
-import { useSelector } from 'react-redux';
 
 const Checkout = () => {
-  const [createOrder, { data: orderData, isError, isSuccess, isLoading, error }] = useCreateOrderMutation();
-  const { cartItems } = useSelector(selectShoppingCart);
+  const [createOrder, { data: orderData, isError, isSuccess, isLoading, error }] = useCreateOrderMutation();;
   const [activeStep, setActiveStep] = useState(0);
   const dispatch = useAppDispatch();
   const [isPayed, setIsPayed] = useState(false);
   const steps = ['Shipping address', 'Review your order', 'Order confirmation', 'Payment details'];
 
-  const {
-    data: shoppingCartData,
-    error: shoppingCartError,
-    isSuccess: isShoppingCartSuccess,
-    isError: isShoppingCartError,
-    refetch
-  } = useGetShoppingCartQuery();
-
-  useEffect(() => {
-    if (isShoppingCartError) {
-      console.error(shoppingCartError);
-    }
-  }, [isShoppingCartError])
-
-  // useEffect(() => {
-  //   if (cartItems.length === 0 && shoppingCartData && isShoppingCartSuccess) {
-  //     dispatch(setCartItems({ cartItems: shoppingCartData.cartItems }));
-  //   }
-  // }, [shoppingCartData, isShoppingCartSuccess])
-
   const handleApprove = () => {
     setIsPayed(true);
     setActiveStep(4); //step after the last step so it shows as completed
-    refetch();
   }
 
   const [shippingData, setShippingData] = useState({
