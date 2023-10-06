@@ -44,6 +44,9 @@ const productsSlice = createSlice({
   reducers: {
     setProducts: (state, action: PayloadAction<Product[]>) => {
       state.products = action.payload;
+    },
+    resetPage: (state) => {
+      state.page = 0;
     }
   },
   extraReducers: (builder) => {
