@@ -36,11 +36,12 @@ function useRouteMatch(patterns: readonly string[]) {
 }
 
 const Navbar = () => {
-  const routeMatch = useRouteMatch(['/home', '/products', '/contacts', '/about']);
+  const { jwt } = useSelector(selectAuth);
+  //match must be created based on authentication and user roles. This might be a function in the future.
+  const routeMatch = jwt ? useRouteMatch(['/home', '/products', '/orders', '/contacts', '/about']) : useRouteMatch(['/home', '/products', '/contacts', '/about']);
   const currentTab = routeMatch?.pattern?.path || false;
   const routeLoginMatch = useRouteMatch(['/login', '/signup']);
   const currentLoginTab = routeLoginMatch?.pattern?.path || false;
-  const { jwt } = useSelector(selectAuth);
   const { mode } = useThemeContext();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
@@ -88,6 +89,9 @@ const Navbar = () => {
           sx={{ marginLeft: 'auto' }}>
           <Tab label="Home" value="/home" to="/home" component={Link} />
           <Tab label="Products" value="/products" to="/products" component={Link} />
+          {jwt && (
+            <Tab label="My Orders" value="/orders" to="/orders" component={Link} />
+          )}
           <Tab label="Contacts" value="/contacts" to="/contacts" component={Link} />
           <Tab label="About" value="/about" to="/about" component={Link} />
         </Tabs>
