@@ -24,6 +24,7 @@ import { toast } from 'react-toastify';
 import { useThemeContext } from '../theme/ThemeContextProvider';
 import { setCartItems } from '../features/shoppingCartSlice';
 import ItemAddedToCart from '../components/ItemAddedToCart';
+import { resetPage } from '../features/productsSlice';
 
 const Products = () => {
   const [openModal, setOpenModal] = useState<boolean>(false);
@@ -63,6 +64,7 @@ const Products = () => {
   useEffect(() => {
     if (!renderAfterCalled.current) { // This is so that React Strict Mode doesn't cause issues
       if (products.length === 0) {
+        dispatch(resetPage())
         dispatch(fetchProducts()).then((data) => {
           if (data.payload) {
             const payload = data.payload as ProductData;
