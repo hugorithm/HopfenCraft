@@ -5,6 +5,7 @@ import { LoginRequestBody } from '../../../types/auth/LoginRequestBody';
 import { SignUpResponse } from '../../../types/auth/SignUpResponse';
 import { SignUpRequestBody } from '../../../types/auth/SignUpRequestBody';
 import { OAuth2UserResponse } from '../../../types/auth/OAuth2UserResponse';
+import { UserResponse } from '../../../types/auth/UserResponse';
 
 export const authApi = createApi({
   reducerPath: "authApi",
@@ -29,6 +30,20 @@ export const authApi = createApi({
           body
         };
       },
+    }),
+    getUser : builder.query<UserResponse, string>({
+      query: (token: string) => {
+        const headers = new Headers({
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        });
+
+        return {
+          url: "/auth/current-user",
+          method: "GET",
+          headers
+        }
+      }
     }),
     getOAuth2User : builder.query<OAuth2UserResponse, string>({
       query: (token: string) => {
