@@ -7,40 +7,10 @@ import Grid from '@mui/material/Grid';
 import { useGetShoppingCartQuery } from '../app/api/shoppingCartApi';
 import { useSelector } from 'react-redux';
 import { selectShoppingCart, setCartItems } from '../features/shoppingCartSlice';
-import { Product } from '../types/product/ProductData';
 import { CartItem } from '../types/shopping/ShoppingCartResponse';
 import { useEffect } from 'react';
 import { useAppDispatch } from '../app/hooks';
-
-const products = [
-  {
-    name: 'Product 1',
-    desc: 'A nice thing',
-    price: '$9.99',
-  },
-  {
-    name: 'Product 2',
-    desc: 'Another thing',
-    price: '$3.45',
-  },
-  {
-    name: 'Product 3',
-    desc: 'Something else',
-    price: '$6.51',
-  },
-  {
-    name: 'Product 4',
-    desc: 'Best thing of all',
-    price: '$14.11',
-  },
-  { name: 'Shipping', desc: '', price: 'Free' },
-];
-const payments = [
-  { name: 'Card type', detail: 'Visa' },
-  { name: 'Card holder', detail: 'Mr John Smith' },
-  { name: 'Card number', detail: 'xxxx-xxxx-xxxx-1234' },
-  { name: 'Expiry date', detail: '04/2024' },
-];
+import formatPrice from '../utils/priceFormatter';
 
 interface AddressFormProps {
   shippingDetails: {
@@ -60,10 +30,6 @@ const Review: React.FC<AddressFormProps> = ({ shippingDetails }) => {
   const { cartItems } = useSelector(selectShoppingCart);
   const { data: getCartData, error, isLoading, isSuccess: getCartSuccess, } = useGetShoppingCartQuery();
   const dispatch = useAppDispatch();
-
-  function ccyFormat(num: number) {
-    return `${num.toFixed(2)}`;
-  }
 
   const total = cartItems.reduce((accumulator, cartItem) => {
     const price = parseFloat(cartItem.product.price);
@@ -97,7 +63,7 @@ const Review: React.FC<AddressFormProps> = ({ shippingDetails }) => {
         <ListItem sx={{ py: 1, px: 0 }}>
           <ListItemText primary="Total" />
           <Typography variant="subtitle1" sx={{ fontWeight: 700 }}>
-            € {ccyFormat(total)}
+            € {formatPrice(total)}
           </Typography>
         </ListItem>
       </List>

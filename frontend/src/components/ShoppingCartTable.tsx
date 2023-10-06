@@ -19,11 +19,7 @@ import ShoppingCartSkeleton from './ShoppingCartSkeleton';
 import { toast } from 'react-toastify';
 import { useThemeContext } from '../theme/ThemeContextProvider';
 import { Link as RouterLink } from 'react-router-dom';
-
-
-function ccyFormat(num: number) {
-  return `${num.toFixed(2)}`;
-}
+import formatPrice from '../utils/priceFormatter';
 
 const ShoppingCartTable = () => {
   const { cartItems } = useSelector(selectShoppingCart);
@@ -36,7 +32,7 @@ const ShoppingCartTable = () => {
       if (getCartData) {
         dispatch(setCartItems({ cartItems: getCartData.cartItems }));
       } else if (error) {
-        console.log(error);
+        console.error(error);
       }
     }
   }, [getCartData]);
@@ -154,7 +150,7 @@ const ShoppingCartTable = () => {
               <Typography variant="h6">Total</Typography>
             </TableCell>
             <TableCell align="right">
-              <Typography variant="h6">€ {ccyFormat(total)}</Typography>
+              <Typography variant="h6">€ {formatPrice(total)}</Typography>
             </TableCell>
             <TableCell />
           </TableRow>
