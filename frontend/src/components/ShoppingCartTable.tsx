@@ -49,7 +49,7 @@ const ShoppingCartTable = () => {
     if (isShoppingCartSuccess && shoppingCartData) {
       dispatch(setCartItems({ cartItems: shoppingCartData.cartItems }));
     }
-  }, [isShoppingCartSuccess])
+  }, [isShoppingCartSuccess, shoppingCartData])
 
   useEffect(() => {
     if (isShoppingCartError) {
@@ -119,10 +119,10 @@ const ShoppingCartTable = () => {
               </TableCell>
             </TableRow>
           ) : (
-            cartItems.map((cartItem : CartItem) => (
+            cartItems.map((cartItem: CartItem) => (
               <TableRow key={cartItem.cartItemId}>
                 <TableCell component="th" scope="row">
-                  <ProductImageLink productId={cartItem.product.productId}/>
+                  <ProductImageLink productId={cartItem.product.productId} />
                 </TableCell>
                 <TableCell>
                   <Button
@@ -162,10 +162,10 @@ const ShoppingCartTable = () => {
 };
 
 interface ProductImageLinkProps {
-  productId: number; 
+  productId: number;
 }
 
-const ProductImageLink : React.FC<ProductImageLinkProps> = ({ productId }) => {
+const ProductImageLink: React.FC<ProductImageLinkProps> = ({ productId }) => {
   return (
     <RouterLink to={`/product/${productId}`}>
       <CardMedia
@@ -173,7 +173,7 @@ const ProductImageLink : React.FC<ProductImageLinkProps> = ({ productId }) => {
         sx={{
           pt: '50.25%',
           backgroundSize: 'contain',
-          cursor: 'pointer', 
+          cursor: 'pointer',
         }}
         image={`${BASE_URL}/product/${productId}/image`}
       />
