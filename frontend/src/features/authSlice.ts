@@ -5,12 +5,14 @@ export interface AuthState {
   username:  string | null;
   email:     string | null;
   jwt:       string | null;
+  roles:     string[] | null;
 }
 
 const initialState: AuthState = {
   username: null,
   email:    null,
-  jwt:      null
+  jwt:      null,
+  roles:    null
 }
 
 export const authSlice = createSlice({
@@ -23,18 +25,21 @@ export const authSlice = createSlice({
         JSON.stringify({
           username: action.payload.username,
           email: action.payload.email,
-          jwt: action.payload.jwt
+          jwt: action.payload.jwt,
+          roles: action.payload.roles
         }),
       );
       state.username = action.payload.username;
       state.email = action.payload.email;
       state.jwt = action.payload.jwt;
+      state.roles = action.payload.roles;
     },
     logout: (state) => {
       localStorage.removeItem("user");
       state.username = null;
       state.email = null;
       state.jwt = null;
+      state.roles = null;
     },
   },
 });

@@ -1,7 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { Order } from '../types/order/Order';
 
-
 export interface OrderState {
   order:  Order | null;
   isLoading:    boolean;
