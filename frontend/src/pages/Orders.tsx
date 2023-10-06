@@ -17,7 +17,7 @@ import {
 } from "@mui/material";
 import { useAppDispatch } from "../app/hooks";
 import { useEffect, useRef } from "react";
-import { fetchOrders, selectOrders, setOrders } from "../features/ordersSlice";
+import { fetchOrders, resetPage, selectOrders, setOrders } from "../features/ordersSlice";
 import { useSelector } from "react-redux";
 import { OrderList } from "../types/order/OrderList";
 import ShoppingCartSkeleton from "../components/ShoppingCartSkeleton";
@@ -41,6 +41,7 @@ const Orders = () => {
   useEffect(() => {
     if (!renderAfterCalled.current) { // This is so that React Strict Mode doesn't cause issues
       if (orders.length === 0) {
+        dispatch(resetPage());
         dispatch(fetchOrders()).then((data) => {
           if (data.payload) {
             const payload = data.payload as OrderList;
