@@ -2,10 +2,12 @@ import { BASE_URL } from "../config/constants";
 import {
   PayPalScriptProvider,
   PayPalButtons,
+  usePayPalScriptReducer,
 } from "@paypal/react-paypal-js";
 import { PayPalScriptOptions } from "@paypal/paypal-js/types/script-options";
 import { useSelector } from "react-redux";
 import { selectOrder } from "../features/orderSlice";
+import { Box, CircularProgress } from "@mui/material";
 
 const paypalScriptOptions: PayPalScriptOptions = {
   clientId: import.meta.env.VITE_PAYPAL_CLIENT_ID,
@@ -16,7 +18,24 @@ interface PaypalPaymentProps {
   onApproveCallback: () => void;
 }
 
-const PaypalPayment: React.FC<PaypalPaymentProps> = ({ onApproveCallback })  => {
+interface ButtonWrapperProps {
+  createOrder: () => Promise<string>;
+  onApprove: (data: { orderID: string }) => Promise<void>;
+}
+
+const ButtonWrapper: React.FC<ButtonWrapperProps> = ({ createOrder, onApprove }) => {
+  const [{ isPending }] = usePayPalScriptReducer();
+  return (
+    isPending ? <Box sx={{
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+    }}><CircularProgress /></Box>
+    : <PayPalButtons createOrder={createOrder} onApprove={onApprove}  />
+  )
+}
+
+const PaypalPayment: React.FC<PaypalPaymentProps> = ({ onApproveCallback }) => {
   const { order } = useSelector(selectOrder);
 
   const createOrder = () => {
@@ -53,13 +72,13 @@ const PaypalPayment: React.FC<PaypalPaymentProps> = ({ onApproveCallback })  => 
     })
       .then((response) => response.json())
       .then(() => {
-          onApproveCallback();
+        onApproveCallback();
       });
   };
 
   return (
     <PayPalScriptProvider options={paypalScriptOptions}>
-      <PayPalButtons createOrder={createOrder} onApprove={onApprove} />
+      <ButtonWrapper createOrder={createOrder} onApprove={onApprove} />
     </PayPalScriptProvider>
   );
 }
