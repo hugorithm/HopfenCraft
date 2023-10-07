@@ -99,7 +99,7 @@ public class OrderService {
                     .body(new OrderResponseDTO(
                             savedOrder.getOrderId(),
                             savedOrder.getTotal(),
-                            Order.getCurrency().toString(),
+                            Order.getCurrency(),
                             cartItemsDTO,
                             savedOrder.getOrderStatus(),
                             savedOrder.getOrderDate()
@@ -129,6 +129,7 @@ public class OrderService {
             LOGGER.error(ex.getMessage(), ex);
         }
     }
+
     public ResponseEntity<Page<OrderResponseDTO>> getOrders(Pageable pageable, Jwt jwt) {
         try {
             Page<Order> orderPage = orderRepository.findAll(pageable);
@@ -139,7 +140,7 @@ public class OrderService {
             Page<OrderResponseDTO> page = orderPage.map(order -> new OrderResponseDTO(
                     order.getOrderId(),
                     order.getTotal(),
-                    Order.getCurrency().toString(),
+                    Order.getCurrency(),
                     cartItemsDTO,
                     order.getOrderStatus(),
                     order.getOrderDate()
