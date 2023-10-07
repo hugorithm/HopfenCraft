@@ -7,6 +7,7 @@ import com.hugorithm.hopfencraft.dto.shippingDetails.ShippingDetailsDTO;
 import com.hugorithm.hopfencraft.enums.OrderStatus;
 import com.hugorithm.hopfencraft.exception.order.InsufficientStockException;
 import com.hugorithm.hopfencraft.exception.order.OrderCartIsEmptyException;
+import com.hugorithm.hopfencraft.exception.order.OrderNotFoundException;
 import com.hugorithm.hopfencraft.model.*;
 import com.hugorithm.hopfencraft.repository.OrderRepository;
 import com.hugorithm.hopfencraft.repository.ProductRepository;
@@ -26,6 +27,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -146,6 +149,38 @@ public class OrderService {
         } catch (UsernameNotFoundException ex) {
             LOGGER.error(ex.getMessage(), ex);
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+    }
+
+    public ResponseEntity<OrderResponseDTO> getOrder(Jwt jwt, Long orderId) {
+        try {
+            ApplicationUser user = jwtService.getUserFromJwt(jwt);
+            Optional<Order> hasOrder = user.getOrders()
+                    .stream()
+                    .filter(order ->
+                            Objects.equals(order.getOrderId(), orderId)
+                    ).findFirst();
+
+            if (hasOrder.isEmpty()) {
+                throw new OrderNotFoundException("Order not found with id: %s", orderId);
+            }
+
+            Order order = hasOrder.get();
+
+            return ResponseEntity.ok(new OrderResponseDTO(
+                    order.getOrderId(),
+                    order.getTotal(),
+                    Order.getCurrency(),
+                    shoppingCartService.convertCartItemListToCartItemDTOList(user.getCartItems()),
+                    order.getOrderStatus(),
+                    order.getOrderDate()
+            ));
+        } catch (UsernameNotFoundException ex) {
+            LOGGER.error(ex.getMessage(), ex);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        } catch (OrderNotFoundException ex) {
+            LOGGER.error(ex.getMessage(), ex);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }
 }
