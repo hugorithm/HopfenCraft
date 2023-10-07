@@ -25,7 +25,22 @@ export const orderApi = createApi({
         };
       },
     }),
+    getOrder: builder.query<Order, string>({
+      query: (id) => {
+        const localJwt: string = JSON.parse(localStorage.getItem("user") || "{}").jwt;
+        const headers = new Headers({
+          'Authorization': `Bearer ${localJwt}`,
+          'Content-Type': 'application/json',
+        });
+
+        return {
+          url: `/order/${id}`,
+          method: "GET",
+          headers,
+        };
+      },
+    }),
   }),
 });
 
-export const { useCreateOrderMutation } = orderApi;
+export const { useCreateOrderMutation, useGetOrderQuery } = orderApi;
