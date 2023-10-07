@@ -30,6 +30,7 @@ import OAuth2RedirectHandler from './components/oauth2/OAuth2RedirectHandler';
 import ProductDetails from './pages/ProductDetails';
 import Checkout from './pages/Checkout';
 import Orders from './pages/Orders';
+import Order from './pages/Order';
 
 
 const Root = () => {
@@ -62,6 +63,7 @@ const router = createBrowserRouter(
         <Route path='profile' element={<Profile />} errorElement={<CustomError />} />
         <Route path='shopping-cart' element={<ShoppingCart />} errorElement={<CustomError />} />
         <Route path='orders' element={<Orders />} errorElement={<CustomError />} />
+        <Route path='order/:id' element={<Order />} errorElement={<CustomError />} />
       </Route>
       <Route path="*" element={<NotFound />} />
     </Route>
