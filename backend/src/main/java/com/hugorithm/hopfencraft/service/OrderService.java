@@ -162,11 +162,7 @@ public class OrderService {
                             Objects.equals(order.getOrderId(), orderId)
                     ).findFirst();
 
-            if (hasOrder.isEmpty()) {
-                throw new OrderNotFoundException("Order not found with id: %s", orderId);
-            }
-
-            Order order = hasOrder.get();
+            Order order = hasOrder.orElseThrow(() -> new OrderNotFoundException("Order not found with id: %s", orderId));
 
             return ResponseEntity.ok(new OrderResponseDTO(
                     order.getOrderId(),
