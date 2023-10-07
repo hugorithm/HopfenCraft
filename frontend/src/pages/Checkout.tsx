@@ -23,11 +23,11 @@ const Checkout = () => {
   const [createOrder, { data: orderData, isError, isSuccess, isLoading, error }] = useCreateOrderMutation();;
   const [activeStep, setActiveStep] = useState(0);
   const dispatch = useAppDispatch();
-  const [isPayed, setIsPayed] = useState(false);
+  const [isPaid, setIsPaid] = useState(false);
   const steps = ['Shipping address', 'Review your order', 'Order confirmation', 'Payment details'];
 
   const handleApprove = () => {
-    setIsPayed(true);
+    setIsPaid(true);
     setActiveStep(4); //step after the last step so it shows as completed
   }
 
@@ -129,7 +129,7 @@ const Checkout = () => {
               </Step>
             ))}
           </Stepper>
-          {!isPayed && activeStep !== 4 ? (
+          {!isPaid && activeStep !== 4 ? (
             <React.Fragment>
               {getStepContent(activeStep)}
               <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
