@@ -1,5 +1,6 @@
 package com.hugorithm.hopfencraft.controller;
 
+import com.hugorithm.hopfencraft.dto.order.OrderDTO;
 import com.hugorithm.hopfencraft.dto.order.OrderResponseDTO;
 import com.hugorithm.hopfencraft.dto.shippingDetails.ShippingDetailsDTO;
 import com.hugorithm.hopfencraft.service.OrderService;
@@ -33,6 +34,12 @@ public class OrderController {
                                                     @RequestParam(defaultValue = "10") int size) {
         Pageable pageable = PageRequest.of(page, size);
         return orderService.getOrders(pageable, jwt);
+    }
+
+    @GetMapping("/order/{orderId}")
+    @RolesAllowed("USER")
+    public ResponseEntity<OrderResponseDTO> getOrder(@AuthenticationPrincipal Jwt jwt, @PathVariable Long orderId) {
+        return orderService.getOrder(jwt, orderId);
     }
 
 }
