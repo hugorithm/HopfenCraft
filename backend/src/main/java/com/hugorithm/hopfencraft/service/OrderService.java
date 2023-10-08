@@ -167,9 +167,8 @@ public class OrderService {
 
     public ResponseEntity<Page<OrderResponseDTO>> getOrders(Pageable pageable, Jwt jwt) {
         try {
-            Page<Order> orderPage = orderRepository.findAll(pageable);
             ApplicationUser user = jwtService.getUserFromJwt(jwt);
-            List<CartItem> cartItems = user.getCartItems();
+            Page<Order> orderPage = orderRepository.findAllByUser(pageable, user);
 
             Page<OrderResponseDTO> page = orderPage.map(order -> new OrderResponseDTO(
                     order.getOrderId(),
