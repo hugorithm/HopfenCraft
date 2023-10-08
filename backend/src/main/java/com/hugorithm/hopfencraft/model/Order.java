@@ -11,6 +11,7 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "orders")
@@ -24,6 +25,8 @@ public class Order {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private ApplicationUser user;
+    @OneToMany(mappedBy = "order")
+    private List<OrderItem> orderItems;
     @Column(name = "order_date")
     @CreationTimestamp
     private LocalDateTime orderDate;
