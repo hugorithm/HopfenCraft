@@ -16,10 +16,13 @@ import {
 } from "@mui/material";
 import { useAppDispatch } from "../app/hooks";
 import { useGetOrderQuery } from "../app/api/orderApi";
-import { CartItem } from "../types/order/Order";
+import { OrderItem } from "../types/order/Order";
 import PaypalPayment from "../components/PaypalPayment";
 import { selectOrder, setOrder } from "../features/orderSlice";
 import { useSelector } from "react-redux";
+import NotFound from "../errors/NotFound";
+import ProductImageLink from "../components/ProductImageLink";
+import PaymentConfirmation from "../components/PaymentConfirmation";
 
 const Order = () => {
   const [isPaid, setIsPaid] = useState(false);
@@ -77,18 +80,21 @@ const Order = () => {
               </Typography>
               <Divider />
               <List disablePadding>
-                {order.cartItems.map((cartItem: CartItem) => (
+                {order.orderItems.map((orderItem: OrderItem) => (
                   <ListItem
-                    key={cartItem.cartItemId}
+                    key={orderItem.orderItemId}
                     sx={{ py: 1, px: 0 }}
                     divider
                   >
+                    <ListItem sx={{ width: "unset" }}>
+                      <ProductImageLink productId={orderItem.product.productId} width="5rem" />
+                    </ListItem>
                     <ListItemText
-                      primary={cartItem.product.name}
-                      secondary={cartItem.product.description}
+                      primary={orderItem.product.name}
+                      secondary={orderItem.product.description}
                     />
                     <Typography variant="body2">
-                      {cartItem.quantity} x €{cartItem.product.price}
+                      {orderItem.quantity} x €{orderItem.product.price}
                     </Typography>
                   </ListItem>
                 ))}
@@ -104,12 +110,16 @@ const Order = () => {
                 </Typography>
               </Box>
               <Divider sx={{ mt: 2 }} />
-              {!isPaid && (
+              {!isPaid && order.orderStatus !== "PAID" ? (
                 <Box sx={{ mt: 3 }}>
                   <Typography variant="h6" color="textPrimary" gutterBottom>
                     Payment
                   </Typography>
-                  <PaypalPayment onApproveCallback={handleApprove} />
+                  <PaypalPayment onApproveCallback={handleApprove} orderId={order.orderId} />
+                </Box>
+              ) : (
+                <Box sx={{ mt: 3 }}>
+                  <PaymentConfirmation />
                 </Box>
               )}
             </Paper>

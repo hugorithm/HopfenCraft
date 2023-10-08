@@ -26,7 +26,6 @@ import dateFormater from "../utils/dateFormatter";
 import PaymentIcon from '@mui/icons-material/Payment';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import { Link } from "react-router-dom";
-import { setOrder } from "../features/orderSlice";
 
 
 const Orders = () => {
