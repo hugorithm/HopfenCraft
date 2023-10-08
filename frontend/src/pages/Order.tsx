@@ -19,25 +19,31 @@ import { OrderItem } from "../types/order/Order";
 import PaypalPayment from "../components/PaypalPayment";
 import { selectOrder, setOrder } from "../features/orderSlice";
 import { useSelector } from "react-redux";
-import NotFound from "../errors/NotFound";
 import ProductImageLink from "../components/ProductImageLink";
 import PaymentConfirmation from "../components/PaymentConfirmation";
 
-const Order = () => {
+interface OrderProps {
+  onApproveCallback: () => void;
+  orderId: number | undefined;
+}
+
+const Order: React.FC<OrderProps> = ({ onApproveCallback, orderId }) => {
   const [isPaid, setIsPaid] = useState(false);
   const dispatch = useAppDispatch();
   const { id } = useParams() as { id: string };
+
   const {
     data: orderData,
     isLoading,
     isSuccess,
     isError,
     error,
-  } = useGetOrderQuery(id);
+  } = useGetOrderQuery(orderId === undefined ? id : orderId.toString());
   const { order } = useSelector(selectOrder);
 
   const handleApprove = () => {
     setIsPaid(true);
+    onApproveCallback();
   };
 
   useEffect(() => {
@@ -45,6 +51,7 @@ const Order = () => {
       dispatch(setOrder(orderData));
     }
   }, [isSuccess, orderData]);
+
 
   return (
     <>
