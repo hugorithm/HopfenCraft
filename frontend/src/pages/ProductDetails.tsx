@@ -17,7 +17,7 @@ const ProductDetails = () => {
     isError,
     error
   } = useGetProductQuery(id) as {
-    data: Product,
+    data: Product | undefined,
     isLoading: boolean,
     isSuccess: boolean,
     isError: boolean,
@@ -32,47 +32,48 @@ const ProductDetails = () => {
     }
   }
 
-  if (!product) {
-    return <CustomError />;
-  }
-
   return (
     <>
       <CssBaseline />
-      <Container maxWidth="lg">
-        <Box
-          sx={{
-            mt: 8,
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-          }}
-        >
-          <Grid container spacing={3}>
-            <Grid item xs={12} md={6}>
-              <CardMedia
-                component="img"
-                alt={product.name}
-                height="500rem"
-                style={{ objectFit: 'contain' }}
-                image={`${BASE_URL}/product/${product.productId}/image`}
-              />
-            </Grid>
-            <Grid item xs={12} md={6}>
-              <Typography variant="h4" gutterBottom>
-                {product.name}
-              </Typography>
-              <Typography variant="body1" gutterBottom>
-                Description: {product.description}
-              </Typography>
-              <Typography variant="h5" gutterBottom>
-                Price: €{product.price}
-              </Typography>
+      {isLoading || !product ? (
+        <Skeleton variant="rectangular" width={300} height={100} />
+      ) : (
 
+        <Container maxWidth="lg">
+          <Box
+            sx={{
+              mt: 8,
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+            }}
+          >
+            <Grid container spacing={3}>
+              <Grid item xs={12} md={6}>
+                <CardMedia
+                  component="img"
+                  alt={product.name}
+                  height="500rem"
+                  style={{ objectFit: 'contain' }}
+                  image={`${BASE_URL}/product/${product.productId}/image`}
+                />
+              </Grid>
+              <Grid item xs={12} md={6}>
+                <Typography variant="h4" gutterBottom>
+                  {product.name}
+                </Typography>
+                <Typography variant="body1" gutterBottom>
+                  Description: {product.description}
+                </Typography>
+                <Typography variant="h5" gutterBottom>
+                  Price: €{product.price}
+                </Typography>
+
+              </Grid>
             </Grid>
-          </Grid>
-        </Box>
-      </Container>
+          </Box>
+        </Container>
+      )}
     </>
   );
 };
