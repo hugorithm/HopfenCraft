@@ -5,8 +5,6 @@ import {
   usePayPalScriptReducer,
 } from "@paypal/react-paypal-js";
 import { PayPalScriptOptions } from "@paypal/paypal-js/types/script-options";
-import { useSelector } from "react-redux";
-import { selectOrder } from "../features/orderSlice";
 import { Box, CircularProgress } from "@mui/material";
 
 const paypalScriptOptions: PayPalScriptOptions = {

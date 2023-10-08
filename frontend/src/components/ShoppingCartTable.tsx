@@ -9,7 +9,7 @@ import Paper from '@mui/material/Paper';
 import { useSelector } from 'react-redux';
 import { selectShoppingCart, setCartItems } from '../features/shoppingCartSlice';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { Button, CardMedia, IconButton, Typography } from '@mui/material';
+import { Button, IconButton, Typography } from '@mui/material';
 import { useDeleteShoppingCartMutation, useGetShoppingCartQuery } from '../app/api/shoppingCartApi';
 import { useEffect } from 'react';
 import { CartItem } from '../types/shopping/ShoppingCartResponse';

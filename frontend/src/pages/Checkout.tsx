@@ -11,7 +11,6 @@ import Typography from '@mui/material/Typography';
 import AddressForm from '../components/AddressForm';
 import Review from '../components/OrderReview';
 import { useEffect, useState } from 'react';
-import PaypalPayment from '../components/PaypalPayment';
 import { useCreateOrderMutation } from '../app/api/orderApi';
 import { useAppDispatch } from '../app/hooks';
 import { selectOrder, setOrder } from '../features/orderSlice';
