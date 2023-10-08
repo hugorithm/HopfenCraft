@@ -1,7 +1,6 @@
 package com.hugorithm.hopfencraft.dto.order;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.hugorithm.hopfencraft.dto.cart.CartItemDTO;
 import com.hugorithm.hopfencraft.enums.Currency;
 import com.hugorithm.hopfencraft.enums.OrderStatus;
 import lombok.AllArgsConstructor;
@@ -20,7 +19,7 @@ public class OrderResponseDTO {
     @JsonFormat(shape = JsonFormat.Shape.STRING)
     private BigDecimal total;
     private Currency currency;
-    private List<CartItemDTO> cartItems;
+    private List<OrderItemDTO> orderItems;
     private OrderStatus orderStatus;
     private LocalDateTime orderDate;
 }
