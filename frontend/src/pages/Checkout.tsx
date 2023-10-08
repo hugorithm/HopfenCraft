@@ -20,6 +20,7 @@ import PaymentConfirmation from '../components/PaymentConfirmation';
 import { ShippingDetails } from '../types/order/ShippingDetails';
 import { useSelector } from 'react-redux';
 import CustomError from '../errors/CustomError';
+import Order from './Order';
 
 const Checkout = () => {
   const [createOrder, { data: orderData, isError, isSuccess, isLoading, error }] = useCreateOrderMutation();;
@@ -62,7 +63,7 @@ const Checkout = () => {
       case 2:
         return <OrderConfirmation />
       case 3:
-        return order ? <PaypalPayment onApproveCallback={handleApprove} orderId={order.orderId} /> : <CustomError />;
+        return order ? <Order onApproveCallback={handleApprove} orderId={order.orderId} /> : <CustomError />;
       default:
         throw new Error('Unknown step');
     }
