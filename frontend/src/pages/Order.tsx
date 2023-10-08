@@ -38,7 +38,7 @@ const Order: React.FC<OrderProps> = ({ onApproveCallback, orderId }) => {
     isSuccess,
     isError,
     error,
-  } = useGetOrderQuery(orderId === undefined ? id : orderId.toString());
+  } = useGetOrderQuery(orderId?.toString() || id);
   const { order } = useSelector(selectOrder);
 
   const handleApprove = () => {
