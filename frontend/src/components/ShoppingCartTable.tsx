@@ -10,7 +10,6 @@ import { useSelector } from 'react-redux';
 import { selectShoppingCart, setCartItems } from '../features/shoppingCartSlice';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { Button, CardMedia, IconButton, Typography } from '@mui/material';
-import { BASE_URL } from '../config/constants';
 import { useDeleteShoppingCartMutation, useGetShoppingCartQuery } from '../app/api/shoppingCartApi';
 import { useEffect } from 'react';
 import { CartItem } from '../types/shopping/ShoppingCartResponse';
@@ -20,6 +19,7 @@ import { toast } from 'react-toastify';
 import { useThemeContext } from '../theme/ThemeContextProvider';
 import { Link as RouterLink } from 'react-router-dom';
 import formatPrice from '../utils/priceFormatter';
+import ProductImageLink from './ProductImageLink';
 
 const ShoppingCartTable = () => {
   const { cartItems } = useSelector(selectShoppingCart);
@@ -162,24 +162,5 @@ const ShoppingCartTable = () => {
   );
 };
 
-interface ProductImageLinkProps {
-  productId: number;
-}
-
-const ProductImageLink: React.FC<ProductImageLinkProps> = ({ productId }) => {
-  return (
-    <RouterLink to={`/product/${productId}`}>
-      <CardMedia
-        component="div"
-        sx={{
-          pt: '50.25%',
-          backgroundSize: 'contain',
-          cursor: 'pointer',
-        }}
-        image={`${BASE_URL}/product/${productId}/image`}
-      />
-    </RouterLink>
-  );
-};
 
 export default ShoppingCartTable;
