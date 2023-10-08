@@ -1,3 +1,5 @@
+import { OrderItem } from "./Order";
+
 export interface OrderList {
     content:          Order[];
     pageable:         Pageable;
@@ -16,13 +18,13 @@ export interface Order {
     orderId:     number;
     total:       string;
     currency:    string;
-    cartItems:   CartItem[];
+    orderItems:  OrderItem[];
     orderStatus: string;
     orderDate:   string;
 }
 
-export interface CartItem {
-    cartItemId:    number;
+export interface OrderItem {
+    orderItemId:    number;
     product:       Product;
     quantity:      number;
     total:         string;
