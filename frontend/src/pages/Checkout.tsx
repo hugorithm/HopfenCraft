@@ -14,10 +14,12 @@ import { useEffect, useState } from 'react';
 import PaypalPayment from '../components/PaypalPayment';
 import { useCreateOrderMutation } from '../app/api/orderApi';
 import { useAppDispatch } from '../app/hooks';
-import { setOrder } from '../features/orderSlice';
+import { selectOrder, setOrder } from '../features/orderSlice';
 import OrderConfirmation from '../components/OrderConfirmation';
 import PaymentConfirmation from '../components/PaymentConfirmation';
 import { ShippingDetails } from '../types/order/ShippingDetails';
+import { useSelector } from 'react-redux';
+import CustomError from '../errors/CustomError';
 
 const Checkout = () => {
   const [createOrder, { data: orderData, isError, isSuccess, isLoading, error }] = useCreateOrderMutation();;
@@ -25,6 +27,7 @@ const Checkout = () => {
   const dispatch = useAppDispatch();
   const [isPaid, setIsPaid] = useState(false);
   const steps = ['Shipping address', 'Review your order', 'Order confirmation', 'Payment details'];
+  const { order } = useSelector(selectOrder);
 
   const handleApprove = () => {
     setIsPaid(true);
@@ -59,7 +62,7 @@ const Checkout = () => {
       case 2:
         return <OrderConfirmation />
       case 3:
-        return <PaypalPayment onApproveCallback={handleApprove} />;
+        return order ? <PaypalPayment onApproveCallback={handleApprove} orderId={order.orderId} /> : <CustomError />;
       default:
         throw new Error('Unknown step');
     }
