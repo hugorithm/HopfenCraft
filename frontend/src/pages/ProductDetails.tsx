@@ -1,5 +1,5 @@
 import { useParams } from 'react-router-dom';
-import { Container, Typography, Card, CardContent, CardMedia, Button, Box, Paper, Grid, CssBaseline } from '@mui/material';
+import { Container, Typography, Card, CardContent, CardMedia, Button, Box, Paper, Grid, CssBaseline, Fade, Skeleton } from '@mui/material';
 import { BASE_URL } from '../config/constants';
 import { useGetProductQuery } from '../app/api/productApi';
 import CustomError from '../errors/CustomError';
