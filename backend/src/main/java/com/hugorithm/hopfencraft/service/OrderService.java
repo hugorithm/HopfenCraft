@@ -1,14 +1,16 @@
 package com.hugorithm.hopfencraft.service;
 
-import com.hugorithm.hopfencraft.dto.cart.CartItemDTO;
 import com.hugorithm.hopfencraft.dto.order.OrderDTO;
+import com.hugorithm.hopfencraft.dto.order.OrderItemDTO;
 import com.hugorithm.hopfencraft.dto.order.OrderResponseDTO;
+import com.hugorithm.hopfencraft.dto.product.ProductDTO;
 import com.hugorithm.hopfencraft.dto.shippingDetails.ShippingDetailsDTO;
 import com.hugorithm.hopfencraft.enums.OrderStatus;
 import com.hugorithm.hopfencraft.exception.order.InsufficientStockException;
 import com.hugorithm.hopfencraft.exception.order.OrderCartIsEmptyException;
 import com.hugorithm.hopfencraft.exception.order.OrderNotFoundException;
 import com.hugorithm.hopfencraft.model.*;
+import com.hugorithm.hopfencraft.repository.OrderItemRepository;
 import com.hugorithm.hopfencraft.repository.OrderRepository;
 import com.hugorithm.hopfencraft.repository.ProductRepository;
 import com.hugorithm.hopfencraft.repository.ShippingDetailsRepository;
@@ -39,6 +41,7 @@ public class OrderService {
     private final ProductRepository productRepository;
     private final ShoppingCartService shoppingCartService;
     private final ShippingDetailsRepository shippingDetailsRepository;
+    private final OrderItemRepository orderItemRepository;
     private final static Logger LOGGER = LoggerFactory.getLogger(OrderService.class);
 
     public List<OrderDTO> ConvertOrderListIntoOrderDTOList(List<Order> orderList) {
@@ -50,6 +53,28 @@ public class OrderService {
                         Product.getCurrency(),
                         shoppingCartService.convertCartItemListToCartItemDTOList(o.getUser().getCartItems()),
                         o.getOrderDate()
+                ))
+                .toList();
+    }
+
+    public List<OrderItemDTO> ConvertOrderItemListIntoOderItemDTOList(List<OrderItem> orderItems) {
+        return orderItems
+                .stream()
+                .map(orderItem -> new OrderItemDTO(
+                        orderItem.getOrderItemId(),
+                        new ProductDTO(
+                                orderItem.getProduct().getProductId(),
+                                orderItem.getProduct().getBrand(),
+                                orderItem.getProduct().getName(),
+                                orderItem.getProduct().getDescription(),
+                                orderItem.getProduct().getStockQuantity(),
+                                orderItem.getProduct().getPrice(),
+                                Product.getCurrency(),
+                                orderItem.getProduct().getRegisterDateTime()
+                        ),
+                        orderItem.getQuantity(),
+                        orderItem.getTotal(),
+                        orderItem.getAddedDateTime()
                 ))
                 .toList();
     }
@@ -91,16 +116,26 @@ public class OrderService {
                 order.setShippingDetails(shippingDetails);
             }
 
-            Order savedOrder = orderRepository.save(order);
+            List<OrderItem> orderItems = cartItems
+                    .stream()
+                    .map(cartItem -> new OrderItem(
+                            order,
+                            cartItem.getProduct(),
+                            cartItem.getQuantity(),
+                            cartItem.getAddedDateTime(),
+                            cartItem.getTotal()
+                    ))
+                    .toList();
 
-            List<CartItemDTO> cartItemsDTO = shoppingCartService.convertCartItemListToCartItemDTOList(cartItems);
+            orderItemRepository.saveAll(orderItems);
+            Order savedOrder = orderRepository.save(order);
 
             return ResponseEntity.status(HttpStatus.CREATED)
                     .body(new OrderResponseDTO(
                             savedOrder.getOrderId(),
                             savedOrder.getTotal(),
                             Order.getCurrency(),
-                            cartItemsDTO,
+                            ConvertOrderItemListIntoOderItemDTOList(orderItems),
                             savedOrder.getOrderStatus(),
                             savedOrder.getOrderDate()
                     ));
@@ -112,7 +147,7 @@ public class OrderService {
 
     public void updateStock(Order order) {
         try {
-            for (CartItem orderItem : order.getUser().getCartItems()) {
+            for (OrderItem orderItem : order.getOrderItems()) {
                 Product product = orderItem.getProduct();
                 int orderedQuantity = orderItem.getQuantity();
                 int currentStock = product.getStockQuantity();
@@ -135,13 +170,12 @@ public class OrderService {
             Page<Order> orderPage = orderRepository.findAll(pageable);
             ApplicationUser user = jwtService.getUserFromJwt(jwt);
             List<CartItem> cartItems = user.getCartItems();
-            List<CartItemDTO> cartItemsDTO = shoppingCartService.convertCartItemListToCartItemDTOList(cartItems);
 
             Page<OrderResponseDTO> page = orderPage.map(order -> new OrderResponseDTO(
                     order.getOrderId(),
                     order.getTotal(),
                     Order.getCurrency(),
-                    cartItemsDTO,
+                    ConvertOrderItemListIntoOderItemDTOList(order.getOrderItems()),
                     order.getOrderStatus(),
                     order.getOrderDate()
             ));
@@ -168,7 +202,7 @@ public class OrderService {
                     order.getOrderId(),
                     order.getTotal(),
                     Order.getCurrency(),
-                    shoppingCartService.convertCartItemListToCartItemDTOList(user.getCartItems()),
+                    ConvertOrderItemListIntoOderItemDTOList(order.getOrderItems()),
                     order.getOrderStatus(),
                     order.getOrderDate()
             ));
