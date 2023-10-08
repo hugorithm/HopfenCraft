@@ -16,6 +16,7 @@ const paypalScriptOptions: PayPalScriptOptions = {
 
 interface PaypalPaymentProps {
   onApproveCallback: () => void;
+  orderId: number;
 }
 
 interface ButtonWrapperProps {
@@ -35,9 +36,7 @@ const ButtonWrapper: React.FC<ButtonWrapperProps> = ({ createOrder, onApprove })
   )
 }
 
-const PaypalPayment: React.FC<PaypalPaymentProps> = ({ onApproveCallback }) => {
-  const { order } = useSelector(selectOrder);
-
+const PaypalPayment: React.FC<PaypalPaymentProps> = ({ onApproveCallback, orderId }) => {
   const createOrder = () => {
     const localJwt: string = JSON.parse(localStorage.getItem("user") || "{}").jwt;
     const headers = new Headers({
@@ -49,7 +48,7 @@ const PaypalPayment: React.FC<PaypalPaymentProps> = ({ onApproveCallback }) => {
       method: "POST",
       headers,
       body: JSON.stringify({
-        orderId: order?.orderId,
+        orderId: orderId,
       }),
     })
       .then((response) => response.json())
@@ -67,7 +66,7 @@ const PaypalPayment: React.FC<PaypalPaymentProps> = ({ onApproveCallback }) => {
       method: "POST",
       headers,
       body: JSON.stringify({
-        orderId: order?.orderId,
+        orderId: orderId,
       })
     })
       .then((response) => response.json())
