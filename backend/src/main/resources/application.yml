@@ -52,6 +52,7 @@ paypal:
   client:
     id: ${PAYPAL_CLIENT_ID}
     secret: ${PAYPAL_CLIENT_SECRET}
+  base-url: "https://api-m.sandbox.paypal.com"
 jwt:
   rsa:
     public:
