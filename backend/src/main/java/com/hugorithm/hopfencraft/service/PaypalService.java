@@ -47,8 +47,9 @@ public class PaypalService {
     private final String CLIENT_ID;
     private final String CLIENT_SECRET;
     private final static Logger LOGGER = LoggerFactory.getLogger(PaypalService.class);
-    //Needs to be changed with live url for production
-    private final static String PAYPAL_BASE_URL = "https://api-m.sandbox.paypal.com";
+    //TODO: Needs to be changed with live url for production
+    @Value("${paypal.base-url}")
+    private String PAYPAL_BASE_URL;
 
     @Autowired
     public PaypalService(JwtService jwtService,
