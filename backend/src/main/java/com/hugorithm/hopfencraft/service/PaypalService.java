@@ -13,10 +13,7 @@ import com.hugorithm.hopfencraft.exception.order.OrderPaymentException;
 import com.hugorithm.hopfencraft.exception.order.OrderNotFoundException;
 import com.hugorithm.hopfencraft.exception.order.OrderUserMismatchException;
 import com.hugorithm.hopfencraft.exception.paypal.PaypalAccessTokenException;
-import com.hugorithm.hopfencraft.model.ApplicationUser;
-import com.hugorithm.hopfencraft.model.CartItem;
-import com.hugorithm.hopfencraft.model.Order;
-import com.hugorithm.hopfencraft.model.Product;
+import com.hugorithm.hopfencraft.model.*;
 import com.hugorithm.hopfencraft.repository.OrderRepository;
 import org.json.JSONObject;
 import org.slf4j.Logger;
@@ -230,7 +227,7 @@ public class PaypalService {
             itemTotal.put("value", order.getTotal().toString());
             ArrayNode items = unitNode.putArray("items");
 
-            for (CartItem orderItem : order.getUser().getCartItems()) {
+            for (OrderItem orderItem : order.getOrderItems()) {
                 ObjectNode item = items.addObject();
                 item.put("name", orderItem.getProduct().getName());
                 item.put("description", orderItem.getProduct().getDescription());
