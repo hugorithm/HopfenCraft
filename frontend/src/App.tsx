@@ -26,11 +26,16 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.min.css';
 import { LoginResponse } from './types/auth/LoginResponse';
 import ShoppingCart from './pages/ShoppingCart';
-import OAuth2RedirectHandler from './components/oauth2/OAuth2RedirectHandler';
+import OAuth2RedirectHandler from './components/handlers/OAuth2RedirectHandler';
 import ProductDetails from './pages/ProductDetails';
 import Checkout from './pages/Checkout';
 import Orders from './pages/Orders';
 import Order from './pages/Order';
+import PasswordResetHandler from './components/handlers/PasswordResetHandler';
+import ResetPasswordResquest from './pages/ResetPasswordRequest';
+import PasswordResetForm from './pages/PasswordResetForm';
+import RequireResetToken from './route/RequireResetToken';
+import InvalidToken from './errors/InvalidToken';
 
 
 const Root = () => {
@@ -58,7 +63,13 @@ const router = createBrowserRouter(
       <Route path="product/:id" element={<ProductDetails />} errorElement={<CustomError />} />
       <Route path='signup' element={<SignUp />} errorElement={<CustomError />} />
       <Route path="oauth2/redirect" element={<OAuth2RedirectHandler />} errorElement={<CustomError />} />
+      <Route path="reset-password" element={<ResetPasswordResquest />} errorElement={<CustomError />} />
+      <Route path="user/reset-password" element={<PasswordResetHandler />} errorElement={<CustomError />} />
       <Route path="checkout" element={<Checkout />} errorElement={<CustomError />} />
+      <Route path="invalid-token" element={<InvalidToken />} errorElement={<CustomError />} />
+      <Route element={<RequireResetToken />}>
+        <Route path="user/reset-password-form" element={<PasswordResetForm />} errorElement={<CustomError />} />
+      </Route>
       <Route element={<RequireAuth />}>
         <Route path='profile' element={<Profile />} errorElement={<CustomError />} />
         <Route path='shopping-cart' element={<ShoppingCart />} errorElement={<CustomError />} />
