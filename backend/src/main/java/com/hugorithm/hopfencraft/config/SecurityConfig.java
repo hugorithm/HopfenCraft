@@ -36,7 +36,8 @@ public class SecurityConfig {
     private final OAuth2LoginSuccessHandler oAuth2LoginSuccessHandler;
 
     @Value("${frontend.url}")
-    private String frontendUrl;
+    public String FRONTEND_URL;
+
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -46,13 +47,13 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> {
                     auth.requestMatchers("/auth/**", "/oauth2/**").permitAll();
                     auth.requestMatchers("/admin/**").hasRole("ADMIN");
-                    auth.requestMatchers("/user/**").hasAnyRole("ADMIN", "USER");
                     auth.requestMatchers("/order/**").hasAnyRole("ADMIN", "USER");
                     auth.requestMatchers("/paypal/**").hasAnyRole("ADMIN", "USER");
                     auth.requestMatchers("/product/").permitAll();
                     auth.requestMatchers("/product/register").hasRole("ADMIN");
                     auth.requestMatchers("/product/update").hasRole("ADMIN");
                     auth.requestMatchers("/product/remove").hasRole("ADMIN");
+                    auth.requestMatchers("/user/**").permitAll();
                     auth.requestMatchers("/product/**").permitAll();
                     auth.requestMatchers("/cart/**").hasAnyRole("ADMIN", "USER");
                     auth.anyRequest().authenticated();
@@ -62,7 +63,7 @@ public class SecurityConfig {
                 .httpBasic(AbstractHttpConfigurer::disable)
 
                 .oauth2Login(oauth2 -> {
-                    oauth2.loginPage(frontendUrl + "/login").permitAll();
+                    oauth2.loginPage(FRONTEND_URL + "/login").permitAll();
                     // Define custom authorization endpoints and redirect callbacks
 
                     oauth2.authorizationEndpoint(authorizationEndpointConfig ->
@@ -122,7 +123,7 @@ public class SecurityConfig {
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(List.of(frontendUrl));
+        configuration.setAllowedOrigins(List.of(FRONTEND_URL));
         configuration.addAllowedHeader("*");
         configuration.addAllowedMethod("*");
         configuration.setAllowCredentials(true);
