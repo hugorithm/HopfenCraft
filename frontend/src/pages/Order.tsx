@@ -23,8 +23,8 @@ import ProductImageLink from "../components/ProductImageLink";
 import PaymentConfirmation from "../components/PaymentConfirmation";
 
 interface OrderProps {
-  onApproveCallback: () => void;
-  orderId: number | undefined;
+  onApproveCallback?: () => void;
+  orderId?: number | undefined;
 }
 
 const Order: React.FC<OrderProps> = ({ onApproveCallback, orderId }) => {
@@ -43,7 +43,7 @@ const Order: React.FC<OrderProps> = ({ onApproveCallback, orderId }) => {
 
   const handleApprove = () => {
     setIsPaid(true);
-    onApproveCallback();
+    if (onApproveCallback) onApproveCallback();
   };
 
   useEffect(() => {
