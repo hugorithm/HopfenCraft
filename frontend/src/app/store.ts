@@ -10,6 +10,7 @@ import { shoppingCartApi } from "./api/shoppingCartApi";
 import { productApi } from "./api/productApi";
 import { rtkQueryErrorLogger } from "./middleware/ErrorHandler";
 import { orderApi } from "./api/orderApi";
+import { passowrdResetApi } from './api/passwordResetApi'
 
 const rootReducer = combineReducers({
   auth: authReducer,
@@ -17,6 +18,7 @@ const rootReducer = combineReducers({
   [shoppingCartApi.reducerPath]: shoppingCartApi.reducer,
   [productApi.reducerPath]: productApi.reducer,
   [orderApi.reducerPath]: orderApi.reducer,
+  [passowrdResetApi.reducerPath]: passowrdResetApi.reducer,
   shoppingCart: shoppingCartReducer,
   order: orderReducer,
   products: productsReducer,
@@ -31,6 +33,7 @@ export const store = configureStore({
       shoppingCartApi.middleware,
       productApi.middleware,
       orderApi.middleware,
+      passowrdResetApi.middleware,
       rtkQueryErrorLogger
     ),
 });
