@@ -19,19 +19,8 @@ import { Alert, Zoom } from '@mui/material';
 import { Theme as ToastifyTheme, toast } from 'react-toastify';
 import { useThemeContext } from '../theme/ThemeContextProvider';
 import ReCAPTCHA from "react-google-recaptcha";
+import Copyright from '../components/Copyright';
 
-function Copyright(props: any) {
-  return (
-    <Typography variant="body2" color="text.secondary" align="center" {...props}>
-      {'Copyright © '}
-      <Link color="inherit" component={RouterLink} to="/home">
-        HopfenCraft
-      </Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
-    </Typography>
-  );
-}
 
 const SignUp = () => {
   const [error, setError] = useState<string | null>(null);
