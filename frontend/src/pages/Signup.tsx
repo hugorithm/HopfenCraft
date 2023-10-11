@@ -28,10 +28,9 @@ const SignUp = () => {
   const [theme, setTheme] = useState<any>(mode);
 
   const [signUp,
-    { data,
+    { 
       isSuccess,
       isError,
-      isLoading,
       error: signUpError
     }
   ] = useSignUpMutation();
