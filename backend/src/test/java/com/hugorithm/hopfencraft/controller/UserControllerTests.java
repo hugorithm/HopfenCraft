@@ -2,6 +2,7 @@ package com.hugorithm.hopfencraft.controller;
 
 import com.hugorithm.hopfencraft.dto.authentication.PasswordResetDTO;
 import com.hugorithm.hopfencraft.dto.user.PasswordResetRequestDTO;
+import com.hugorithm.hopfencraft.dto.user.PasswordResetResponseDTO;
 import com.hugorithm.hopfencraft.enums.AuthProvider;
 import com.hugorithm.hopfencraft.model.ApplicationUser;
 import com.hugorithm.hopfencraft.model.Role;
@@ -49,7 +50,7 @@ public class UserControllerTests {
     @Test
     public void SendPasswordResetRequest_ValidInput_ReturnsOk() throws Exception {
         // Mock the behavior of your userService to return a ResponseEntity
-        ResponseEntity<String> responseEntity = ResponseEntity.ok("Request sent successfully");
+        ResponseEntity<PasswordResetResponseDTO> responseEntity = ResponseEntity.ok(new PasswordResetResponseDTO("Request sent successfully"));
 
         when(userService.sendPasswordResetRequest(Mockito.any(PasswordResetRequestDTO.class))).thenReturn(responseEntity);
 
