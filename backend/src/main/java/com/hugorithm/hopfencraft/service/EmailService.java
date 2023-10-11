@@ -23,8 +23,6 @@ import java.time.LocalDateTime;
 @AllArgsConstructor(onConstructor = @__(@Autowired))
 public class EmailService {
     private final JavaMailSender mailSender;
-    public final String baseUrl = "http://localhost:8080";
-
     private final EmailRepository emailRepository;
     private final static Logger LOGGER = LoggerFactory.getLogger(EmailService.class);
 
