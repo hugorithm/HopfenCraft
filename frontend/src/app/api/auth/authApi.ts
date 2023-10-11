@@ -13,7 +13,7 @@ export const authApi = createApi({
     baseUrl: BASE_URL,
   }),
   endpoints: (builder) => ({
-    loginUser: builder.mutation<LoginResponse, LoginRequestBody>({
+    login: builder.mutation<LoginResponse, LoginRequestBody>({
       query: (body) => {
         return {
           url: "/auth/login",
@@ -62,4 +62,4 @@ export const authApi = createApi({
   }),
 });
 
-export const { useLoginUserMutation, useSignUpMutation, useGetOAuth2UserQuery } = authApi;
+export const { useLoginMutation, useSignUpMutation, useGetOAuth2UserQuery } = authApi;

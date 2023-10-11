@@ -18,13 +18,13 @@ import githubLogo from '../assets/oauth2/github-logo.png';
 import { GOOGLE_AUTH_URL, GITHUB_AUTH_URL } from '../config/constants';
 import { Alert, Divider, Zoom } from '@mui/material';
 import { LoginRequestBody } from '../types/auth/LoginRequestBody';
-import { useLoginUserMutation } from '../app/api/auth/authApi';
+import { useLoginMutation } from '../app/api/auth/authApi';
 import { useAppDispatch } from '../app/hooks';
 import { setUser } from '../features/authSlice';
 import { toast } from 'react-toastify';
 import { useThemeContext } from '../theme/ThemeContextProvider';
 
-export default function Login() {
+const Login = () => {
   const [error, setError] = useState<string | null>(null);
   const [rememberMe, setRememberMe] = useState(false);
   const [username, setUsername] = useState('');
@@ -32,13 +32,13 @@ export default function Login() {
   const navigate = useNavigate();
   const { mode } = useThemeContext();
 
-  const [loginUser,
+  const [login,
     { data: loginData,
       isSuccess: isLoginSuccess,
       isError: isLoginError,
       error: loginError
     },
-  ] = useLoginUserMutation();
+  ] = useLoginMutation();
 
   useEffect(() => {
     if (isLoginSuccess && loginData) {
@@ -95,7 +95,7 @@ export default function Login() {
       localStorage.removeItem('savedUsername');
     }
 
-    loginUser(body);
+    login(body);
   };
 
   return (
@@ -218,3 +218,5 @@ export default function Login() {
     </Grid>
   );
 }
+
+export default Login;
