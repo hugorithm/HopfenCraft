@@ -1,6 +1,7 @@
 package com.hugorithm.hopfencraft.controller;
 
 import com.hugorithm.hopfencraft.dto.authentication.PasswordResetDTO;
+import com.hugorithm.hopfencraft.dto.user.PasswordResetRequestDTO;
 import com.hugorithm.hopfencraft.enums.AuthProvider;
 import com.hugorithm.hopfencraft.model.ApplicationUser;
 import com.hugorithm.hopfencraft.model.Role;
@@ -50,7 +51,7 @@ public class UserControllerTests {
         // Mock the behavior of your userService to return a ResponseEntity
         ResponseEntity<String> responseEntity = ResponseEntity.ok("Request sent successfully");
 
-        when(userService.sendPasswordResetRequest(Mockito.any(Jwt.class))).thenReturn(responseEntity);
+        when(userService.sendPasswordResetRequest(Mockito.any(PasswordResetRequestDTO.class))).thenReturn(responseEntity);
 
         mockMvc.perform(MockMvcRequestBuilders.post("/user/reset-password-request")
                         .header("Authorization", "Bearer mockToken")
@@ -62,7 +63,7 @@ public class UserControllerTests {
     public void ResetPasswordRequest_ValidInput_ReturnsOk() throws Exception {
         // Mock the behavior of your userService to return a ResponseEntity
 
-        when(userService.showPasswordResetForm(Mockito.any(Jwt.class), Mockito.anyString())).thenReturn(ResponseEntity.ok().build());
+        when(userService.showPasswordResetForm(Mockito.anyString())).thenReturn(ResponseEntity.ok().build());
 
         mockMvc.perform(MockMvcRequestBuilders.get("/user/reset-password")
                         .header("Authorization", "Bearer mockToken")
@@ -89,7 +90,7 @@ public class UserControllerTests {
 
         // Mock the behavior of your userService to return a success response
         String resetToken = "resetToken"; // Replace with an actual reset token
-        when(userService.resetPassword(mockJwt, resetToken, passwordResetDTO))
+        when(userService.resetPassword(resetToken, passwordResetDTO))
                 .thenReturn(ResponseEntity.ok().build());
 
         // Convert the DTO to JSON

@@ -1,5 +1,6 @@
 package com.hugorithm.hopfencraft.service;
 
+import com.hugorithm.hopfencraft.dto.user.PasswordResetRequestDTO;
 import com.hugorithm.hopfencraft.exception.auth.InvalidTokenException;
 import com.hugorithm.hopfencraft.model.ApplicationUser;
 import com.hugorithm.hopfencraft.repository.UserRepository;
@@ -12,7 +13,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.oauth2.jwt.Jwt;
 
 import java.time.LocalDateTime;
 
@@ -57,7 +57,7 @@ public class UserServiceTests {
         when(userRepository.save(any())).thenReturn(user);
 
         // Act
-        ResponseEntity<String> response = userService.sendPasswordResetRequest(mock(Jwt.class));
+        ResponseEntity<String> response = userService.sendPasswordResetRequest(mock(PasswordResetRequestDTO.class));
 
         // Assert
         assertEquals(HttpStatus.OK, response.getStatusCode());
@@ -69,7 +69,7 @@ public class UserServiceTests {
         when(jwtService.getUserFromJwt(any())).thenThrow(new UsernameNotFoundException("User not found"));
 
         // Act
-        ResponseEntity<String> response = userService.sendPasswordResetRequest(mock(Jwt.class));
+        ResponseEntity<String> response = userService.sendPasswordResetRequest(mock(PasswordResetRequestDTO.class));
 
         // Assert
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
