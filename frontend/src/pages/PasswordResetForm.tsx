@@ -20,6 +20,11 @@ const PasswordResetForm = () => {
     error: resetPasswordError,
   }] = useResetPasswordMutation();
 
+  useEffect(() => {
+    if (isSuccess) {
+      localStorage.removeItem("resetToken");
+    }
+  }, [isSuccess]);
 
   useEffect(() => {
     if (isError) {
