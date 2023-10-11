@@ -1,6 +1,7 @@
 package com.hugorithm.hopfencraft.service;
 
 import com.hugorithm.hopfencraft.dto.authentication.PasswordResetDTO;
+import com.hugorithm.hopfencraft.dto.user.PasswordResetRequestDTO;
 import com.hugorithm.hopfencraft.enums.EmailType;
 import com.hugorithm.hopfencraft.exception.auth.InvalidTokenException;
 import com.hugorithm.hopfencraft.exception.auth.PasswordMismatchException;
@@ -9,17 +10,17 @@ import com.hugorithm.hopfencraft.exception.auth.WrongCredentialsException;
 import com.hugorithm.hopfencraft.exception.email.EmailSendingFailedException;
 import com.hugorithm.hopfencraft.model.ApplicationUser;
 import com.hugorithm.hopfencraft.repository.UserRepository;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -29,13 +30,15 @@ import java.util.Optional;
 
 
 @Service
-@AllArgsConstructor(onConstructor = @__(@Autowired))
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class UserService implements UserDetailsService {
     private final JwtService jwtService;
     private final EmailService emailService;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final static Logger LOGGER = LoggerFactory.getLogger(UserService.class);
+    @Value("${frontend.url}")
+    private String FRONTEND_URL;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -48,13 +51,13 @@ public class UserService implements UserDetailsService {
             String dateStr = parts[1];
             String[] datePatterns = {
                     "yyyy-MM-dd'T'HH:mm:ss.SSSSSSSSS",
-                    "yyyy-MM-dd'T'HH:mm:ss.SSSSSSSS",  // One less 'S'
-                    "yyyy-MM-dd'T'HH:mm:ss.SSSSSS",    // Two less 'S'
-                    "yyyy-MM-dd'T'HH:mm:ss.SSSSS",      // Three less 'S'
-                    "yyyy-MM-dd'T'HH:mm:ss.SSSS",        // Four less 'S'
-                    "yyyy-MM-dd'T'HH:mm:ss.SSS",          // Five less 'S'
-                    "yyyy-MM-dd'T'HH:mm:ss.SS",            // Six less 'S'
-                    "yyyy-MM-dd'T'HH:mm:ss.S",              // Seven less 'S'
+                    "yyyy-MM-dd'T'HH:mm:ss.SSSSSSSS",
+                    "yyyy-MM-dd'T'HH:mm:ss.SSSSSS",
+                    "yyyy-MM-dd'T'HH:mm:ss.SSSSS",
+                    "yyyy-MM-dd'T'HH:mm:ss.SSSS",
+                    "yyyy-MM-dd'T'HH:mm:ss.SSS",
+                    "yyyy-MM-dd'T'HH:mm:ss.SS",
+                    "yyyy-MM-dd'T'HH:mm:ss.S",
             };
 
             for (String pattern : datePatterns) {
@@ -79,9 +82,11 @@ public class UserService implements UserDetailsService {
         }
     }
 
-    public ResponseEntity<String> sendPasswordResetRequest(Jwt jwt) {
+    public ResponseEntity<String> sendPasswordResetRequest(PasswordResetRequestDTO dto) {
         try {
-            ApplicationUser user = jwtService.getUserFromJwt(jwt);
+            ApplicationUser user = userRepository.findByUsername(dto.getUsername())
+                    .orElseThrow(() -> new UsernameNotFoundException(String.format("Username not found with username %s", dto.getUsername())));
+
             String token = jwtService.generatePasswordResetToken();
             String decodedToken = jwtService.URLDecodeToken(token);
             LocalDateTime expirationDate = extractDateTimeFromToken(decodedToken);
@@ -91,7 +96,7 @@ public class UserService implements UserDetailsService {
             userRepository.save(user);
 
             String subject = "Password Reset";
-            String link = emailService.baseUrl + "/user/reset-password?token=" + token;
+            String link = FRONTEND_URL + "/user/reset-password?token=" + token;
             String message = emailService.buildPasswordResetEmail(user.getUsername(), link);
 
             emailService.sendEmail(user.getEmail(), subject, message, user, EmailType.PASSWORD_RESET);
@@ -103,25 +108,28 @@ public class UserService implements UserDetailsService {
         }
     }
 
-    private ApplicationUser verifyPasswordResetToken(Jwt jwt, String token) throws InvalidTokenException {
-        ApplicationUser user = jwtService.getUserFromJwt(jwt);
-        String decodedToken = jwtService.URLDecodeToken(token);
-        LocalDateTime expirationDate = extractDateTimeFromToken(decodedToken);
+    private ApplicationUser verifyPasswordResetToken(String token) {
+        try {
+            String decodedToken = jwtService.URLDecodeToken(token);
+            ApplicationUser user = userRepository.findByPasswordResetToken(decodedToken)
+                    .orElseThrow(() -> new InvalidTokenException("Invalid token"));
 
-        if (!decodedToken.equals(user.getPasswordResetToken())) {
-            throw new InvalidTokenException("Invalid token");
+            LocalDateTime expirationDate = extractDateTimeFromToken(decodedToken);
+
+            if (expirationDate.equals(user.getPasswordResetTokenExpiration()) && user.getPasswordResetTokenExpiration().isBefore(LocalDateTime.now())) {
+                throw new InvalidTokenException("Token has expired");
+            }
+
+            return user;
+        } catch (InvalidTokenException | UsernameNotFoundException ex) {
+            LOGGER.error(ex.getMessage(), ex);
+            throw ex;
         }
-
-        if (expirationDate.equals(user.getPasswordResetTokenExpiration()) && user.getPasswordResetTokenExpiration().isBefore(LocalDateTime.now())) {
-            throw new InvalidTokenException("Token has expired");
-        }
-
-        return user;
     }
 
-    public ResponseEntity<?> showPasswordResetForm(Jwt jwt, String token) {
+    public ResponseEntity<?> showPasswordResetForm(String token) {
         try {
-            verifyPasswordResetToken(jwt, token);
+            verifyPasswordResetToken(token);
             return ResponseEntity.ok().build();
         } catch (InvalidTokenException | UsernameNotFoundException ex) {
             LOGGER.error(ex.getMessage(), ex);
@@ -129,10 +137,9 @@ public class UserService implements UserDetailsService {
         }
     }
 
-    public ResponseEntity<?> resetPassword(Jwt jwt, String token, PasswordResetDTO dto) {
+    public ResponseEntity<?> resetPassword(String token, PasswordResetDTO dto) {
         try {
-            ApplicationUser user = verifyPasswordResetToken(jwt, token);
-
+            ApplicationUser user = verifyPasswordResetToken(token);
 
             if (dto.getNewPassword().equals(dto.getNewPasswordConfirmation())) {
                 String encodedPassword = passwordEncoder.encode(dto.getNewPassword());
