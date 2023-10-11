@@ -169,6 +169,7 @@ public class PaypalService {
 
                 orderService.updateStock(savedOrder);
                 shoppingCartService.clearShoppingCart(user);
+                //TODO: Send Email here
 
                 return ResponseEntity.status(response.getStatusCode()).body(response.getBody());
             } else {
