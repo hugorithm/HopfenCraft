@@ -202,13 +202,13 @@ const Login = () => {
             </Button>
             <Grid container>
               <Grid item xs>
-                <Link href="#" variant="body2">
+                <Link variant="body2" component={RouterLink} to="/reset-password">
                   Forgot password?
                 </Link>
               </Grid>
               <Grid item>
                 <Link variant="body2" component={RouterLink} to="/signup">
-                  {"Don't have an account? Sign Up"}
+                  Don't have an account? Sign Up
                 </Link>
               </Grid>
             </Grid>
