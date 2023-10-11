@@ -2,6 +2,7 @@ package com.hugorithm.hopfencraft.service;
 
 import com.hugorithm.hopfencraft.dto.authentication.PasswordResetDTO;
 import com.hugorithm.hopfencraft.dto.user.PasswordResetRequestDTO;
+import com.hugorithm.hopfencraft.dto.user.PasswordResetResponseDTO;
 import com.hugorithm.hopfencraft.enums.EmailType;
 import com.hugorithm.hopfencraft.exception.auth.InvalidTokenException;
 import com.hugorithm.hopfencraft.exception.auth.PasswordMismatchException;
@@ -82,7 +83,7 @@ public class UserService implements UserDetailsService {
         }
     }
 
-    public ResponseEntity<String> sendPasswordResetRequest(PasswordResetRequestDTO dto) {
+    public ResponseEntity<PasswordResetResponseDTO> sendPasswordResetRequest(PasswordResetRequestDTO dto) {
         try {
             ApplicationUser user = userRepository.findByUsername(dto.getUsername())
                     .orElseThrow(() -> new UsernameNotFoundException(String.format("Username not found with username %s", dto.getUsername())));
@@ -101,7 +102,7 @@ public class UserService implements UserDetailsService {
 
             emailService.sendEmail(user.getEmail(), subject, message, user, EmailType.PASSWORD_RESET);
 
-            return ResponseEntity.ok("Password reset email sent successfully");
+            return ResponseEntity.ok(new PasswordResetResponseDTO("Password reset email sent successfully"));
         } catch (UsernameNotFoundException | InvalidTokenException | EmailSendingFailedException ex) {
             LOGGER.error(ex.getMessage(), ex);
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
