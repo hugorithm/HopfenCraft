@@ -11,15 +11,11 @@ import {
 import SportsBarIcon from '@mui/icons-material/SportsBar';
 import { Link, useLocation, matchPath } from 'react-router-dom';
 import NightModeToggle from "./NightModeToggle";
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
-import { useNavigate } from "react-router-dom";
-import { logout, selectAuth } from "../features/authSlice";
+import { selectAuth } from "../features/authSlice";
 import { useSelector } from "react-redux";
-import { useAppDispatch } from "../app/hooks";
-import { toast } from "react-toastify";
-import { useThemeContext } from "../theme/ThemeContextProvider";
 import { selectShoppingCart } from "../features/shoppingCartSlice";
+import DropDownMenu from "./DropDownMenu";
 
 function useRouteMatch(patterns: readonly string[]) {
   const { pathname } = useLocation();
@@ -42,28 +38,7 @@ const Navbar = () => {
   const currentTab = routeMatch?.pattern?.path || false;
   const routeLoginMatch = useRouteMatch(['/login', '/signup']);
   const currentLoginTab = routeLoginMatch?.pattern?.path || false;
-  const { mode } = useThemeContext();
-  const navigate = useNavigate();
-  const dispatch = useAppDispatch();
   const { cartItems } = useSelector(selectShoppingCart);
-
-  const handleLogout = () => {
-    dispatch(logout());
-
-    toast.success('Logout Successful!', {
-      position: "top-right",
-      autoClose: 1000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: false,
-      draggable: true,
-      pauseOnFocusLoss: false,
-      progress: undefined,
-      theme: mode === 'light' ? 'light' : 'dark',
-    });
-
-    navigate("/home");
-  }
 
   return (
     <AppBar position="static">
@@ -98,15 +73,12 @@ const Navbar = () => {
         <NightModeToggle />
         {jwt && (
           <>
-            <IconButton to="/profile" component={Link} color="inherit">
-              <AccountCircleIcon />
-            </IconButton>
             <IconButton to="/shopping-cart" component={Link} color="inherit">
               <Badge color="error" badgeContent={cartItems.length}>
                 <ShoppingCartIcon />
               </Badge>
             </IconButton>
-            <Button color="inherit" onClick={handleLogout}>Logout</Button>
+            <DropDownMenu />
           </>
         )}
         {!jwt && (
