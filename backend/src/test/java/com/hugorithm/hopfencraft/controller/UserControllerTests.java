@@ -1,11 +1,9 @@
 package com.hugorithm.hopfencraft.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hugorithm.hopfencraft.dto.authentication.PasswordResetDTO;
 import com.hugorithm.hopfencraft.dto.user.PasswordResetRequestDTO;
 import com.hugorithm.hopfencraft.dto.user.PasswordResetResponseDTO;
-import com.hugorithm.hopfencraft.enums.AuthProvider;
-import com.hugorithm.hopfencraft.model.ApplicationUser;
-import com.hugorithm.hopfencraft.model.Role;
 import com.hugorithm.hopfencraft.service.UserService;
 import com.hugorithm.hopfencraft.utils.JsonToStringConverter;
 import org.junit.jupiter.api.BeforeEach;
@@ -17,15 +15,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
-
-import java.util.HashSet;
-import java.util.Set;
 
 import static org.mockito.Mockito.when;
 
@@ -48,15 +44,19 @@ public class UserControllerTests {
 
     //TODO: Properly mock this, Instantiate UserService and mock functions accordingly
     @Test
-    public void SendPasswordResetRequest_ValidInput_ReturnsOk() throws Exception {
+    public void SendPasswordResetRequest_ValidInput_ReturnsOK() throws Exception {
         // Mock the behavior of your userService to return a ResponseEntity
-        ResponseEntity<PasswordResetResponseDTO> responseEntity = ResponseEntity.ok(new PasswordResetResponseDTO("Request sent successfully"));
+        ResponseEntity<PasswordResetResponseDTO> responseEntity = ResponseEntity.status(HttpStatus.OK)
+                .body(new PasswordResetResponseDTO("Request sent successfully"));
 
         when(userService.sendPasswordResetRequest(Mockito.any(PasswordResetRequestDTO.class))).thenReturn(responseEntity);
+        PasswordResetRequestDTO dto = new PasswordResetRequestDTO("testuser");
+        ObjectMapper objectMapper = new ObjectMapper();
+        String json = objectMapper.writeValueAsString(dto);
 
         mockMvc.perform(MockMvcRequestBuilders.post("/user/reset-password-request")
-                        .header("Authorization", "Bearer mockToken")
-                        .contentType(MediaType.APPLICATION_JSON))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(json))
                 .andExpect(MockMvcResultMatchers.status().isOk());
     }
 
@@ -67,7 +67,6 @@ public class UserControllerTests {
         when(userService.showPasswordResetForm(Mockito.anyString())).thenReturn(ResponseEntity.ok().build());
 
         mockMvc.perform(MockMvcRequestBuilders.get("/user/reset-password")
-                        .header("Authorization", "Bearer mockToken")
                         .param("token", "mockToken")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isOk());
@@ -76,17 +75,6 @@ public class UserControllerTests {
     @Test
     public void ResetPassword_ValidInput_ReturnsOk() throws Exception {
         // Create a PasswordResetDTO for testing
-        Role role = new Role("USER");
-        Set<Role> roles = new HashSet<>();
-        roles.add(role);
-        ApplicationUser user = new ApplicationUser(
-                "user1",
-                "Password123!",
-                "email@example.com",
-                roles,
-                "Test",
-                "test",
-                AuthProvider.LOCAL);
         PasswordResetDTO passwordResetDTO = new PasswordResetDTO("newPassword123!", "newPassword123!");
 
         // Mock the behavior of your userService to return a success response
