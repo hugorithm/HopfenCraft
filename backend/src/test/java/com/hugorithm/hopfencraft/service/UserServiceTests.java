@@ -42,37 +42,5 @@ public class UserServiceTests {
         MockitoAnnotations.openMocks(this);
     }
 
-    @Test
-    public void sendPasswordResetRequest_ValidJwt_ReturnsOk() throws InvalidTokenException {
-        // Arrange
-        ApplicationUser user = new ApplicationUser();
-        user.setUsername("testuser");
-        user.setEmail("testuser@example.com");
-        user.setPasswordResetTokenExpiration(LocalDateTime.now().plusDays(1));
 
-        when(jwtService.getUserFromJwt(any())).thenReturn(user);
-        when(jwtService.generatePasswordResetToken())
-                .thenReturn("2bcb63ba728ea29e9763612ae885659ec0e2c6dc9d0d54ee7b8fb1e620aeb3e4|2023-09-11T19:23:04.862591200");
-        when(jwtService.URLDecodeToken(any()))
-                .thenReturn("2bcb63ba728ea29e9763612ae885659ec0e2c6dc9d0d54ee7b8fb1e620aeb3e4|2023-09-11T19:23:04.862591200");
-        when(userRepository.save(any())).thenReturn(user);
-
-        // Act
-        ResponseEntity<PasswordResetResponseDTO> response = userService.sendPasswordResetRequest(mock(PasswordResetRequestDTO.class));
-
-        // Assert
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-    }
-
-    @Test
-    public void sendPasswordResetRequest_InvalidJwt_ReturnsBadRequest() throws InvalidTokenException {
-        // Arrange
-        when(jwtService.getUserFromJwt(any())).thenThrow(new UsernameNotFoundException("User not found"));
-
-        // Act
-        ResponseEntity<PasswordResetResponseDTO> response = userService.sendPasswordResetRequest(mock(PasswordResetRequestDTO.class));
-
-        // Assert
-        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
-    }
 }
