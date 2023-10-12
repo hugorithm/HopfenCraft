@@ -4,6 +4,8 @@ import com.hugorithm.hopfencraft.config.TestConfig;
 import com.hugorithm.hopfencraft.dto.authentication.LoginDTO;
 import com.hugorithm.hopfencraft.dto.authentication.LoginResponseDTO;
 import com.hugorithm.hopfencraft.dto.authentication.PasswordResetDTO;
+import com.hugorithm.hopfencraft.dto.user.PasswordResetRequestDTO;
+import com.hugorithm.hopfencraft.dto.user.PasswordResetResponseDTO;
 import com.hugorithm.hopfencraft.model.ApplicationUser;
 import com.hugorithm.hopfencraft.repository.UserRepository;
 import com.hugorithm.hopfencraft.service.JwtService;
@@ -44,21 +46,16 @@ public class UserIntegrationTests {
 
         assertEquals(HttpStatus.OK, loginResponse.getStatusCode());
         assertNotNull(loginResponse.getBody());
-        String jwt = loginResponse.getBody().getJwt();
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.set("Authorization", "Bearer " + jwt);
-
-
-        ResponseEntity<String> response = restTemplate.exchange(
+        PasswordResetRequestDTO dto = new PasswordResetRequestDTO("testuser");
+        ResponseEntity<PasswordResetResponseDTO> response = restTemplate.postForEntity(
                 "http://localhost:" + port + "/user/reset-password-request",
-                HttpMethod.POST,
-                new HttpEntity<>(headers),
-                String.class
+                dto,
+                PasswordResetResponseDTO.class
         );
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals("Password reset email sent successfully", response.getBody());
+        assertEquals(new PasswordResetResponseDTO("Password reset email sent successfully"), response.getBody());
 
         // Add more assertions as needed
     }
@@ -76,31 +73,24 @@ public class UserIntegrationTests {
 
         assertEquals(HttpStatus.OK, loginResponse.getStatusCode());
         assertNotNull(loginResponse.getBody());
-        String jwt = loginResponse.getBody().getJwt();
-
-        HttpHeaders headers = new HttpHeaders();
-        headers.set("Authorization", "Bearer " + jwt);
+        PasswordResetRequestDTO dto = new PasswordResetRequestDTO("testuser");
 
         //Send token
-        ResponseEntity<String> response = restTemplate.exchange(
+        ResponseEntity<PasswordResetResponseDTO> response = restTemplate.postForEntity(
                 "http://localhost:" + port + "/user/reset-password-request",
-                HttpMethod.POST,
-                new HttpEntity<>(headers),
-                String.class
-        );
+                dto,
+                PasswordResetResponseDTO.class);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals("Password reset email sent successfully", response.getBody());
+        assertEquals(new PasswordResetResponseDTO("Password reset email sent successfully"), response.getBody());
 
         ApplicationUser user = userRepository.findByUsername("testuser").get();
 
         String token = user.getPasswordResetToken();
         // Assume you have a valid reset token and a PasswordResetDTO with new passwords
 
-        ResponseEntity<?> response2 = restTemplate.exchange(
+        ResponseEntity<?> response2 = restTemplate.getForEntity(
                 "http://localhost:" + port + "/user/reset-password?token=" + token,
-                HttpMethod.GET,
-                new HttpEntity<>(headers),
                 ResponseEntity.class
         );
 
@@ -114,7 +104,7 @@ public class UserIntegrationTests {
         );
 
 
-        HttpEntity<PasswordResetDTO> requestEntity = new HttpEntity<>(passwordResetDTO, headers);
+        HttpEntity<PasswordResetDTO> requestEntity = new HttpEntity<>(passwordResetDTO);
 
         ResponseEntity<Void> response3 = restTemplate.exchange(
                 "http://localhost:" + port + "/user/reset-password?token=" + token,
@@ -139,20 +129,15 @@ public class UserIntegrationTests {
 
         assertEquals(HttpStatus.OK, loginResponse.getStatusCode());
         assertNotNull(loginResponse.getBody());
-        String jwt = loginResponse.getBody().getJwt();
+        PasswordResetRequestDTO dto = new PasswordResetRequestDTO("testuser");
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.set("Authorization", "Bearer " + jwt);
-
-        ResponseEntity<String> response = restTemplate.exchange(
+        ResponseEntity<PasswordResetResponseDTO> response = restTemplate.postForEntity(
                 "http://localhost:" + port + "/user/reset-password-request",
-                HttpMethod.POST,
-                new HttpEntity<>(headers),
-                String.class
-        );
+                dto,
+                PasswordResetResponseDTO.class);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals("Password reset email sent successfully", response.getBody());
+        assertEquals(new PasswordResetResponseDTO("Password reset email sent successfully"), response.getBody());
 
         // Assume you have an invalid PasswordResetDTO
         PasswordResetDTO passwordResetDTO = new PasswordResetDTO(
@@ -165,10 +150,8 @@ public class UserIntegrationTests {
         String token = jwtService.URLEncodeToken(user.getPasswordResetToken());
 
 
-        ResponseEntity<?> response2 = restTemplate.exchange(
+        ResponseEntity<?> response2 = restTemplate.getForEntity(
                 "http://localhost:" + port + "/user/reset-password?token=" + token,
-                HttpMethod.GET,
-                new HttpEntity<>(headers),
                 ResponseEntity.class
         );
 
@@ -176,7 +159,7 @@ public class UserIntegrationTests {
         assertEquals(HttpStatus.OK, response2.getStatusCode());
 
 
-        HttpEntity<PasswordResetDTO> requestEntity = new HttpEntity<>(passwordResetDTO, headers);
+        HttpEntity<PasswordResetDTO> requestEntity = new HttpEntity<>(passwordResetDTO);
         ResponseEntity<Void> response3 = restTemplate.exchange(
                 "http://localhost:" + port + "/user/reset-password?token=" + token,
                 HttpMethod.POST,
