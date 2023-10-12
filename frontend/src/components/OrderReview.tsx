@@ -43,7 +43,7 @@ const Review: React.FC<AddressFormProps> = ({ shippingDetails }) => {
       if (getCartData) {
         dispatch(setCartItems({ cartItems: getCartData.cartItems }));
       } else if (error) {
-        console.log(error);
+        console.error(error);
       }
     }
   }, [getCartData]);
