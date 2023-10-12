@@ -36,6 +36,8 @@ import ResetPasswordResquest from './pages/ResetPasswordRequest';
 import PasswordResetForm from './pages/PasswordResetForm';
 import RequireResetToken from './route/RequireResetToken';
 import InvalidToken from './errors/InvalidToken';
+import RequireAdminRole from './route/RequireAdminRole';
+import RegisterProduct from './pages/RegisterProduct';
 
 
 const Root = () => {
@@ -71,6 +73,9 @@ const router = createBrowserRouter(
         <Route path="user/reset-password-form" element={<PasswordResetForm />} errorElement={<CustomError />} />
       </Route>
       <Route element={<RequireAuth />}>
+        <Route element={<RequireAdminRole />}>
+          <Route path='product/register' element={<RegisterProduct />} errorElement={<CustomError />} />
+        </Route>
         <Route path='profile' element={<Profile />} errorElement={<CustomError />} />
         <Route path='shopping-cart' element={<ShoppingCart />} errorElement={<CustomError />} />
         <Route path='orders' element={<Orders />} errorElement={<CustomError />} />
