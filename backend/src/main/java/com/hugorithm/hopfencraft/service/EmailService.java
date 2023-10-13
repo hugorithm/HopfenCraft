@@ -362,4 +362,22 @@ public class EmailService {
                 "</body>\n" +
                 "</html>";
     }
+
+    public void sendWelcomeEmail(ApplicationUser user) {
+        String subject = "Welcome to HopfenCraft - Your Registration Was Successful!";
+        String message = buildWelcomeEmail(user);
+        sendEmail(user.getEmail(), subject, message, user, EmailType.REGISTRATION);
+    }
+
+    public void sendPasswordResetEmail(ApplicationUser user, String link) {
+        String subject = "Password Reset Request - HopfenCraft";
+        String message = buildPasswordResetEmail(user, link);
+        sendEmail(user.getEmail(), subject, message, user, EmailType.PASSWORD_RESET);
+    }
+
+    public void sendPaypalPaymentSuccessEmail(ApplicationUser user, Order order) {
+        String subject = "Order Payment Confirmation - Thank You for Shopping at HopfenCraft!";
+        String message = buildPaypalPaymentSuccessEmail(user, order);
+        sendEmail(user.getEmail(), subject, message, user, EmailType.ORDER);
+    }
 }
