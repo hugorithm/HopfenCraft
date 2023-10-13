@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.hugorithm.hopfencraft.dto.paypal.PaymentRequestDTO;
+import com.hugorithm.hopfencraft.enums.EmailType;
 import com.hugorithm.hopfencraft.enums.OrderStatus;
 import com.hugorithm.hopfencraft.enums.PaymentMethod;
 import com.hugorithm.hopfencraft.exception.order.OrderPaymentException;
@@ -44,6 +45,7 @@ public class PaypalService {
     private final OrderRepository orderRepository;
     private final OrderService orderService;
     private final ShoppingCartService shoppingCartService;
+    private final EmailService emailService;
     private final String CLIENT_ID;
     private final String CLIENT_SECRET;
     private final static Logger LOGGER = LoggerFactory.getLogger(PaypalService.class);
@@ -56,12 +58,14 @@ public class PaypalService {
                          OrderRepository orderRepository,
                          OrderService orderService,
                          ShoppingCartService shoppingCartService,
+                         EmailService emailService,
                          @Value("${paypal.client.id}") String clientId,
                          @Value("${paypal.client.secret}") String clientSecret) {
         this.jwtService = jwtService;
         this.orderRepository = orderRepository;
         this.orderService = orderService;
         this.shoppingCartService = shoppingCartService;
+        this.emailService = emailService;
         this.CLIENT_ID = clientId;
         this.CLIENT_SECRET = clientSecret;
     }
@@ -169,7 +173,7 @@ public class PaypalService {
 
                 orderService.updateStock(savedOrder);
                 shoppingCartService.clearShoppingCart(user);
-                //TODO: Send Email here
+                emailService.sendPaypalPaymentSuccessEmail(user, savedOrder);
 
                 return ResponseEntity.status(response.getStatusCode()).body(response.getBody());
             } else {
