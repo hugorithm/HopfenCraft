@@ -83,12 +83,9 @@ public class AuthenticationService {
                     dto.getLastName(),
                     AuthProvider.LOCAL
             );
+
             userRepository.save(user);
-
-            String message = emailService.buildWelcomeEmail(username);
-            String subject = "Welcome to HopfenCraft - Your Registration Was Successful!";
-
-            emailService.sendEmail(user.getEmail(), subject, message, user, EmailType.REGISTRATION);
+            emailService.sendWelcomeEmail(user);
 
             UserRegistrationResponseDTO userDto = new UserRegistrationResponseDTO(
                     username,
