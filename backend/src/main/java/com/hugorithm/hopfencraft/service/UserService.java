@@ -93,14 +93,10 @@ public class UserService implements UserDetailsService {
             LocalDateTime expirationDate = extractDateTimeFromToken(decodedToken);
             user.setPasswordResetTokenExpiration(expirationDate);
             user.setPasswordResetToken(decodedToken);
-
             userRepository.save(user);
 
-            String subject = "Password Reset";
             String link = FRONTEND_URL + "/user/reset-password?token=" + token;
-            String message = emailService.buildPasswordResetEmail(user.getUsername(), link);
-
-            emailService.sendEmail(user.getEmail(), subject, message, user, EmailType.PASSWORD_RESET);
+            emailService.sendPasswordResetEmail(user, link);
 
             return ResponseEntity.ok(new PasswordResetResponseDTO("Password reset email sent successfully"));
         } catch (UsernameNotFoundException | InvalidTokenException | EmailSendingFailedException ex) {
