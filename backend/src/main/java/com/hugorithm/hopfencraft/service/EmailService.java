@@ -250,7 +250,7 @@ public class EmailService {
                 "            <h1>Welcome to HopfenCraft</h1>\n" +
                 "        </div>\n" +
                 "        <div class=\"content\">\n" +
-                "            <p class=\"message\">Hi <strong>" + username + "</strong>,</p>\n" +
+                "            <p class=\"message\">Hi <strong>" + user.getUsername() + "</strong>,</p>\n" +
                 "            <p class=\"message\">Thank you for joining HopfenCraft! Explore our website and discover a world of amazing products and services. If you have any questions or need assistance, don't hesitate to contact our support team.</p>\n" +
                 "            <div class=\"creative-image\">\n" +
                 "                <!--img src=\"file.png\" alt=\"HopfenCraft Illustration\"-->\n" +
@@ -265,7 +265,7 @@ public class EmailService {
                 "</html>";
     }
 
-    public String buildPasswordResetEmail(String username, String link) {
+    private String buildPasswordResetEmail(ApplicationUser user, String link) {
         return "<!DOCTYPE html>\n" +
                 "<html lang=\"en\">\n" +
                 "<head>\n" +
@@ -350,7 +350,7 @@ public class EmailService {
                 "            <h1>Password Reset</h1>\n" +
                 "        </div>\n" +
                 "        <div class=\"content\">\n" +
-                "            <p class=\"message\">Hi <strong>" + username + "</strong>,</p>\n" +
+                "            <p class=\"message\">Hi <strong>" + user.getUsername() + "</strong>,</p>\n" +
                 "            <p class=\"message\">You recently requested to reset your password. Click the button below to reset it:</p>\n" +
                 "            <a class=\"cta-button\" href=\"" + link + "\">Reset Password</a>\n" +
                 "        </div>\n" +
