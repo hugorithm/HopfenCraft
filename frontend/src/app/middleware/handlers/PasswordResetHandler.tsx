@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { useValidateTokenQuery } from '../../app/api/passwordResetApi';
+import { useValidateTokenQuery } from '../../api/passwordResetApi';
 
 const PasswordResetHandler = () => {
   const location = useLocation();

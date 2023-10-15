@@ -1,9 +1,9 @@
 import React, { useEffect } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
-import { useAppDispatch } from '../../app/hooks';
-import { setUser } from '../../features/authSlice';
-import { useGetOAuth2UserQuery } from '../../app/api/auth/authApi';
-import { useThemeContext } from '../../theme/ThemeContextProvider';
+import { useAppDispatch } from '../../hooks';
+import { setUser } from '../../../features/authSlice';
+import { useGetOAuth2UserQuery } from '../../api/auth/authApi';
+import { useThemeContext } from '../../../theme/ThemeContextProvider';
 import { toast } from 'react-toastify';
 
 const OAuth2RedirectHandler = () => {

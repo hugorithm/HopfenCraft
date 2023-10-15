@@ -8,7 +8,7 @@ import orderReducer from '../features/orderSlice';
 import ordersReducer from '../features/ordersSlice';
 import { shoppingCartApi } from "./api/shoppingCartApi";
 import { productApi } from "./api/productApi";
-import { rtkQueryErrorLogger } from "./middleware/ErrorHandler";
+import { rtkQueryErrorLogger } from "./middleware/handlers/ErrorHandler";
 import { orderApi } from "./api/orderApi";
 import { passowrdResetApi } from './api/passwordResetApi'
 
