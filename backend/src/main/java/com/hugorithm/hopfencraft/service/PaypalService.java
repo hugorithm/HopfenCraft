@@ -7,7 +7,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.hugorithm.hopfencraft.dto.paypal.PaymentRequestDTO;
-import com.hugorithm.hopfencraft.enums.EmailType;
 import com.hugorithm.hopfencraft.enums.OrderStatus;
 import com.hugorithm.hopfencraft.enums.PaymentMethod;
 import com.hugorithm.hopfencraft.exception.order.OrderPaymentException;
@@ -180,7 +179,6 @@ public class PaypalService {
                 LOGGER.error("Failed to capture paypal order");
                 return ResponseEntity.status(response.getStatusCode()).body("Failed to capture paypal order");
             }
-
         } catch (HttpClientErrorException ex) {
             LOGGER.error(ex.getMessage(), ex);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to capture paypal order");
