@@ -1,5 +1,6 @@
 package com.hugorithm.hopfencraft.service;
 
+import com.hugorithm.hopfencraft.enums.AuthProvider;
 import com.hugorithm.hopfencraft.enums.EmailType;
 import com.hugorithm.hopfencraft.exception.email.EmailSendingFailedException;
 import com.hugorithm.hopfencraft.model.*;
@@ -46,7 +47,7 @@ public class EmailService {
         }
     }
 
-    private String buildPaypalPaymentSuccessEmail(ApplicationUser user, Order order) {
+    private String buildPaypalPaymentSuccessEmail(String username, Order order) {
         StringBuilder orderItemsDetails = new StringBuilder();
 
         for (OrderItem orderItem : order.getOrderItems()) {
@@ -150,7 +151,7 @@ public class EmailService {
                 "            <h1>Payment Success at HopfenCraft</h1>\n" +
                 "        </div>\n" +
                 "        <div class=\"content\">\n" +
-                "            <p class=\"message\">Hi <strong>" + user.getUsername() + "</strong>,</p>\n" +
+                "            <p class=\"message\">Hi <strong>" + username + "</strong>,</p>\n" +
                 "            <p class=\"message\">Your payment was successful for the following product:</p>\n" +
                 "            <div class=\"product-details\">\n" +
                 orderItemsDetails +
@@ -171,7 +172,7 @@ public class EmailService {
     }
 
 
-    private String buildWelcomeEmail(ApplicationUser user) {
+    private String buildWelcomeEmail(String username) {
         return "<!DOCTYPE html>\n" +
                 "<html lang=\"en\">\n" +
                 "<head>\n" +
@@ -250,7 +251,7 @@ public class EmailService {
                 "            <h1>Welcome to HopfenCraft</h1>\n" +
                 "        </div>\n" +
                 "        <div class=\"content\">\n" +
-                "            <p class=\"message\">Hi <strong>" + user.getUsername() + "</strong>,</p>\n" +
+                "            <p class=\"message\">Hi <strong>" + username + "</strong>,</p>\n" +
                 "            <p class=\"message\">Thank you for joining HopfenCraft! Explore our website and discover a world of amazing products and services. If you have any questions or need assistance, don't hesitate to contact our support team.</p>\n" +
                 "            <div class=\"creative-image\">\n" +
                 "                <!--img src=\"file.png\" alt=\"HopfenCraft Illustration\"-->\n" +
@@ -265,7 +266,7 @@ public class EmailService {
                 "</html>";
     }
 
-    private String buildPasswordResetEmail(ApplicationUser user, String link) {
+    private String buildPasswordResetEmail(String username, String link) {
         return "<!DOCTYPE html>\n" +
                 "<html lang=\"en\">\n" +
                 "<head>\n" +
@@ -350,7 +351,7 @@ public class EmailService {
                 "            <h1>Password Reset</h1>\n" +
                 "        </div>\n" +
                 "        <div class=\"content\">\n" +
-                "            <p class=\"message\">Hi <strong>" + user.getUsername() + "</strong>,</p>\n" +
+                "            <p class=\"message\">Hi <strong>" + username + "</strong>,</p>\n" +
                 "            <p class=\"message\">You recently requested to reset your password. Click the button below to reset it:</p>\n" +
                 "            <a class=\"cta-button\" href=\"" + link + "\">Reset Password</a>\n" +
                 "        </div>\n" +
@@ -365,19 +366,26 @@ public class EmailService {
 
     public void sendWelcomeEmail(ApplicationUser user) {
         String subject = "Welcome to HopfenCraft - Your Registration Was Successful!";
-        String message = buildWelcomeEmail(user);
+        String username = getUserUsernameBasedOnAuthProvider(user);
+        String message = buildWelcomeEmail(username);
         sendEmail(user.getEmail(), subject, message, user, EmailType.REGISTRATION);
     }
 
     public void sendPasswordResetEmail(ApplicationUser user, String link) {
         String subject = "Password Reset Request - HopfenCraft";
-        String message = buildPasswordResetEmail(user, link);
+        String username = getUserUsernameBasedOnAuthProvider(user);
+        String message = buildPasswordResetEmail(username, link);
         sendEmail(user.getEmail(), subject, message, user, EmailType.PASSWORD_RESET);
     }
 
     public void sendPaypalPaymentSuccessEmail(ApplicationUser user, Order order) {
         String subject = "Order Payment Confirmation - Thank You for Shopping at HopfenCraft!";
-        String message = buildPaypalPaymentSuccessEmail(user, order);
+        String username = getUserUsernameBasedOnAuthProvider(user);
+        String message = buildPaypalPaymentSuccessEmail(username, order);
         sendEmail(user.getEmail(), subject, message, user, EmailType.ORDER);
+    }
+
+    private String getUserUsernameBasedOnAuthProvider(ApplicationUser user) {
+        return user.getAuthProvider().equals(AuthProvider.LOCAL) ? user.getUsername() : user.getFirstName();
     }
 }
