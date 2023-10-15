@@ -1,4 +1,4 @@
-import React, { useState, ChangeEvent, FormEvent } from 'react';
+import React, { useState, ChangeEvent, FormEvent, useEffect } from 'react';
 import {
   TextField,
   Button,
@@ -7,9 +7,17 @@ import {
   Container,
   Fade,
   CssBaseline,
+  Avatar,
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+import { useRegisterProductMutation } from '../app/api/productApi';
+import { ProductRegistration } from '../types/product/ProductRegistration';
+import { Theme as ToastifyTheme, toast } from 'react-toastify';
+import { useThemeContext } from '../theme/ThemeContextProvider';
+import { BASE_URL } from '../config/constants';
+import { buildFormDataHeadersWithJwt } from '../utils/jwtUtils';
+import ProductRegistered from '../components/ProductRegistered';
 
 const VisuallyHiddenInput = styled('input')({
   clip: 'rect(0 0 0 0)',
@@ -23,61 +31,139 @@ const VisuallyHiddenInput = styled('input')({
   width: 1,
 });
 
-interface FormData {
-  brand: string;
-  name: string;
-  description: string;
-  quantity: number;
-  price: number;
+const AvatarContainer = styled(Avatar)({
+  width: '10rem',
+  height: '10rem',
+  borderRadius: '8px',
+  backgroundColor: 'transparent',
+});
+
+const ImagePreview = styled('img')({
+  width: '100%',
+  height: '100%',
+  objectFit: 'contain',
+  borderRadius: '8px',
+  marginTop: '1rem',
+  marginBottom: '1rem'
+});
+
+
+interface FileData {
   file: File | null;
-  fileName: string; // Added to store the selected file name
+  fileName: string;
 }
 
-const initialFormData: FormData = {
-  brand: '',
-  name: '',
-  description: '',
-  quantity: 0,
-  price: 0,
+const initialFileData: FileData = {
   file: null,
-  fileName: '', // Initialize it as an empty string
+  fileName: '',
 };
 
 const RegisterProduct: React.FC = () => {
-  const [formData, setFormData] = useState<FormData>(initialFormData);
+  const [fileData, setFileData] = useState<FileData>(initialFileData);
+  const { mode } = useThemeContext();
+  const [registerProduct, {
+    data,
+    isSuccess,
+    isError,
+    error
+  }] = useRegisterProductMutation();
 
-  const handleInputChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: name === 'quantity' || name === 'price' ? parseFloat(value) : value,
-    });
-  };
+  useEffect(() => {
+    if (isSuccess && data) {
+      toast.success(<ProductRegistered id={data.productId} />, {
+        position: "top-right",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: true,
+        pauseOnFocusLoss: false,
+        progress: undefined,
+        theme: mode as ToastifyTheme,
+      });
+    }
+  }, [isSuccess])
+
+  useEffect(() => {
+    if (isError) {
+      console.error(error);
+      toast.error('Product Registration Failed!', {
+        position: "top-right",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: true,
+        pauseOnFocusLoss: false,
+        progress: undefined,
+        theme: mode as ToastifyTheme,
+      });
+    }
+  }, [isError]);
 
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
       const selectedFile = e.target.files[0];
-      setFormData({
-        ...formData,
+      if (!selectedFile) return;
+      setFileData({
+        ...fileData,
         file: selectedFile,
-        fileName: selectedFile.name, // Store the selected file name
+        fileName: selectedFile.name,
       });
     }
   };
 
+  const registerProductImage = async (id: string) => {
+    if (!fileData.file) return;
+
+    const formData = new FormData();
+    formData.append("file", fileData.file, fileData.fileName);
+    const headers = buildFormDataHeadersWithJwt();
+
+    const requestOptions = {
+      method: 'POST',
+      body: formData,
+      headers,
+    }
+
+    try {
+      const response = await fetch(`${BASE_URL}/product/${id}/image/register`, requestOptions);
+      if (response.ok) {
+        const data = await response.json();
+        return data;
+      } else {
+        throw new Error("Failed to register the product image");
+      }
+    } catch (error) {
+      console.error(error);
+    }
+
+  }
+
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // Send the formData to your server here
-    console.log('Form data submitted:', formData);
-    // You can send the data to your server using Axios or fetch.
-    // Replace the console.log with your API call.
+
+    const data = new FormData(e.currentTarget);
+    const body: ProductRegistration = {
+      brand: data.get('brand') as string,
+      name: data.get('name') as string,
+      description: data.get('description') as string,
+      quantity: data.get('quantity') as string,
+      price: data.get('price') as string
+    };
+
+    registerProduct(body)
+      .unwrap()
+      .then((product) => {
+        registerProductImage(product.productId.toString());
+      });
   };
 
   return (
     <>
       <CssBaseline />
       <Fade in={true} timeout={1000}>
-        <Container maxWidth="sm">
+        <Container maxWidth="sm" sx={{ mb: "1rem" }}>
           <Box
             sx={{
               mt: 8,
