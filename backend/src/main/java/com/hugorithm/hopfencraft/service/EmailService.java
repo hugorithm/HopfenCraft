@@ -365,17 +365,25 @@ public class EmailService {
     }
 
     public void sendWelcomeEmail(ApplicationUser user) {
-        String subject = "Welcome to HopfenCraft - Your Registration Was Successful!";
-        String username = getUserUsernameBasedOnAuthProvider(user);
-        String message = buildWelcomeEmail(username);
-        sendEmail(user.getEmail(), subject, message, user, EmailType.REGISTRATION);
+        try {
+            String subject = "Welcome to HopfenCraft - Your Registration Was Successful!";
+            String username = getUserUsernameBasedOnAuthProvider(user);
+            String message = buildWelcomeEmail(username);
+            sendEmail(user.getEmail(), subject, message, user, EmailType.REGISTRATION);
+        } catch (EmailSendingFailedException ex) {
+            LOGGER.error(ex.getMessage(), ex);
+        }
     }
 
     public void sendPasswordResetEmail(ApplicationUser user, String link) {
-        String subject = "Password Reset Request - HopfenCraft";
-        String username = getUserUsernameBasedOnAuthProvider(user);
-        String message = buildPasswordResetEmail(username, link);
-        sendEmail(user.getEmail(), subject, message, user, EmailType.PASSWORD_RESET);
+        try {
+            String subject = "Password Reset Request - HopfenCraft";
+            String username = getUserUsernameBasedOnAuthProvider(user);
+            String message = buildPasswordResetEmail(username, link);
+            sendEmail(user.getEmail(), subject, message, user, EmailType.PASSWORD_RESET);
+        } catch (EmailSendingFailedException ex) {
+            LOGGER.error(ex.getMessage(), ex);
+        }
     }
 
     public void sendPaypalPaymentSuccessEmail(ApplicationUser user, Order order) {
