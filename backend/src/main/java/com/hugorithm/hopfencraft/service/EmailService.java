@@ -379,10 +379,14 @@ public class EmailService {
     }
 
     public void sendPaypalPaymentSuccessEmail(ApplicationUser user, Order order) {
-        String subject = "Order Payment Confirmation - Thank You for Shopping at HopfenCraft!";
-        String username = getUserUsernameBasedOnAuthProvider(user);
-        String message = buildPaypalPaymentSuccessEmail(username, order);
-        sendEmail(user.getEmail(), subject, message, user, EmailType.ORDER);
+        try {
+            String subject = "Order Payment Confirmation - Thank You for Shopping at HopfenCraft!";
+            String username = getUserUsernameBasedOnAuthProvider(user);
+            String message = buildPaypalPaymentSuccessEmail(username, order);
+            sendEmail(user.getEmail(), subject, message, user, EmailType.ORDER);
+        } catch (EmailSendingFailedException ex) {
+            LOGGER.error(ex.getMessage(), ex);
+        }
     }
 
     private String getUserUsernameBasedOnAuthProvider(ApplicationUser user) {
