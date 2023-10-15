@@ -2,6 +2,7 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { BASE_URL } from '../../config/constants';
 import { CartItem, ShoppingCartResponse } from '../../types/shopping/ShoppingCartResponse';
 import { ShoppingCartResquestBody } from '../../types/shopping/ShoppingCartRequestBody';
+import { buildJsonHeadersWithJwt } from '../../utils/jwtUtils';
 
 export const shoppingCartApi = createApi({
   reducerPath: "shoppingCartApi",
@@ -11,12 +12,7 @@ export const shoppingCartApi = createApi({
   endpoints: (builder) => ({
     shoppingCartAdd: builder.mutation<ShoppingCartResponse, ShoppingCartResquestBody>({
       query: (body) => {
-        const localJwt: string = JSON.parse(localStorage.getItem("user") || "{}").jwt;
-        // Create headers with the JWT token
-        const headers = new Headers({
-          'Authorization': `Bearer ${localJwt}`,
-          'Content-Type': 'application/json',
-        });
+        const headers = buildJsonHeadersWithJwt();
 
         return {
           url: "/cart/add",
@@ -28,11 +24,7 @@ export const shoppingCartApi = createApi({
     }),
     getShoppingCart: builder.query<ShoppingCartResponse, void>({
       query: () => {
-        const localJwt: string = JSON.parse(localStorage.getItem("user") || "{}").jwt;
-        const headers = new Headers({
-          'Authorization': `Bearer ${localJwt}`,
-          'Content-Type': 'application/json',
-        });
+        const headers = buildJsonHeadersWithJwt();
 
         return {
           url: "/cart/items",
@@ -43,11 +35,7 @@ export const shoppingCartApi = createApi({
     }),
     deleteShoppingCart: builder.mutation<ShoppingCartResponse, CartItem>({
       query: (cartItem) => {
-        const localJwt: string = JSON.parse(localStorage.getItem("user") || "{}").jwt;
-        const headers = new Headers({
-          'Authorization': `Bearer ${localJwt}`,
-          'Content-Type': 'application/json',
-        });
+        const headers = buildJsonHeadersWithJwt();
 
         return {
           url: `/cart/remove/${cartItem.cartItemId}`,

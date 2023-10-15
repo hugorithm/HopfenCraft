@@ -1,6 +1,8 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { BASE_URL } from '../../config/constants';
 import { Product } from '../../types/product/ProductData';
+import { ProductRegistration } from '../../types/product/ProductRegistration';
+import { buildJsonHeadersWithJwt } from '../../utils/jwtUtils';
 
 export const productApi = createApi({
   reducerPath: "productApi",
@@ -10,11 +12,7 @@ export const productApi = createApi({
   endpoints: (builder) => ({
     getProduct: builder.query<Product, string>({
       query: (id: string) => {
-        const localJwt: string = JSON.parse(localStorage.getItem("user") || "{}").jwt;
-        const headers = new Headers({
-          'Authorization': `Bearer ${localJwt}`,
-          'Content-Type': 'application/json',
-        });
+        const headers = buildJsonHeadersWithJwt();
 
         return {
           url: `product/${id}`,
@@ -23,7 +21,19 @@ export const productApi = createApi({
         };
       },
     }),
+    registerProduct: builder.mutation<Product, ProductRegistration>({
+      query: (body) => {
+        const headers = buildJsonHeadersWithJwt();
+
+        return {
+          url: `product/register`,
+          method: "POST",
+          headers,
+          body
+        };
+      }
+    }),
   })
 });
 
-export const { useGetProductQuery } = productApi;
+export const { useGetProductQuery, useRegisterProductMutation } = productApi;

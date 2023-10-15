@@ -2,6 +2,7 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { BASE_URL } from '../../config/constants';
 import { Order } from '../../types/order/Order';
 import { ShippingDetails } from '../../types/order/ShippingDetails';
+import { buildJsonHeadersWithJwt } from '../../utils/jwtUtils';
 
 export const orderApi = createApi({
   reducerPath: "orderApi",
@@ -11,11 +12,7 @@ export const orderApi = createApi({
   endpoints: (builder) => ({
     createOrder: builder.mutation<Order, ShippingDetails>({
       query: (body) => {
-        const localJwt: string = JSON.parse(localStorage.getItem("user") || "{}").jwt;
-        const headers = new Headers({
-          'Authorization': `Bearer ${localJwt}`,
-          'Content-Type': 'application/json',
-        });
+        const headers = buildJsonHeadersWithJwt();
 
         return {
           url: "order/create",
@@ -27,11 +24,7 @@ export const orderApi = createApi({
     }),
     getOrder: builder.query<Order, string>({
       query: (id) => {
-        const localJwt: string = JSON.parse(localStorage.getItem("user") || "{}").jwt;
-        const headers = new Headers({
-          'Authorization': `Bearer ${localJwt}`,
-          'Content-Type': 'application/json',
-        });
+        const headers = buildJsonHeadersWithJwt();
 
         return {
           url: `/order/${id}`,
