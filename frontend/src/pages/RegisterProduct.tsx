@@ -226,7 +226,7 @@ const RegisterProduct: React.FC = () => {
                 fullWidth
                 margin="normal"
                 required
-                inputProps={{ step: "0.01" }}
+                inputProps={{ step: "0.01", min: "0.01" }}
               />
               <Box sx={{
                 display: "flex",
