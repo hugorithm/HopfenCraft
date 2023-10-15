@@ -215,6 +215,7 @@ const RegisterProduct: React.FC = () => {
                 fullWidth
                 margin="normal"
                 required
+                inputProps={{ min: "1" }}
               />
               <TextField
                 id="price"
