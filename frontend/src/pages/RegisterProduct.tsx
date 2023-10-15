@@ -175,28 +175,28 @@ const RegisterProduct: React.FC = () => {
             <Typography component="h1" variant="h2" gutterBottom>
               Product Registration
             </Typography>
-            <form onSubmit={handleSubmit}>
+            <Box component="form" onSubmit={handleSubmit} sx={{ mt: 3 }}>
               <TextField
+                id="brand"
                 name="brand"
                 label="Brand"
                 variant="outlined"
                 fullWidth
                 margin="normal"
-                value={formData.brand}
-                onChange={handleInputChange}
                 required
+                autoFocus
               />
               <TextField
+                id="name"
                 name="name"
                 label="Name"
                 variant="outlined"
                 fullWidth
                 margin="normal"
-                value={formData.name}
-                onChange={handleInputChange}
                 required
               />
               <TextField
+                id="description"
                 name="description"
                 label="Description"
                 variant="outlined"
@@ -204,36 +204,48 @@ const RegisterProduct: React.FC = () => {
                 margin="normal"
                 multiline
                 rows={4}
-                value={formData.description}
-                onChange={handleInputChange}
                 required
               />
               <TextField
+                id="quantity"
                 name="quantity"
                 label="Quantity"
                 type="number"
                 variant="outlined"
                 fullWidth
                 margin="normal"
-                value={formData.quantity}
-                onChange={handleInputChange}
                 required
               />
               <TextField
+                id="price"
                 name="price"
                 label="Price"
                 type="number"
                 variant="outlined"
                 fullWidth
                 margin="normal"
-                value={formData.price}
-                onChange={handleInputChange}
                 required
+                inputProps={{ step: "0.01" }}
               />
-              <Button component="label" variant="contained" startIcon={<CloudUploadIcon />}>
-                {formData.fileName ? formData.fileName : 'Upload Product Image'} {/* Display the selected file name */}
-                <VisuallyHiddenInput type="file" accept="image/*" onChange={handleFileChange} />
-              </Button>
+              <Box sx={{
+                display: "flex",
+                flexWrap: "nowrap",
+                gap: 10
+              }}>
+                <Box>
+                  <Button component="label" variant="contained" startIcon={<CloudUploadIcon />} sx={{ mt: "1rem", mb: "1rem" }}>
+                    {fileData.fileName ? fileData.fileName : 'Upload Product Image'}
+                    <VisuallyHiddenInput required id="file" type="file" accept="image/*" onChange={handleFileChange} />
+                  </Button>
+                </Box>
+                <AvatarContainer>
+                  {fileData.file ? (
+                    <ImagePreview src={URL.createObjectURL(fileData.file)} alt="Product" />
+                  ) : (
+                    <CloudUploadIcon fontSize="large" color="primary" />
+                  )}
+                </AvatarContainer>
+              </Box>
               <Button
                 type="submit"
                 variant="contained"
@@ -243,7 +255,7 @@ const RegisterProduct: React.FC = () => {
               >
                 Register Product
               </Button>
-            </form>
+            </Box>
           </Box>
         </Container>
       </Fade>
