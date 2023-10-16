@@ -73,6 +73,7 @@ public class ShoppingCartService {
 
             List<CartItem> cartItems = user.getCartItems();
 
+            //TODO: Revise this as it might not be needed since one product always stays in the same cartItem
             int totalQuantity = cartItems.stream()
                     .filter(cartItem -> cartItem.getProduct().getProductId().equals(dto.getProductId()))
                     .mapToInt(CartItem::getQuantity)
