@@ -1,6 +1,7 @@
 package com.hugorithm.hopfencraft.service;
 
 import com.hugorithm.hopfencraft.dto.cart.CartItemDTO;
+import com.hugorithm.hopfencraft.dto.cart.CartItemQuantityUpdateDTO;
 import com.hugorithm.hopfencraft.dto.cart.CartRegistrationDTO;
 import com.hugorithm.hopfencraft.dto.cart.CartResponseDTO;
 import com.hugorithm.hopfencraft.dto.product.ProductDTO;
