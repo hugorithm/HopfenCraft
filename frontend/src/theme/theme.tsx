@@ -8,7 +8,7 @@ import '@fontsource/roboto/700.css';
 const theme = {
   palette: {
     primary: amber,
-  },
+  }
 };
 
 export const getDesignTokens = (mode: PaletteMode) => ({
@@ -18,7 +18,7 @@ export const getDesignTokens = (mode: PaletteMode) => ({
       ? {
         // palette values for light mode
         primary: amber,
-        secondary: grey, 
+        secondary: grey,
         divider: grey[300],
         text: {
           primary: grey[900],
@@ -41,6 +41,61 @@ export const getDesignTokens = (mode: PaletteMode) => ({
       }),
   },
   components: {
+    MuiCssBaseline: {
+      styleOverrides: {
+        body: {
+          ...(mode === "light") ?
+            {
+              scrollbarColor: "#ffffff #ffffff",
+              "&::-webkit-scrollbar, & *::-webkit-scrollbar": {
+                backgroundColor: "#ffffff",
+                width: "8px"
+              },
+              "&::-webkit-scrollbar-thumb, & *::-webkit-scrollbar-thumb": {
+                borderRadius: 8,
+                backgroundColor: amber[500],
+                minHeight: 10,
+              },
+              "&::-webkit-scrollbar-thumb:focus, & *::-webkit-scrollbar-thumb:focus": {
+                backgroundColor: amber[500],
+              },
+              "&::-webkit-scrollbar-thumb:active, & *::-webkit-scrollbar-thumb:active": {
+                backgroundColor: amber[500],
+              },
+              "&::-webkit-scrollbar-thumb:hover, & *::-webkit-scrollbar-thumb:hover": {
+                backgroundColor: amber[800],
+              },
+              "&::-webkit-scrollbar-corner, & *::-webkit-scrollbar-corner": {
+                backgroundColor: amber[500],
+              },
+            }
+            : {
+              scrollbarColor: grey[900],
+              "&::-webkit-scrollbar, & *::-webkit-scrollbar": {
+                backgroundColor: grey[900],
+                width: "8px"
+              },
+              "&::-webkit-scrollbar-thumb, & *::-webkit-scrollbar-thumb": {
+                borderRadius: 8,
+                backgroundColor: amber[500],
+                minHeight: 10,
+              },
+              "&::-webkit-scrollbar-thumb:focus, & *::-webkit-scrollbar-thumb:focus": {
+                backgroundColor: amber[500],
+              },
+              "&::-webkit-scrollbar-thumb:active, & *::-webkit-scrollbar-thumb:active": {
+                backgroundColor: amber[500],
+              },
+              "&::-webkit-scrollbar-thumb:hover, & *::-webkit-scrollbar-thumb:hover": {
+                backgroundColor: amber[800],
+              },
+              "&::-webkit-scrollbar-corner, & *::-webkit-scrollbar-corner": {
+                backgroundColor: amber[500],
+              },
+            }
+        },
+      },
+    },
     typography: {
       fontFamily: [
         'Roboto',
@@ -61,7 +116,7 @@ export const getDesignTokens = (mode: PaletteMode) => ({
               }
             }
           }
-        } 
+        }
         : {
           styleOverrides: {
             root: {
