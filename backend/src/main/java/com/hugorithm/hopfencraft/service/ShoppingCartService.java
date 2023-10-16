@@ -27,6 +27,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -76,14 +77,24 @@ public class ShoppingCartService {
                     .mapToInt(CartItem::getQuantity)
                     .sum();
 
+            Optional<CartItem> hasProduct = cartItems.stream()
+                    .filter(cartItem -> cartItem.getProduct().getProductId().equals(product.getProductId()))
+                    .findFirst();
+
             if (dto.getQuantity() + totalQuantity <= product.getStockQuantity()) {
 
                 BigDecimal total =  product.getPrice().multiply(BigDecimal.valueOf(dto.getQuantity()));
 
-                CartItem cartItem = new CartItem(product, user, dto.getQuantity(), total);
-
-                cartItemRepository.save(cartItem);
-                cartItems.add(cartItem);
+                if (hasProduct.isPresent()) {
+                    CartItem cartItem = hasProduct.get();
+                    int sum = cartItem.getQuantity() + dto.getQuantity();
+                    cartItem.setQuantity(sum);
+                    cartItemRepository.save(cartItem);
+                } else {
+                    CartItem cartItem = new CartItem(product, user, dto.getQuantity(), total);
+                    cartItemRepository.save(cartItem);
+                    cartItems.add(cartItem);
+                }
 
                 return ResponseEntity.ok(new CartResponseDTO(convertCartItemListToCartItemDTOList(cartItems)));
             } else {
