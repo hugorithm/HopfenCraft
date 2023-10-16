@@ -112,6 +112,34 @@ public class ShoppingCartService {
     }
 
 
+    public ResponseEntity<CartResponseDTO> updateCartItemQuantity(Jwt jwt, CartItemQuantityUpdateDTO dto){
+        try {
+            ApplicationUser user = jwtService.getUserFromJwt(jwt);
+            List<CartItem> cartItems = user.getCartItems();
+
+            CartItem cartItem = cartItems.stream()
+                    .filter(ci -> ci.getCartItemId().equals(dto.getCartItemId()))
+                    .findFirst()
+                    .orElseThrow(() -> new CartItemNotFoundException("CartItem not Found"));
+
+            if (dto.getQuantity() <= cartItem.getProduct().getStockQuantity()) {
+                cartItem.setQuantity(dto.getQuantity());
+                cartItemRepository.save(cartItem);
+            } else {
+                throw new CartItemQuantityExceedsAvailableException("Requested quantity exceeds available quantity");
+            }
+
+            return ResponseEntity.ok(new CartResponseDTO(convertCartItemListToCartItemDTOList(cartItems)));
+        } catch (UsernameNotFoundException | CartItemNotFoundException ex) {
+            LOGGER.error(ex.getMessage(), ex);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+
+        }  catch (CartItemQuantityExceedsAvailableException ex) {
+            LOGGER.error(ex.getMessage(), ex);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+    }
+
     public ResponseEntity<CartResponseDTO> removeCartItem(Jwt jwt, Long cartItemId) {
         try {
             ApplicationUser user = jwtService.getUserFromJwt(jwt);
