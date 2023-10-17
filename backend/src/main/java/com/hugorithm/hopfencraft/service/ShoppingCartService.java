@@ -70,19 +70,13 @@ public class ShoppingCartService {
         try {
             ApplicationUser user = jwtService.getUserFromJwt(jwt);
             Product product = getProductFromRepoById(dto.getProductId());
-
             List<CartItem> cartItems = user.getCartItems();
-
-            //TODO: Revise this as it might not be needed since one product always stays in the same cartItem
-            int totalQuantity = cartItems.stream()
-                    .filter(cartItem -> cartItem.getProduct().getProductId().equals(dto.getProductId()))
-                    .mapToInt(CartItem::getQuantity)
-                    .sum();
 
             Optional<CartItem> hasProduct = cartItems.stream()
                     .filter(cartItem -> cartItem.getProduct().getProductId().equals(product.getProductId()))
                     .findFirst();
 
+            int totalQuantity = hasProduct.map(CartItem::getQuantity).orElse(0);
             if (dto.getQuantity() + totalQuantity <= product.getStockQuantity()) {
 
                 BigDecimal total =  product.getPrice().multiply(BigDecimal.valueOf(dto.getQuantity()));
