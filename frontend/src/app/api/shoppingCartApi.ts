@@ -3,6 +3,7 @@ import { BASE_URL } from '../../config/constants';
 import { CartItem, ShoppingCartResponse } from '../../types/shopping/ShoppingCartResponse';
 import { ShoppingCartResquestBody } from '../../types/shopping/ShoppingCartRequestBody';
 import { buildJsonHeadersWithJwt } from '../../utils/jwtUtils';
+import { CartItemUpdateQuantityRequest } from '../../types/shopping/CartItemUpdateQuantityRequest';
 
 export const shoppingCartApi = createApi({
   reducerPath: "shoppingCartApi",
@@ -17,6 +18,17 @@ export const shoppingCartApi = createApi({
         return {
           url: "/cart/add",
           method: "POST",
+          headers,
+          body
+        };
+      },
+    }),
+    updateCartItemQuantity: builder.mutation<ShoppingCartResponse, CartItemUpdateQuantityRequest>({
+      query: (body) => {
+        const headers = buildJsonHeadersWithJwt();
+        return {
+          url: "/cart/update",
+          method: "PUT",
           headers,
           body
         };
@@ -48,4 +60,4 @@ export const shoppingCartApi = createApi({
 
 });
 
-export const { useShoppingCartAddMutation, useGetShoppingCartQuery, useDeleteShoppingCartMutation } = shoppingCartApi;
+export const { useShoppingCartAddMutation, useGetShoppingCartQuery, useDeleteShoppingCartMutation, useUpdateCartItemQuantityMutation } = shoppingCartApi;
