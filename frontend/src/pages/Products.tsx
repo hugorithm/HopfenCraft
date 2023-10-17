@@ -42,7 +42,6 @@ const Products = () => {
     }
   }, [fadeIn]);
 
-
   const [shoppingCartAdd,
     { data: cartData,
       isSuccess: isCartAddSuccess,
@@ -84,7 +83,6 @@ const Products = () => {
     }
   };
 
-
   useEffect(() => {
     if (isCartAddSuccess && cartData) {
       dispatch(setCartItems({ cartItems: cartData.cartItems }));
@@ -116,31 +114,25 @@ const Products = () => {
     shoppingCartAdd({ productId, quantity })
       .unwrap()
       .catch((error: { status: number, data: string }) => {
+        let message = "Failed to add item to cart!";
+
         if (error.status === 400) {
-          toast.error('Unable to add the selected quantity to your cart. The requested quantity exceeds the available stock.', {
-            position: "top-right",
-            autoClose: 2000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: false,
-            draggable: true,
-            pauseOnFocusLoss: false,
-            progress: undefined,
-            theme: mode,
-          });
+          message = "Unable to add the selected quantity to your cart. The requested quantity exceeds the available stock.";
         } else if (error.status === 404) {
-          toast.error('Failed to add item to cart!', {
-            position: "top-right",
-            autoClose: 2000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: false,
-            draggable: true,
-            pauseOnFocusLoss: false,
-            progress: undefined,
-            theme: mode,
-          });
+          message = "Failed to add item to cart!";
         }
+
+        toast.error(message, {
+          position: "top-right",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: false,
+          draggable: true,
+          pauseOnFocusLoss: false,
+          progress: undefined,
+          theme: mode,
+        });
       })
   }
 
