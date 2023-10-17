@@ -90,14 +90,14 @@ const Order: React.FC<OrderProps> = ({ onApproveCallback, orderId }) => {
                     sx={{ py: 1, px: 0 }}
                     divider
                   >
-                    <ListItem sx={{ width: "unset" }}>
+                    <Box sx={{ width: "unset" }}>
                       <ProductImageLink productId={orderItem.product.productId} width="5rem" />
-                    </ListItem>
+                    </Box>
                     <ListItemText
                       primary={orderItem.product.name}
                       secondary={orderItem.product.description}
                     />
-                    <Typography variant="body2">
+                    <Typography variant="body2" whiteSpace={"nowrap"}>
                       {orderItem.quantity} x €{orderItem.product.price}
                     </Typography>
                   </ListItem>
