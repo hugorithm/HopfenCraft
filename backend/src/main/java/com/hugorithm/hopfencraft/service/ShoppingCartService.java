@@ -26,6 +26,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.util.Comparator;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -63,6 +64,7 @@ public class ShoppingCartService {
                         ci.getTotal(),
                         ci.getAddedDateTime()
                 ))
+                .sorted(Comparator.comparing(CartItemDTO::getAddedDateTime, Comparator.reverseOrder()))
                 .toList();
     }
 
