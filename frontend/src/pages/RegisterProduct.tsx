@@ -8,6 +8,7 @@ import {
   Fade,
   CssBaseline,
   Avatar,
+  InputAdornment,
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
@@ -226,7 +227,13 @@ const RegisterProduct: React.FC = () => {
                 fullWidth
                 margin="normal"
                 required
-                inputProps={{ step: "0.01", min: "0.01" }}
+                inputProps={{
+                  step: "0.01",
+                  min: "0.01",
+                }}
+                InputProps={{
+                  startAdornment: <InputAdornment position="start" >€</InputAdornment>
+                }}
               />
               <Box sx={{
                 display: "flex",
