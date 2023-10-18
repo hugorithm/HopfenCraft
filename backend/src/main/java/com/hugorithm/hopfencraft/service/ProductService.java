@@ -247,4 +247,45 @@ public class ProductService {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
+
+    public ResponseEntity<ProductDTO> updateProductImage(Long productId, MultipartFile file) {
+        try {
+            Product product = productRepository.findById(productId)
+                    .orElseThrow(() -> new ProductNotFoundException("Product not found with id: %s", productId));
+
+            File oldFile = new File(product.getImage().getPath());
+            if (oldFile.exists()) {
+                if (oldFile.delete()) {
+                    LOGGER.info("Old file deleted successfully");
+                } else {
+                    LOGGER.error("Failed to delete old file");
+                }
+            }
+
+            UUID uuid = UUID.randomUUID();
+            String filePath = FOLDER_PATH + uuid + "_" + file.getOriginalFilename();
+
+            ProductImage image = product.getImage();
+            image.setName(uuid + "_" + file.getOriginalFilename());
+            image.setType(file.getContentType());
+            image.setPath(filePath);
+
+            file.transferTo(new File(filePath));
+            Product p = productRepository.save(product);
+
+            return ResponseEntity.status(HttpStatus.OK).body(new ProductDTO(
+                    p.getProductId(),
+                    p.getBrand(),
+                    p.getName(),
+                    p.getDescription(),
+                    p.getStockQuantity(),
+                    p.getPrice(),
+                    Product.getCurrency(),
+                    p.getRegisterDateTime()
+            ));
+        } catch (IOException ex) {
+            LOGGER.error(ex.getMessage(), ex);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
 }
