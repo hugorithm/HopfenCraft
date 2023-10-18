@@ -32,7 +32,7 @@ const Products = () => {
   const [productQuantities, setProductQuantities] = useState<{ [productId: string]: number }>({});
   const { jwt } = useSelector(selectAuth);
   const { mode }: any = useThemeContext();
-  const { products, loading, error, page, last } = useSelector(selectProducts);
+  const { products, loading, last } = useSelector(selectProducts);
   const dispatch = useAppDispatch();
   const [fadeIn, setFadeIn] = useState(false);
 
