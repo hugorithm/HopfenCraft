@@ -3,6 +3,7 @@ import { BASE_URL } from '../../config/constants';
 import { Product } from '../../types/product/ProductData';
 import { ProductRegistration } from '../../types/product/ProductRegistration';
 import { buildJsonHeadersWithJwt } from '../../utils/jwtUtils';
+import { ProductUpdate } from '../../types/product/ProductUpdate';
 
 export const productApi = createApi({
   reducerPath: "productApi",
@@ -33,7 +34,19 @@ export const productApi = createApi({
         };
       }
     }),
-  })
+    updateProduct: builder.mutation<Product, ProductUpdate>({
+      query: (body) => {
+        const headers = buildJsonHeadersWithJwt();
+
+        return {
+          url: `product/update`,
+          method: "PUT",
+          headers,
+          body
+        };
+      }
+    }),
+  }),
 });
 
-export const { useGetProductQuery, useRegisterProductMutation } = productApi;
+export const { useGetProductQuery, useRegisterProductMutation, useUpdateProductMutation } = productApi;
