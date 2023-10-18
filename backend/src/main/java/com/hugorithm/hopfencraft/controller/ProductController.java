@@ -67,6 +67,12 @@ public class ProductController {
         return productService.registerProductImage(productId, file);
     }
 
+    @PutMapping("{productId}/image/update")
+    @RolesAllowed("ADMIN")
+    public ResponseEntity<ProductDTO> updateProductImage(@PathVariable Long productId, MultipartFile file) {
+        return productService.updateProductImage(productId, file);
+    }
+
     @PutMapping("/update")
     @RolesAllowed("ADMIN")
     public ResponseEntity<ProductDTO> updateProduct(@Valid @RequestBody ProductUpdateDTO body) {
