@@ -8,6 +8,7 @@ import {
   CssBaseline,
   Avatar,
   Fade,
+  InputAdornment,
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
@@ -237,6 +238,9 @@ const UpdateProduct: React.FC = () => {
                 margin="normal"
                 required
                 inputProps={{ step: "0.01", min: "0.01" }}
+                InputProps={{
+                  startAdornment: <InputAdornment position="start" >€</InputAdornment>
+                }}
                 defaultValue={productData?.price}
               />
               <Box sx={{
