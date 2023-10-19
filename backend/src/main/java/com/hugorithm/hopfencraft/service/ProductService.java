@@ -115,9 +115,15 @@ public class ProductService {
         }
     }
 
-    public ResponseEntity<Page<ProductDTO>> getProducts(Pageable pageable) {
+    public ResponseEntity<Page<ProductDTO>> getProducts(Pageable pageable, String search) {
         try {
-            Page<Product> productPage = productRepository.findAll(pageable);
+            Page<Product> productPage;
+
+            if (search != null && !search.isEmpty()) {
+                productPage = productRepository.findByProductNameOrDescription(search, pageable);
+            } else {
+                productPage = productRepository.findAll(pageable);
+            }
 
             return ResponseEntity.ok(productPage.map(p -> new ProductDTO(
                     p.getProductId(),
