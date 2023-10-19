@@ -236,7 +236,7 @@ public class ProductControllerTests {
                 p.getRegisterDateTime()
         ));
 
-        when(productService.getProducts(Mockito.any(Pageable.class))).thenReturn(ResponseEntity.ok(dtoPage));
+        when(productService.getProducts(Mockito.any(Pageable.class), Mockito.any())).thenReturn(ResponseEntity.ok(dtoPage));
 
         mockMvc.perform(get("/product/products")
                         .param("page", "1")

@@ -279,7 +279,7 @@ public class ProductServiceTests {
         )));
 
         // Call the service method to retrieve all products
-        ResponseEntity<Page<ProductDTO>> productsPage = productService.getProducts(pageable);
+        ResponseEntity<Page<ProductDTO>> productsPage = productService.getProducts(pageable, null);
 
         // Assert the expected behavior
         assertEquals(3, productsPage.getBody().getTotalElements());
