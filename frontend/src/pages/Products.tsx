@@ -289,18 +289,20 @@ const Products = () => {
               ))
             )}
           </Grid>
-          <Container
-            sx={{ my: 5 }}
-            style={{ display: 'flex', justifyContent: 'center' }}>
-            <Button
-              onClick={loadMore}
-              disabled={last}
-              variant="contained"
-              sx={{ mt: 2 }}
-            >
-              Load More
-            </Button>
-          </Container>
+          {!!products.length && (
+            <Container
+              sx={{ my: 5 }}
+              style={{ display: 'flex', justifyContent: 'center' }}>
+              <Button
+                onClick={loadMore}
+                disabled={last}
+                variant="contained"
+                sx={{ mt: 2 }}
+              >
+                Load More
+              </Button>
+            </Container>
+          )}
         </Container>
       </main>
       {/* Footer */}
