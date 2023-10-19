@@ -15,7 +15,7 @@ import SearchIcon from '@mui/icons-material/Search';
 import { Link as RouterLink } from 'react-router-dom';
 import { Product, ProductData } from '../types/product/ProductData';
 import { BASE_URL } from '../config/constants';
-import { useEffect, useRef, useState } from 'react';
+import { ChangeEvent, useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { selectAuth } from '../features/authSlice';
 import { fetchProducts, resetProducts, selectProducts, setProducts } from '../features/productsSlice';
@@ -38,6 +38,7 @@ const Products = () => {
   const { products, loading, last } = useSelector(selectProducts);
   const dispatch = useAppDispatch();
   const [fadeIn, setFadeIn] = useState(false);
+  let debounceTimer: NodeJS.Timeout | undefined;
 
   useEffect(() => {
     if (!fadeIn) {
@@ -138,6 +139,14 @@ const Products = () => {
         });
       })
   }
+
+  const debounce = (fn: () => void, delay: number) => {
+    if (debounceTimer) clearTimeout(debounceTimer);
+
+    debounceTimer = setTimeout(() => {
+      fn();
+    }, delay);
+  };
 
   const handleImageClick = (product: Product) => {
     setSelectedProduct(product);
