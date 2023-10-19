@@ -54,20 +54,25 @@ const Products = () => {
     },
   ] = useShoppingCartAddMutation();
 
+  const getProducts = () => {
+    dispatch(resetPage());
+    dispatch(resetProducts());
+    dispatch(fetchProducts())
+      .then((data) => {
+        if (data.payload) {
+          const payload = data.payload as ProductData;
+          dispatch(setProducts(payload.content));
+        } else {
+          throw new Error("Failed to fetch data");
+        }
+      });
+  }
+
   const renderAfterCalled = useRef(false);
   useEffect(() => {
     if (!renderAfterCalled.current) { // This is so that React Strict Mode doesn't cause issues
       if (loading !== "loading") {
-        dispatch(resetPage());
-        dispatch(resetProducts());
-        dispatch(fetchProducts()).then((data) => {
-          if (data.payload) {
-            const payload = data.payload as ProductData;
-            dispatch(setProducts(payload.content));
-          } else {
-            throw new Error("Failed to fetch data");
-          }
-        });
+        getProducts();
       }
     }
     renderAfterCalled.current = true; // This is so that React Strict Mode doesn't cause issues
