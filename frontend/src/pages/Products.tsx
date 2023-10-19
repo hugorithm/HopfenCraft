@@ -153,6 +153,32 @@ const Products = () => {
     }, delay);
   };
 
+  const searchProducts = (search: string) => {
+    dispatch(resetPage());
+    dispatch(resetProducts());
+    dispatch(fetchProducts(encodeURIComponent(search)))
+      .then((data) => {
+        if (data.payload) {
+          const payload = data.payload as ProductData;
+          dispatch(setProducts(payload.content));
+        } else {
+          throw new Error("Failed to fetch data");
+        }
+      });
+  }
+
+  const handleSearch = (e: ChangeEvent<HTMLInputElement>) => {
+    const search = e.target.value;
+
+    debounce(() => {
+      if (search.trim() !== "") {
+        searchProducts(search);
+      } else {
+        getProducts();
+      }
+    }, 500);
+  }
+
   const handleImageClick = (product: Product) => {
     setSelectedProduct(product);
     setOpenModal(true);
@@ -225,6 +251,7 @@ const Products = () => {
               fullWidth
               variant="outlined"
               placeholder="Search for beers..."
+              onChange={handleSearch}
               InputProps={{
                 startAdornment: (
                   <InputAdornment position="start">
