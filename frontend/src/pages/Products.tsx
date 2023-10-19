@@ -262,7 +262,17 @@ const Products = () => {
             />
           </Box>
           <Grid container spacing={5}>
-            {products.length === 0 && loading !== 'succeeded' ? (
+            {!products.length && loading === "succeeded" && (
+              <Container
+                sx={{ my: 5 }}
+                style={{ display: 'flex', justifyContent: 'center' }}
+              >
+                <Typography>
+                  No products match the search keyword.
+                </Typography>
+              </Container>
+            )}
+            {!products.length && loading !== "succeeded" ? (
               // Render Skeletons when products are loading
               <ProductsSkeleton />
             ) : (
