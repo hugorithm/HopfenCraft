@@ -15,6 +15,6 @@ import java.util.Optional;
 public interface ProductRepository extends JpaRepository<Product, Long> {
     Optional<Product> findProductByName(String name);
     Optional<Product> findProductByBrandName(String brandName);
-    @Query("select p from Product p where LOWER(p.brand) like %:keyword% or LOWER(p.name) like %:keyword%")
+    @Query("select p from Product p where lower(p.brand) like %:keyword% or lower(p.name) like %:keyword%")
     Page<Product> findByProductNameOrDescription(@Param("keyword") String keyword, Pageable pageable);
 }
