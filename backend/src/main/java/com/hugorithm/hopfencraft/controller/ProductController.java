@@ -31,7 +31,7 @@ public class ProductController {
 
     @GetMapping("/products")
     public ResponseEntity<Page<ProductDTO>> getProducts(@RequestParam(defaultValue = "0") int page,
-                                                        @RequestParam(defaultValue = "10") int size,
+                                                        @RequestParam(defaultValue = "15") int size,
                                                         @RequestParam(name = "search", required = false) String search) {
         Pageable pageable = PageRequest.of(page, size);
         return productService.getProducts(pageable, search);
