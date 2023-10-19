@@ -7,8 +7,11 @@ import {
   Container,
   Link,
   Modal,
-  Fade
+  Fade,
+  TextField,
+  InputAdornment
 } from '@mui/material';
+import SearchIcon from '@mui/icons-material/Search';
 import { Link as RouterLink } from 'react-router-dom';
 import { Product, ProductData } from '../types/product/ProductData';
 import { BASE_URL } from '../config/constants';
@@ -203,6 +206,20 @@ const Products = () => {
           </Box>
         </Fade>
         <Container sx={{ py: 8 }} maxWidth="md">
+          <Box mb={5}>
+            <TextField
+              fullWidth
+              variant="outlined"
+              placeholder="Search for beers..."
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <SearchIcon />
+                  </InputAdornment>
+                ),
+              }}
+            />
+          </Box>
           <Grid container spacing={5}>
             {products.length === 0 && loading !== 'succeeded' ? (
               // Render Skeletons when products are loading
