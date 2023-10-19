@@ -20,12 +20,12 @@ const initialState: ProductsState = {
 };
 
 // Define an async thunk for fetching products
-export const fetchProducts = createAsyncThunk<ProductData, void, { state: RootState }>(
+export const fetchProducts = createAsyncThunk<ProductData, void | string, { state: RootState }>(
   'products/fetchProducts',
-  async (_, { getState }) => {
+  async (search, { getState }) => {
     const { page } = getState().products;
-    const apiUrl = `${BASE_URL}/product/products?page=${page}&size=15`;
-
+    const baseApiUrl = `${BASE_URL}/product/products?page=${page}`;
+    const apiUrl = search ? `${baseApiUrl}&search=${encodeURIComponent(search)}` : baseApiUrl;
     const response = await fetch(apiUrl);
 
     if (!response.ok) {
