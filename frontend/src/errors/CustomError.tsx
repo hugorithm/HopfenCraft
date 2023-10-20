@@ -9,7 +9,6 @@ import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 const CustomError = () => {
   return (
     <>
-      <CssBaseline />
       <Container maxWidth="sm">
         <Box
           sx={{

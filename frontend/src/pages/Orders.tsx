@@ -59,7 +59,6 @@ const Orders = () => {
 
   return (
     <>
-      <CssBaseline />
       <Fade in={true} timeout={1000}>
         <Container maxWidth="md">
           <Box

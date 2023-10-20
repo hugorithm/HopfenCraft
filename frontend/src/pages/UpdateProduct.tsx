@@ -169,7 +169,6 @@ const UpdateProduct: React.FC = () => {
 
   return (
     <>
-      <CssBaseline />
       <Fade in={true} timeout={1000}>
         <Container maxWidth="sm" sx={{ mb: "1rem" }}>
           <Box

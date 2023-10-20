@@ -100,7 +100,6 @@ const Login = () => {
 
   return (
     <Grid container component="main" sx={{ height: '93.35vh' }}>
-      <CssBaseline />
       <Grid
         item
         xs={false}

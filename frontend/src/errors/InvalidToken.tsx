@@ -3,14 +3,12 @@ import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
-import { CssBaseline } from '@mui/material';
 import { Link as RouterLink } from 'react-router-dom';
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 
 const InvalidToken = () => {
   return (
     <>
-      <CssBaseline />
       <Container maxWidth="sm">
         <Box
           sx={{

@@ -33,7 +33,6 @@ const ProductDetails = () => {
 
   return (
     <>
-      <CssBaseline />
       {isLoading || !product ? (
         <Skeleton variant="rectangular" width={300} height={100} />
       ) : (

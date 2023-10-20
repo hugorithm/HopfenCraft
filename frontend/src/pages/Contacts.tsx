@@ -10,7 +10,6 @@ import { Fade } from '@mui/material';
 function Contacts() {
   return (
     <>
-      <CssBaseline />
       <Fade in={true} timeout={1000}>
         <Container maxWidth="sm">
           <Box

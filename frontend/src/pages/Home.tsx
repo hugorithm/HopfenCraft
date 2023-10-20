@@ -45,7 +45,6 @@ export default function Home() {
 
   return (
     <>
-      <CssBaseline />
       <Box sx={{ position: 'relative', height: '100vh', overflow: 'hidden' }}>
         <CardMedia
           component="video"
@@ -145,7 +144,6 @@ export default function Home() {
           </Fade>
         </Box>
       </Box>
-      <CssBaseline />
     </>
   );
 }

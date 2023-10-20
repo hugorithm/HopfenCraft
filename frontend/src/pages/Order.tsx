@@ -53,7 +53,6 @@ const Order: React.FC<OrderProps> = ({ onApproveCallback, orderId }) => {
 
   return (
     <>
-      <CssBaseline />
       {isLoading || order === null ? (
         <Fade in={true} timeout={1000}>
           <Container maxWidth="sm">

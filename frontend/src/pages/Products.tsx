@@ -193,7 +193,6 @@ const Products = () => {
 
   return (
     <>
-      <CssBaseline />
       <Modal
         open={openModal}
         onClose={handleCloseModal}

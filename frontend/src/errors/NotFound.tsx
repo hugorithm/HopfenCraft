@@ -9,7 +9,6 @@ import { Link as RouterLink } from 'react-router-dom';
 const NotFound = () => {
   return (
     <>
-      <CssBaseline />
       <Container maxWidth="sm">
         <Box
           sx={{
