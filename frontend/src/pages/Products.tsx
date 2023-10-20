@@ -28,6 +28,7 @@ import { useThemeContext } from '../theme/ThemeContextProvider';
 import { setCartItems } from '../features/shoppingCartSlice';
 import ItemAddedToCart from '../components/ItemAddedToCart';
 import { resetPage } from '../features/productsSlice';
+import ProductsIntroduction from '../components/ProductsIntroduction';
 
 const Products = () => {
   const [openModal, setOpenModal] = useState<boolean>(false);
@@ -212,37 +213,8 @@ const Products = () => {
               bgcolor: 'background.paper',
               mt: 8,
               mb: 6,
-            }}
-          >
-            <Container maxWidth="sm">
-              <Typography
-                component="h1"
-                variant="h2"
-                align="center"
-                color="text.primary"
-                gutterBottom
-              >
-                Our Beers
-              </Typography>
-              <Typography variant="h5" align="center" color="text.secondary" paragraph>
-                Explore the world of beer,
-                where craftsmanship meets creativity,
-                and every bottle tells a unique story.
-              </Typography>
-              <Typography variant="h5" align="center" color="text.secondary" paragraph>
-                Our collection showcases a curated selection of brews
-                that celebrate the artistry and passion of brewers from
-                around the globe. From refreshing lagers to robust
-                stouts, each beer is a journey of flavor waiting to be
-                savored.
-              </Typography>
-              <Typography variant="h5" align="center" color="text.secondary" paragraph>
-                Join us in raising a glass to the diversity
-                and richness of the beer world—where there's a brew
-                for every palate and a story in every sip.
-                Cheers to the boundless possibilities of beer!
-              </Typography>
-            </Container>
+            }}>
+            <ProductsIntroduction />
           </Box>
         </Fade>
         <Container sx={{ py: 8 }} maxWidth="md">
