@@ -13,7 +13,7 @@ import About from './pages/About';
 import Contacts from './pages/Contacts';
 import Products from './pages/Products';
 import SignUp from './pages/Signup';
-import { ThemeProvider } from "@mui/material";
+import { CssBaseline, ThemeProvider } from "@mui/material";
 import { useThemeContext } from "./theme/ThemeContextProvider";
 import CustomError from './errors/CustomError';
 import NotFound from './errors/NotFound';
@@ -101,6 +101,7 @@ const App = () => {
     <>
       <ThemeProvider theme={theme}>
         <RouterProvider router={router} />
+        <CssBaseline />
         <ToastContainer />
       </ThemeProvider>
 
