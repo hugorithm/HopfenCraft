@@ -218,21 +218,23 @@ const Products = () => {
           </Box>
         </Fade>
         <Container sx={{ py: 8 }} maxWidth="md">
-          <Box mb={5}>
-            <TextField
-              fullWidth
-              variant="outlined"
-              placeholder="Search for beers..."
-              onChange={handleSearch}
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <SearchIcon />
-                  </InputAdornment>
-                ),
-              }}
-            />
-          </Box>
+          <Fade in={fadeIn} timeout={1000}>
+            <Box mb={5}>
+              <TextField
+                fullWidth
+                variant="outlined"
+                placeholder="Search for beers..."
+                onChange={handleSearch}
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <SearchIcon />
+                    </InputAdornment>
+                  ),
+                }}
+              />
+            </Box>
+          </Fade>
           <Grid container spacing={5}>
             {!products.length && loading === "succeeded" && (
               <Container
