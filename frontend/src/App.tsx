@@ -39,8 +39,7 @@ import InvalidToken from './errors/InvalidToken';
 import RequireAdminRole from './route/RequireAdminRole';
 import RegisterProduct from './pages/RegisterProduct';
 import UpdateProduct from './pages/UpdateProduct';
-import DashboardProducts from './pages/DashboardProducts';
-
+import ProductsDashboard from './pages/ProductsDashboard';
 
 const Root = () => {
   return (
@@ -78,7 +77,7 @@ const router = createBrowserRouter(
         <Route element={<RequireAdminRole />}>
           <Route path='product/register' element={<RegisterProduct />} errorElement={<CustomError />} />
           <Route path='product/:id/update' element={<UpdateProduct />} errorElement={<CustomError />} />
-          <Route path='dashboard/products' element={<DashboardProducts />} errorElement={<CustomError />} />
+          <Route path='dashboard/products' element={<ProductsDashboard />} errorElement={<CustomError />} />
         </Route>
         <Route path='profile' element={<Profile />} errorElement={<CustomError />} />
         <Route path='shopping-cart' element={<ShoppingCart />} errorElement={<CustomError />} />
