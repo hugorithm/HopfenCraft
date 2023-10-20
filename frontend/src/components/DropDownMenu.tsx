@@ -7,7 +7,7 @@ import { useThemeContext } from '../theme/ThemeContextProvider';
 import { useAppDispatch, useAppSelector } from '../app/hooks';
 import { logout, selectAuth } from '../features/authSlice';
 import { toast } from 'react-toastify';
-import { Add, Logout, Settings } from '@mui/icons-material';
+import { Add, Logout, Settings, Dashboard } from '@mui/icons-material';
 import { useSelector } from 'react-redux';
 
 const DropDownMenu = () => {
@@ -116,12 +116,20 @@ const DropDownMenu = () => {
           Settings
         </MenuItem>
         {jwt && roles.includes("ADMIN") && (
-        <MenuItem component={Link} to="/product/register">
-          <ListItemIcon>
-            <Add fontSize="small" />
-          </ListItemIcon>
-          Register a Product
-        </MenuItem>
+          <Box>
+            <MenuItem component={Link} to="/product/register">
+              <ListItemIcon>
+                <Add fontSize="small" />
+              </ListItemIcon>
+              Register a Product
+            </MenuItem>
+            <MenuItem component={Link} to="/dashboard/products">
+              <ListItemIcon>
+                <Dashboard fontSize="small" />
+              </ListItemIcon>
+              Products Dashboard
+            </MenuItem>
+          </Box>
         )}
         <MenuItem onClick={handleLogout}>
           <ListItemIcon>
