@@ -26,6 +26,7 @@ const ProductTable: React.FC<ProductTableProps> = ({ products }) => {
             <TableCell>Name</TableCell>
             <TableCell>Description</TableCell>
             <TableCell>Price</TableCell>
+            <TableCell>Stock Quantity</TableCell>
             <TableCell>Actions</TableCell>
           </TableRow>
         </TableHead>
@@ -38,13 +39,16 @@ const ProductTable: React.FC<ProductTableProps> = ({ products }) => {
                   <img
                     src={`${BASE_URL}/product/${product.productId}/image`}
                     alt={product.name}
-                    style={{ width: 100, height: 100 }}
+                    style={{
+                      width: 100, height: 100, objectFit: 'contain'
+                    }}
                   />
                 </ButtonBase>
               </TableCell>
               <TableCell>{product.name}</TableCell>
               <TableCell>{truncateDescription(product.description, 300)}</TableCell>
               <TableCell>€{product.price}</TableCell>
+              <TableCell>{product.quantity}</TableCell>
               <TableCell>
                 <Button>Edit</Button>
               </TableCell>
