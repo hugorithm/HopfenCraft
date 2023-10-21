@@ -2,6 +2,7 @@ import React from 'react';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button, Typography, ButtonBase } from '@mui/material';
 import { BASE_URL } from '../config/constants';
 import { Product } from '../types/product/ProductData';
+import { Link } from 'react-router-dom';
 import formatDate from '../utils/dateFormatter';
 
 interface ProductTableProps {
@@ -44,7 +45,7 @@ const ProductTable: React.FC<ProductTableProps> = ({ products }) => {
               <TableCell>€{product.price}</TableCell>
               <TableCell>{product.quantity}</TableCell>
               <TableCell>
-                <Button>Edit</Button>
+                <Button variant='text' component={Link} to={`/product/${product.productId}/update`}>Edit</Button>
               </TableCell>
             </TableRow>
           ))}
