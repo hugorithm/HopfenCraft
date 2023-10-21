@@ -8,13 +8,6 @@ interface ProductTableProps {
 }
 
 const ProductTable: React.FC<ProductTableProps> = ({ products }) => {
-  const truncateDescription = (description: string, maxLength: number) => {
-    if (description.length <= maxLength) {
-      return description;
-    } else {
-      return description.slice(0, maxLength) + '...';
-    }
-  };
 
   return (
     <TableContainer component={Paper}>
@@ -46,7 +39,7 @@ const ProductTable: React.FC<ProductTableProps> = ({ products }) => {
                 </ButtonBase>
               </TableCell>
               <TableCell>{product.name}</TableCell>
-              <TableCell>{truncateDescription(product.description, 300)}</TableCell>
+              <TableCell>{product.description}</TableCell>
               <TableCell>€{product.price}</TableCell>
               <TableCell>{product.quantity}</TableCell>
               <TableCell>
