@@ -23,6 +23,7 @@ const ProductTable: React.FC<ProductTableProps> = ({ products }) => {
             <TableCell>Description</TableCell>
             <TableCell>Price</TableCell>
             <TableCell>Stock Quantity</TableCell>
+            <TableCell>Registration Date</TableCell>
             <TableCell>Actions</TableCell>
           </TableRow>
         </TableHead>
@@ -46,6 +47,7 @@ const ProductTable: React.FC<ProductTableProps> = ({ products }) => {
               <TableCell>{product.description}</TableCell>
               <TableCell>€{product.price}</TableCell>
               <TableCell>{product.quantity}</TableCell>
+              <TableCell>{formatDate(product.registerDateTime)}</TableCell>
               <TableCell>
                 <Button variant='text' component={Link} to={`/product/${product.productId}/update`}>Edit</Button>
               </TableCell>
