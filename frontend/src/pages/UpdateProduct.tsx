@@ -180,7 +180,10 @@ const UpdateProduct: React.FC = () => {
             }}
           >
             <Typography component="h1" variant="h2" gutterBottom>
-              Product Update
+              Update Product #{productData?.productId}
+            </Typography>
+            <Typography component="h6" variant="h6" gutterBottom>
+              {productData?.brand}: {productData?.name}
             </Typography>
             <Box component="form" onSubmit={handleSubmit} sx={{ mt: 3 }}>
               <TextField
