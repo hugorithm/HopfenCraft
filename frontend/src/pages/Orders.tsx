@@ -21,7 +21,7 @@ import { useSelector } from "react-redux";
 import { OrderList } from "../types/order/OrderList";
 import ShoppingCartSkeleton from "../components/ShoppingCartSkeleton";
 import { Order } from "../types/order/Order";
-import dateFormater from "../utils/dateFormatter";
+import formatDate from "../utils/dateFormatter";
 import PaymentIcon from '@mui/icons-material/Payment';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import { Link } from "react-router-dom";
@@ -100,7 +100,7 @@ const Orders = () => {
                         <TableCell component="th" scope="row">
                           #{order.orderId}
                         </TableCell>
-                        <TableCell align="center">{dateFormater(order.orderDate)}</TableCell>
+                        <TableCell align="center">{formatDate(order.orderDate)}</TableCell>
                         <TableCell align="center">€ {order.total}</TableCell>
                         <TableCell align="center">{order.orderStatus}</TableCell>
 
