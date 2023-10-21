@@ -43,7 +43,20 @@ const ProductsDashboard = () => {
 
   return (
     <>
-      <ProductTable products={products} />
+      <Fade in={true} timeout={1000}>
+        <Container maxWidth="md" >
+          <Box
+            sx={{
+              mt: 8,
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+            }}>
+            <ProductTable products={products} />
+          </Box>
+          <LoadMoreButton onClick={loadMore} disabled={last} />
+        </Container>
+      </Fade >
     </>
   );
 }
