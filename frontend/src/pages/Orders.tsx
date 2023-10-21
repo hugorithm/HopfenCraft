@@ -72,7 +72,7 @@ const Orders = () => {
             <Typography component="h1" variant="h2" align="center" color="text.primary" gutterBottom>
               My Orders
             </Typography>
-            <TableContainer component={Paper} elevation={3} sx={{ maxWidth: 800, margin: '0 auto' }}>
+            <TableContainer component={Paper} sx={{ maxWidth: 800, margin: '0 auto' }}>
               <Table aria-label="orders-table">
                 <TableHead>
                   <TableRow>
