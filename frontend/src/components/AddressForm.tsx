@@ -34,7 +34,7 @@ const AddressForm: React.FC<AddressFormProps> = ({ shippingDetails, onFormChange
   };
 
   return (
-    <React.Fragment>
+    <>
       <Typography variant="h6" gutterBottom>
         Shipping address
       </Typography>
@@ -151,7 +151,7 @@ const AddressForm: React.FC<AddressFormProps> = ({ shippingDetails, onFormChange
           />
         </Grid>
       </Grid>
-    </React.Fragment>
+    </>
   );
 }
 

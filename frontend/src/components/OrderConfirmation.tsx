@@ -8,7 +8,7 @@ const OrderConfirmation = () => {
 
     return (
         order ? (
-        <React.Fragment>
+        <>
           <Typography variant="h5" gutterBottom>
             Thank you for your order!
           </Typography>
@@ -16,16 +16,16 @@ const OrderConfirmation = () => {
             Your order number is #{order.orderId} We have emailed your order
             confirmation. Please proceed to the payment.
           </Typography>
-        </React.Fragment>
+        </>
         ) : (
-            <React.Fragment>
+            <>
             <Typography variant="h5" gutterBottom>
               There was a problem with your order
             </Typography>
             <Typography variant="subtitle1">
                 There was a problem with your order
             </Typography>
-          </React.Fragment>
+          </>
         )
     )
 }

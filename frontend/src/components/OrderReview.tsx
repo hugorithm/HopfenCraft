@@ -49,7 +49,7 @@ const Review: React.FC<AddressFormProps> = ({ shippingDetails }) => {
   }, [getCartData]);
 
   return (
-    <React.Fragment>
+    <>
       <Typography variant="h6" gutterBottom>
         Order summary
       </Typography>
@@ -102,7 +102,7 @@ const Review: React.FC<AddressFormProps> = ({ shippingDetails }) => {
           </Grid>
         </Grid>
       </Grid>
-    </React.Fragment>
+    </>
   );
 }
 

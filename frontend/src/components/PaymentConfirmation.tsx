@@ -3,7 +3,7 @@ import React from "react";
 
 const PaymentConfirmation = () => {
     return (
-        <React.Fragment>
+        <>
           <Typography variant="h5" gutterBottom>
             Thank you!
           </Typography>
@@ -13,7 +13,7 @@ const PaymentConfirmation = () => {
           <Typography variant="subtitle1" mt={2} fontWeight={500}>
             Cheers! 🍻
           </Typography>
-        </React.Fragment>
+        </>
        
     )
 }
