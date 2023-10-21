@@ -4,6 +4,8 @@ import { fetchProducts, resetPage, resetProducts, selectProducts, setProducts } 
 import { ProductData } from "../types/product/ProductData";
 import { useSelector } from "react-redux";
 import { useAppDispatch } from "../app/hooks";
+import { Box, Container, Fade } from "@mui/material";
+import LoadMoreButton from "../components/LoadMoreButton";
 
 const ProductsDashboard = () => {
   const { products, loading, last } = useSelector(selectProducts);
@@ -21,6 +23,12 @@ const ProductsDashboard = () => {
           throw new Error("Failed to fetch data");
         }
       });
+  }
+
+  const loadMore = () => {
+    if (!last && loading !== 'loading') {
+      dispatch(fetchProducts());
+    }
   }
 
   const renderAfterCalled = useRef(false);

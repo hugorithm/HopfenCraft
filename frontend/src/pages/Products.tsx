@@ -29,6 +29,7 @@ import { setCartItems } from '../features/shoppingCartSlice';
 import ItemAddedToCart from '../components/ItemAddedToCart';
 import { resetPage } from '../features/productsSlice';
 import ProductsIntroduction from '../components/ProductsIntroduction';
+import LoadMoreButton from '../components/LoadMoreButton';
 
 const Products = () => {
   const [openModal, setOpenModal] = useState<boolean>(false);
@@ -263,18 +264,7 @@ const Products = () => {
             )}
           </Grid>
           {!!products.length && (
-            <Container
-              sx={{ my: 5 }}
-              style={{ display: 'flex', justifyContent: 'center' }}>
-              <Button
-                onClick={loadMore}
-                disabled={last}
-                variant="contained"
-                sx={{ mt: 2 }}
-              >
-                Load More
-              </Button>
-            </Container>
+            <LoadMoreButton onClick={loadMore} disabled={last} />
           )}
         </Container>
       </main>
