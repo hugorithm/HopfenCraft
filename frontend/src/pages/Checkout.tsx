@@ -118,7 +118,7 @@ const Checkout = () => {
   };
 
   return (
-    <React.Fragment>
+    <>
       <Container component="main" maxWidth="sm" sx={{ mb: 4 }}>
         <Paper variant="outlined" sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}>
           <Typography component="h1" variant="h4" align="center">
@@ -132,7 +132,7 @@ const Checkout = () => {
             ))}
           </Stepper>
           {!isPaid && activeStep !== 4 ? (
-            <React.Fragment>
+            <>
               {getStepContent(activeStep)}
               <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
                 {activeStep !== 0 && activeStep !== 2 && (
@@ -150,13 +150,13 @@ const Checkout = () => {
                   </Button>
                 )}
               </Box>
-            </React.Fragment>
+            </>
           ) : (
             <PaymentConfirmation />
           )}
         </Paper>
       </Container>
-    </React.Fragment>
+    </>
   );
 }
 
