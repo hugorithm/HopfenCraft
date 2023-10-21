@@ -16,6 +16,7 @@ const ProductTable: React.FC<ProductTableProps> = ({ products }) => {
       <Table>
         <TableHead>
           <TableRow>
+            <TableCell>ID</TableCell>
             <TableCell>Brand</TableCell>
             <TableCell>Image</TableCell>
             <TableCell>Name</TableCell>
@@ -28,6 +29,7 @@ const ProductTable: React.FC<ProductTableProps> = ({ products }) => {
         <TableBody>
           {products.map((product) => (
             <TableRow key={product.productId}>
+              <TableCell>#{product.productId}</TableCell>
               <TableCell>{product.brand}</TableCell>
               <TableCell>
                 <ButtonBase>
