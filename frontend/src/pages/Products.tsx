@@ -88,7 +88,6 @@ const Products = () => {
 
   // Function to load more products
   const loadMore = () => {
-
     if (!last && loading !== 'loading') {
       dispatch(fetchProducts());
     }
