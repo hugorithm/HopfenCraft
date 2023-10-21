@@ -2,6 +2,7 @@ import React from 'react';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button, Typography, ButtonBase } from '@mui/material';
 import { BASE_URL } from '../config/constants';
 import { Product } from '../types/product/ProductData';
+import formatDate from '../utils/dateFormatter';
 
 interface ProductTableProps {
   products: Product[];
