@@ -385,7 +385,7 @@ public class ProductControllerTests {
         Long productId = 1L;
 
         // Simulate a successful removal by the productService
-        when(productService.removeProduct(productId)).thenReturn(ResponseEntity.ok("Product removed successfully"));
+        when(productService.deleteProduct(productId)).thenReturn(ResponseEntity.ok("Product removed successfully"));
 
         mockMvc.perform(delete("/product/remove/{productId}", productId)
                         .contentType(MediaType.APPLICATION_JSON)
@@ -399,7 +399,7 @@ public class ProductControllerTests {
         Long nonExistingProductId = 999L;
 
         // Simulate productService returning a not found response
-        when(productService.removeProduct(nonExistingProductId)).thenReturn(ResponseEntity.notFound().build());
+        when(productService.deleteProduct(nonExistingProductId)).thenReturn(ResponseEntity.notFound().build());
 
         mockMvc.perform(delete("/product/remove/{nonExistingProductId}", nonExistingProductId)
                         .contentType(MediaType.APPLICATION_JSON)
@@ -413,7 +413,7 @@ public class ProductControllerTests {
         Long productIdWithError = 2L;
 
         // Simulate productService returning an internal server error response
-        when(productService.removeProduct(productIdWithError))
+        when(productService.deleteProduct(productIdWithError))
                 .thenReturn(ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error occurred while removing product"));
 
         mockMvc.perform(delete("/product/remove/{productIdWithError}", productIdWithError)

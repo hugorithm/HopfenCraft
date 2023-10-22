@@ -52,7 +52,7 @@ public class SecurityConfig {
                     auth.requestMatchers("/product/").permitAll();
                     auth.requestMatchers("/product/register").hasRole("ADMIN");
                     auth.requestMatchers("/product/update").hasRole("ADMIN");
-                    auth.requestMatchers("/product/remove").hasRole("ADMIN");
+                    auth.requestMatchers("/product/delete").hasRole("ADMIN");
                     auth.requestMatchers("/user/**").permitAll();
                     auth.requestMatchers("/product/**").permitAll();
                     auth.requestMatchers("/cart/**").hasAnyRole("ADMIN", "USER");

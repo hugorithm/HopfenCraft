@@ -206,13 +206,12 @@ public class ProductService {
         }
     }
 
-    public ResponseEntity<String> removeProduct(Long productId) {
+    public ResponseEntity<String> deleteProduct(Long productId) {
         try {
             Product product = productRepository.findById(productId)
                     .orElseThrow(() -> new ProductNotFoundException("Product not found with id: %s", productId));
 
             productRepository.delete(product);
-            return ResponseEntity.ok("Product removed successfully");
         } catch (ProductNotFoundException ex) {
             LOGGER.error(ex.getMessage(), ex);
             return ResponseEntity.notFound().build();

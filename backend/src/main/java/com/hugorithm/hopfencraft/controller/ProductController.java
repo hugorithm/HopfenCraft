@@ -81,10 +81,10 @@ public class ProductController {
         return productService.updateProduct(body);
     }
 
-    @DeleteMapping("/remove/{productId}")
+    @DeleteMapping("/delete/{productId}")
     @RolesAllowed("ADMIN")
-    public ResponseEntity<String> removeProduct(@PathVariable Long productId) {
-        return productService.removeProduct(productId);
+    public ResponseEntity<String> deleteProduct(@PathVariable Long productId) {
+        return productService.deleteProduct(productId);
     }
 
     @GetMapping("{productId}/image")

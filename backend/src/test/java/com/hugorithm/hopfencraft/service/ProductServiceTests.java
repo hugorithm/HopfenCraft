@@ -242,7 +242,7 @@ public class ProductServiceTests {
         when(productRepository.findById(productId)).thenReturn(Optional.of(new Product()));
 
         // Call the service method to remove the product
-        ResponseEntity<String> response = productService.removeProduct(productId);
+        ResponseEntity<String> response = productService.deleteProduct(productId);
 
         // Assert the expected behavior
         assertEquals(HttpStatus.OK, response.getStatusCode());
@@ -258,7 +258,7 @@ public class ProductServiceTests {
         when(productRepository.findById(productId)).thenReturn(Optional.empty());
 
         // Call the service method to remove the product
-        ResponseEntity<String> response = productService.removeProduct(productId);
+        ResponseEntity<String> response = productService.deleteProduct(productId);
 
         // Assert the expected behavior
         assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
