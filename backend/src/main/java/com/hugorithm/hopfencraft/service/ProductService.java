@@ -212,6 +212,7 @@ public class ProductService {
                     .orElseThrow(() -> new ProductNotFoundException("Product not found with id: %s", productId));
 
             productRepository.delete(product);
+            return ResponseEntity.ok().build();
         } catch (ProductNotFoundException ex) {
             LOGGER.error(ex.getMessage(), ex);
             return ResponseEntity.notFound().build();
