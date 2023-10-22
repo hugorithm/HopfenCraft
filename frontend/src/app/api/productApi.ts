@@ -46,7 +46,17 @@ export const productApi = createApi({
         };
       }
     }),
+    deleteProduct: builder.mutation<string, number>({
+      query: (id: number) => {
+        const headers = buildJsonHeadersWithJwt();
+        return {
+          url: `product/delete/${id}`,
+          method: "DELETE",
+          headers
+        };
+      }
+    })
   }),
 });
 
-export const { useGetProductQuery, useRegisterProductMutation, useUpdateProductMutation } = productApi;
+export const { useGetProductQuery, useRegisterProductMutation, useUpdateProductMutation, useDeleteProductMutation } = productApi;
