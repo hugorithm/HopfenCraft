@@ -44,7 +44,7 @@ const ProductsDashboard = () => {
   return (
     <>
       <Fade in={true} timeout={1000}>
-        <Container maxWidth="lg" >
+        <Container maxWidth="xl" >
           <Box
             sx={{
               mt: 8,
