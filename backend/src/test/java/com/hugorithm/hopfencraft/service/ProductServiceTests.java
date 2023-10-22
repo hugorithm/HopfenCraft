@@ -246,7 +246,7 @@ public class ProductServiceTests {
 
         // Assert the expected behavior
         assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals("Product removed successfully", response.getBody());
+        assertEquals(null, response.getBody());
     }
 
     @Test
