@@ -33,7 +33,9 @@ interface FileData {
 
 const ProductTable: React.FC<ProductTableProps> = ({ products }) => {
   const [rowEditMode, setRowEditMode] = useState<Record<number, boolean>>({});
+  const [editedData, setEditedData] = useState<Record<number, Partial<Product>>>({});
   const [fileData, setFileData] = useState<Record<number, FileData>>({});
+  const dispatch = useAppDispatch();
   const { mode } = useThemeContext();
   const [updateProduct, {
     data,
@@ -117,29 +119,41 @@ const ProductTable: React.FC<ProductTableProps> = ({ products }) => {
     });
   }
 
-  // const handleUpdate = () => {
-  //   const data = new FormData(e.currentTarget);
-  //   const body: ProductUpdate = {
-  //     productId: parseInt(id),
-  //     brand: data.get('brand') as string,
-  //     name: data.get('name') as string,
-  //     description: data.get('description') as string,
-  //     quantity: data.get('quantity') as string,
-  //     price: data.get('price') as string
-  //   };
+  const handleUpdate = (productId: number) => {
+    const updatedProduct = {
+      ...products.find(product => product.productId === productId),
+      ...editedData[productId],
+    };
 
-  //   updateProduct(body)
-  //     .unwrap()
-  //     .then(() => {
-  //       if (productData.productId) {
-  //         updateProductImage(productData.productId.toString());
-  //       }
-  //     });
-  // }
+    const body: ProductUpdate = {
+      productId: productId,
+      brand: updatedProduct.brand,
+      name: updatedProduct.name,
+      description: updatedProduct.description,
+      quantity: updatedProduct.quantity?.toString(),
+      price: updatedProduct.price
+    };
+
+    updateProduct(body)
+      .unwrap()
+      .then(() => {
+        getProducts();
+        updateProductImage(productId);
+        setRowEditMode({
+          ...rowEditMode,
+          [productId]: false
+        });
+
+      });
+  }
 
   const handleCancel = (productId: number) => {
     //Wipe file data on cancelation
-    setFileData(initialFileData);
+    setFileData({});
+    setEditedData({
+      ...editedData,
+      [productId]: {},
+    });
 
     setRowEditMode({
       ...rowEditMode,
@@ -151,7 +165,16 @@ const ProductTable: React.FC<ProductTableProps> = ({ products }) => {
     //TODO: Needs to open a modal confirmation
   }
 
-  const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
+  const handleInputChange = (productId: number, field: string, value: string | number) => {
+    setEditedData({
+      ...editedData,
+      [productId]: {
+        ...editedData[productId],
+        [field]: value,
+      },
+    });
+  }
+
     if (e.target.files) {
       const selectedFile = e.target.files[0];
 
@@ -269,6 +292,7 @@ const ProductTable: React.FC<ProductTableProps> = ({ products }) => {
                       margin="normal"
                       required
                       defaultValue={product.name}
+                      onChange={(e) => handleInputChange(product.productId, 'name', e.target.value)}
                     />
                   </TableCell>
                   <TableCell>
@@ -282,6 +306,7 @@ const ProductTable: React.FC<ProductTableProps> = ({ products }) => {
                       margin="normal"
                       required
                       defaultValue={product.description}
+                      onChange={(e) => handleInputChange(product.productId, 'description', e.target.value)}
                     />
                   </TableCell>
                   <TableCell>
@@ -291,9 +316,18 @@ const ProductTable: React.FC<ProductTableProps> = ({ products }) => {
                       label="Price"
                       variant="outlined"
                       margin="normal"
+                      type='number'
                       required
+                      InputProps={{
+                        startAdornment: (
+                          <InputAdornment position="start">
+                            <EuroIcon fontSize='small' />
+                          </InputAdornment>
+                        ),
+                      }}
                       inputProps={{ step: "0.01", min: "0.01" }}
                       defaultValue={product.price}
+                      onChange={(e) => handleInputChange(product.productId, 'price', e.target.value)}
                     />
                   </TableCell>
                   <TableCell>
@@ -303,16 +337,17 @@ const ProductTable: React.FC<ProductTableProps> = ({ products }) => {
                       label="Quantity"
                       variant="outlined"
                       margin="normal"
+                      type='number'
                       required
                       inputProps={{ min: "1" }}
                       defaultValue={product.quantity}
+                      onChange={(e) => handleInputChange(product.productId, 'quantity', e.target.value)}
                     />
                   </TableCell>
                   <TableCell>{formatDate(product.registerDateTime)}</TableCell>
                   <TableCell>
                     <Box display={'flex'} justifyContent={'center'} alignItems={'center'} flexWrap={'nowrap'}>
-                      {/* handleUpdate here */}
-                      <Button variant='contained' onClick={() => {}} sx={{ mr: 2 }}>Update</Button>
+                      <Button variant='contained' onClick={() => handleUpdate(product.productId)} sx={{ mr: 2 }}>Update</Button>
                       <Button variant='outlined' onClick={() => handleCancel(product.productId)}>Cancel</Button>
                     </Box>
                   </TableCell>
