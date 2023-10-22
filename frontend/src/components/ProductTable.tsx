@@ -180,6 +180,10 @@ const ProductTable: React.FC<ProductTableProps> = ({ products }) => {
     });
   }
 
+  const handleUpdateDisabled = (productId: number) => {
+    return editedData[productId] || fileData[productId] ? false : true;
+  }
+
   const handleUpdate = (productId: number) => {
     const updatedProduct = {
       ...products.find(product => product.productId === productId),
@@ -436,7 +440,7 @@ const ProductTable: React.FC<ProductTableProps> = ({ products }) => {
                   <TableCell>{formatDate(product.registerDateTime)}</TableCell>
                   <TableCell>
                     <Box display={'flex'} justifyContent={'center'} alignItems={'center'} flexWrap={'nowrap'}>
-                      <Button variant='contained' onClick={() => handleUpdate(product.productId)} sx={{ mr: 2 }}>Update</Button>
+                      <Button variant='contained' onClick={() => handleUpdate(product.productId)} sx={{ mr: 2 }}  disabled={handleUpdateDisabled(product.productId)}>Update</Button>
                       <Button variant='outlined' onClick={() => handleCancel(product.productId)}>Cancel</Button>
                     </Box>
                   </TableCell>
