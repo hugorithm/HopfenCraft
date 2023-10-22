@@ -95,11 +95,12 @@ const ProductTable: React.FC<ProductTableProps> = ({ products }) => {
     }
   }, [isError]);
 
-  const updateProductImage = async (id: string) => {
-    if (!fileData.file) return;
+  const updateProductImage = async (productId: number) => {
+    const productFile = fileData[productId];
+    if (!productFile.file) return;
 
     const formData = new FormData();
-    formData.append("file", fileData.file, fileData.fileName);
+    formData.append("file", productFile.file, productFile.fileName);
     const headers = buildFormDataHeadersWithJwt();
 
     const requestOptions = {
@@ -109,7 +110,7 @@ const ProductTable: React.FC<ProductTableProps> = ({ products }) => {
     }
 
     try {
-      const response = await fetch(`${BASE_URL}/product/${id}/image/update`, requestOptions);
+      const response = await fetch(`${BASE_URL}/product/${productId}/image/update`, requestOptions);
       if (response.ok) {
         const data = await response.json();
         return data;
@@ -193,6 +194,7 @@ const ProductTable: React.FC<ProductTableProps> = ({ products }) => {
     });
   }
 
+  const handleFileChange = (e: ChangeEvent<HTMLInputElement>, productId: number) => {
     if (e.target.files) {
       const selectedFile = e.target.files[0];
 
@@ -203,11 +205,14 @@ const ProductTable: React.FC<ProductTableProps> = ({ products }) => {
       reader.onload = (e) => {
         if (e.target && e.target.result) {
           const dataURL = e.target.result as string;
+
           setFileData({
             ...fileData,
-            file: selectedFile,
-            fileName: selectedFile.name,
-            dataUrl: dataURL
+            [productId]: {
+              file: selectedFile,
+              fileName: selectedFile.name,
+              dataUrl: dataURL
+            }
           });
         }
       }
@@ -278,25 +283,26 @@ const ProductTable: React.FC<ProductTableProps> = ({ products }) => {
                       margin="normal"
                       required
                       defaultValue={product.brand}
+                      onChange={(e) => handleInputChange(product.productId, 'brand', e.target.value)}
                     />
                   </TableCell>
                   <TableCell>
                     <ButtonBase>
-                      {fileData.file ? (
+                      {fileData[product.productId]?.file ? (
                         <Tooltip title="Click here to upload a different Image">
                           <Button component="label">
                             <img
-                              src={fileData.dataUrl}
+                              src={fileData[product.productId]?.dataUrl}
                               style={{
                                 width: 100, height: 100, objectFit: 'contain'
                               }} />
-                            <VisuallyHiddenInput required id="file" type="file" accept="image/*" onChange={handleFileChange} />
+                            <VisuallyHiddenInput required id="file" type="file" accept="image/*" onChange={(event) => handleFileChange(event, product.productId)} />
                           </Button>
                         </Tooltip>
                       ) : (
                         <Button component="label" variant="outlined" startIcon={<CloudUploadIcon />}>
                           Upload Image
-                          <VisuallyHiddenInput required id="file" type="file" accept="image/*" onChange={handleFileChange} />
+                          <VisuallyHiddenInput required id="file" type="file" accept="image/*" onChange={(event) => handleFileChange(event, product.productId)} />
                         </Button>
                       )}
                     </ButtonBase>
