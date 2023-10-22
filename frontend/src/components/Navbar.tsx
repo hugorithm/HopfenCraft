@@ -6,7 +6,8 @@ import {
   Tabs,
   Tab,
   IconButton,
-  Badge
+  Badge,
+  Tooltip
 } from "@mui/material";
 import SportsBarIcon from '@mui/icons-material/SportsBar';
 import { Link, useLocation, matchPath } from 'react-router-dom';
@@ -73,11 +74,13 @@ const Navbar = () => {
         <NightModeToggle />
         {jwt && (
           <>
-            <IconButton to="/shopping-cart" component={Link} color="inherit">
-              <Badge color="error" badgeContent={cartItems.length}>
-                <ShoppingCartIcon />
-              </Badge>
-            </IconButton>
+            <Tooltip title="Shopping Cart">
+              <IconButton to="/shopping-cart" component={Link} color="inherit">
+                <Badge color="error" badgeContent={cartItems.length}>
+                  <ShoppingCartIcon />
+                </Badge>
+              </IconButton>
+            </Tooltip>
             <DropDownMenu />
           </>
         )}
