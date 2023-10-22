@@ -183,7 +183,7 @@ public class ProductService {
                 throw new ProductUpdateException("No fields to update");
             }
 
-            product.setUpdatedDate(LocalDateTime.now());
+            product.setUpdatedDateTime(LocalDateTime.now());
             Product savedProduct = productRepository.save(product);
 
             return ResponseEntity.ok(new ProductDTO(

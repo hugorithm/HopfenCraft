@@ -37,7 +37,7 @@ public class Product {
     private static final Currency currency = Currency.EUR;
     @CreationTimestamp
     private LocalDateTime registerDateTime;
-    private LocalDateTime updatedDate;
+    private LocalDateTime updatedDateTime;
     @ManyToOne
     private ApplicationUser user;
     @OneToOne(cascade = CascadeType.ALL)
