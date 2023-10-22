@@ -38,7 +38,6 @@ import RequireResetToken from './route/RequireResetToken';
 import InvalidToken from './errors/InvalidToken';
 import RequireAdminRole from './route/RequireAdminRole';
 import RegisterProduct from './pages/RegisterProduct';
-import UpdateProduct from './pages/UpdateProduct';
 import ProductsDashboard from './pages/ProductsDashboard';
 
 const Root = () => {
@@ -76,7 +75,6 @@ const router = createBrowserRouter(
       <Route element={<RequireAuth />}>
         <Route element={<RequireAdminRole />}>
           <Route path='product/register' element={<RegisterProduct />} errorElement={<CustomError />} />
-          <Route path='product/:id/update' element={<UpdateProduct />} errorElement={<CustomError />} />
           <Route path='dashboard/products' element={<ProductsDashboard />} errorElement={<CustomError />} />
         </Route>
         <Route path='profile' element={<Profile />} errorElement={<CustomError />} />
