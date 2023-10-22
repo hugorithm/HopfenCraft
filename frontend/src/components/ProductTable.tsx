@@ -31,15 +31,9 @@ interface FileData {
   dataUrl: string;
 }
 
-const initialFileData: FileData = {
-  file: null,
-  fileName: '',
-  dataUrl: ''
-};
-
 const ProductTable: React.FC<ProductTableProps> = ({ products }) => {
   const [rowEditMode, setRowEditMode] = useState<Record<number, boolean>>({});
-  const [fileData, setFileData] = useState<FileData>(initialFileData);
+  const [fileData, setFileData] = useState<Record<number, FileData>>({});
   const { mode } = useThemeContext();
   const [updateProduct, {
     data,
