@@ -57,7 +57,7 @@ const DropDownMenu = () => {
   return (
     <>
       <Box sx={{ display: 'flex', alignItems: 'center', textAlign: 'center' }}>
-        <Tooltip title="Account settings">
+        <Tooltip title="Account Settings">
           <IconButton
             onClick={handleClick}
             size="small"
