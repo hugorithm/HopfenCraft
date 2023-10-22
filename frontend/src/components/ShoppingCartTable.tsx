@@ -27,7 +27,6 @@ const ShoppingCartTable = () => {
   const dispatch = useAppDispatch();
   const { data: getCartData, error, isLoading, isSuccess: getCartSuccess, refetch } = useGetShoppingCartQuery();
   const { mode }: any = useThemeContext();
-
   const [localQuantities, setLocalQuantities] = useState<Record<number, number>>({});
 
   const [updateCartItemQuantity,
