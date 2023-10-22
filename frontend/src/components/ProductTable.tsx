@@ -12,6 +12,7 @@ import { ProductUpdate } from '../types/product/ProductUpdate';
 import EuroIcon from '@mui/icons-material/Euro';
 import { useAppDispatch } from '../app/hooks';
 import { fetchProducts, resetPage, resetProducts, setProducts } from '../features/productsSlice';
+import ConfirmationDialog from './ConfirmationDialog';
 
 const VisuallyHiddenInput = styled('input')({
   clip: 'rect(0 0 0 0)',
@@ -39,6 +40,8 @@ const ProductTable: React.FC<ProductTableProps> = ({ products }) => {
   const [rowEditMode, setRowEditMode] = useState<Record<number, boolean>>({});
   const [editedData, setEditedData] = useState<Record<number, Partial<Product>>>({});
   const [fileData, setFileData] = useState<Record<number, FileData>>({});
+  const [isConfirmationDialogOpen, setIsConfirmationDialogOpen] = useState(false);
+  const [productIdToRemove, setProductIdToRemove] = useState<number | null>(null);
   const dispatch = useAppDispatch();
   const { mode } = useThemeContext();
   const [updateProduct, {
@@ -219,13 +222,6 @@ const ProductTable: React.FC<ProductTableProps> = ({ products }) => {
     })
   }
 
-  const handleRemove = (productId: number) => {
-    deleteProduct(productId)
-      .then(() => {
-        getProducts();
-      });
-  }
-
   const handleInputChange = (productId: number, field: string, value: string | number) => {
     setEditedData({
       ...editedData,
@@ -261,8 +257,35 @@ const ProductTable: React.FC<ProductTableProps> = ({ products }) => {
     }
   };
 
+  const handleRemove = (productId: number) => {
+    setProductIdToRemove(productId);
+    setIsConfirmationDialogOpen(true);
+  };
+
+  const confirmRemoval = () => {
+    if (productIdToRemove === null) return;
+
+    deleteProduct(productIdToRemove)
+      .then(() => {
+        getProducts();
+        setIsConfirmationDialogOpen(false);
+      });
+
+  };
+
+  const cancelRemoval = () => {
+    setProductIdToRemove(null);
+    setIsConfirmationDialogOpen(false);
+  };
+
   return (
     <TableContainer component={Paper}>
+      <ConfirmationDialog
+        open={isConfirmationDialogOpen}
+        onClose={cancelRemoval}
+        onConfirm={confirmRemoval}
+      />
+
       <Table>
         <TableHead>
           <TableRow>
