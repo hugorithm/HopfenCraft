@@ -1,8 +1,8 @@
 export interface ProductUpdate {
     productId:    number;
-    brand:       string;
-    name:        string;
-    description: string;
-    quantity:    string;
-    price:       string;
+    brand:       string | undefined;
+    name:        string | undefined;
+    description: string | undefined;
+    quantity:    string | undefined;
+    price:       string | undefined;
 }
