@@ -1,13 +1,17 @@
 import React, { ChangeEvent, useEffect, useState } from 'react';
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button, ButtonBase, TextField, styled, Box, Tooltip } from '@mui/material';
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button, ButtonBase, TextField, styled, Box, Tooltip, InputAdornment } from '@mui/material';
 import { BASE_URL } from '../config/constants';
-import { Product } from '../types/product/ProductData';
+import { Product, ProductData } from '../types/product/ProductData';
 import formatDate from '../utils/dateFormatter';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import { useThemeContext } from '../theme/ThemeContextProvider';
 import { useUpdateProductMutation } from '../app/api/productApi';
 import { Theme as ToastifyTheme, toast } from 'react-toastify';
 import { buildFormDataHeadersWithJwt } from '../utils/jwtUtils';
+import { ProductUpdate } from '../types/product/ProductUpdate';
+import EuroIcon from '@mui/icons-material/Euro';
+import { useAppDispatch } from '../app/hooks';
+import { fetchProducts, resetPage, resetProducts, setProducts } from '../features/productsSlice';
 
 const VisuallyHiddenInput = styled('input')({
   clip: 'rect(0 0 0 0)',
