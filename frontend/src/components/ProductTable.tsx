@@ -48,6 +48,20 @@ const ProductTable: React.FC<ProductTableProps> = ({ products }) => {
     error
   }] = useUpdateProductMutation();
 
+  const getProducts = () => {
+    dispatch(resetPage());
+    dispatch(resetProducts());
+    dispatch(fetchProducts())
+      .then((data) => {
+        if (data.payload) {
+          const payload = data.payload as ProductData;
+          dispatch(setProducts(payload.content));
+        } else {
+          throw new Error("Failed to fetch data");
+        }
+      });
+  }
+
   useEffect(() => {
     if (isSuccess && data) {
       toast.success('Product Updated Successfully!', {
