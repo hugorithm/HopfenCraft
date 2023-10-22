@@ -11,7 +11,7 @@ import { selectAuth } from '../features/authSlice';
 import { useGetShoppingCartQuery } from '../app/api/shoppingCartApi';
 import { selectShoppingCart, setCartItems } from '../features/shoppingCartSlice';
 import { useSelector } from 'react-redux';
-import { Fade } from '@mui/material';
+import { Avatar, Fade } from '@mui/material';
 
 const Profile = () => {
   const { username, email } = useAppSelector(selectAuth);
@@ -52,6 +52,7 @@ const Profile = () => {
             <Typography variant="h5" align="center" color="text.secondary" paragraph>
               Welcome to your HopfenCraft profile. Here, you can manage your account and preferences.
             </Typography>
+            <Avatar></Avatar>
             <Stack
               sx={{ pt: 4 }}
               direction="row"
