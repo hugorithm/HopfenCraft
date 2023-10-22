@@ -5,7 +5,7 @@ import { Product, ProductData } from '../types/product/ProductData';
 import formatDate from '../utils/dateFormatter';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import { useThemeContext } from '../theme/ThemeContextProvider';
-import { useUpdateProductMutation } from '../app/api/productApi';
+import { useDeleteProductMutation, useUpdateProductMutation } from '../app/api/productApi';
 import { Theme as ToastifyTheme, toast } from 'react-toastify';
 import { buildFormDataHeadersWithJwt } from '../utils/jwtUtils';
 import { ProductUpdate } from '../types/product/ProductUpdate';
@@ -47,6 +47,12 @@ const ProductTable: React.FC<ProductTableProps> = ({ products }) => {
     isError,
     error
   }] = useUpdateProductMutation();
+  const [deleteProduct, {
+    data: deleteData,
+    isSuccess: isDeleteSuccess,
+    isError: isDeleteError,
+    error: deleteError
+  }] = useDeleteProductMutation();
 
   const getProducts = () => {
     dispatch(resetPage());
@@ -94,6 +100,39 @@ const ProductTable: React.FC<ProductTableProps> = ({ products }) => {
       });
     }
   }, [isError]);
+
+  useEffect(() => {
+    if (isDeleteSuccess) {
+      toast.success('Product Deleted Successfully!', {
+        position: "top-right",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: true,
+        pauseOnFocusLoss: false,
+        progress: undefined,
+        theme: mode as ToastifyTheme,
+      });
+    }
+  }, [isDeleteSuccess]);
+
+  useEffect(() => {
+    if (isDeleteError) {
+      console.error(deleteError);
+      toast.error('Product Deletion Failed!', {
+        position: "top-right",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: true,
+        pauseOnFocusLoss: false,
+        progress: undefined,
+        theme: mode as ToastifyTheme,
+      });
+    }
+  }, [isDeleteError]);
 
   const updateProductImage = async (productId: number) => {
     const productFile = fileData[productId];
@@ -181,7 +220,10 @@ const ProductTable: React.FC<ProductTableProps> = ({ products }) => {
   }
 
   const handleRemove = (productId: number) => {
-    //TODO: Needs to open a modal confirmation
+    deleteProduct(productId)
+      .then(() => {
+        getProducts();
+      });
   }
 
   const handleInputChange = (productId: number, field: string, value: string | number) => {
