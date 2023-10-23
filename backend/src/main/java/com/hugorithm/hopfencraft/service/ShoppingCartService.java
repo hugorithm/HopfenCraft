@@ -56,6 +56,7 @@ public class ShoppingCartService {
                                 ci.getProduct().getName(),
                                 ci.getProduct().getDescription(),
                                 ci.getProduct().getStockQuantity(),
+                                ci.getProduct().getSku(),
                                 ci.getProduct().getPrice(),
                                 Product.getCurrency(),
                                 ci.getProduct().getRegisterDateTime()

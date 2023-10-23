@@ -73,6 +73,7 @@ public class ProductService {
                     p.getName(),
                     p.getDescription(),
                     p.getStockQuantity(),
+                    p.getSku(),
                     p.getPrice(),
                     Product.getCurrency(),
                     p.getRegisterDateTime()
@@ -131,6 +132,7 @@ public class ProductService {
                     p.getName(),
                     p.getDescription(),
                     p.getStockQuantity(),
+                    p.getSku(),
                     p.getPrice(),
                     Product.getCurrency(),
                     p.getRegisterDateTime()
@@ -192,6 +194,7 @@ public class ProductService {
                     savedProduct.getName(),
                     savedProduct.getDescription(),
                     savedProduct.getStockQuantity(),
+                    savedProduct.getSku(),
                     savedProduct.getPrice(),
                     Product.getCurrency(),
                     savedProduct.getRegisterDateTime()
@@ -244,6 +247,7 @@ public class ProductService {
                     p.getName(),
                     p.getDescription(),
                     p.getStockQuantity(),
+                    p.getSku(),
                     p.getPrice(),
                     Product.getCurrency(),
                     p.getRegisterDateTime()
@@ -294,6 +298,7 @@ public class ProductService {
                     p.getName(),
                     p.getDescription(),
                     p.getStockQuantity(),
+                    p.getSku(),
                     p.getPrice(),
                     Product.getCurrency(),
                     p.getRegisterDateTime()

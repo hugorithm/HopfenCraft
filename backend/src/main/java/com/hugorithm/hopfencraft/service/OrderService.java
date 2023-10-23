@@ -68,6 +68,7 @@ public class OrderService {
                                 orderItem.getProduct().getName(),
                                 orderItem.getProduct().getDescription(),
                                 orderItem.getProduct().getStockQuantity(),
+                                orderItem.getProduct().getSku(),
                                 orderItem.getProduct().getPrice(),
                                 Product.getCurrency(),
                                 orderItem.getProduct().getRegisterDateTime()

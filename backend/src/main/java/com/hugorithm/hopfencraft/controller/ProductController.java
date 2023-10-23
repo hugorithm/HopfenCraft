@@ -49,6 +49,7 @@ public class ProductController {
                                 p.getName(),
                                 p.getDescription(),
                                 p.getStockQuantity(),
+                                p.getSku(),
                                 p.getPrice(),
                                 Product.getCurrency(),
                                 p.getRegisterDateTime()
