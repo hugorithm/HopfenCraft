@@ -18,6 +18,7 @@ public class ProductDTO {
     private String name;
     private String description;
     private int quantity;
+    private String sku;
     @JsonFormat(shape = JsonFormat.Shape.STRING)
     private BigDecimal price;
     private Currency currency;
