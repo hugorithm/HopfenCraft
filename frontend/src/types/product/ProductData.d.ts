@@ -18,6 +18,7 @@ export interface Product {
     name:             string;
     description:      string;
     quantity:         number;
+    sku:              string;
     price:            string;
     currency:         Currency;
     registerDateTime: string;
