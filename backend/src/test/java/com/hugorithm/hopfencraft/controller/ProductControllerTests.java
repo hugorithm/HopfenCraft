@@ -73,6 +73,7 @@ public class ProductControllerTests {
                 "Paulaner Weizen",
                 "Weiss",
                 10,
+                "PL05NER23",
                 price,
                 Currency.EUR,
                 LocalDateTime.now()
@@ -231,6 +232,7 @@ public class ProductControllerTests {
                 p.getName(),
                 p.getDescription(),
                 p.getStockQuantity(),
+                p.getSku(),
                 p.getPrice(),
                 Product.getCurrency(),
                 p.getRegisterDateTime()
@@ -322,6 +324,7 @@ public class ProductControllerTests {
                 "Updated Product",
                 "Updated Description",
                 20,
+                "UP23TD12",
                 new BigDecimal("9.99"),
                 Currency.EUR,
                 dt
