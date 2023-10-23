@@ -51,7 +51,7 @@ const Profile = () => {
             <Typography variant="h5" align="center" color="text.secondary" paragraph>
               Welcome to your HopfenCraft profile. Here, you can manage your account and preferences.
             </Typography>
-            <Avatar></Avatar>
+            <Avatar>{username}</Avatar>
             <Stack
               sx={{ pt: 4 }}
               direction="row"
