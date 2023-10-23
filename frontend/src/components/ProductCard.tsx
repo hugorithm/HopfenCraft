@@ -5,6 +5,7 @@ import { BASE_URL } from '../config/constants';
 import { Product } from '../types/product/ProductData';
 import CustomNumberInput from '../components/CustomNumberInput';
 import { Link as RouterLink } from 'react-router-dom';
+import { grey } from '@mui/material/colors';
 
 interface ProductCardProps {
   product: Product;
@@ -42,8 +43,11 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, handleImageClick, ha
           <Typography gutterBottom variant="h6" component="h2">
             {product.name}
           </Typography>
-          <Typography gutterBottom>{truncateDescription(product.description, 300)}</Typography>
-          <Typography sx={{ fontWeight: 500 }}>€{product.price}</Typography>
+          <Typography gutterBottom variant="caption" component="p" fontWeight={700} color={grey[800]}>
+            SKU: {product.sku}
+          </Typography>
+          <Typography gutterBottom variant="body2">{truncateDescription(product.description, 300)}</Typography>
+          <Typography fontWeight={500} variant="body1">€{product.price}</Typography>
         </CardContent>
         <CardActions
           sx={{
