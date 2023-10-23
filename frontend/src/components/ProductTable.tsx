@@ -294,6 +294,7 @@ const ProductTable: React.FC<ProductTableProps> = ({ products }) => {
         <TableHead>
           <TableRow>
             <TableCell>ID</TableCell>
+            <TableCell>SKU</TableCell>
             <TableCell>Brand</TableCell>
             <TableCell>Image</TableCell>
             <TableCell>Name</TableCell>
@@ -313,6 +314,7 @@ const ProductTable: React.FC<ProductTableProps> = ({ products }) => {
               return (
                 <TableRow key={product.productId}>
                   <TableCell>#{product.productId}</TableCell>
+                  <TableCell>{product.sku}</TableCell>
                   <TableCell>{product.brand}</TableCell>
                   <TableCell>
                     <ButtonBase>
@@ -342,6 +344,7 @@ const ProductTable: React.FC<ProductTableProps> = ({ products }) => {
               return (
                 <TableRow key={product.productId}>
                   <TableCell>#{product.productId}</TableCell>
+                  <TableCell>{product.sku}</TableCell>
                   <TableCell>
                     <TextField
                       id="brand"
