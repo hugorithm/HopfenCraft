@@ -3,7 +3,6 @@ import {
   Typography,
   Stack,
   Box,
-  CssBaseline,
   Button,
   Container,
   CardMedia,

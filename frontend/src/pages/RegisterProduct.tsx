@@ -6,7 +6,6 @@ import {
   Box,
   Container,
   Fade,
-  CssBaseline,
   Avatar,
   InputAdornment,
 } from '@mui/material';
