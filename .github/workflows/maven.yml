@@ -28,6 +28,26 @@ jobs:
         distribution: 'temurin'
         cache: maven
     - name: Build with Maven
+      env:
+        DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+        DB_USERNAME: ${{ secrets.DB_USERNAME }}
+        EMAIL_HOST: ${{ secrets.EMAIL_HOST }}
+        EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
+        EMAIL_PORT: ${{ secrets.EMAIL_PORT }}
+        EMAIL_USERNAME: ${{ secrets.EMAIL_USERNAME }}
+        GITHUB_CLIENT: ${{ secrets.GHUB_CLIENT }}
+        GITHUB_SECRET: ${{ secrets.GHUB_SECRET }}
+        GOOGLE_CLIENT: ${{ secrets.GOOGLE_CLIENT }}
+        GOOGLE_SECRET: ${{ secrets.GOOGLE_SECRET }}
+        JWT_SIGNING_KEY: ${{ secrets.JWT_SIGNING_KEY }}
+        PAYPAL_CLIENT_ID: ${{ secrets.PAYPAL_CLIENT_ID }}
+        PAYPAL_CLIENT_SECRET: ${{ secrets.PAYPAL_CLIENT_SECRET }}
+        RSA_PRIVATE_EXPONENT: ${{ secrets.RSA_PRIVATE_EXPONENT }}
+        RSA_PRIVATE_MODULUS: ${{ secrets.RSA_PRIVATE_MODULUS }}
+        RSA_PUBLIC_EXPONENT: ${{ secrets.RSA_PUBLIC_EXPONENT }}
+        RSA_PUBLIC_MODULUS: ${{ secrets.RSA_PUBLIC_MODULUS }}
+        UPLOAD_FOLDER_PATH: ${{ secrets.UPLOAD_FOLDER_PATH }}
       run: mvn verify -f backend/pom.xml
 
     # Optional: Uploads the full dependency graph to GitHub to improve the quality of Dependabot alerts this repository can receive
