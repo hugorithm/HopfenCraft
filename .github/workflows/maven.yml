@@ -50,6 +50,7 @@ jobs:
         echo "UPLOAD_FOLDER_PATH=${{ secrets.UPLOAD_FOLDER_PATH }}" >> $GITHUB_ENV
       
     - name: Build with Maven
+      run: mvn verify -f backend/pom.xml
       env:
         DATABASE_URL: ${{ secrets.DATABASE_URL }}
         DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
@@ -70,7 +71,6 @@ jobs:
         RSA_PUBLIC_EXPONENT: ${{ secrets.RSA_PUBLIC_EXPONENT }}
         RSA_PUBLIC_MODULUS: ${{ secrets.RSA_PUBLIC_MODULUS }}
         UPLOAD_FOLDER_PATH: ${{ secrets.UPLOAD_FOLDER_PATH }}
-      run: mvn verify -f backend/pom.xml
 
     # Optional: Uploads the full dependency graph to GitHub to improve the quality of Dependabot alerts this repository can receive
     - name: Update dependency graph
