@@ -27,6 +27,28 @@ jobs:
         java-version: '21'
         distribution: 'temurin'
         cache: maven
+    - name: Set Environment Variables
+       run: |
+          echo "VAR1=${{ secrets.DATABASE_URL }}" >> $DATABASE_URL
+          echo "VAR2=${{ secrets.DB_PASSWORD }}" >> $DB_PASSWORD
+          echo "VAR2=${{ secrets.DB_USERNAME }}" >> $DB_USERNAME
+          echo "VAR2=${{ secrets.EMAIL_HOST }}" >> $EMAIL_HOST
+          echo "VAR2=${{ secrets.EMAIL_PASSWORD }}" >> $EMAIL_PASSWORD
+          echo "VAR2=${{ secrets.EMAIL_PORT }}" >> $EMAIL_PORT
+          echo "VAR2=${{ secrets.EMAIL_USERNAME }}" >> $EMAIL_USERNAME
+          echo "VAR2=${{ secrets.GHUB_CLIENT }}" >> $GITHUB_CLIENT
+          echo "VAR2=${{ secrets.GHUB_SECRET }}" >> $GITHUB_SECRET
+          echo "VAR2=${{ secrets.GOOGLE_CLIENT }}" >> $GOOGLE_CLIENT
+          echo "VAR2=${{ secrets.GOOGLE_SECRET }}" >> $GOOGLE_SECRET
+          echo "VAR2=${{ secrets.JWT_SIGNING_KEY }}" >> $JWT_SIGNING_KEY
+          echo "VAR2=${{ secrets.PAYPAL_CLIENT_ID }}" >> $PAYPAL_CLIENT_ID
+          echo "VAR2=${{ secrets.PAYPAL_CLIENT_SECRET }}" >> $PAYPAL_CLIENT_SECRET
+          echo "VAR2=${{ secrets.RSA_PRIVATE_EXPONENT }}" >> $RSA_PRIVATE_EXPONENT
+          echo "VAR2=${{ secrets.RSA_PRIVATE_MODULUS }}" >> $RSA_PRIVATE_MODULUS
+          echo "VAR2=${{ secrets.RSA_PUBLIC_EXPONENT }}" >> $RSA_PUBLIC_EXPONENT
+          echo "VAR2=${{ secrets.RSA_PUBLIC_MODULUS }}" >> $RSA_PUBLIC_MODULUS
+          echo "VAR2=${{ secrets.UPLOAD_FOLDER_PATH }}" >> $UPLOAD_FOLDER_PATH
+      
     - name: Build with Maven
       env:
         DATABASE_URL: ${{ secrets.DATABASE_URL }}
