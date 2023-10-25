@@ -18,6 +18,8 @@ jobs:
   build:
 
     runs-on: ubuntu-latest
+    environment:
+      name: prod
     steps:
     - uses: actions/checkout@v3
     - name: Set up JDK 21
