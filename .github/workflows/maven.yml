@@ -19,7 +19,6 @@ jobs:
 
     runs-on: ubuntu-latest
     environment: prod
-   
     steps:
     - uses: actions/checkout@v3
     - name: Set up JDK 21
@@ -28,53 +27,20 @@ jobs:
         java-version: '21'
         distribution: 'temurin'
         cache: maven
-
-    - name: Set Environment Variables
-      run: |
-        echo "DATABASE_URL=${{ secrets.DATABASE_URL }}" >> $GITHUB_ENV
-        echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> $GITHUB_ENV
-        echo "DB_USERNAME=${{ secrets.DB_USERNAME }}" >> $GITHUB_ENV
-        echo "EMAIL_HOST=${{ secrets.EMAIL_HOST }}" >> $GITHUB_ENV
-        echo "EMAIL_PASSWORD=${{ secrets.EMAIL_PASSWORD }}" >> $GITHUB_ENV
-        echo "EMAIL_PORT=${{ secrets.EMAIL_PORT }}" >> $GITHUB_ENV
-        echo "EMAIL_USERNAME=${{ secrets.EMAIL_USERNAME }}" >> $GITHUB_ENV
-        echo "GITHUB_CLIENT=${{ secrets.GHUB_CLIENT }}" >> $GITHUB_ENV
-        echo "GITHUB_SECRET=${{ secrets.GHUB_SECRET }}" >> $GITHUB_ENV
-        echo "GOOGLE_CLIENT=${{ secrets.GOOGLE_CLIENT }}" >> $GITHUB_ENV
-        echo "GOOGLE_SECRET=${{ secrets.GOOGLE_SECRET }}" >> $GITHUB_ENV
-        echo "JWT_SIGNING_KEY=${{ secrets.JWT_SIGNING_KEY }}" >> $GITHUB_ENV
-        echo "PAYPAL_CLIENT_ID=${{ secrets.PAYPAL_CLIENT_ID }}" >> $GITHUB_ENV
-        echo "PAYPAL_CLIENT_SECRET=${{ secrets.PAYPAL_CLIENT_SECRET }}" >> $GITHUB_ENV
-        echo "RSA_PRIVATE_EXPONENT=${{ secrets.RSA_PRIVATE_EXPONENT }}" >> $GITHUB_ENV
-        echo "RSA_PRIVATE_MODULUS=${{ secrets.RSA_PRIVATE_MODULUS }}" >> $GITHUB_ENV
-        echo "RSA_PUBLIC_EXPONENT=${{ secrets.RSA_PUBLIC_EXPONENT }}" >> $GITHUB_ENV
-        echo "RSA_PUBLIC_MODULUS=${{ secrets.RSA_PUBLIC_MODULUS }}" >> $GITHUB_ENV
-        echo "UPLOAD_FOLDER_PATH=${{ secrets.UPLOAD_FOLDER_PATH }}" >> $GITHUB_ENV
-
-
     - name: Build with Maven
-      run: mvn verify -f backend/pom.xml
-      env:
-        DATABASE_URL: ${{ env.DATABASE_URL }}
-        DB_PASSWORD: ${{ env.DB_PASSWORD }}
-        DB_USERNAME: ${{ env.DB_USERNAME }}
-        EMAIL_HOST: ${{ env.EMAIL_HOST }}
-        EMAIL_PASSWORD: ${{ env.EMAIL_PASSWORD }}
-        EMAIL_PORT: ${{ env.EMAIL_PORT }}
-        EMAIL_USERNAME: ${{ env.EMAIL_USERNAME }}
-        GITHUB_CLIENT: ${{ env.GHUB_CLIENT }}
-        GITHUB_SECRET: ${{ env.GHUB_SECRET }}
-        GOOGLE_CLIENT: ${{ env.GOOGLE_CLIENT }}
-        GOOGLE_SECRET: ${{ env.GOOGLE_SECRET }}
-        JWT_SIGNING_KEY: ${{ env.JWT_SIGNING_KEY }}
-        PAYPAL_CLIENT_ID: ${{ env.PAYPAL_CLIENT_ID }}
-        PAYPAL_CLIENT_SECRET: ${{ env.PAYPAL_CLIENT_SECRET }}
-        RSA_PRIVATE_EXPONENT: ${{ env.RSA_PRIVATE_EXPONENT }}
-        RSA_PRIVATE_MODULUS: ${{ env.RSA_PRIVATE_MODULUS }}
-        RSA_PUBLIC_EXPONENT: ${{ env.RSA_PUBLIC_EXPONENT }}
-        RSA_PUBLIC_MODULUS: ${{ env.RSA_PUBLIC_MODULUS }}
-        UPLOAD_FOLDER_PATH: ${{ env.UPLOAD_FOLDER_PATH }}
-     
+    run: |
+      mvn verify -f backend/pom.xml -DDATABASE_URL="${{ secrets.DATABASE_URL }}" \
+        -DDB_PASSWORD="${{ secrets.DB_PASSWORD }}" -DDB_USERNAME="${{ secrets.DB_USERNAME }}" \
+        -DEMAIL_HOST="${{ secrets.EMAIL_HOST }}" -DEMAIL_PASSWORD="${{ secrets.EMAIL_PASSWORD }}" \
+        -DEMAIL_PORT="${{ secrets.EMAIL_PORT }}" -DEMAIL_USERNAME="${{ secrets.EMAIL_USERNAME }}" \
+        -DGITHUB_CLIENT="${{ secrets.GHUB_CLIENT }}" -DGITHUB_SECRET="${{ secrets.GHUB_SECRET }}" \
+        -DGOOGLE_CLIENT="${{ secrets.GOOGLE_CLIENT }}" -DGOOGLE_SECRET="${{ secrets.GOOGLE_SECRET }}" \
+        -DJWT_SIGNING_KEY="${{ secrets.JWT_SIGNING_KEY }}" -DPAYPAL_CLIENT_ID="${{ secrets.PAYPAL_CLIENT_ID }}" \
+        -DPAYPAL_CLIENT_SECRET="${{ secrets.PAYPAL_CLIENT_SECRET }}" -DRSA_PRIVATE_EXPONENT="${{ secrets.RSA_PRIVATE_EXPONENT }}" \
+        -DRSA_PRIVATE_MODULUS="${{ secrets.RSA_PRIVATE_MODULUS }}" -DRSA_PUBLIC_EXPONENT="${{ secrets.RSA_PUBLIC_EXPONENT }}" \
+        -DRSA_PUBLIC_MODULUS="${{ secrets.RSA_PUBLIC_MODULUS }}" -DUPLOAD_FOLDER_PATH="${{ secrets.UPLOAD_FOLDER_PATH }}"
+
+      
     # Optional: Uploads the full dependency graph to GitHub to improve the quality of Dependabot alerts this repository can receive
     - name: Update dependency graph
       uses: advanced-security/maven-dependency-submission-action@571e99aab1055c2e71a1e2309b9691de18d6b7d6
