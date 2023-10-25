@@ -19,13 +19,9 @@ jobs:
 
     runs-on: ubuntu-latest
 
-    # Service containers to run with `container-job`
     services:
-      # Label used to access the service container
       postgres:
-        # Docker Hub image
         image: postgres
-        # Provide the password for postgres
         env:
           POSTGRES_USER: ${{ secrets.DB_USERNAME }}
           POSTGRES_PASSWORD: ${{ secrets.DB_PASSWORD }}
@@ -49,18 +45,7 @@ jobs:
         distribution: 'temurin'
         cache: maven
     - name: Build with Maven
-      run: |
-        mvn verify -f backend/pom.xml -DDATABASE_URL="${{ secrets.DATABASE_URL }}" \
-          -DDB_PASSWORD="${{ secrets.DB_PASSWORD }}" -DDB_USERNAME="${{ secrets.DB_USERNAME }}" \
-          -DEMAIL_HOST="${{ secrets.EMAIL_HOST }}" -DEMAIL_PASSWORD="${{ secrets.EMAIL_PASSWORD }}" \
-          -DEMAIL_PORT="${{ secrets.EMAIL_PORT }}" -DEMAIL_USERNAME="${{ secrets.EMAIL_USERNAME }}" \
-          -DGITHUB_CLIENT="${{ secrets.GHUB_CLIENT }}" -DGITHUB_SECRET="${{ secrets.GHUB_SECRET }}" \
-          -DGOOGLE_CLIENT="${{ secrets.GOOGLE_CLIENT }}" -DGOOGLE_SECRET="${{ secrets.GOOGLE_SECRET }}" \
-          -DJWT_SIGNING_KEY="${{ secrets.JWT_SIGNING_KEY }}" -DPAYPAL_CLIENT_ID="${{ secrets.PAYPAL_CLIENT_ID }}" \
-          -DPAYPAL_CLIENT_SECRET="${{ secrets.PAYPAL_CLIENT_SECRET }}" -DRSA_PRIVATE_EXPONENT="${{ secrets.RSA_PRIVATE_EXPONENT }}" \
-          -DRSA_PRIVATE_MODULUS="${{ secrets.RSA_PRIVATE_MODULUS }}" -DRSA_PUBLIC_EXPONENT="${{ secrets.RSA_PUBLIC_EXPONENT }}" \
-          -DRSA_PUBLIC_MODULUS="${{ secrets.RSA_PUBLIC_MODULUS }}" -DUPLOAD_FOLDER_PATH="${{ secrets.UPLOAD_FOLDER_PATH }}"
-
+      run: mvn verify -f backend/pom.xml
       env:
         DATABASE_URL: ${{ secrets.DATABASE_URL }}
         DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
