@@ -28,26 +28,26 @@ jobs:
         distribution: 'temurin'
         cache: maven
     - name: Set Environment Variables
-       run: |
-          echo "DATABASE_URL=${{ secrets.DATABASE_URL }}" >> $GITHUB_ENV
-          echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> $GITHUB_ENV
-          echo "DB_USERNAME=${{ secrets.DB_USERNAME }}" >> $GITHUB_ENV
-          echo "EMAIL_HOST=${{ secrets.EMAIL_HOST }}" >> $GITHUB_ENV
-          echo "EMAIL_PASSWORD=${{ secrets.EMAIL_PASSWORD }}" >> $GITHUB_ENV
-          echo "EMAIL_PORT=${{ secrets.EMAIL_PORT }}" >> $GITHUB_ENV
-          echo "EMAIL_USERNAME=${{ secrets.EMAIL_USERNAME }}" >> $GITHUB_ENV
-          echo "GHUB_CLIENT=${{ secrets.GHUB_CLIENT }}" >> $GITHUB_ENV
-          echo "GHUB_SECRET=${{ secrets.GHUB_SECRET }}" >> $GITHUB_ENV
-          echo "GOOGLE_CLIENT=${{ secrets.GOOGLE_CLIENT }}" >> $GITHUB_ENV
-          echo "GOOGLE_SECRET=${{ secrets.GOOGLE_SECRET }}" >> $GITHUB_ENV
-          echo "JWT_SIGNING_KEY=${{ secrets.JWT_SIGNING_KEY }}" >> $GITHUB_ENV
-          echo "PAYPAL_CLIENT_ID=${{ secrets.PAYPAL_CLIENT_ID }}" >> $GITHUB_ENV
-          echo "PAYPAL_CLIENT_SECRET=${{ secrets.PAYPAL_CLIENT_SECRET }}" >> $GITHUB_ENV
-          echo "RSA_PRIVATE_EXPONENT=${{ secrets.RSA_PRIVATE_EXPONENT }}" >> $GITHUB_ENV
-          echo "RSA_PRIVATE_MODULUS=${{ secrets.RSA_PRIVATE_MODULUS }}" >> $GITHUB_ENV
-          echo "RSA_PUBLIC_EXPONENT=${{ secrets.RSA_PUBLIC_EXPONENT }}" >> $GITHUB_ENV
-          echo "RSA_PUBLIC_MODULUS=${{ secrets.RSA_PUBLIC_MODULUS }}" >> $GITHUB_ENV
-          echo "UPLOAD_FOLDER_PATH=${{ secrets.UPLOAD_FOLDER_PATH }}" >> $GITHUB_ENV
+      run: |
+        echo "DATABASE_URL=${{ secrets.DATABASE_URL }}" >> $GITHUB_ENV
+        echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> $GITHUB_ENV
+        echo "DB_USERNAME=${{ secrets.DB_USERNAME }}" >> $GITHUB_ENV
+        echo "EMAIL_HOST=${{ secrets.EMAIL_HOST }}" >> $GITHUB_ENV
+        echo "EMAIL_PASSWORD=${{ secrets.EMAIL_PASSWORD }}" >> $GITHUB_ENV
+        echo "EMAIL_PORT=${{ secrets.EMAIL_PORT }}" >> $GITHUB_ENV
+        echo "EMAIL_USERNAME=${{ secrets.EMAIL_USERNAME }}" >> $GITHUB_ENV
+        echo "GHUB_CLIENT=${{ secrets.GHUB_CLIENT }}" >> $GITHUB_ENV
+        echo "GHUB_SECRET=${{ secrets.GHUB_SECRET }}" >> $GITHUB_ENV
+        echo "GOOGLE_CLIENT=${{ secrets.GOOGLE_CLIENT }}" >> $GITHUB_ENV
+        echo "GOOGLE_SECRET=${{ secrets.GOOGLE_SECRET }}" >> $GITHUB_ENV
+        echo "JWT_SIGNING_KEY=${{ secrets.JWT_SIGNING_KEY }}" >> $GITHUB_ENV
+        echo "PAYPAL_CLIENT_ID=${{ secrets.PAYPAL_CLIENT_ID }}" >> $GITHUB_ENV
+        echo "PAYPAL_CLIENT_SECRET=${{ secrets.PAYPAL_CLIENT_SECRET }}" >> $GITHUB_ENV
+        echo "RSA_PRIVATE_EXPONENT=${{ secrets.RSA_PRIVATE_EXPONENT }}" >> $GITHUB_ENV
+        echo "RSA_PRIVATE_MODULUS=${{ secrets.RSA_PRIVATE_MODULUS }}" >> $GITHUB_ENV
+        echo "RSA_PUBLIC_EXPONENT=${{ secrets.RSA_PUBLIC_EXPONENT }}" >> $GITHUB_ENV
+        echo "RSA_PUBLIC_MODULUS=${{ secrets.RSA_PUBLIC_MODULUS }}" >> $GITHUB_ENV
+        echo "UPLOAD_FOLDER_PATH=${{ secrets.UPLOAD_FOLDER_PATH }}" >> $GITHUB_ENV
       
     - name: Build with Maven
       env:
