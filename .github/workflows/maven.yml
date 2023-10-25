@@ -36,8 +36,8 @@ jobs:
         echo "EMAIL_PASSWORD=${{ secrets.EMAIL_PASSWORD }}" >> $GITHUB_ENV
         echo "EMAIL_PORT=${{ secrets.EMAIL_PORT }}" >> $GITHUB_ENV
         echo "EMAIL_USERNAME=${{ secrets.EMAIL_USERNAME }}" >> $GITHUB_ENV
-        echo "GHUB_CLIENT=${{ secrets.GHUB_CLIENT }}" >> $GITHUB_ENV
-        echo "GHUB_SECRET=${{ secrets.GHUB_SECRET }}" >> $GITHUB_ENV
+        echo "GITHUB_CLIENT=${{ secrets.GHUB_CLIENT }}" >> $GITHUB_ENV
+        echo "GITHUB_SECRET=${{ secrets.GHUB_SECRET }}" >> $GITHUB_ENV
         echo "GOOGLE_CLIENT=${{ secrets.GOOGLE_CLIENT }}" >> $GITHUB_ENV
         echo "GOOGLE_SECRET=${{ secrets.GOOGLE_SECRET }}" >> $GITHUB_ENV
         echo "JWT_SIGNING_KEY=${{ secrets.JWT_SIGNING_KEY }}" >> $GITHUB_ENV
