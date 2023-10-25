@@ -27,30 +27,7 @@ jobs:
         java-version: '21'
         distribution: 'temurin'
         cache: maven
-    - name: Set Environment Variables
-      run: |
-        echo "DATABASE_URL=${{ secrets.DATABASE_URL }}" >> $DATABASE_URL
-        echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> $DB_PASSWORD
-        echo "DB_USERNAME=${{ secrets.DB_USERNAME }}" >> $DB_USERNAME
-        echo "EMAIL_HOST=${{ secrets.EMAIL_HOST }}" >> $EMAIL_HOST
-        echo "EMAIL_PASSWORD=${{ secrets.EMAIL_PASSWORD }}" >> $EMAIL_PASSWORD
-        echo "EMAIL_PORT=${{ secrets.EMAIL_PORT }}" >> $EMAIL_PORT
-        echo "EMAIL_USERNAME=${{ secrets.EMAIL_USERNAME }}" >> $EMAIL_USERNAME
-        echo "GITHUB_CLIENT=${{ secrets.GHUB_CLIENT }}" >> $GITHUB_CLIENT
-        echo "GITHUB_SECRET=${{ secrets.GHUB_SECRET }}" >> $GITHUB_SECRET
-        echo "GOOGLE_CLIENT=${{ secrets.GOOGLE_CLIENT }}" >> $GOOGLE_CLIENT
-        echo "GOOGLE_SECRET=${{ secrets.GOOGLE_SECRET }}" >> $GOOGLE_SECRET
-        echo "JWT_SIGNING_KEY=${{ secrets.JWT_SIGNING_KEY }}" >> $JWT_SIGNING_KEY
-        echo "PAYPAL_CLIENT_ID=${{ secrets.PAYPAL_CLIENT_ID }}" >> $PAYPAL_CLIENT_ID
-        echo "PAYPAL_CLIENT_SECRET=${{ secrets.PAYPAL_CLIENT_SECRET }}" >> $PAYPAL_CLIENT_SECRET
-        echo "RSA_PRIVATE_EXPONENT=${{ secrets.RSA_PRIVATE_EXPONENT }}" >> $RSA_PRIVATE_EXPONENT
-        echo "RSA_PRIVATE_MODULUS=${{ secrets.RSA_PRIVATE_MODULUS }}" >> $RSA_PRIVATE_MODULUS
-        echo "RSA_PUBLIC_EXPONENT=${{ secrets.RSA_PUBLIC_EXPONENT }}" >> $RSA_PUBLIC_EXPONENT
-        echo "RSA_PUBLIC_MODULUS=${{ secrets.RSA_PUBLIC_MODULUS }}" >> $RSA_PUBLIC_MODULUS
-        echo "UPLOAD_FOLDER_PATH=${{ secrets.UPLOAD_FOLDER_PATH }}" >> $UPLOAD_FOLDER_PATH
-      
     - name: Build with Maven
-      run: mvn verify -f backend/pom.xml
       env:
         DATABASE_URL: ${{ secrets.DATABASE_URL }}
         DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
@@ -71,6 +48,7 @@ jobs:
         RSA_PUBLIC_EXPONENT: ${{ secrets.RSA_PUBLIC_EXPONENT }}
         RSA_PUBLIC_MODULUS: ${{ secrets.RSA_PUBLIC_MODULUS }}
         UPLOAD_FOLDER_PATH: ${{ secrets.UPLOAD_FOLDER_PATH }}
+      run: mvn verify -f backend/pom.xml
 
     # Optional: Uploads the full dependency graph to GitHub to improve the quality of Dependabot alerts this repository can receive
     - name: Update dependency graph
