@@ -44,8 +44,7 @@ public class OrderService {
     private final OrderItemRepository orderItemRepository;
     private final static Logger LOGGER = LoggerFactory.getLogger(OrderService.class);
 
-    public List<OrderDTO> ConvertOrderListIntoOrderDTOList(List<Order> orderList) {
-
+    public List<OrderDTO> convertOrderListIntoOrderDTOList(List<Order> orderList) {
         return orderList.stream()
                 .map(o -> new OrderDTO(
                         o.getOrderId(),
@@ -57,7 +56,7 @@ public class OrderService {
                 .toList();
     }
 
-    public List<OrderItemDTO> ConvertOrderItemListIntoOderItemDTOList(List<OrderItem> orderItems) {
+    public List<OrderItemDTO> convertOrderItemListIntoOderItemDTOList(List<OrderItem> orderItems) {
         return orderItems
                 .stream()
                 .map(orderItem -> new OrderItemDTO(
@@ -136,7 +135,7 @@ public class OrderService {
                             savedOrder.getOrderId(),
                             savedOrder.getTotal(),
                             Order.getCurrency(),
-                            ConvertOrderItemListIntoOderItemDTOList(orderItems),
+                            convertOrderItemListIntoOderItemDTOList(orderItems),
                             savedOrder.getOrderStatus(),
                             savedOrder.getOrderDate()
                     ));
@@ -175,7 +174,7 @@ public class OrderService {
                     order.getOrderId(),
                     order.getTotal(),
                     Order.getCurrency(),
-                    ConvertOrderItemListIntoOderItemDTOList(order.getOrderItems()),
+                    convertOrderItemListIntoOderItemDTOList(order.getOrderItems()),
                     order.getOrderStatus(),
                     order.getOrderDate()
             ));
@@ -202,7 +201,7 @@ public class OrderService {
                     order.getOrderId(),
                     order.getTotal(),
                     Order.getCurrency(),
-                    ConvertOrderItemListIntoOderItemDTOList(order.getOrderItems()),
+                    convertOrderItemListIntoOderItemDTOList(order.getOrderItems()),
                     order.getOrderStatus(),
                     order.getOrderDate()
             ));

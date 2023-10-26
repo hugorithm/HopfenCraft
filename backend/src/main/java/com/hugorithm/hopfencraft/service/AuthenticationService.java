@@ -133,7 +133,7 @@ public class AuthenticationService {
                             user.getLastName(),
                             user.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList(),
                             shoppingCartService.convertCartItemListToCartItemDTOList(user.getCartItems()),
-                            orderService.ConvertOrderListIntoOrderDTOList(user.getOrders())
+                            orderService.convertOrderListIntoOrderDTOList(user.getOrders())
                     ));
         } catch (UsernameNotFoundException ex) {
             LOGGER.error(ex.getMessage(), ex);

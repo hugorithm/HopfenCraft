@@ -37,7 +37,7 @@ public class AdminService {
                             applicationUser.getLastName(),
                             applicationUser.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList(),
                             shoppingCartService.convertCartItemListToCartItemDTOList(applicationUser.getCartItems()),
-                            orderService.ConvertOrderListIntoOrderDTOList(applicationUser.getOrders())
+                            orderService.convertOrderListIntoOrderDTOList(applicationUser.getOrders())
                     ))
                     .toList();
 
@@ -60,7 +60,7 @@ public class AdminService {
                     user.getLastName(),
                     user.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList(),
                     shoppingCartService.convertCartItemListToCartItemDTOList(user.getCartItems()),
-                    orderService.ConvertOrderListIntoOrderDTOList(user.getOrders())
+                    orderService.convertOrderListIntoOrderDTOList(user.getOrders())
             ));
         } catch (UsernameNotFoundException ex) {
             LOGGER.error(ex.getMessage(), ex);
@@ -80,7 +80,7 @@ public class AdminService {
                     user.getLastName(),
                     user.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList(),
                     shoppingCartService.convertCartItemListToCartItemDTOList(user.getCartItems()),
-                    orderService.ConvertOrderListIntoOrderDTOList(user.getOrders())
+                    orderService.convertOrderListIntoOrderDTOList(user.getOrders())
             ));
         } catch (UsernameNotFoundException ex) {
             LOGGER.error(ex.getMessage(), ex);

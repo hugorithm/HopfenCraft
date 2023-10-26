@@ -37,7 +37,7 @@ public class OAuth2Service {
                             user.getLastName(),
                             user.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList(),
                             shoppingCartService.convertCartItemListToCartItemDTOList(user.getCartItems()),
-                            orderService.ConvertOrderListIntoOrderDTOList(user.getOrders()),
+                            orderService.convertOrderListIntoOrderDTOList(user.getOrders()),
                             user.getAttributes()
                     ));
         } catch (UsernameNotFoundException ex) {
