@@ -15,6 +15,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.*;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 
@@ -35,6 +36,7 @@ public class UserIntegrationTests {
     private JwtService jwtService;
 
     @Test
+    @WithMockUser(username="testuser",roles="USER")
     public void sendPasswordResetRequest_ValidUser_ReturnsOk() {
         // Perform login or JWT retrieval here if needed
         LoginDTO login = new LoginDTO("testuser", "Password123!");
@@ -62,6 +64,7 @@ public class UserIntegrationTests {
 
 
     @Test
+    @WithMockUser(username="testuser",roles="USER")
     public void resetPassword_ValidRequest_ReturnsOk() {
         // Perform login or JWT retrieval here if needed
         LoginDTO login = new LoginDTO("testuser", "Password123!");
@@ -118,6 +121,7 @@ public class UserIntegrationTests {
     }
 
     @Test
+    @WithMockUser(username="testuser",roles="USER")
     public void resetPassword_InvalidRequest_ReturnsBadRequest() {
         // Perform login or JWT retrieval here if needed
         LoginDTO login = new LoginDTO("testuser", "Password123!");

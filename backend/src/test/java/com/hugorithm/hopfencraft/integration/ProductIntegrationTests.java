@@ -15,6 +15,7 @@ import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.data.domain.Page;
 import org.springframework.http.*;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 
@@ -33,6 +34,7 @@ public class ProductIntegrationTests {
     private TestRestTemplate restTemplate;
 
     @Test
+    @WithMockUser(username="admin",roles="ADMIN")
     public void CreateProduct_ValidInput_ReturnsCreated() {
         //Login
         LoginDTO login = new LoginDTO("admin", "Password123!");
@@ -79,6 +81,7 @@ public class ProductIntegrationTests {
     }
 
     @Test
+    @WithMockUser(username="admin",roles="ADMIN")
     public void CreateProduct_InvalidInput_ReturnsBadRequest() {
         //Login
         LoginDTO login = new LoginDTO("admin", "Password123!");
@@ -119,6 +122,7 @@ public class ProductIntegrationTests {
     }
 
     @Test
+    @WithMockUser(username="admin",roles="ADMIN")
     public void GetProductById_ValidId_ReturnsOk() {
         LoginDTO login = new LoginDTO("admin", "Password123!");
 
@@ -186,6 +190,7 @@ public class ProductIntegrationTests {
     }
 
     @Test
+    @WithMockUser(username="admin",roles="ADMIN")
     public void GetProducts_ReturnsOk() {
         LoginDTO login = new LoginDTO("admin", "Password123!");
 
@@ -259,6 +264,7 @@ public class ProductIntegrationTests {
     }
 
     @Test
+    @WithMockUser(username="admin",roles="ADMIN")
     public void UpdateProduct_ValidInput_ReturnsOk() {
         LoginDTO login = new LoginDTO("admin", "Password123!");
 
@@ -340,6 +346,7 @@ public class ProductIntegrationTests {
     }
 
     @Test
+    @WithMockUser(username="admin",roles="ADMIN")
     public void UpdateProduct_InvalidInput_ReturnsBadRequest() {
         LoginDTO login = new LoginDTO("admin", "Password123!");
 

@@ -12,6 +12,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.*;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 
@@ -30,6 +31,7 @@ public class ShoppingCartIntegrationTests {
     private TestRestTemplate restTemplate;
 
     @Test
+    @WithMockUser(username="testuser",roles="USER")
     public void AddCartItem_ValidInput_ReturnsCreated() {
         //Login
         LoginDTO login = new LoginDTO("testuser", "Password123!");
@@ -72,6 +74,7 @@ public class ShoppingCartIntegrationTests {
     }
 
     @Test
+    @WithMockUser(username="testuser",roles="USER")
     public void GetCartItems_EmptyCart_ReturnsOKWithEmptyList() {
         // Login as a user with an empty cart
         LoginDTO login = new LoginDTO("testuser", "Password123!");
@@ -108,6 +111,7 @@ public class ShoppingCartIntegrationTests {
     }
 
     @Test
+    @WithMockUser(username="testuser",roles="USER")
     public void RemoveCartItem_ValidInput_ReturnsOK() {
         // Login as a user
         LoginDTO login = new LoginDTO("testuser", "Password123!");
@@ -178,6 +182,7 @@ public class ShoppingCartIntegrationTests {
     }
 
     @Test
+    @WithMockUser(username="testuser",roles="USER")
     public void AddCartItem_InvalidProduct_ReturnsBadRequest() {
         // Login as a user
         LoginDTO login = new LoginDTO("testuser", "Password123!");
@@ -212,6 +217,7 @@ public class ShoppingCartIntegrationTests {
     }
 
     @Test
+    @WithMockUser(username="testuser",roles="USER")
     public void AddCartItem_InvalidQuantity_ReturnsBadRequest() {
         // Login as a user
         LoginDTO login = new LoginDTO("testuser", "Password123!");
@@ -244,6 +250,7 @@ public class ShoppingCartIntegrationTests {
     }
 
     @Test
+    @WithMockUser(username="testuser",roles="USER")
     public void RemoveCartItem_NonExistentItem_ReturnsNotFound() {
         // Login as a user
         LoginDTO login = new LoginDTO("testuser", "Password123!");
