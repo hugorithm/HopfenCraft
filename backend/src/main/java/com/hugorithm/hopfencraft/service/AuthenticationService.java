@@ -8,7 +8,6 @@ import com.hugorithm.hopfencraft.dto.authentication.LoginDTO;
 import com.hugorithm.hopfencraft.dto.authentication.UserRegistrationDTO;
 import com.hugorithm.hopfencraft.dto.authentication.UserRegistrationResponseDTO;
 import com.hugorithm.hopfencraft.dto.user.ApplicationUserDTO;
-import com.hugorithm.hopfencraft.enums.EmailType;
 import com.hugorithm.hopfencraft.enums.AuthProvider;
 import com.hugorithm.hopfencraft.exception.email.EmailAlreadyTakenException;
 import com.hugorithm.hopfencraft.exception.auth.UsernameAlreadyExistsException;
