@@ -18,7 +18,7 @@ jobs:
   build:
 
     runs-on: ubuntu-latest
-
+    environment: prod
     services:
       postgres:
         image: postgres
