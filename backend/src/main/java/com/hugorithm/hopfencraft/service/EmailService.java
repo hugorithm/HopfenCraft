@@ -42,8 +42,7 @@ public class EmailService {
             emailRepository.save(new Email(emailType, LocalDateTime.now(), user));
 
         } catch (MessagingException | MailSendException ex) {
-            LOGGER.error(ex.getMessage(), ex);
-            throw new EmailSendingFailedException("Email sending failed");
+            throw new EmailSendingFailedException("Email sending failed", ex);
         }
     }
 
