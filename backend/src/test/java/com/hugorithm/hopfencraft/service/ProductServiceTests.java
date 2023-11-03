@@ -22,6 +22,7 @@ import org.springframework.security.oauth2.jwt.Jwt;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
+import java.util.Objects;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -282,7 +283,7 @@ public class ProductServiceTests {
         ResponseEntity<Page<ProductDTO>> productsPage = productService.getProducts(pageable, null);
 
         // Assert the expected behavior
-        assertEquals(3, productsPage.getBody().getTotalElements());
+        assertEquals(3, Objects.requireNonNull(productsPage.getBody()).getTotalElements());
         assertEquals(3, productsPage.getBody().getContent().size());
     }
 
