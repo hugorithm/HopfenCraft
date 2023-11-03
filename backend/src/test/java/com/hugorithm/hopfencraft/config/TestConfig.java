@@ -32,7 +32,8 @@ public class TestConfig {
         this.productRepository = productRepository;
         this.productImageRepository = productImageRepository;
     }
-
+    
+    //TODO: This dependency must be deleted.
     @Bean
     @Primary
     public DataInitialization testDataInitialization() {

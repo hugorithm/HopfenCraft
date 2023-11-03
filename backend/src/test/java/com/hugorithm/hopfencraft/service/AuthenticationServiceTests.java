@@ -68,9 +68,8 @@ public class AuthenticationServiceTests {
         when(userRepository.findByEmail("validemail@example.com")).thenReturn(Optional.empty());
         when(roleRepository.findByAuthority("USER")).thenReturn(Optional.of(userRole));
         when(passwordEncoder.encode("ValidPass123!")).thenReturn("encodedPassword");
-
-
         when(roleRepository.findByAuthority("USER")).thenReturn(Optional.of(userRole));
+
         // Call the service method
         ResponseEntity<UserRegistrationResponseDTO> response = authenticationService.registerUser(validInput);
 
