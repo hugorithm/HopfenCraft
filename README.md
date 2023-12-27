@@ -24,7 +24,7 @@
     <img alt="Google reCAPTCHA" src="https://img.shields.io/badge/Google%20reCAPTCHA-Success-43A047?style=flat&logo=google"/>
 </p>
 
-[![Java CI with Maven](https://github.com/hugorithm/HopfenCraft/actions/workflows/maven.yml/badge.svg)](https://github.com/hugorithm/HopfenCraft/actions/workflows/maven.yml)
+[![CI tests](https://github.com/hugorithm/HopfenCraft/actions/workflows/maven.yml/badge.svg)](https://github.com/hugorithm/HopfenCraft/actions/workflows/maven.yml)
 ## Features
 
 ### User Management
