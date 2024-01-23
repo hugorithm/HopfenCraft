@@ -1,0 +1,15 @@
+version: "1.0"
+services:
+  frontend:
+    build: ./frontend
+    container_name: hopfencraft_frontend
+    ports: 
+      - '3000:3000'
+    stdin_open: true
+    tty: true
+  email:
+    image:  maildev/maildev
+    container_name: hopfencraft_email
+    ports:
+      - 1025:1025
+      - 1080:1080
