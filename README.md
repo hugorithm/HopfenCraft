@@ -1,7 +1,5 @@
 # HopfenCraft
 
-<img align="center" alt="Logo" src="backend/src/main/resources/images/hopfencraft.jpg" width=200>    
-
 ## Website    
 
 <img alt="Website" src="frontend/public/homepage.gif">
@@ -53,20 +51,7 @@
 
 To run the HopfenCraft application, you'll need to set up the following environment variables in both the frontend and backend components:
 
-### Frontend (React)
-
-In the `frontend` directory, create a `.env` file with the following variable:
-
-- `VITE_GOOGLE_RECAPTCHA_KEY`: Replace with your Google reCAPTCHA site key.
-- `VITE_PAYPAL_CLIENT_ID`: Replace with your PayPal Client ID:
-
-Example `.env` file content:
-```env
-VITE_GOOGLE_RECAPTCHA_KEY=your-recaptcha-site-key
-VITE_PAYPAL_CLIENT_ID=your-paypal-client-id
-```
-
-### Backend (Java Spring Boot)
+### Environment Variables)
 
 To configure the backend of the HopfenCraft application, you'll need to set the following environment variables:
 
@@ -89,30 +74,53 @@ To configure the backend of the HopfenCraft application, you'll need to set the 
 - `RSA_PUBLIC_EXPONENT`: Replace with your RSA public exponent.
 - `RSA_PUBLIC_MODULUS`: Replace with your RSA public modulus.
 - `UPLOAD_FOLDER_PATH`: Replace with the path for file uploads.
+- `VITE_GOOGLE_RECAPTCHA_KEY`: Replace with your Google reCAPTCHA site key.
+- `VITE_PAYPAL_CLIENT_ID`: Replace with your PayPal Client ID:
 
-Example `.env` file content for backend:
-```env
-DATABASE_URL=your-database-url
-DB_PASSWORD=your-database-password
-DB_USERNAME=your-database-username
-EMAIL_HOST=your-email-host
-EMAIL_PASSWORD=your-email-password
-EMAIL_PORT=your-email-port
-EMAIL_USERNAME=your-email-username
-GITHUB_CLIENT=your-github-client-id
-GITHUB_SECRET=your-github-client-secret
-GOOGLE_CLIENT=your-google-client-id
-GOOGLE_SECRET=your-google-client-secret
-JWT_SIGNING_KEY=your-jwt-signing-key
-PAYPAL_CLIENT_ID=your-paypal-client-id
-PAYPAL_CLIENT_SECRET=your-paypal-client-secret
-RSA_PRIVATE_EXPONENT=your-rsa-private-exponent
-RSA_PRIVATE_MODULUS=your-rsa-private-modulus
-RSA_PUBLIC_EXPONENT=your-rsa-public-exponent
-RSA_PUBLIC_MODULUS=your-rsa-public-modulus
-UPLOAD_FOLDER_PATH=your-upload-folder-path
+Example `.bashrc` or `.zshrc`:
+```zsh
+# bakend
+export DATABASE_URL=your-database-url
+export DB_PASSWORD=your-database-password
+export DB_USERNAME=your-database-username
+export EMAIL_HOST=your-email-host
+export EMAIL_PASSWORD=your-email-password
+export EMAIL_PORT=your-email-port
+export EMAIL_USERNAME=your-email-username
+export GITHUB_CLIENT=your-github-client-id
+export GITHUB_SECRET=your-github-client-secret
+export GOOGLE_CLIENT=your-google-client-id
+export GOOGLE_SECRET=your-google-client-secret
+export JWT_SIGNING_KEY=your-jwt-signing-key
+export PAYPAL_CLIENT_ID=your-paypal-client-id
+export PAYPAL_CLIENT_SECRET=your-paypal-client-secret
+export RSA_PRIVATE_EXPONENT=your-rsa-private-exponent
+export RSA_PRIVATE_MODULUS=your-rsa-private-modulus
+export RSA_PUBLIC_EXPONENT=your-rsa-public-exponent
+export RSA_PUBLIC_MODULUS=your-rsa-public-modulus
+export UPLOAD_FOLDER_PATH=your-upload-folder-path
+
+# frontend
+export VITE_GOOGLE_RECAPTCHA_KEY=your-recaptcha-site-key
+export VITE_PAYPAL_CLIENT_ID=your-paypal-client-id
+```
+## Docker
+
+Firstly you need to compile the backend before building the containers.
+For that you must run the following commands inside the `backend` folder::
+```
+mvn clean
+mvn install
 ```
 
+By now you should have a `.jar` file in the `target` folder.
+
+To build and run with docker run the following command in the project folder:
+```
+docker compose up
+```
+
+And that's it! The containers should be up and running and the HopfenCraft is available on [localhost:3000](http:localhost:3000)
 
 ## License
 
