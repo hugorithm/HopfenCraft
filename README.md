@@ -117,9 +117,9 @@ mvn install
 
 By now you should have a `.jar` file in the `target` folder.
 
-To build and run with docker run the following command in the project folder:
+To build and run, execute the following command in the project's root folder:
 ```zsh
-docker compose up
+docker compose up -d
 ```
 Please keep in mind that since we are using Docker, you must use the service name defined in `docker-compose.yaml` instead of `localhost` in your environment variables
 
