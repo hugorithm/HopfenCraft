@@ -67,7 +67,6 @@ To configure the backend of the HopfenCraft application, you'll need to set the 
 - `GITHUB_SECRET`: Replace with your GitHub OAuth2 client secret.
 - `GOOGLE_CLIENT`: Replace with your Google OAuth2 client ID.
 - `GOOGLE_SECRET`: Replace with your Google OAuth2 client secret.
-- `JWT_SIGNING_KEY`: Replace with your JWT signing key.
 - `PAYPAL_CLIENT_ID`: Replace with your PayPal client ID.
 - `PAYPAL_CLIENT_SECRET`: Replace with your PayPal client secret.
 - `RSA_PRIVATE_EXPONENT`: Replace with your RSA private exponent.
@@ -92,7 +91,6 @@ export GITHUB_CLIENT=your-github-client-id
 export GITHUB_SECRET=your-github-client-secret
 export GOOGLE_CLIENT=your-google-client-id
 export GOOGLE_SECRET=your-google-client-secret
-export JWT_SIGNING_KEY=your-jwt-signing-key
 export PAYPAL_CLIENT_ID=your-paypal-client-id
 export PAYPAL_CLIENT_SECRET=your-paypal-client-secret
 export RSA_PRIVATE_EXPONENT=your-rsa-private-exponent
