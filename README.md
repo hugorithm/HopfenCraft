@@ -51,7 +51,7 @@
 
 To run the HopfenCraft application, you'll need to set up the following environment variables in both the frontend and backend components:
 
-### Environment Variables)
+### Environment Variables
 
 To configure the backend of the HopfenCraft application, you'll need to set the following environment variables:
 
