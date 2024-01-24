@@ -1,5 +1,7 @@
 # HopfenCraft
 
+[![CI tests](https://github.com/hugorithm/HopfenCraft/actions/workflows/maven.yml/badge.svg)](https://github.com/hugorithm/HopfenCraft/actions/workflows/maven.yml)
+
 ## Website    
 
 <img alt="Website" src="frontend/public/homepage.gif">
@@ -22,7 +24,6 @@
     <img alt="Google reCAPTCHA" src="https://img.shields.io/badge/Google%20reCAPTCHA-Success-43A047?style=flat&logo=google"/>
 </p>
 
-[![CI tests](https://github.com/hugorithm/HopfenCraft/actions/workflows/maven.yml/badge.svg)](https://github.com/hugorithm/HopfenCraft/actions/workflows/maven.yml)
 ## Features
 
 ### User Management
