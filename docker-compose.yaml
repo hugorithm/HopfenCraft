@@ -6,6 +6,9 @@ services:
       - 3000:3000
     stdin_open: true
     tty: true
+    environment:
+      - VITE_GOOGLE_RECAPTCHA_KEY=${VITE_GOOGLE_RECAPTCHA_KEY}
+      - VITE_PAYPAL_CLIENT_ID=${VITE_PAYPAL_CLIENT_ID}
   db:
     image: postgres
     environment:
