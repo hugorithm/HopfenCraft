@@ -108,17 +108,17 @@ export VITE_PAYPAL_CLIENT_ID=your-paypal-client-id
 
 Firstly you need to compile the backend before building the containers.
 For that you must run the following commands inside the `backend` folder:
-```
+```zsh
 mvn clean
 ```
-```
+```zsh
 mvn install
 ```
 
 By now you should have a `.jar` file in the `target` folder.
 
 To build and run with docker run the following command in the project folder:
-```
+```zsh
 docker compose up
 ```
 Please keep in mind that since we are using Docker, you must use the service name defined in `docker-compose.yaml` instead of `localhost` in your environment variables
