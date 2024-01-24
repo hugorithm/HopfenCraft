@@ -123,7 +123,17 @@ docker compose up -d
 ```
 Please keep in mind that since we are using Docker, you must use the service name defined in `docker-compose.yaml` instead of `localhost` in your environment variables
 
-And that's it! The containers should be up and running and the HopfenCraft is available on [localhost:3000](http:localhost:3000)
+And that's it! The containers should be up and running and HopfenCraft is available on [localhost:3000](http:localhost:3000)
+
+## Generate RSA keys
+
+To generate the RSA keys you can execute the following command:
+```zsh
+openssl genpkey -algorithm RSA -out private_key.pem
+```
+```zsh
+openssl rsa -pubout -in private_key.pem -out public_key.pem
+```
 
 ## License
 
