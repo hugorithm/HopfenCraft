@@ -107,9 +107,11 @@ export VITE_PAYPAL_CLIENT_ID=your-paypal-client-id
 ## Docker
 
 Firstly you need to compile the backend before building the containers.
-For that you must run the following commands inside the `backend` folder::
+For that you must run the following commands inside the `backend` folder:
 ```
 mvn clean
+```
+```
 mvn install
 ```
 
@@ -119,6 +121,7 @@ To build and run with docker run the following command in the project folder:
 ```
 docker compose up
 ```
+Please keep in mind that since we are using Docker, you must use the service name defined in `docker-compose.yaml` instead of `localhost` in your environment variables
 
 And that's it! The containers should be up and running and the HopfenCraft is available on [localhost:3000](http:localhost:3000)
 
