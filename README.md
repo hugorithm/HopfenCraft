@@ -110,10 +110,10 @@ For that you must run the following commands inside the `backend` folder:
 ```zsh
 mvn clean
 ```
+We will need to skip tests as we don't have a database yet.
 ```zsh
-mvn install
+mvn install -DskipTests
 ```
-
 By now you should have a `.jar` file in the `target` folder.
 
 To build and run, execute the following command in the project's root folder:
