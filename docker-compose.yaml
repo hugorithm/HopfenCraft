@@ -2,6 +2,7 @@ version: "1.0"
 services:
   frontend:
     build: ./frontend
+    user: appuser
     ports: 
       - 3000:3000
     stdin_open: true
@@ -24,6 +25,7 @@ services:
       - 1080:1080
   backend:
     build: ./backend/
+    user: appuser
     depends_on:
       - db 
       - email
