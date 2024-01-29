@@ -1,0 +1,73 @@
+# This workflow uses actions that are not certified by GitHub.
+# They are provided by a third-party and are governed by
+# separate terms of service, privacy policy, and support
+# documentation.
+# This workflow will build a Java project with Gradle and cache/restore any dependencies to improve the workflow execution time
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-java-with-gradle
+
+name: Java CI with Gradle
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    environment: prod
+    services:
+      postgres:
+        image: postgres
+        env:
+          POSTGRES_USER: ${{ secrets.DB_USERNAME }}
+          POSTGRES_PASSWORD: ${{ secrets.DB_PASSWORD }}
+          POSTGRES_DB: hopfencraft
+        # Set health checks to wait until postgres has started
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          # Maps tcp port 5432 on service container to the host
+          - 5432:5432
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up JDK 21
+      uses: actions/setup-java@v3
+      with:
+        java-version: '21'
+        distribution: 'temurin'
+    - name: Build with Gradle
+      uses: gradle/gradle-build-action@bd5760595778326ba7f1441bcf7e88b49de61a25 # v2.6.0
+      with:
+        arguments: build
+      env:
+        DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+        DB_USERNAME: ${{ secrets.DB_USERNAME }}
+        EMAIL_HOST: ${{ secrets.EMAIL_HOST }}
+        EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
+        EMAIL_PORT: ${{ secrets.EMAIL_PORT }}
+        EMAIL_USERNAME: ${{ secrets.EMAIL_USERNAME }}
+        GITHUB_CLIENT: ${{ secrets.GHUB_CLIENT }}
+        GITHUB_SECRET: ${{ secrets.GHUB_SECRET }}
+        GOOGLE_CLIENT: ${{ secrets.GOOGLE_CLIENT }}
+        GOOGLE_SECRET: ${{ secrets.GOOGLE_SECRET }}
+        JWT_SIGNING_KEY: ${{ secrets.JWT_SIGNING_KEY }}
+        PAYPAL_CLIENT_ID: ${{ secrets.PAYPAL_CLIENT_ID }}
+        PAYPAL_CLIENT_SECRET: ${{ secrets.PAYPAL_CLIENT_SECRET }}
+        RSA_PRIVATE_EXPONENT: ${{ secrets.RSA_PRIVATE_EXPONENT }}
+        RSA_PRIVATE_MODULUS: ${{ secrets.RSA_PRIVATE_MODULUS }}
+        RSA_PUBLIC_EXPONENT: ${{ secrets.RSA_PUBLIC_EXPONENT }}
+        RSA_PUBLIC_MODULUS: ${{ secrets.RSA_PUBLIC_MODULUS }}
+        UPLOAD_FOLDER_PATH: ${{ secrets.UPLOAD_FOLDER_PATH }}
+        POSTGRES_HOST: localhost    
+        POSTGRES_PORT: 5432
