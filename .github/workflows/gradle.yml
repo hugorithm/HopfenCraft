@@ -64,7 +64,6 @@ jobs:
         POSTGRES_PORT: 5432
     - name: Archive test report
       uses: actions/upload-artifact@v4
-      working-directory: backend
       with:
         name: Test report
-        path: build/reports/tests/test
+        path: backend/build/reports/tests/test
