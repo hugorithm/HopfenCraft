@@ -133,6 +133,8 @@ gradle clean build -x test
 We will need to skip tests as we don't have a database yet.
 The `-x test` flag indicates gradle to skip the test task.
 
+If you have already setup a database just run `gradle clean build`
+
 ## License
 
 This repository is released under the [MIT license](https://opensource.org/licenses/MIT).
