@@ -105,21 +105,11 @@ export VITE_PAYPAL_CLIENT_ID=your-paypal-client-id
 ```
 ## Docker
 
-Firstly you need to compile the backend before building the containers.
-For that you must run the following commands inside the `backend` folder:
-```zsh
-mvn clean
-```
-We will need to skip tests as we don't have a database yet.
-```zsh
-mvn install -DskipTests
-```
-By now you should have a `.jar` file in the `target` folder.
-
 To build and run, execute the following command in the project's root folder:
 ```zsh
 docker compose up -d
 ```
+This command will download, build and deploy all the containers.
 Please keep in mind that since we are using Docker, you must use the service name defined in `docker-compose.yaml` instead of `localhost` in your environment variables
 
 And that's it! The containers should be up and running and HopfenCraft is available on [localhost:3000](http:localhost:3000)
@@ -133,6 +123,15 @@ openssl genpkey -algorithm RSA -out private_key.pem
 ```zsh
 openssl rsa -pubout -in private_key.pem -out public_key.pem
 ```
+
+## Compile the backend
+
+To compile  you must run the following commands inside the `backend` folder:
+```zsh
+gradle clean build -x test
+```
+We will need to skip tests as we don't have a database yet.
+The `-x test` flag indicates gradle to skip the test task.
 
 ## License
 
