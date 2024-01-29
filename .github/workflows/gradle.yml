@@ -44,6 +44,7 @@ jobs:
         distribution: 'temurin'
         cache: gradle
     - name: Build with Gradle
+      working-directory: backend
       run: ./gradlew build
       env:
         DATABASE_URL: ${{ secrets.DATABASE_URL }}
