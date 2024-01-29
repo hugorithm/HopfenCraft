@@ -1,7 +1,7 @@
 # HopfenCraft
 
 [![CI tests](https://github.com/hugorithm/HopfenCraft/actions/workflows/maven.yml/badge.svg)](https://github.com/hugorithm/HopfenCraft/actions/workflows/maven.yml)
-
+[![CI](https://github.com/hugorithm/HopfenCraft/actions/workflows/gradle.yml/badge.svg?branch=master)](https://github.com/hugorithm/HopfenCraft/actions/workflows/gradle.yml)
 ## Website    
 
 <img alt="Website" src="frontend/public/homepage.gif">
