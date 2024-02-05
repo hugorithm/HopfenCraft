@@ -113,6 +113,10 @@ Please keep in mind that since we are using Docker, you must use the service nam
 
 And that's it! The containers should be up and running and HopfenCraft is available on [localhost:3000](http:localhost:3000)
 
+There are also images on DockerHub `hugorithm/hopfencraft-backend` and `hugorithm/hopfencraft-frontend`:
+[hugorithm/hopfencraft-frontend](https://hub.docker.com/r/hugorithm/hopfencraft-frontend)
+[hugorithm/hopfencraft-backend](https://hub.docker.com/r/hugorithm/hopfencraft-backend)
+
 ## Generate RSA keys
 
 To generate the RSA keys you can execute the following command:
