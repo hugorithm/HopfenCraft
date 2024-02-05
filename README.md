@@ -53,7 +53,10 @@ I've also integrated Prometheus and Grafana to monitor the spring boot applicati
 Here is the [dashboard](https://grafana.com/grafana/dashboards/4701-jvm-micrometer/) I've used.  
 The `dashboard id` is `4701`  
 
-![grafana](gifs/grafana.gif)
+![grafana](imgs/grafana.gif)
+
+## Project Architecture
+![architecture](imgs/architecture-dark.png)
 
 ## Installation
 
