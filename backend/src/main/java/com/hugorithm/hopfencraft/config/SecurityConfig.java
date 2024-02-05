@@ -58,10 +58,8 @@ public class SecurityConfig {
                     auth.requestMatchers("/cart/**").hasAnyRole("ADMIN", "USER");
                     auth.anyRequest().authenticated();
                 })
-
                 .formLogin(AbstractHttpConfigurer::disable)
                 .httpBasic(AbstractHttpConfigurer::disable)
-
                 .oauth2Login(oauth2 -> {
                     oauth2.loginPage(FRONTEND_URL + "/login").permitAll();
                     // Define custom authorization endpoints and redirect callbacks
