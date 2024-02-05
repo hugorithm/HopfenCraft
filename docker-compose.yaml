@@ -50,3 +50,18 @@ services:
       - RSA_PUBLIC_EXPONENT=${RSA_PUBLIC_EXPONENT}
       - RSA_PUBLIC_MODULUS=${RSA_PUBLIC_MODULUS}
       - UPLOAD_FOLDER_PATH=${UPLOAD_FOLDER_PATH}
+  prometheus:
+    image: prom/prometheus
+    restart: always
+    extra_hosts:
+      - host.docker.internal:host-gateway
+    command:
+      - --config.file=/etc/prometheus/prometheus.yml
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+    ports:
+      - 9090:9090
+  graphana:
+    image: grafana/grafana
+    ports:
+      - 4000:3000
