@@ -65,3 +65,8 @@ frontend:
   url: http://localhost:3000
 upload:
   directory: ${UPLOAD_FOLDER_PATH}
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,prometheus
