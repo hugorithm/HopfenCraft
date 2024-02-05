@@ -48,7 +48,10 @@
 - **Secure Transactions**: Rest assured that your payment information is handled securely.
 
 ## Service Monitoring with Prometheus and Grafana
-![grafana](grafana.gif)
+
+I've integrated Prometheus and Grafana to monitor the spring boot application.  
+
+![grafana](gifs/grafana.gif)
 
 ## Installation
 
