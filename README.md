@@ -22,6 +22,8 @@
 ![GitHub OAuth2](https://img.shields.io/badge/GitHub%20OAuth2-Success-181717?style=flat&logo=github)
 ![Google OAuth2](https://img.shields.io/badge/Google%20OAuth2-Success-4285F4?style=flat&logo=google)
 ![Google reCAPTCHA](https://img.shields.io/badge/Google%20reCAPTCHA-Success-43A047?style=flat&logo=google)
+![Prometheus](https://img.shields.io/badge/Prometheus-Monitoring-yellow?style=flat&logo=prometheus&logoColor=white)
+![Grafana](https://img.shields.io/badge/Grafana-Dashboard-orange?style=flat&logo=grafana&logoColor=white)
 
 ## Index
 
