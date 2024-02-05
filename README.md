@@ -3,7 +3,7 @@
 [![CI](https://github.com/hugorithm/HopfenCraft/actions/workflows/gradle.yml/badge.svg?branch=master)](https://github.com/hugorithm/HopfenCraft/actions/workflows/gradle.yml)
 ## Website    
 
-<img alt="Website" src="frontend/public/homepage.gif">
+![hopfencraft](frontend/public/homepage.gif)
 
 <p align="center">
     <img alt="Java" src="https://img.shields.io/badge/-Java-007396?style=flat&logo=java&logoColor=white"/>
@@ -46,6 +46,9 @@
 ### Secure Payments
 - **PayPal Integration**: Pay for your beer orders using PayPal or credit card.
 - **Secure Transactions**: Rest assured that your payment information is handled securely.
+
+## Service Monitoring with Prometheus and Grafana
+![grafana](grafana.gif)
 
 ## Installation
 
