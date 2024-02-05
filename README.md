@@ -49,7 +49,9 @@
 
 ## Service Monitoring with Prometheus and Grafana
 
-I've integrated Prometheus and Grafana to monitor the spring boot application.  
+I've also integrated Prometheus and Grafana to monitor the spring boot application.  
+Here is the [dashboard](https://grafana.com/grafana/dashboards/4701-jvm-micrometer/) I've used.  
+The `dashboard id` is `4701`  
 
 ![grafana](gifs/grafana.gif)
 
@@ -143,6 +145,13 @@ We will need to skip tests as we don't have a database yet.
 The `-x test` flag indicates gradle to skip the test task.
 
 If you have already setup a database just run `gradle clean build`
+
+## Create a Dashboard in Grafana
+
+To create a dashboard you need to define the datasource.  
+You need to add a Prometheus datasoruce in the Grafana menu and then configure the endpoint.  
+In our case the endpoint is `http://prometheus:9090`.   
+After that it's just a matter of creating a dashboard with the already defined Prometheus datasource.  
 
 ## License
 
