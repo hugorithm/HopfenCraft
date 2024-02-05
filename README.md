@@ -1,6 +1,8 @@
 # HopfenCraft
 
-[![CI](https://github.com/hugorithm/HopfenCraft/actions/workflows/gradle.yml/badge.svg?branch=master)](https://github.com/hugorithm/HopfenCraft/actions/workflows/gradle.yml)
+## CI
+[![CI](https://github.com/hugorithm/HopfenCraft/actions/workflows/gradle.yml/badge.svg?branch=master)](https://github.com/hugorithm/HopfenCraft/actions/workflows/gradle.yml)  
+
 ## Website    
 
 ![hopfencraft](frontend/public/homepage.gif)
@@ -24,17 +26,18 @@
 ## Index
 
 1. [HopfenCraft](#hopfencraft)
-2. [Website](#website)
-3. [Features](#features)
-4. [Service Monitoring with Prometheus and Grafana](#service-monitoring-with-prometheus-and-grafana)
-5. [Project Architecture](#project-architecture)
-6. [Installation](#installation)
+2. [CI](#ci)
+3. [Website](#website)
+4. [Features](#features)
+5. [Service Monitoring with Prometheus and Grafana](#service-monitoring-with-prometheus-and-grafana)
+6. [Project Architecture](#project-architecture)
+7. [Installation](#installation)
    - [Environment Variables](#environment-variables)
    - [Docker](#docker)
-7. [Generate RSA keys](#generate-rsa-keys)
-8. [Compile the backend](#compile-the-backend)
-9. [Create a Dashboard in Grafana](#create-a-dashboard-in-grafana)
-10. [License](#license)
+8. [Generate RSA keys](#generate-rsa-keys)
+9. [Compile the backend](#compile-the-backend)
+10. [Create a Dashboard in Grafana](#create-a-dashboard-in-grafana)
+11. [License](#license)
 
 ## Features
 
