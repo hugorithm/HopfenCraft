@@ -50,8 +50,6 @@
 ## Service Monitoring with Prometheus and Grafana
 
 I've also integrated Prometheus and Grafana to monitor the spring boot application.  
-Here is the [dashboard](https://grafana.com/grafana/dashboards/4701-jvm-micrometer/) I've used.  
-The `dashboard id` is `4701`  
 
 ![grafana](imgs/grafana.gif)
 
@@ -155,6 +153,7 @@ To create a dashboard you need to define the datasource.
 You need to add a Prometheus datasoruce in the Grafana menu and then configure the endpoint.  
 In our case the endpoint is `http://prometheus:9090`.   
 After that it's just a matter of creating a dashboard with the already defined Prometheus datasource.  
+Here is the [dashboard](https://grafana.com/grafana/dashboards/4701-jvm-micrometer/) I've used.  
 
 ## License
 
