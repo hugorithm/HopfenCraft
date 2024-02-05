@@ -5,23 +5,36 @@
 
 ![hopfencraft](frontend/public/homepage.gif)
 
-<p align="center">
-    <img alt="Java" src="https://img.shields.io/badge/-Java-007396?style=flat&logo=java&logoColor=white"/>
-    <img alt="Spring Boot" src="https://img.shields.io/badge/-Spring%20Boot-6DB33F?style=flat&logo=spring&logoColor=white"/>
-    <img alt="PostgreSQL" src="https://img.shields.io/badge/-PostgreSQL-336791?style=flat&logo=postgresql&logoColor=white"/>
-    <img alt="REST API" src="https://img.shields.io/badge/-REST%20API-FF5733?style=flat"/>
-    <img alt="React" src="https://img.shields.io/badge/-React-61DAFB?style=flat&logo=react&logoColor=white"/>
-    <img alt="Redux" src="https://img.shields.io/badge/-Redux-764ABC?style=flat&logo=redux&logoColor=white"/>
-    <img alt="Material-UI" src="https://img.shields.io/badge/-Material%20UI-0081CB?style=flat&logo=material-ui&logoColor=white"/>
-    <img alt="TypeScript" src="https://img.shields.io/badge/-TypeScript-3178C6?style=flat&logo=typescript&logoColor=white"/>
-    <img alt="PayPal Integration Status" src="https://img.shields.io/badge/PayPal%20Integration-Success-brightgreen"/>
-    <img alt="PayPal API Version" src="https://img.shields.io/badge/PayPal%20API%20Version-v2.0-blue"/>
-    <img alt="PayPal Payment Methods" src="https://img.shields.io/badge/Payment%20Methods-PayPal%2C%20Credit%20Card-orange"/>
-    <img alt="Docker" src="https://img.shields.io/badge/Docker-Container-blue?style=flat&logo=docker" />
-    <img alt="GitHub OAuth2" src="https://img.shields.io/badge/GitHub%20OAuth2-Success-181717?style=flat&logo=github"/>
-    <img alt="Google OAuth2" src="https://img.shields.io/badge/Google%20OAuth2-Success-4285F4?style=flat&logo=google"/>
-    <img alt="Google reCAPTCHA" src="https://img.shields.io/badge/Google%20reCAPTCHA-Success-43A047?style=flat&logo=google"/>
-</p>
+![Java](https://img.shields.io/badge/-Java-007396?style=flat&logo=java&logoColor=white)
+![Spring Boot](https://img.shields.io/badge/-Spring%20Boot-6DB33F?style=flat&logo=spring&logoColor=white)
+![PostgreSQL](https://img.shields.io/badge/-PostgreSQL-336791?style=flat&logo=postgresql&logoColor=white)
+![REST API](https://img.shields.io/badge/-REST%20API-FF5733?style=flat)
+![React](https://img.shields.io/badge/-React-61DAFB?style=flat&logo=react&logoColor=white)
+![Redux](https://img.shields.io/badge/-Redux-764ABC?style=flat&logo=redux&logoColor=white)
+![Material-UI](https://img.shields.io/badge/-Material%20UI-0081CB?style=flat&logo=material-ui&logoColor=white)
+![TypeScript](https://img.shields.io/badge/-TypeScript-3178C6?style=flat&logo=typescript&logoColor=white)
+![PayPal Integration Status](https://img.shields.io/badge/PayPal%20Integration-Success-brightgreen)
+![PayPal API Version](https://img.shields.io/badge/PayPal%20API%20Version-v2.0-blue)
+![PayPal Payment Methods](https://img.shields.io/badge/Payment%20Methods-PayPal%2C%20Credit%20Card-orange)
+![Docker](https://img.shields.io/badge/Docker-Container-blue?style=flat&logo=docker)
+![GitHub OAuth2](https://img.shields.io/badge/GitHub%20OAuth2-Success-181717?style=flat&logo=github)
+![Google OAuth2](https://img.shields.io/badge/Google%20OAuth2-Success-4285F4?style=flat&logo=google)
+![Google reCAPTCHA](https://img.shields.io/badge/Google%20reCAPTCHA-Success-43A047?style=flat&logo=google)
+
+## Index
+
+1. [HopfenCraft](#hopfencraft)
+2. [Website](#website)
+3. [Features](#features)
+4. [Service Monitoring with Prometheus and Grafana](#service-monitoring-with-prometheus-and-grafana)
+5. [Project Architecture](#project-architecture)
+6. [Installation](#installation)
+   - [Environment Variables](#environment-variables)
+   - [Docker](#docker)
+7. [Generate RSA keys](#generate-rsa-keys)
+8. [Compile the backend](#compile-the-backend)
+9. [Create a Dashboard in Grafana](#create-a-dashboard-in-grafana)
+10. [License](#license)
 
 ## Features
 
