@@ -45,6 +45,9 @@ public class SecurityConfig {
         http.csrf(AbstractHttpConfigurer::disable)
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .authorizeHttpRequests(auth -> {
+                    // Permit access to Prometheus metrics endpoints
+                    auth.requestMatchers("/actuator/prometheus").permitAll();
+
                     auth.requestMatchers("/auth/**", "/oauth2/**").permitAll();
                     auth.requestMatchers("/admin/**").hasRole("ADMIN");
                     auth.requestMatchers("/order/**").hasAnyRole("ADMIN", "USER");
