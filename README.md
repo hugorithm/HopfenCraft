@@ -33,17 +33,18 @@
 
 1. [HopfenCraft](#hopfencraft)
 2. [CI](#ci)
-3. [Website](#website)
-4. [Features](#features)
-5. [Service Monitoring with Prometheus and Grafana](#service-monitoring-with-prometheus-and-grafana)
-6. [Project Architecture](#project-architecture)
-7. [Installation](#installation)
+3. [Onefetch](#onefetch)
+4. [Website](#website)
+5. [Features](#features)
+6. [Service Monitoring with Prometheus and Grafana](#service-monitoring-with-prometheus-and-grafana)
+7. [Project Architecture](#project-architecture)
+8. [Installation](#installation)
    - [Environment Variables](#environment-variables)
    - [Docker](#docker)
-8. [Generate RSA keys](#generate-rsa-keys)
-9. [Compile the backend](#compile-the-backend)
-10. [Create a Dashboard in Grafana](#create-a-dashboard-in-grafana)
-11. [License](#license)
+9. [Generate RSA keys](#generate-rsa-keys)
+10. [Compile the backend](#compile-the-backend)
+11. [Create a Dashboard in Grafana](#create-a-dashboard-in-grafana)
+12. [License](#license)
 
 ## Features
 
