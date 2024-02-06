@@ -25,6 +25,7 @@
 ![Prometheus](https://img.shields.io/badge/Prometheus-Monitoring-yellow?style=flat&logo=prometheus&logoColor=white)
 ![Grafana](https://img.shields.io/badge/Grafana-Dashboard-orange?style=flat&logo=grafana&logoColor=white)
 
+
 ## Index
 
 1. [HopfenCraft](#hopfencraft)
@@ -136,11 +137,11 @@ To build and run, execute the following command in the project's root folder:
 docker compose up -d
 ```
 This command will download, build and deploy all the containers.
-Please keep in mind that since we are using Docker, you must use the service name defined in `docker-compose.yaml` instead of `localhost` in your environment variables
+Please keep in mind that since we are using Docker, you must use the service name defined in `docker-compose.yml` instead of `localhost` in your environment variables
 
 And that's it! The containers should be up and running and HopfenCraft is available on [localhost:3000](http:localhost:3000)
 
-There are also images on DockerHub `hugorithm/hopfencraft-backend` and `hugorithm/hopfencraft-frontend`:
+There are also images on DockerHub:  
 [hugorithm/hopfencraft-frontend](https://hub.docker.com/r/hugorithm/hopfencraft-frontend)
 [hugorithm/hopfencraft-backend](https://hub.docker.com/r/hugorithm/hopfencraft-backend)
 
