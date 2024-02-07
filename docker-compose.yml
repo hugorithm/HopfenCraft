@@ -67,5 +67,8 @@ services:
     image: grafana/grafana
     ports:
       - 4000:3000
+    volumes:
+      - grafana:/var/lib/grafana
 volumes:
   psqldb:
+  grafana:
