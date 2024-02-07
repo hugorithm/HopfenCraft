@@ -18,6 +18,8 @@ services:
       POSTGRES_DB: hopfencraft
     ports:
       - 5432:5432
+    volumes:
+      - psqldb:/var/lib/postgresql/data
   email:
     image: maildev/maildev
     ports:
@@ -65,3 +67,5 @@ services:
     image: grafana/grafana
     ports:
       - 4000:3000
+volumes:
+  psqldb:
